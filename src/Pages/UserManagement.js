@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate,useLocation } from "react-router-dom";
 import MainLayout from "../Layouts/Index";
 import { Text, Flex, HStack, Box, useDisclosure } from "@chakra-ui/react";
 import {
@@ -188,6 +188,16 @@ export default function UserManagement() {
     onOpen();
   };
 
+  const location = useLocation().pathname
+  const nav = useNavigate()
+
+  const onPermission = (id) => {
+
+    localStorage.setItem('pathLocation', location)
+    nav(`/dashboard/edit-permission/${id}`);
+  
+  };
+
   const onChangeStatus = async (id) => {
     try {
       const result = await UpdateUserStatusApi(id);
@@ -247,6 +257,8 @@ export default function UserManagement() {
     setModalState("bulkUpload");
     onOpen();
   };
+
+
 
   useEffect(() => {
     getAllUser();
@@ -624,6 +636,7 @@ export default function UserManagement() {
                       date={moment(item.createdAt).format("lll")}
                       phone={item.phoneNumber}
                       onEdit={() => onEdit(item._id)}
+                      onPermission={() => onPermission(item._id)}
                       onChangeStatus={() => onChangeStatus(item._id)}
                       onReset={() => onReset(item._id)}
                     />
