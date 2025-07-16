@@ -42,7 +42,7 @@ export default function HistoryCvsModal({ isOpen, onClose, setOldPayload, activa
 
     const save = () => {
 
-        setOldPayload({ ...oldPayload, ["historycvs"]: Payload })
+        setOldPayload({ ...oldPayload, "historycvs": Payload })
         activateNotifications("Saved Successfully", "success")
         onClose()
     }

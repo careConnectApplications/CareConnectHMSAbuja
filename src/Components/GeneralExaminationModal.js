@@ -75,7 +75,7 @@ export default function GeneralExaminationModal({ isOpen, onClose, type, setOldP
     const save = ()=>{
 
         const mergedPayload = { ...Payload, ...RadioGroups}
-        setOldPayload({...oldPayload, ["paediatricsspecific"]: mergedPayload})
+        setOldPayload({...oldPayload, "paediatricsspecific": mergedPayload})
         activateNotifications("Saved Successfully", "success")
         onClose()
     }

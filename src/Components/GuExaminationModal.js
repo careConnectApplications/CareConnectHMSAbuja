@@ -54,7 +54,7 @@ export default function GiExaminationModal({ isOpen, onClose, setOldPayload, act
 
     const save = () => {
 
-        setOldPayload({ ...oldPayload, ["gu"]: Payload })
+        setOldPayload({ ...oldPayload, "gu": Payload })
         activateNotifications("Saved Successfully", "success")
         onClose()
     }

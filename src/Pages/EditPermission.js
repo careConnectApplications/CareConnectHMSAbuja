@@ -5,48 +5,143 @@ import Seo from "../Utils/Seo";
 import Button from "../Components/Button";
 import { FaUserShield } from 'react-icons/fa';
 
+import { GetSingleUsersApi, UpdateUserPermissionApi  } from "../Utils/ApiCalls";
+
+
 import ShowToast from "../Components/ToastNotification";
 
 import { useNavigate } from 'react-router-dom';
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { useParams } from 'react-router-dom';
-import { baseUrl } from '../Utils/ApiConfig';
-import axios from 'axios';
 import Preloader from '../Components/Preloader';
 
 export default function EditPermission() {
     const { id } = useParams()
-    const [user, setUser] = useState({
-        firstName: "Solomon",
-        lastName: "Adeleke"
-    });
+    const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
+
+   
     
-    const [permissions, setPermissions] = useState({
-        "can-view-dashboard": true, 
-        "can-view-patients": true,
-        "can-add-patient": false,
-        "can-edit-patient": false,
-        "can-delete-patient": false,
-        "can-view-appointments": true,
-        "can-add-appointment": false,
-        "can-edit-appointment": false,
-        "can-delete-appointment": false,
-        "can-view-users": false,
-        "can-add-user": false,
-        "can-edit-user": false,
-        "can-delete-user": false,
-    });
+    const [permissions, setPermissions] = useState([
+        {
+            "id": 1,
+            "name": "isOutPatientParent",
+            "status": false
+        },
+        {
+            "id": 2,
+            "name": "isOutPatient",
+            "status": false
+        },
+        {
+            "id": 3,
+            "name": "isInPatient",
+            "status": false
+        },
+        {
+            "id": 4,
+            "name": "isLabStaff",
+            "status": false
+        },
+        {
+            "id": 5,
+            "name": "isRadiologyStaff",
+            "status": false
+        },
+        {
+            "id": 6,
+            "name": "isScheduleAppointmentStaff",
+            "status": false
+        },
+        {
+            "id": 7,
+            "name": "isScheduleProcedureStaff",
+            "status": false
+        },
+        {
+            "id": 8,
+            "name": "isPharmacyStaff",
+            "status": false
+        },
+        {
+            "id": 9,
+            "name": "isBillingStaff",
+            "status": false
+        },
+        {
+            "id": 10,
+            "name": "isAdminStaff",
+            "status": false
+        },
+        {
+            "id": 11,
+            "name": "isClinicalReport",
+            "status": false
+        },
+        {
+            "id": 12,
+            "name": "isUserManagerStaff",
+            "status": false
+        },
+        {
+            "id": 13,
+            "name": "isPaymentStaff",
+            "status": false
+        }
+    ]);
 
-    const handlePermissionChange = (permission) => {
-        setPermissions(prev => ({ ...prev, [permission]: !prev[permission] }));
+     const getSingleUser = async () => {
+        setLoading(true);
+        try {
+          const result = await GetSingleUsersApi(id);
+    
+          console.log("result getSingleUser", result);
+    
+          if (result.status === true) {
+            setLoading(false);
+            setUser(result.data.user);
+            setPermissions(result.data.permissions);
+          }
+        } catch (e) {
+          console.log(e.message);
+        }
+      };
+
+    const handlePermissionChange = (id) => {
+        setPermissions(
+            permissions.map((permission) =>
+                permission.id === id
+                    ? { ...permission, status: !permission.status }
+                    : permission
+            )
+        );
     };
 
-    const handleUpdate = () => {
-        // Handle update logic here
-        console.log("Updated permissions:", permissions);
-        activateNotifications("Permissions updated successfully", "success");
-    };
+
+      const handleUpdate = async () => {
+        setIsLoading(true);
+        try {
+          const result = await UpdateUserPermissionApi({permissions},id);
+    
+          console.log("result handleUpdate", result);
+    
+          if (result.status === true) {
+            setIsLoading(false);
+            activateNotifications("Permissions updated successfully", "success");
+        }
+    } catch (e) {
+        console.log(e.message);
+        setIsLoading(false);
+        activateNotifications(e.message, "success");
+        }
+      };
+
+    // const handleUpdate = () => { 
+    //     // Handle update logic here
+    //     console.log("Updated permissions:", permissions);
+    //     activateNotifications("Permissions updated successfully", "success");
+    // };
 
 
 
@@ -74,25 +169,10 @@ export default function EditPermission() {
 
 
     useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const response = await axios.get(`${baseUrl}/user/${id}`, {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token')}`
-                    }
-                });
-                setUser(response.data.data);
-                setLoading(false);
-            } catch (error) {
-                console.error("Error fetching user:", error);
-                setLoading(false);
-            }
-        };
-
-        fetchUser();
+       
+        getSingleUser()
+        
     }, [id]);
-
-    const filteredPermissions = Object.keys(permissions);
 
     const nav = useNavigate()
 
@@ -128,9 +208,9 @@ export default function EditPermission() {
                         </Box>
                     )}
                     <Stack spacing={6}    mt="12px">
-                        {filteredPermissions.map((permission) => (
+                        {permissions.map((permission) => (
                             <Flex
-                                key={permission}
+                                key={permission.id}
                                 as={FormControl}
                                 align="center"
                                 justify="space-between"
@@ -144,25 +224,24 @@ export default function EditPermission() {
                             >
                                 <HStack>
                                     <Icon as={FaUserShield} />
-                                    <FormLabel htmlFor={permission} mb="0">
-                                        {permission.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                                    <FormLabel htmlFor={permission.name} mb="0">
+                                        {permission.name.replace(/([A-Z])/g, ' $1').replace(/^./, function(str){ return str.toUpperCase(); })}
                                     </FormLabel>
                                 </HStack>
                                 <Switch
                                     colorScheme="orange"
                                     size="md"
                                     color="orange.500"
-                                    variant="outline"
-                                  
-                                    id={permission}
-                                    isChecked={permissions[permission]}
-                                    onChange={() => handlePermissionChange(permission)}
+                                    variant="outline"                                  
+                                    id={permission.name}
+                                    isChecked={permission.status}
+                                    onChange={() => handlePermissionChange(permission.id)}
                                 />
                             </Flex>
                         ))}
                     </Stack>
                     <Flex justify="flex-end" mt={8}>
-                        <Button px="40px" w="230px" onClick={handleUpdate} >Update Permissions</Button>
+                        <Button isLoading={isLoading} px="40px" w="230px" onClick={handleUpdate} >Update Permissions</Button>
                     </Flex>
                 </Box>
             </Box>

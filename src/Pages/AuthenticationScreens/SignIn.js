@@ -27,7 +27,6 @@ export default function SignIn() {
   const [Loading, setLoading] = useState(false);
   const [onlineUser, setOnlineUser] = useState(null);
   const [showUpdatePasswordModal, setShowUpdatePasswordModal] = useState(false);
-  const [requirePasswordChange, setRequirePasswordChange] = useState(false);
   // Make token reactive.
   const [token, setToken] = useState('');
   const nav = useNavigate();
@@ -53,7 +52,6 @@ export default function SignIn() {
 
         // Check if a password update is required.
         if (result.data.requirepasswordchange) {
-          setRequirePasswordChange(true);
           localStorage.setItem("requirePasswordChange", "true");
           setShowUpdatePasswordModal(true);
           setShowToast({
@@ -110,6 +108,19 @@ export default function SignIn() {
       }, 3000);
     }
   }, [token, nav]);
+
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      Proceed();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyPress);
+    return () => {
+      window.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [Payload]);
 
   return (
     <AuthLayout>
@@ -179,7 +190,6 @@ export default function SignIn() {
           onSuccess={() => {
             // When password update succeeds, clear the flag and redirect.
             localStorage.setItem("requirePasswordChange", "false");
-            setRequirePasswordChange(false);
             setShowUpdatePasswordModal(false);
             nav("/dashboard");
           }}

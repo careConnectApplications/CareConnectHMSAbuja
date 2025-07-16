@@ -49,6 +49,7 @@ import { GiEnergyBreath } from "react-icons/gi";
 import { GiWeight } from "react-icons/gi";
 import { TbMichelinStarFilled } from "react-icons/tb";
 import { useParams } from 'react-router-dom';
+import PatientInfoCard from '../Components/PatientInfoCard';
 
 export default function AddClinicalEncounter() {
     const { id } = useParams()
@@ -305,7 +306,7 @@ export default function AddClinicalEncounter() {
 
             <Box>
                 <Button leftIcon={<IoMdArrowRoundBack />} px="40px" w="100px" onClick={() => nav(`${pathname}`)}>Back</Button>
-
+                <PatientInfoCard />
                 <Accordion defaultIndex={[7]} mt="32px" allowToggle>
                     <AccordionItem mb="15px" >
 

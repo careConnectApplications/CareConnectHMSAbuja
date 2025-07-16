@@ -217,12 +217,13 @@ export default function DoctoerSchedule() {
   }
   const location = useLocation().pathname
 
-  const ExaminePatient = (PatientId, AppointmentID, Name, status) => {
+  const ExaminePatient = (item) => {
     localStorage.setItem('pathLocation', location)
-    nav(`/dashboard/doctor-schedule-details/${PatientId}`);
-    localStorage.setItem('appointmentId', AppointmentID)
-    localStorage.setItem('PatientName', Name)
-    localStorage.setItem('appointmentStatus', status)
+    nav(`/dashboard/doctor-schedule-details/${item.patient?._id}`);
+    localStorage.setItem('appointmentId', item._id)
+    localStorage.setItem('PatientName', `${item.patient?.firstName} ${item.patient?.lastName}`)
+    localStorage.setItem('appointmentStatus', item.status)
+    localStorage.setItem('patientDetails', JSON.stringify(item.patient))
 
   }
   const takeVitals = (item) => {
@@ -584,7 +585,7 @@ export default function DoctoerSchedule() {
                         clinic={item.clinic}
                         status={item.status}
                         vitalStatus={item?.vitalstatus}
-                        onClick={() => ExaminePatient(item.patient?._id, item._id, `${item.patient?.firstName} ${item.patient?.lastName}`, item.status)}
+                        onClick={() => ExaminePatient(item)}
                         onVital={() => takeVitals(item)}
 
                       />
@@ -604,7 +605,7 @@ export default function DoctoerSchedule() {
                           clinic={item.clinic}
                           status={item.status}
                           vitalStatus={item?.vitalstatus}
-                          onClick={() => ExaminePatient(item.patient?._id, item._id, `${item.patient?.firstName} ${item.patient?.lastName}`, item.status)}
+                        onClick={() => ExaminePatient(item)}
                           onVital={() => takeVitals(item)}
 
                         />

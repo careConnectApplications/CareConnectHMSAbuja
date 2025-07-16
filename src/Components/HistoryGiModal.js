@@ -52,7 +52,7 @@ export default function HistoryGiModal({ isOpen, onClose, setOldPayload, activat
 
     const save = () => {
 
-        setOldPayload({ ...oldPayload, ["historygi"]: Payload })
+        setOldPayload({ ...oldPayload, "historygi": Payload })
         activateNotifications("Saved Successfully", "success")
         onClose()
     }

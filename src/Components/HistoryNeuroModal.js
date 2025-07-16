@@ -40,7 +40,7 @@ export default function HistoryNeuroModal({ isOpen, onClose, setOldPayload, acti
 
     const save = () => {
 
-        setOldPayload({ ...oldPayload, ["historyneuro"]: Payload })
+        setOldPayload({ ...oldPayload, "historyneuro": Payload })
         activateNotifications("Saved Successfully", "success")
         onClose()
     }

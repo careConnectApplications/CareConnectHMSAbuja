@@ -52,7 +52,7 @@ export default function PreviousPregnancyModal({ isOpen, onClose, setOldPayload,
 
     const save = () => {
 
-        setOldPayload({ ...oldPayload, ["previouspregnancy"]: Payload.previouspregnancy })
+        setOldPayload({ ...oldPayload, "previouspregnancy": Payload.previouspregnancy })
         activateNotifications("Saved Successfully", "success")
         onClose()
         console.log("payload", oldPayload)

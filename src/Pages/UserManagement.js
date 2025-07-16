@@ -191,11 +191,10 @@ export default function UserManagement() {
   const location = useLocation().pathname
   const nav = useNavigate()
 
-  const onPermission = (id) => {
-
-    localStorage.setItem('pathLocation', location)
-    nav(`/dashboard/edit-permission/${id}`);
-  
+  const onPermission = (user) => {
+    localStorage.setItem("pathLocation", location);
+    localStorage.setItem("userToEdit", JSON.stringify(user));
+    nav(`/dashboard/edit-permission/${user._id}`);
   };
 
   const onChangeStatus = async (id) => {
@@ -636,7 +635,7 @@ export default function UserManagement() {
                       date={moment(item.createdAt).format("lll")}
                       phone={item.phoneNumber}
                       onEdit={() => onEdit(item._id)}
-                      onPermission={() => onPermission(item._id)}
+                      onPermission={() => onPermission(item)}
                       onChangeStatus={() => onChangeStatus(item._id)}
                       onReset={() => onReset(item._id)}
                     />
@@ -655,6 +654,7 @@ export default function UserManagement() {
                       date={moment(item.createdAt).format("lll")}
                       phone={item.phoneNumber}
                       onEdit={() => onEdit(item._id)}
+                      onPermission={() => onPermission(item)}
                       onChangeStatus={() => onChangeStatus(item._id)}
                       onReset={() => onReset(item._id)}
                     />

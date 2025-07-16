@@ -92,7 +92,7 @@ export default function PostnatalHistoryModal({ isOpen, onClose, type, setOldPay
     const save = () => {
 
         const mergedPayload = { ...Payload, ...RadioGroups }
-        setOldPayload({ ...oldPayload, ["prepostnatalhistory"]: mergedPayload })
+        setOldPayload({ ...oldPayload, "prepostnatalhistory": mergedPayload })
         activateNotifications("Saved Successfully", "success")
         onClose()
     }
