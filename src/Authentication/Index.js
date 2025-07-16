@@ -1,10 +1,11 @@
-import { jwtDecode } from "jwt-decode"
 
-let token = localStorage.getItem("token") 
 
 const onlineUser = JSON.parse(localStorage.getItem("onlineUser"))
 
-let role = onlineUser?.roleId
+// console.log
+
+let role = onlineUser?.roleId;
+let permissions = onlineUser?.permissions
 
 
 export const isAuthenticated = () => {
@@ -33,9 +34,9 @@ export const isAdmin = () => {
 };
 
 export const isOutPatientParent = () => {
-    let roles = ["1","20", "6", "4", "7", "8","9","10","15","16","17","18","13","28","14","19","21","22","23","24","25","26","27"]
+    let id = 1
 
-    let result = roles.includes(role)
+    let result = permissions.includes(id)
 
     if (result) {
         return true
@@ -45,9 +46,9 @@ export const isOutPatientParent = () => {
 
 };
 export const isOutPatient = () => {
-    let roles = ["1","20", "6", "4", "7", "8","9","10","15", "14","16","17","18","19","21","22","23","24","25","26","27"]
+    let id = 2
 
-    let result = roles.includes(role)
+    let result = permissions.includes(id)
 
     if (result) {
         return true
@@ -57,10 +58,9 @@ export const isOutPatient = () => {
 
 };
 export const isInPatient = () => {
-    let roles = ["1","20", "6", "4", "7", "8","9","10","14","15","16","17","18","19","21","22","23","24","25","26","27"]
+    let id = 3
 
-    let result = roles.includes(role)
-
+    let result = permissions.includes(id)
     if (result) {
         return true
     } else {
@@ -69,9 +69,9 @@ export const isInPatient = () => {
 
 };
 export const isLabStaff = () => {
-    let roles = ["1","20", "6", "4","5","28","3","18", "7", "8","9","10","19","25","26","27"]
+    let id = 4
 
-    let result = roles.includes(role)
+    let result = permissions.includes(id)
 
     if (result) {
         return true
@@ -81,9 +81,9 @@ export const isLabStaff = () => {
 
 };
 export const isRadiologyStaff = () => {
-    let roles = ["1","20", "6","18","4","5","28","3", "7", "8","9","10","19","21","27"]
+    let id = 5
 
-    let result = roles.includes(role)
+    let result = permissions.includes(id)
 
     if (result) {
         return true
@@ -93,9 +93,9 @@ export const isRadiologyStaff = () => {
 
 };
 export const isScheduleAppointmentStaff = () => {
-    let roles = ["1","20", "6","18", "4", "7","13","28","14", "8","9","10","19","27"]
+    let id = 6
 
-    let result = roles.includes(role)
+    let result = permissions.includes(id)
 
     if (result) {
         return true
@@ -105,9 +105,9 @@ export const isScheduleAppointmentStaff = () => {
 
 };
 export const isScheduleProcedureStaff = () => {
-    let roles = ["1","20", "6","18", "4","5","28","3", "7", "8","9","10","19","23","24"]
+   let id = 7
 
-    let result = roles.includes(role)
+    let result = permissions.includes(id)
 
     if (result) {
         return true
@@ -117,9 +117,9 @@ export const isScheduleProcedureStaff = () => {
 
 };
 export const isPharmacyStaff = () => {
-    let roles = ["1","20", "2","5","28","3", "6","18", "11","22","27"]
+  let id = 8
 
-    let result = roles.includes(role)
+    let result = permissions.includes(id)
 
     if (result) {
         return true
@@ -129,9 +129,10 @@ export const isPharmacyStaff = () => {
 
 };
 export const isInventoryStaff = () => {
-    let roles = ["1","20", "2", "11","22"]
+     let id = 14
 
-    let result = roles.includes(role)
+    let result = permissions.includes(id)
+
 
     if (result) {
         return true
@@ -139,11 +140,13 @@ export const isInventoryStaff = () => {
         return false
     }
 
-};
-export const isBillingStaff = () => {
-    let roles = ["1","20", "3", "5","28","12"]
+}; 
 
-    let result = roles.includes(role)
+
+export const isBillingStaff = () => {
+     let id = 9
+
+    let result = permissions.includes(id)
 
     if (result) {
         return true
@@ -153,9 +156,9 @@ export const isBillingStaff = () => {
 
 };
 export const isBillingStaffHOD = () => {
-    let roles = ["1", "3",]
+    let id = 15
 
-    let result = roles.includes(role)
+    let result = permissions.includes(id)
 
     if (result) {
         return true
@@ -165,9 +168,10 @@ export const isBillingStaffHOD = () => {
 
 };
 export const isRecordStaff = () => {
-    let roles = ["1"]
+      let id = 10
 
-    let result = roles.includes(role)
+    let result = permissions.includes(id)
+
 
     if (result) {
         return true
@@ -177,11 +181,10 @@ export const isRecordStaff = () => {
 
 };
 export const isClinicalReport = () => {
-    let roles = ["1","3","27","3","5","28","11","14","22"]
+     let id = 11
 
-    // "6", "4","7","20","8","9","14","3","5","28","12"
+    let result = permissions.includes(id)
 
-    let result = roles.includes(role)
 
     if (result) {
         return true
@@ -191,9 +194,9 @@ export const isClinicalReport = () => {
 
 };
 export const isUserManagerStaff = () => {
-    let roles = ["1","20","19","27"]
+     let id = 12
 
-    let result = roles.includes(role)
+    let result = permissions.includes(id)
 
     if (result) {
         return true
@@ -205,9 +208,9 @@ export const isUserManagerStaff = () => {
 
 
 export const isTheatreStaff = () => {
-    let roles = ["1","20", "6", "4", "7", "8","9","10","15","16","17","18"]
+    let id = 13
 
-    let result = roles.includes(role)
+    let result = permissions.includes(id)
 
     if (result) {
         return true
