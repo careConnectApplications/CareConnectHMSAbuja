@@ -5,6 +5,9 @@ import Seo from "../Utils/Seo";
 import Button from "../Components/Button";
 import { FaUserShield } from 'react-icons/fa';
 
+import { GetSingleUsersApi, UpdateUserPermissionApi  } from "../Utils/ApiCalls";
+
+
 import ShowToast from "../Components/ToastNotification";
 
 import { useNavigate } from 'react-router-dom';
@@ -16,6 +19,9 @@ export default function EditPermission() {
     const { id } = useParams()
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
+
+   
     
     const [permissions, setPermissions] = useState([
         {
@@ -26,22 +32,22 @@ export default function EditPermission() {
         {
             "id": 2,
             "name": "isOutPatient",
-            "status": true
+            "status": false
         },
         {
             "id": 3,
             "name": "isInPatient",
-            "status": true
+            "status": false
         },
         {
             "id": 4,
             "name": "isLabStaff",
-            "status": true
+            "status": false
         },
         {
             "id": 5,
             "name": "isRadiologyStaff",
-            "status": true
+            "status": false
         },
         {
             "id": 6,
@@ -51,39 +57,56 @@ export default function EditPermission() {
         {
             "id": 7,
             "name": "isScheduleProcedureStaff",
-            "status": true
+            "status": false
         },
         {
             "id": 8,
             "name": "isPharmacyStaff",
-            "status": true
+            "status": false
         },
         {
             "id": 9,
             "name": "isBillingStaff",
-            "status": true
+            "status": false
         },
         {
             "id": 10,
             "name": "isAdminStaff",
-            "status": true
+            "status": false
         },
         {
             "id": 11,
             "name": "isClinicalReport",
-            "status": true
+            "status": false
         },
         {
             "id": 12,
             "name": "isUserManagerStaff",
-            "status": true
+            "status": false
         },
         {
             "id": 13,
             "name": "isPaymentStaff",
-            "status": true
+            "status": false
         }
     ]);
+
+     const getSingleUser = async () => {
+        setLoading(true);
+        try {
+          const result = await GetSingleUsersApi(id);
+    
+          console.log("result getSingleUser", result);
+    
+          if (result.status === true) {
+            setLoading(false);
+            setUser(result.data.user);
+            setPermissions(result.data.permissions);
+          }
+        } catch (e) {
+          console.log(e.message);
+        }
+      };
 
     const handlePermissionChange = (id) => {
         setPermissions(
@@ -95,11 +118,30 @@ export default function EditPermission() {
         );
     };
 
-    const handleUpdate = () => {
-        // Handle update logic here
-        console.log("Updated permissions:", permissions);
-        activateNotifications("Permissions updated successfully", "success");
-    };
+
+      const handleUpdate = async () => {
+        setIsLoading(true);
+        try {
+          const result = await UpdateUserPermissionApi({permissions},id);
+    
+          console.log("result handleUpdate", result);
+    
+          if (result.status === true) {
+            setIsLoading(false);
+            activateNotifications("Permissions updated successfully", "success");
+        }
+    } catch (e) {
+        console.log(e.message);
+        setIsLoading(false);
+        activateNotifications(e.message, "success");
+        }
+      };
+
+    // const handleUpdate = () => { 
+    //     // Handle update logic here
+    //     console.log("Updated permissions:", permissions);
+    //     activateNotifications("Permissions updated successfully", "success");
+    // };
 
 
 
@@ -127,11 +169,9 @@ export default function EditPermission() {
 
 
     useEffect(() => {
-        const userToEdit = localStorage.getItem("userToEdit");
-        if (userToEdit) {
-            setUser(JSON.parse(userToEdit));
-        }
-        setLoading(false);
+       
+        getSingleUser()
+        
     }, [id]);
 
     const nav = useNavigate()
@@ -201,7 +241,7 @@ export default function EditPermission() {
                         ))}
                     </Stack>
                     <Flex justify="flex-end" mt={8}>
-                        <Button px="40px" w="230px" onClick={handleUpdate} >Update Permissions</Button>
+                        <Button isLoading={isLoading} px="40px" w="230px" onClick={handleUpdate} >Update Permissions</Button>
                     </Flex>
                 </Box>
             </Box>
