@@ -9,6 +9,7 @@ import {
   Image,
   Stack,
   Spacer,
+  Avatar,
   Input,
 } from "@chakra-ui/react";
 import { Table, Thead, Tbody, Tr, Th, TableContainer } from "@chakra-ui/react";
@@ -223,13 +224,11 @@ export default function SinglePatient() {
           w={["100%", "100%", "48%", "25%"]}
         >
           <Flex justifyContent="center" pos="relative" mb="16px">
-            <Image
+            <Avatar
               src={`${baseUrl}/uploads/${patientData.passport}`}
               w="85px"
               h="85px"
-              objectFit="cover"
-              rounded="100%"
-              alt={`${firstName} ${lastName}`}
+              name={`${firstName} ${lastName}`}
             />
           </Flex>
 
