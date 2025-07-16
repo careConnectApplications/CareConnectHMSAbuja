@@ -68,7 +68,7 @@ export default function GeneralPhysicalModal({ isOpen, onClose, type, setOldPayl
     const save = () => {
 
         const mergedPayload = { ...Payload, ...RadioGroups }
-        setOldPayload({ ...oldPayload, ["physicalexamination"]: mergedPayload })
+        setOldPayload({ ...oldPayload, "physicalexamination": mergedPayload })
         activateNotifications("Saved Successfully", "success")
         onClose()
     }

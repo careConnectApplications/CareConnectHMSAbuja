@@ -46,7 +46,7 @@ export default function LaboratoryANCModal({ isOpen, onClose, setOldPayload, act
 
     const save = () => {
 
-        setOldPayload({ ...oldPayload, ["laboratory"]: Payload })
+        setOldPayload({ ...oldPayload, "laboratory": Payload })
         activateNotifications("Saved Successfully", "success")
         onClose()
     }

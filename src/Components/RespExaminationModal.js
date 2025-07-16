@@ -54,7 +54,7 @@ export default function RespExaminationModal({ isOpen, onClose, type, setOldPayl
 
     const save = () => {
 
-        setOldPayload({ ...oldPayload, ["resp"]: Payload })
+        setOldPayload({ ...oldPayload, "resp": Payload })
         activateNotifications("Saved Successfully", "success")
         onClose()
     }

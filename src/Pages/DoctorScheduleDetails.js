@@ -33,6 +33,7 @@ export default function DoctorScheduleDetails() {
    localStorage.setItem('patientId', id)
    let patientName =  localStorage.getItem('PatientName')
    let pathName =  localStorage.getItem('pathLocation')
+   let patientDetails = JSON.parse(localStorage.getItem('patientDetails'))
 
    
   
@@ -43,8 +44,10 @@ export default function DoctorScheduleDetails() {
 
             <HStack cursor="pointer">
                 <Text fontSize="15px" onClick={() => nav(`${pathName}`)} fontWeight="500" color="blue.blue500">Patient Timeline </Text>
-                <Text fontSize="15px" fontWeight="400" color="#8A8D8E"> {`> ${patientName}`}</Text>
+                <Text fontSize="15px" fontWeight="400" color="#8A8D8E"> {`> ${patientName} >  MRN: ${patientDetails?.MRN} > Gender: ${patientDetails?.gender} > Age: ${patientDetails?.age} `} </Text>
+               
             </HStack>
+        
             <Text color="#686C75" mt="9px" fontWeight="400" fontSize="15px">
                 Give review, notes, findings and diagnosis about patient
             </Text>

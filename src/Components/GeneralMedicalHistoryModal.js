@@ -56,7 +56,7 @@ export default function GeneralMedicalHistoryModal({ isOpen, onClose, type, setO
     const save = () => {
 
         const mergedPayload = { ...Payload, ...RadioGroups }
-        setOldPayload({ ...oldPayload, ["generalmedicalhistory"]: mergedPayload })
+        setOldPayload({ ...oldPayload, "generalmedicalhistory": mergedPayload })
         activateNotifications("Saved Successfully", "success")
         onClose()
     }
