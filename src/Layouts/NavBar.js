@@ -45,6 +45,7 @@ export default function NavBar({ showSearch = true,showNav = true }) {
     const nav = useNavigate()
     const onlineUser = JSON.parse(localStorage.getItem("onlineUser"))
     const token = localStorage.getItem("token")
+    const expiredAt = localStorage.getItem("expiredAt")
 
     const Logout = () => {
 
@@ -59,9 +60,9 @@ export default function NavBar({ showSearch = true,showNav = true }) {
      
 
 
-    if (jwtDecode(token).exp * 1000 <= Date.now()) {
+    if (expiredAt * 1000 <= Date.now()) {
         Logout()
-        // alert("Session has expired")
+        alert("Session has expired")
     }
 
 

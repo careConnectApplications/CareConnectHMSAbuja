@@ -44,10 +44,13 @@ export default function SignIn() {
       if (result.status === 200) {
         setLoading(false);
         const token = result.data.queryresult.token;
+        const expiredAt = result.data.queryresult.options.expires;
         localStorage.setItem("token", token);
+        localStorage.setItem("expiredAt", expiredAt);
         setToken(token);
         const decodedUser = jwtDecode(token).user;
         setOnlineUser(decodedUser);
+        console.log("Decoded User:", decodedUser)
         localStorage.setItem("onlineUser", JSON.stringify(decodedUser));
 
         // Check if a password update is required.
