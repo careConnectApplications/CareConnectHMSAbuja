@@ -62,7 +62,7 @@ export default function TetanusGivenModal({ isOpen, onClose, type, setOldPayload
     const save = () => {
 
         const mergedPayload = { ...Payload, ...RadioGroups }
-        setOldPayload({ ...oldPayload, ["tetanustoxod"]: mergedPayload })
+        setOldPayload({ ...oldPayload, "tetanustoxod": mergedPayload })
         activateNotifications("Saved Successfully", "success")
         onClose()
     }

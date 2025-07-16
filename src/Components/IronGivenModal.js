@@ -56,7 +56,7 @@ export default function IronGivenModal({ isOpen, onClose, type, setOldPayload, a
     const save = () => {
 
         const mergedPayload = { ...Payload, ...RadioGroups }
-        setOldPayload({ ...oldPayload, ["ironfolategiven"]: mergedPayload })
+        setOldPayload({ ...oldPayload, "ironfolategiven": mergedPayload })
         activateNotifications("Saved Successfully", "success")
         onClose()
     }

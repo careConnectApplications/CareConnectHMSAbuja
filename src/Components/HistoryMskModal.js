@@ -40,7 +40,7 @@ export default function HistoryMskModal({ isOpen, onClose, setOldPayload, activa
 
     const save = () => {
 
-        setOldPayload({ ...oldPayload, ["historymsk"]: Payload })
+        setOldPayload({ ...oldPayload, "historymsk": Payload })
         activateNotifications("Saved Successfully", "success")
         onClose()
     }

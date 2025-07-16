@@ -47,7 +47,7 @@ export default function HealthEducationModal({ isOpen, onClose, setOldPayload, a
 
     const save = () => {
 
-        setOldPayload({ ...oldPayload, ["healtheducationtopicscovered"]: Payload })
+        setOldPayload({ ...oldPayload, "healtheducationtopicscovered": Payload })
         activateNotifications("Saved Successfully", "success")
         onClose()
     }
