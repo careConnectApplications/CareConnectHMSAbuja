@@ -73,6 +73,7 @@ export default function TableRow({
   items,
   total,
   onRemove,
+  onPermission,
   onChangeStatus,
   mrn,
   age,
@@ -267,6 +268,21 @@ export default function TableRow({
                 >
                   <HStack fontSize="14px">
                     <Text>Reset Password</Text>
+                  </HStack>
+                </MenuItem>
+                <MenuItem
+                  onClick={onPermission}
+                  textTransform="capitalize"
+                  fontWeight={"500"}
+                  color="#2F2F2F"
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                >
+                  <HStack fontSize="14px">
+                    <Text>Edit Permission</Text>
                   </HStack>
                 </MenuItem>
                 <MenuItem

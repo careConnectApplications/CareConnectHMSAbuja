@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SignIn from "../Pages/AuthenticationScreens/SignIn";
 import Dashboard from "../Pages/Dashboard";
 import UserManagement from "../Pages/UserManagement";
+import EditPermission from "../Pages/EditPermission";
 import Report from "../Pages/Report";
 import SummaryReport from "../Pages/SummaryReport";
 import PrintReportSummary from "../Pages/PrintReportSummary";
@@ -193,6 +194,10 @@ export default function IndexRoutes() {
             <Route
               path="/dashboard/user-management"
               element={<UserManagement />}
+            />
+            <Route
+              path="/dashboard/edit-permission/:id"
+              element={<EditPermission />}
             />
           </Route>
           <Route element={<ClinicalReportRoutes />}>
