@@ -36,7 +36,7 @@ export const isAdmin = () => {
 export const isOutPatientParent = () => {
     let id = 1
 
-    let result = permissions.includes(id)
+    let result = permissions?.includes(id)
 
     if (result) {
         return true
@@ -48,7 +48,7 @@ export const isOutPatientParent = () => {
 export const isOutPatient = () => {
     let id = 2
 
-    let result = permissions.includes(id)
+    let result = permissions?.includes(id)
 
     if (result) {
         return true
@@ -60,7 +60,7 @@ export const isOutPatient = () => {
 export const isInPatient = () => {
     let id = 3
 
-    let result = permissions.includes(id)
+    let result = permissions?.includes(id)
     if (result) {
         return true
     } else {
@@ -71,7 +71,7 @@ export const isInPatient = () => {
 export const isLabStaff = () => {
     let id = 4
 
-    let result = permissions.includes(id)
+    let result = permissions?.includes(id)
 
     if (result) {
         return true
@@ -83,7 +83,7 @@ export const isLabStaff = () => {
 export const isRadiologyStaff = () => {
     let id = 5
 
-    let result = permissions.includes(id)
+    let result = permissions?.includes(id)
 
     if (result) {
         return true
@@ -95,7 +95,7 @@ export const isRadiologyStaff = () => {
 export const isScheduleAppointmentStaff = () => {
     let id = 6
 
-    let result = permissions.includes(id)
+    let result = permissions?.includes(id)
 
     if (result) {
         return true
@@ -107,7 +107,7 @@ export const isScheduleAppointmentStaff = () => {
 export const isScheduleProcedureStaff = () => {
    let id = 7
 
-    let result = permissions.includes(id)
+    let result = permissions?.includes(id)
 
     if (result) {
         return true
@@ -119,7 +119,7 @@ export const isScheduleProcedureStaff = () => {
 export const isPharmacyStaff = () => {
   let id = 8
 
-    let result = permissions.includes(id)
+    let result = permissions?.includes(id)
 
     if (result) {
         return true
@@ -131,7 +131,7 @@ export const isPharmacyStaff = () => {
 export const isInventoryStaff = () => {
      let id = 14
 
-    let result = permissions.includes(id)
+    let result = permissions?.includes(id)
 
 
     if (result) {
@@ -146,7 +146,7 @@ export const isInventoryStaff = () => {
 export const isBillingStaff = () => {
      let id = 9
 
-    let result = permissions.includes(id)
+    let result = permissions?.includes(id)
 
     if (result) {
         return true
@@ -158,7 +158,7 @@ export const isBillingStaff = () => {
 export const isBillingStaffHOD = () => {
     let id = 15
 
-    let result = permissions.includes(id)
+    let result = permissions?.includes(id)
 
     if (result) {
         return true
@@ -170,7 +170,7 @@ export const isBillingStaffHOD = () => {
 export const isRecordStaff = () => {
       let id = 10
 
-    let result = permissions.includes(id)
+    let result = permissions?.includes(id)
 
 
     if (result) {
@@ -183,7 +183,7 @@ export const isRecordStaff = () => {
 export const isClinicalReport = () => {
      let id = 11
 
-    let result = permissions.includes(id)
+    let result = permissions?.includes(id)
 
 
     if (result) {
@@ -196,7 +196,7 @@ export const isClinicalReport = () => {
 export const isUserManagerStaff = () => {
      let id = 12
 
-    let result = permissions.includes(id)
+    let result = permissions?.includes(id)
 
     if (result) {
         return true
@@ -210,7 +210,7 @@ export const isUserManagerStaff = () => {
 export const isTheatreStaff = () => {
     let id = 13
 
-    let result = permissions.includes(id)
+    let result = permissions?.includes(id)
 
     if (result) {
         return true
