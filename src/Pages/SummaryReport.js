@@ -245,7 +245,7 @@ export default function SummaryReport() {
           localStorage.setItem("reportCategory", QueryType);
           nav("/dashboard/report-analytics/print-summary");
         } // Handle Health Facility Attendance Report
-        else if (QueryType === "healthfacilityattendance") {
+        else if (QueryType === "health facility attendance") {
           console.log(
             "Processing healthfacilityattendance data:",
             result.queryresult
@@ -273,7 +273,7 @@ export default function SummaryReport() {
           nav("/dashboard/report-analytics/print-summary");
         }
         // Handle Inpatient Care Report
-        else if (QueryType === "inpatientcare") {
+        else if (QueryType === "inpatient care") {
           console.log(
             "Processing inpatient data:",
             result.queryresult
