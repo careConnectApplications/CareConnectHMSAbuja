@@ -1098,7 +1098,7 @@ export default function PrintReportSummary() {
               </TableContainer>
             </>
           )}
-        {Category === "healthfacilityattendance" && (
+        {Category === "health facility attendance" && (
           <>
             {/* Outpatient Attendance Section */}
             {Data.outpatientattendance?.length > 0 && (
@@ -1159,7 +1159,7 @@ export default function PrintReportSummary() {
             )}
           </>
         )}
-        {Category === "inpatientcare" && (
+        {Category === "inpatient care" && (
           <>
             <Text mt="2" fontWeight="600">
               Inpatient Care
