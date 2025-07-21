@@ -2,6 +2,7 @@ import { isActive, isOutPatient,isOutPatientParent,isRecordStaff,isInPatient,
   isScheduleAppointmentStaff,isScheduleProcedureStaff,isLabStaff,isRadiologyStaff,
   isPharmacyStaff,isInventoryStaff,isBillingStaff,isUserManagerStaff,isTheatreStaff,isClinicalReport,isBillingStaffHOD } from "../Authentication/Index";
 import { MdOutlineAnalytics } from "react-icons/md";
+import { IoBody } from "react-icons/io5";
 import { FaUserInjured, FaUsers } from "react-icons/fa";
 import { BiSolidReport } from "react-icons/bi";
 import { FaUserNurse } from "react-icons/fa";
@@ -167,6 +168,30 @@ export const NavList = (location) => {
           icon: <MdOutlineAnalytics />,
           link: "/dashboard/lab-process/report",
           active: isActive(location, "/dashboard/lab-process/report"),
+          display: isLabStaff(),
+        },
+      ],
+    },
+    {
+      name: "histopathology",
+      icon: <IoBody />,
+      link: "#",
+      active: isActive(location, "#"),
+      display: isLabStaff(),
+      children: [
+        {
+          name: "histopathology",
+          icon: <MdOutlineAnalytics />,
+          link: "/dashboard/histopathology-process/histopathology",
+          active: isActive(location, "/dashboard/histopathology-process/histopathology"),
+          display: isLabStaff(),
+        },
+
+        {
+          name: "report",
+          icon: <MdOutlineAnalytics />,
+          link: "/dashboard/histopathology-process/report",
+          active: isActive(location, "/dashboard/histopathology-process/report"),
           display: isLabStaff(),
         },
       ],
