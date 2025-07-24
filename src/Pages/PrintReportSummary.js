@@ -1186,6 +1186,190 @@ export default function PrintReportSummary() {
             </TableContainer>
           </>
         )}
+        {Category === "Family Planning" && (
+          <>
+            {/* Oral Pills Section */}
+            {Data.clientsgivenoralpill?.length > 0 && (
+              <>
+                <Text mt="4" fontWeight="600">
+                  Oral Contraceptive Pills
+                </Text>
+                <TableContainer mt="2">
+                  <Table variant="striped">
+                    <Thead>
+                      <Tr>
+                        <Th>Unique Clients</Th>
+                        <Th>Cycles Dispensed</Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody>
+                      <Tr>
+                        <Td>
+                          {Data.clientsgivenoralpill[0]
+                            ?.uniqueOralPillsPatients || 0}
+                        </Td>
+                        <Td>
+                          {Data.oralpillcyclesdispensed[0]
+                            ?.totalCyclesDispensed || 0}
+                        </Td>
+                      </Tr>
+                    </Tbody>
+                  </Table>
+                </TableContainer>
+              </>
+            )}
+
+            {/* Injectables Section */}
+            {Data.injectablesgiven?.length > 0 && (
+              <>
+                <Text mt="4" fontWeight="600">
+                  Injectable Contraceptives
+                </Text>
+                <TableContainer mt="2">
+                  <Table variant="striped">
+                    <Thead>
+                      <Tr>
+                        <Th>Type</Th>
+                        <Th>Quantity Given</Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody>
+                      <Tr>
+                        <Td>
+                          {Data.injectablesgiven[0]?.injectableName || "N/A"}
+                        </Td>
+                        <Td>{Data.injectablesgiven[0]?.totalQuantity || 0}</Td>
+                      </Tr>
+                    </Tbody>
+                  </Table>
+                </TableContainer>
+              </>
+            )}
+
+            {/* Long-Acting Methods Section */}
+            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4} mt="4">
+              {/* Implants */}
+              {Data.Implantsinserted?.length > 0 && (
+                <Box>
+                  <Text fontWeight="600">Implants</Text>
+                  <TableContainer mt="2">
+                    <Table variant="striped">
+                      <Thead>
+                        <Tr>
+                          <Th>Type</Th>
+                          <Th>Insertions</Th>
+                        </Tr>
+                      </Thead>
+                      <Tbody>
+                        <Tr>
+                          <Td>
+                            {Data.Implantsinserted[0]?.implantType || "N/A"}
+                          </Td>
+                          <Td>
+                            {Data.Implantsinserted[0]?.totalInsertions || 0}
+                          </Td>
+                        </Tr>
+                      </Tbody>
+                    </Table>
+                  </TableContainer>
+                </Box>
+              )}
+
+              {/* IUDs */}
+              {Data.iudInserteds?.length > 0 && (
+                <Box>
+                  <Text fontWeight="600">Intrauterine Devices (IUDs)</Text>
+                  <TableContainer mt="2">
+                    <Table variant="striped">
+                      <Thead>
+                        <Tr>
+                          <Th>Type</Th>
+                          <Th>Insertions</Th>
+                        </Tr>
+                      </Thead>
+                      <Tbody>
+                        <Tr>
+                          <Td>{Data.iudInserteds[0]?.iudType || "N/A"}</Td>
+                          <Td>{Data.iudInserteds[0]?.totalInsertions || 0}</Td>
+                        </Tr>
+                      </Tbody>
+                    </Table>
+                  </TableContainer>
+                </Box>
+              )}
+            </SimpleGrid>
+
+            {/* Postpartum Section */}
+            {Data.postpartumIUDinserted?.length > 0 && (
+              <>
+                <Text mt="4" fontWeight="600">
+                  Postpartum Family Planning
+                </Text>
+                <TableContainer mt="2">
+                  <Table variant="striped">
+                    <Thead>
+                      <Tr>
+                        <Th>Postpartum IUDs Inserted</Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody>
+                      <Tr>
+                        <Td>
+                          {Data.postpartumIUDinserted[0]
+                            ?.postPartumIUDInserted || 0}
+                        </Td>
+                      </Tr>
+                    </Tbody>
+                  </Table>
+                </TableContainer>
+              </>
+            )}
+
+            {/* Summary Totals */}
+            <Box mt="6" p="4" bg="gray.50" borderRadius="md">
+              <Text fontSize="lg" fontWeight="700" mb="2">
+                Summary Totals
+              </Text>
+              <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={3}>
+                <Box>
+                  <Text fontWeight="600">Oral Pill Clients</Text>
+                  <Text>
+                    {JSON.parse(localStorage.getItem("reportGrandTotal"))
+                      ?.oralPillClients || 0}
+                  </Text>
+                </Box>
+                <Box>
+                  <Text fontWeight="600">Injectable Contraceptives</Text>
+                  <Text>
+                    {JSON.parse(localStorage.getItem("reportGrandTotal"))
+                      ?.injectables || 0}
+                  </Text>
+                </Box>
+                <Box>
+                  <Text fontWeight="600">Implants</Text>
+                  <Text>
+                    {JSON.parse(localStorage.getItem("reportGrandTotal"))
+                      ?.implants || 0}
+                  </Text>
+                </Box>
+                <Box>
+                  <Text fontWeight="600">IUDs</Text>
+                  <Text>
+                    {JSON.parse(localStorage.getItem("reportGrandTotal"))
+                      ?.iuds || 0}
+                  </Text>
+                </Box>
+                <Box>
+                  <Text fontWeight="600">Postpartum IUDs</Text>
+                  <Text>
+                    {JSON.parse(localStorage.getItem("reportGrandTotal"))
+                      ?.postpartumIUDs || 0}
+                  </Text>
+                </Box>
+              </SimpleGrid>
+            </Box>
+          </>
+        )}
       </Box>
     </Box>
   );

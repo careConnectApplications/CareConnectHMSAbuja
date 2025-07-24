@@ -130,7 +130,6 @@ export const GetAllHistopathologyReportApi = () => {
     });
 };
 
-
 export const AddUserApi = (userData) => {
   console.log("AddUserApi", userData);
 
@@ -380,17 +379,17 @@ export const GetSingleUsersApi = (userId) => {
     });
 };
 export const UpdateUserPermissionApi = (payload, userId) => {
-  console.log("payload",payload)
+  console.log("payload", payload);
   // Configure the GET request
   let data = JSON.stringify(payload);
   let config = {
     method: "PUT",
     url: `${baseUrl}/users/${userId}/permissions`,
-    headers: {  
+    headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    data: data
+    data: data,
   };
 
   return axios
@@ -7667,7 +7666,10 @@ export const GetHealthFacilityAttendanceReportApi = (startDate, endDate) => {
       return response.data; // Return the data part of the response
     })
     .catch((error) => {
-      console.log("Error fetching health facility attendance report:", error.response);
+      console.log(
+        "Error fetching health facility attendance report:",
+        error.response
+      );
       if (error.response && error.response.data.msg) {
         throw new Error(error.response.data.msg);
       } else if (error.response && error.response.data) {
@@ -7705,6 +7707,101 @@ export const GetInpatientCareReportApi = (startDate, endDate) => {
         throw new Error(error.msg);
       } else {
         throw new Error(error.msg);
+      }
+    });
+};
+export const CreatePsychiatricEvaluationApi = (id, payload) => {
+  const data = JSON.stringify(payload);
+
+  const config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/psychiatric/createpsychiatricevaluation/${id}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data,
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      console.log(
+        "Psychiatric evaluation created:",
+        JSON.stringify(response.data)
+      );
+      return response;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response?.data?.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response?.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.message);
+      } else {
+        throw new Error(error.message);
+      }
+    });
+};
+
+export const GetPsychiatricEvaluationByIdApi = (id) => {
+  const config = {
+    method: "get",
+    url: `${baseUrl}/psychiatric/readAllPsychiatricByPatient/${id}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      console.log("Psychiatric evaluation retrieved:", response.data);
+      return response.data;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      throw error;
+    });
+};
+
+export const UpdatePsychiatricEvaluationApi = (id, payload) => {
+  const data = JSON.stringify(payload);
+
+  const config = {
+    method: "put",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/psychiatric/updatepsychiatric//${id}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data,
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      console.log(
+        "Psychiatric evaluation updated:",
+        JSON.stringify(response.data)
+      );
+      return response;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response?.data?.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response?.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.message);
+      } else {
+        throw new Error(error.message);
       }
     });
 };
