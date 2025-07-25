@@ -159,7 +159,6 @@ export default function SummaryReport() {
       );
 
       console.log("result GetFullReportSummaryApi", result);
-      
 
       if (result.status === true) {
         setLoading(false);
@@ -274,10 +273,7 @@ export default function SummaryReport() {
         }
         // Handle Inpatient Care Report
         else if (QueryType === "inpatient care") {
-          console.log(
-            "Processing inpatient data:",
-            result.queryresult
-          );
+          console.log("Processing inpatient data:", result.queryresult);
           // Calculate total
           const totalInpatient = result.queryresult.reduce(
             (sum, item) => sum + item.count,
@@ -293,6 +289,32 @@ export default function SummaryReport() {
             "reportGrandTotal",
             JSON.stringify({ totalInpatient })
           );
+          nav("/dashboard/report-analytics/print-summary");
+        } else if (QueryType === "Family Planning") {
+          // Process family planning data
+          const totals = {
+            oralPillClients:
+              result.queryresult.clientsgivenoralpill?.[0]
+                ?.uniqueOralPillsPatients || 0,
+            oralPillCycles:
+              result.queryresult.oralpillcyclesdispensed?.[0]
+                ?.totalCyclesDispensed || 0,
+            injectables:
+              result.queryresult.injectablesgiven?.[0]?.totalQuantity || 0,
+            implants:
+              result.queryresult.Implantsinserted?.[0]?.totalInsertions || 0,
+            iuds: result.queryresult.iudInserteds?.[0]?.totalInsertions || 0,
+            postpartumIUDs:
+              result.queryresult.postpartumIUDinserted?.[0]
+                ?.postPartumIUDInserted || 0,
+          };
+
+          localStorage.setItem(
+            "reportSummary",
+            JSON.stringify(result.queryresult)
+          );
+          localStorage.setItem("reportCategory", QueryType);
+          localStorage.setItem("reportGrandTotal", JSON.stringify(totals));
           nav("/dashboard/report-analytics/print-summary");
         }
       }
@@ -366,7 +388,7 @@ export default function SummaryReport() {
         </Text>
       </HStack>
       <Text color="#686C75" mt="9px" fontWeight="400" fontSize="15px">
-        Access reports, and analytics across departments all in one place
+        Access reports, and analytics across departments all in one place
       </Text>
       {/* filters needed for the get full report */}
       <Box

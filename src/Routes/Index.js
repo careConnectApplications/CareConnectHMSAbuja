@@ -73,6 +73,9 @@ import EditPostAnaestheticRecoveryChartForm from "../Pages/EditPostAnaestheticRe
 import TheatreVitalSignScores from "../Pages/TheatreVitalSignScores";
 import AddHistologyRequestForm from "../Pages/AddHistologyRequestForm";
 import EditHistologyRequestForm from "../Pages/EditHistologyRequestForm";
+import AddPsychiatricEvaluation from "../Pages/AddPsychiatricEvaluation";
+import EditPsychiatricEvaluation from "../Pages/EditPsychiatricEvaluation";
+import PsychiatricEvaluations from "../Pages/PsychiatricEvaluations";
 
 export default function IndexRoutes() {
   return (
@@ -297,6 +300,15 @@ export default function IndexRoutes() {
             <Route
               path="/dashboard/add-histology-request-form/:id"
               element={<AddHistologyRequestForm />}
+            />
+
+            <Route
+              path="/dashboard/add-psychiatric-evaluation/:id"
+              element={<AddPsychiatricEvaluation />}
+            />
+            <Route
+              path="/dashboard/edit-psychiatric-evaluation/:id"
+              element={<EditPsychiatricEvaluation />}
             />
           </Route>
         </Route>
