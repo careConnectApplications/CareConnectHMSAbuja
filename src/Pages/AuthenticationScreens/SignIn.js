@@ -45,8 +45,8 @@ export default function SignIn() {
         setLoading(false);
         const token = result.data.queryresult.token;
         const expiredAt = result.data.queryresult.options.expires;
-        localStorage.setItem("token", token);
         localStorage.setItem("expiredAt", expiredAt);
+        localStorage.setItem("token", token);
         setToken(token);
         const decodedUser = jwtDecode(token).user;
         setOnlineUser(decodedUser);

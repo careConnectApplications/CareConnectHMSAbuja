@@ -23,7 +23,7 @@ import { IoFilter } from "react-icons/io5";
 import moment from "moment";
 import Seo from "../Utils/Seo";
 import CreateTestOrderModal from "../Components/CreateTestOrderModal";
-import RequestLabOtherModal from "../Components/RequestLabOtherModal";
+import CreateHistopathologyModal from "../Components/CreateHistopathologyModal";
 import ConfirmLabOrderModal from "../Components/ConfirmLabOrderModal";
 import { GetAllHistopathologyApi, GetAllHistopathologyFilteredApi } from "../Utils/ApiCalls";
 import Pagination from "../Components/Pagination";
@@ -155,9 +155,9 @@ export default function Histopathology() {
       console.log("getAllScheduledPathology", result);
       if (result.status === true) {
         setIsLoading(false);
-        setData(result.queryresult.labdetails);
-        setFilterData(result.queryresult.labdetails);
-        setTotalData(result.queryresult.totallabdetails)
+        setData(result.data.results);
+        setFilterData(result.data.results);
+        setTotalData(result.data.totalCount)
       }
     } catch (e) {
       console.error(e.message);
@@ -528,22 +528,31 @@ export default function Histopathology() {
             <Thead bg="#fff">
               <Tr>
                 <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
-                  Test ID
-                </Th>
-                <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
                   Patient name
-                </Th>
-                <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
-                  Department
                 </Th>
                 <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
                   Test Name
                 </Th>
                 <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
-                  Order Date
+                 biopsy Type
+                </Th>
+                <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                  lmp
+                </Th>
+                <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                 phone Number
+                </Th>
+                <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                 previous Biopsy
+                </Th>
+                <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                whole Organ
                 </Th>
                 <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
                   Lab Status
+                </Th>
+                <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                  Payment Status
                 </Th>
                 <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
                   Actions
@@ -555,14 +564,17 @@ export default function Histopathology() {
                 FilterData?.map((item, i) => (
                   <TableRow
                     key={i}
-                    type="lab-processing"
-                    testid={item.testid}
+                    type="histopatholgy-process"
                     name={`${item.patient?.firstName} ${item.patient?.lastName}`}
-                    mrn={item.patient?.MRN}
-                    department={item.department}
-                    testName={item.testname}
-                    date={moment(item.createdAt).format("lll")}
+                    testName={item.testName}
+                    biopsyType={item.diagnosisForm?.biopsyType}
+                    mrn={item.patient?.mrn}
+                    phone={item.diagnosisForm?.phoneNumber}
+                    previousBiopsy={item.diagnosisForm?.previousBiopsy ? "Yes" : "No"}
+                    lmp={moment(item.diagnosisForm?.lmp).format("lll")}
+                    wholeOrgan={item.diagnosisForm?.wholeOrgan}
                     labStatus={item.status}
+                    status={item.testPaymentStatus}
                     onConfirmClick={() => {
                       console.log("Confirm action triggered for item:", item);
                       confirmLab(item);
@@ -583,7 +595,7 @@ export default function Histopathology() {
                 FilteredData?.map((item, i) => (
                   <TableRow
                     key={i}
-                    type="lab-processing"
+                    type="histopatholgy-process"
                     name={`${item.patient?.firstName} ${item.patient?.lastName}`}
                     mrn={item.patient?.MRN}
                     testName={item.testname}
@@ -629,7 +641,7 @@ export default function Histopathology() {
         type={ModalState}
         activateNotifications={activateNotifications}
       />
-      <RequestLabOtherModal
+      <CreateHistopathologyModal
         isOpen={OpenOrderModal}
         oldPayload={OldPayload}
         onClose={() => setOpenOrderModal(false)}

@@ -31,48 +31,7 @@ export const NavList = (location) => {
     }
   };
 
-  const checkReport = () => {
-    let result = "";
-
-    if (
-      isActive(location, "/dashboard/report-analytics/report") ||
-      isActive(location, "/dashboard/report-analytics/summary")
-    ) {
-      result = true;
-      return result;
-    } else {
-      result = false;
-      return result;
-    }
-  };
-  const checkActivePatient = () => {
-    let result = "";
-
-    if (
-      isActive(location, "/dashboard/patient") ||
-      isActive(location, "/dashboard/doctor-schedule")
-    ) {
-      result = true;
-      return result;
-    } else {
-      result = false;
-      return result;
-    }
-  };
-  const checkActiveInPatient = () => {
-    let result = "";
-
-    if (
-      isActive(location, "/dashboard/in-patient") ||
-      isActive(location, "/dashboard/nurse-care")
-    ) {
-      result = true;
-      return result;
-    } else {
-      result = false;
-      return result;
-    }
-  };
+  
 
   let List = [
     {
