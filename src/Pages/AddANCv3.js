@@ -89,8 +89,12 @@ export default function AddANCv3() {
     };
 
     const handlePayload = (e) => {
-        setPayload({ ...Payload, [e.target.id]: e.target.value })
-
+        const { id, value } = e.target;
+        if (id === 'lmp' && value === '') {
+            setPayload({ ...Payload, lmp: '', edd: '' });
+        } else {
+            setPayload({ ...Payload, [id]: value });
+        }
     }
 
     const addPostMedicalHistory = () => {
@@ -201,6 +205,17 @@ export default function AddANCv3() {
     }, [Payload]);
 
 
+    useEffect(() => {
+        if (Payload.lmp) {
+            const lmpDate = new Date(Payload.lmp);
+            lmpDate.setMonth(lmpDate.getMonth() + 9);
+            lmpDate.setDate(lmpDate.getDate() + 7);
+            const eddDate = lmpDate.toISOString().split('T')[0];
+            setPayload(prev => ({ ...prev, edd: eddDate }));
+        }
+    }, [Payload.lmp]);
+
+
 
     const nav = useNavigate()
 
@@ -268,7 +283,7 @@ export default function AddANCv3() {
                             <SimpleGrid columns={{ base: 1, md: 3 }} spacing={2}>
                                 <Input leftIcon={<MdDateRange />} type="date" label="booking Date" value={Payload.bookingDate} onChange={handlePayload} id="bookingDate" />
                                 <Input leftIcon={<MdDateRange />} type="date" label="LMP" value={Payload.lmp} onChange={handlePayload} id="lmp" />
-                                <Input leftIcon={<MdDateRange />} type="date" label="EDD" value={Payload.edd} onChange={handlePayload} id="edd" />
+                                <Input leftIcon={<MdDateRange />} type="date" label="EDD" value={Payload.edd} val={Payload.edd !=="" ? true: false} onChange={handlePayload} id="edd" readOnly={true} />
                             </SimpleGrid>
                             <Input leftIcon={<FaNoteSticky />} label="Gravidity" value={Payload.gravidity} onChange={handlePayload} id="gravidity" />
                             <Input leftIcon={<FaNoteSticky />} label="indication" value={Payload.indication} onChange={handlePayload} id="indication" />
