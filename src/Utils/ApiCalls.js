@@ -35,11 +35,43 @@ export const ProviderLoginApi = (Payload) => {
     });
 };
 
+export const CreateHistologyApi = (payload) => {
+  let data = JSON.stringify(payload);
+  let config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/histopathology`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data: data,
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response.data.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
+
 export const GetAllHistopathologyApi = (postPerPage, pageNo, status) => {
   // Configure the GET request
   let config = {
     method: "get",
-    url: `${baseUrl}/histopathology?status=${status}&page=${pageNo}&size=${postPerPage}`,
+    url: `${baseUrl}/histopathology?status=${status}&page=${pageNo}&limit=${postPerPage}`,
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
