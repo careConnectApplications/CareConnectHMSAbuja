@@ -72,12 +72,12 @@ export default function DoctorScheduleDetails() {
 
       <Tabs mt="12px">
         <TabList color="#101828" pb="10px" flexWrap={"wrap"}>
-          <Tab
+          {/* <Tab
             _focus={{ outline: "none" }}
             _selected={{ color: "blue.blue500", fontWeight: "700" }}
           >
             Encounter{" "}
-          </Tab>
+          </Tab> */}
           <Tab
             _focus={{ outline: "none" }}
             _selected={{ color: "blue.blue500", fontWeight: "700" }}
@@ -144,23 +144,12 @@ export default function DoctorScheduleDetails() {
           >
             Family Planning{" "}
           </Tab>
+        
           <Tab
             _focus={{ outline: "none" }}
             _selected={{ color: "blue.blue500", fontWeight: "700" }}
           >
-            ANC Card{" "}
-          </Tab>
-          <Tab
-            _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
-          >
-            ANC{" "}
-          </Tab>
-          <Tab
-            _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
-          >
-            ANC 3
+            ANC 
           </Tab>
           <Tab
             _focus={{ outline: "none" }}
@@ -207,9 +196,9 @@ export default function DoctorScheduleDetails() {
         </TabList>
         {/* <TabIndicator mt='-1.5px' height='2px' bg='blue.blue500' borderRadius='1px' /> */}
         <TabPanels>
-          <TabPanel p="0">
+          {/* <TabPanel p="0">
             <Examine index={0} id={id} />
-          </TabPanel>
+          </TabPanel> */}
           <TabPanel p="0">
             <ClinicalEncounter index={1} id={id} />
           </TabPanel>
@@ -242,12 +231,6 @@ export default function DoctorScheduleDetails() {
           </TabPanel>
           <TabPanel p="0">
             <SingleFamilyPlanning />
-          </TabPanel>
-          <TabPanel p="0">
-            <AncCards id={id} />
-          </TabPanel>
-          <TabPanel p="0">
-            <ANC id={id} />
           </TabPanel>
           <TabPanel p="0">
             <ANC3 id={id} />

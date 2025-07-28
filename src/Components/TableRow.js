@@ -1364,9 +1364,9 @@ export default function TableRow({
     <Td>
       <HStack
         color={
-                status === "complete"
+                status === "paid"
             ? "#027A48"
-            : status === "scheduled"
+            : status === "pending payment"
             ? "#FFA30C"
             : "#FF0000" // changed to red
         }
@@ -1376,9 +1376,9 @@ export default function TableRow({
           w="8px"
           h="8px"
           bg={
-            status === "complete"
+            status === "paid"
               ? "#027A48"
-              : status === "scheduled"
+              : status === "pending payment"
               ? "#FFA30C"
               : "#FF0000" // changed to red
           }

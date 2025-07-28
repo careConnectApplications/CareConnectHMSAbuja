@@ -71,17 +71,20 @@ export default function CreateHistopathologyModal({
     setPayload({ ...payload, previousBiopsy: value === "true" });
   };
 
+
+
   const fetchDoctors = async () => {
     try {
       const result = await GetAllUsersApi();
-      if (result?.data) {
-        const doctorUsers = result.data.filter(
-          (user) => user.role.toLowerCase() === "doctor"
+      console.log("Doctors API response:", result);
+      if (result?.status) {
+        const doctorUsers = result.queryresult.userdetails.filter(
+          (user) => user.role === "Medical Doctor"
         );
         setDoctors(doctorUsers);
       }
     } catch (e) {
-      console.error("Error fetching doctors:", e);
+      console.error("Error fetching doctors:", e.message);
     }
   };
 
@@ -150,6 +153,7 @@ export default function CreateHistopathologyModal({
       fetchDoctors();
     }
   }, [isOpen]);
+
 
   useEffect(() => {
     if (!isOpen) {

@@ -60,33 +60,33 @@ export default function PreviousPregnancyCard({ Payload, setPayload, oldItem = [
 
         setPayload({ ...Payload, previouspregnancy: itemToUpdate });
     }
-    const handleageifalive = (e) => {
+    const handlepuerperium = (e) => {
         //get the item index to update
         let objIndex = itemToUpdate.findIndex((obj, index) => index == i);
 
         // console.log("idd", objIndex, itemToUpdate[objIndex]);
 
-        itemToUpdate[objIndex].ageifalive = e.target.value
+        itemToUpdate[objIndex].puerperium = e.target.value
 
         setPayload({ ...Payload, previouspregnancy: itemToUpdate });
     }
-    const handleageifdead = (e) => {
+    const handlesex = (e) => {
         //get the item index to update
         let objIndex = itemToUpdate.findIndex((obj, index) => index == i);
 
         // console.log("idd", objIndex, itemToUpdate[objIndex]);
 
-        itemToUpdate[objIndex].ageifdead = e.target.value
+        itemToUpdate[objIndex].sex = e.target.value
 
         setPayload({ ...Payload, previouspregnancy: itemToUpdate });
     }
-    const handlecauseofdeath = (e) => {
+    const handlebirthWeight = (e) => {
         //get the item index to update
         let objIndex = itemToUpdate.findIndex((obj, index) => index == i);
 
         // console.log("idd", objIndex, itemToUpdate[objIndex]);
 
-        itemToUpdate[objIndex].causeofdeath = e.target.value
+        itemToUpdate[objIndex].birthWeight = e.target.value
 
         setPayload({ ...Payload, previouspregnancy: itemToUpdate });
     }
@@ -136,9 +136,9 @@ export default function PreviousPregnancyCard({ Payload, setPayload, oldItem = [
                             <Input leftIcon={<BiUnite />} label="Duration of Pregnancy"  onChange={handledurationpregnancy}  value={data.durationpregnancy}  id="durationpregnancy" val={data.durationpregnancy !== "" ? true : false} />
                             <Input leftIcon={<BiUnite />} label="Antenatal Complication"  onChange={handleantenatalcomplication}  value={data.antenatalcomplication}  id="antenatalcomplication" val={data.antenatalcomplication !== "" ? true : false} />
                             <Input leftIcon={<BiUnite />} label="Labour"  onChange={handlelabour}  value={data.labour}  id="labour" val={data.labour !== "" ? true : false} />
-                            <Input leftIcon={<BiUnite />} label="Age if Alive"  onChange={handleageifalive}  value={data.ageifalive}  id="ageifalive" val={data.ageifalive !== "" ? true : false} />
-                            <Input leftIcon={<BiUnite />} label="Age if Dead"  onChange={handleageifdead}  value={data.ageifdead}  id="ageifdead" val={data.ageifdead !== "" ? true : false} />
-                            <Input leftIcon={<BiUnite />} label="Cause of Death"  onChange={handlecauseofdeath}  value={data.causeofdeath}  id="causeofdeath" val={data.causeofdeath !== "" ? true : false} />
+                            <Input leftIcon={<BiUnite />} label="Puerperium"  onChange={handlepuerperium}  value={data.puerperium}  id="puerperium" val={data.puerperium !== "" ? true : false} />
+                            <Input leftIcon={<BiUnite />} label="Sex"  onChange={handlesex}  value={data.sex}  id="sex" val={data.sex !== "" ? true : false} />
+                            <Input leftIcon={<BiUnite />} label="Birth Weight"  onChange={handlebirthWeight}  value={data.birthWeight}  id="birthWeight" val={data.birthWeight !== "" ? true : false} />
                            
 
                         </SimpleGrid>

@@ -3247,6 +3247,38 @@ export const ProcessLabApi = (payload, id) => {
       }
     });
 };
+export const ProcessHistopathologyApi = (payload) => {
+  let data = JSON.stringify(payload);
+  let config = {
+    method: "POST",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/histopathology-test`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data: data,
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      console.log(JSON.stringify(response.data));
+      return response;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response.data.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
 export const UpdatePatientApi = (patientData, id) => {
   let data = JSON.stringify(patientData);
   let config = {

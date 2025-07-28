@@ -37,9 +37,9 @@ export default function PreviousPregnancyModal({ isOpen, onClose, setOldPayload,
                 durationpregnancy: "",
                 antenatalcomplication: "",
                 labour: "",
-                ageifalive: "",
-                ageifdead: "",
-                causeofdeath: "",
+                puerperium: "",
+                sex: "",
+                birthWeight: "",
 
             }
         ],
@@ -104,9 +104,9 @@ export default function PreviousPregnancyModal({ isOpen, onClose, setOldPayload,
                                     durationpregnancy: "",
                                     antenatalcomplication: "",
                                     labour: "",
-                                    ageifalive: "",
-                                    ageifdead: "",
-                                    causeofdeath: "",
+                                    puerperium: "",
+                                    sex: "",
+                                    birthWeight: "",
                                 },]
                             }
                         )}>Add</Button>
