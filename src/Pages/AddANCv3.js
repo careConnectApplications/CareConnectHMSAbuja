@@ -12,18 +12,14 @@ import GeneralMedicalHistoryModalv2 from "../Components/GeneralMedicalHistoryMod
 import PreviewANC from "../Components/PreviewANC";
 import { useNavigate } from 'react-router-dom';
 import { IoMdArrowRoundBack } from "react-icons/io";
-import {
-    Accordion,
-    AccordionItem,
-    AccordionButton,
-    AccordionPanel,
-    AccordionIcon, RadioGroup, Radio
-} from '@chakra-ui/react'
+import { RadioGroup, Radio } from '@chakra-ui/react'
 import { SettingsApi, CreateAncV3API } from "../Utils/ApiCalls";
 import { FaNoteSticky } from "react-icons/fa6";
 import { IoIosCloseCircle } from "react-icons/io";
 import { MdDateRange } from "react-icons/md";
 import { useParams } from 'react-router-dom';
+import PatientInfoCard from '../Components/PatientInfoCard';
+
 
 export default function AddANCv3() {
     const { id } = useParams()
@@ -46,6 +42,7 @@ export default function AddANCv3() {
     const [Loading, setLoading] = useState(false);
     const [LoadingCompleted, setLoadingCompleted] = useState(false);
 
+
     const [Payload, setPayload] = useState({
 
         lmp: "",
@@ -54,10 +51,30 @@ export default function AddANCv3() {
         cycle: "",
         breasts: "",
         height: "",
+        weight: "",
         cvs: "",
         rs: "",
         pelvis: "",
         abdomen: "",
+        retroviral: "",
+        bp: "",
+        urine: "",
+        hb: "",
+        bloodGroup: "",
+        groupRh: "",
+        genotype: "",
+        VDRL: "",
+        others: "",
+        comments: "",
+        bleeding: "",
+        discharge: "",
+        swellingAnkles: "",
+        urinarySymtoms: "",
+        bookingDate: "",
+        indication: "",
+        specialPoint: "",
+        para: "",
+        consultant: "",
     })
 
 
@@ -84,7 +101,7 @@ export default function AddANCv3() {
         setHistoryPresentPregnancy([...HistoryPresentPregnancy, Payload.historyofpresentpregnancy])
         setPayload({ ...Payload, historyofpresentpregnancy: "" })
     }
-   
+
 
 
 
@@ -110,7 +127,7 @@ export default function AddANCv3() {
         const updatedItems = HistoryPresentPregnancy.filter(id => id !== item);
         setHistoryPresentPregnancy(updatedItems);
     }
-   
+
 
     const [showToast, setShowToast] = useState({
         show: false,
@@ -145,7 +162,7 @@ export default function AddANCv3() {
                 ...Payload,
                 postmedicalorsurgicalhistory: PostMedicalHistory,
                 historyofpresentpregnancy: HistoryPresentPregnancy,
-               
+
             }, id);
 
 
@@ -198,225 +215,136 @@ export default function AddANCv3() {
             <Box>
                 <Button leftIcon={<IoMdArrowRoundBack />} px="40px" w="100px" onClick={() => nav(`${pathname}`)}>Back</Button>
 
-                <Accordion defaultIndex={[2]} mt="32px" allowToggle>
-                    <AccordionItem mb="15px" >
+                <PatientInfoCard />
 
-                        <AccordionButton _hover={{ border: "1px solid #EA5937", color: "#000" }} _focus={{ outline: "none" }} border="1px solid #fff" _expanded={{ rounded: "8px 8px 0px 0px", border: 0 }} bg="#fff" color="#000" rounded="8px">
-                            <Box as='span' flex='1' textAlign='left'>
-                                Previous ANC
-                            </Box>
-                            <AccordionIcon />
-                        </AccordionButton>
+                <Stack spacing={5} mt="32px">
+                    {/* Previous ANC Section */}
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
+                        <Text fontSize="xl" fontWeight="bold" mb={4}>Previous ANC</Text>
+                        <ANC3 hide={true} />
+                    </Box>
 
-                        <AccordionPanel pb={4} bg="#fff" rounded="0px 0px 8px 8px" >
-                            <ANC3 hide={true} />
-                        </AccordionPanel>
-                    </AccordionItem>
-                    <AccordionItem mb="15px">
+                    {/* General Examination Section */}
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
+                        <Text fontSize="xl" fontWeight="bold" mb={4}>General Examination</Text>
+                        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
+                            <Input leftIcon={<FaNoteSticky />} label="Cycle" value={Payload.cycle} onChange={handlePayload} id="cycle" />
+                            <Input leftIcon={<FaNoteSticky />} label="Breasts" value={Payload.breasts} onChange={handlePayload} id="breasts" />
+                            <Input leftIcon={<FaNoteSticky />} label="Height" value={Payload.height} onChange={handlePayload} id="height" />
+                            <Input leftIcon={<FaNoteSticky />} label="weight" value={Payload.weight} onChange={handlePayload} id="weight" />
+                            <Input leftIcon={<FaNoteSticky />} label="CVS" value={Payload.cvs} onChange={handlePayload} id="cvs" />
+                            <Input leftIcon={<FaNoteSticky />} label="RS" value={Payload.rs} onChange={handlePayload} id="rs" />
+                            <Input leftIcon={<FaNoteSticky />} label="Pelvis" value={Payload.pelvis} onChange={handlePayload} id="pelvis" />
+                            <Input leftIcon={<FaNoteSticky />} label="Abdomen" value={Payload.abdomen} onChange={handlePayload} id="abdomen" />
+                            <Input leftIcon={<FaNoteSticky />} label="Retroviral" value={Payload.retroviral} onChange={handlePayload} id="retroviral" />
+                            <Input leftIcon={<FaNoteSticky />} label="bp" value={Payload.bp} onChange={handlePayload} id="bp" />
+                            <Input leftIcon={<FaNoteSticky />} label="urine" value={Payload.urine} onChange={handlePayload} id="urine" />
+                            <Input leftIcon={<FaNoteSticky />} label="hb" value={Payload.hb} onChange={handlePayload} id="hb" />
+                            <Input leftIcon={<FaNoteSticky />} label="bloodGroup" value={Payload.bloodGroup} onChange={handlePayload} id="bloodGroup" />
+                            <Input leftIcon={<FaNoteSticky />} label="groupRh" value={Payload.groupRh} onChange={handlePayload} id="groupRh" />
+                            <Input leftIcon={<FaNoteSticky />} label="genotype" value={Payload.genotype} onChange={handlePayload} id="genotype" />
+                            <Input leftIcon={<FaNoteSticky />} label="VDRL" value={Payload.VDRL} onChange={handlePayload} id="VDRL" />
+                            <Input leftIcon={<FaNoteSticky />} label="others" value={Payload.others} onChange={handlePayload} id="others" />
+                            <Input leftIcon={<FaNoteSticky />} label="comments" value={Payload.comments} onChange={handlePayload} id="comments" />
+                        </SimpleGrid>
+                    </Box>
 
-                        <AccordionButton _hover={{ border: "1px solid #EA5937", color: "#000" }} _focus={{ outline: "none" }} border="1px solid #fff" _expanded={{ rounded: "8px 8px 0px 0px", border: 0 }} bg="#fff" color="#000" rounded="8px">
-                            <Box as='span' flex='1' textAlign='left'>
-                               General Examination
-                            </Box>
-                            <AccordionIcon />
-                        </AccordionButton>
+                    {/* Present Pregnancy Section */}
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
+                        <Text fontSize="xl" fontWeight="bold" mb={4}>Present Pregnancy</Text>
+                        <Stack spacing={4}>
+                            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={2}>
+                                <Input leftIcon={<FaNoteSticky />} label="bleeding" value={Payload.bleeding} onChange={handlePayload} id="bleeding" />
+                                <Input leftIcon={<FaNoteSticky />} type="text" label="discharge" value={Payload.discharge} onChange={handlePayload} id="discharge" />
+                                <Input leftIcon={<FaNoteSticky />} type="text" label="swelling Ankles" value={Payload.swellingAnkles} onChange={handlePayload} id="swellingAnkles" />
+                                <Input leftIcon={<FaNoteSticky />} type="text" label="urinary Symtoms" value={Payload.urinarySymtoms} onChange={handlePayload} id="urinarySymtoms" />
+                            </SimpleGrid>
+                        </Stack>
+                    </Box>
+                    {/* Booking Information  Section */}
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
+                        <Text fontSize="xl" fontWeight="bold" mb={4}>Booking Information </Text>
+                        <Stack spacing={4}>
+                            <SimpleGrid columns={{ base: 1, md: 3 }} spacing={2}>
+                                <Input leftIcon={<MdDateRange />} type="date" label="booking Date" value={Payload.bookingDate} onChange={handlePayload} id="bookingDate" />
+                                <Input leftIcon={<MdDateRange />} type="date" label="LMP" value={Payload.lmp} onChange={handlePayload} id="lmp" />
+                                <Input leftIcon={<MdDateRange />} type="date" label="EDD" value={Payload.edd} onChange={handlePayload} id="edd" />
+                            </SimpleGrid>
+                            <Input leftIcon={<FaNoteSticky />} label="Gravidity" value={Payload.gravidity} onChange={handlePayload} id="gravidity" />
+                            <Input leftIcon={<FaNoteSticky />} label="indication" value={Payload.indication} onChange={handlePayload} id="indication" />
+                            <Input leftIcon={<FaNoteSticky />} label="specialPoint" value={Payload.specialPoint} onChange={handlePayload} id="specialPoint" />
+                            <Input leftIcon={<FaNoteSticky />} label="consultant" value={Payload.consultant} onChange={handlePayload} id="consultant" />
+                        </Stack>
+                    </Box>
 
-                        <AccordionPanel pb={4} bg="#fff" rounded="0px 0px 8px 8px">
-                            <Stack spacing={4}>
-
-
-
-                               
-                                <Input leftIcon={<FaNoteSticky />} label="Cycle" value={Payload.cycle} onChange={handlePayload} id="cycle" />
-                                <Input leftIcon={<FaNoteSticky />} label="Breasts" value={Payload.breasts} onChange={handlePayload} id="breasts" />
-                                <Input leftIcon={<FaNoteSticky />} label="Height" value={Payload.height} onChange={handlePayload} id="height" />
-
-                                <Input leftIcon={<FaNoteSticky />} label="CVS" value={Payload.cvs} onChange={handlePayload} id="cvs" />
-                                <Input leftIcon={<FaNoteSticky />} label="RS" value={Payload.rs} onChange={handlePayload} id="rs" />
-                                <Input leftIcon={<FaNoteSticky />} label="Pelvis" value={Payload.pelvis} onChange={handlePayload} id="pelvis" />
-                                <Input leftIcon={<FaNoteSticky />} label="Abdomen" value={Payload.abdomen} onChange={handlePayload} id="abdomen" />
-
-
-
-
-
-
-
-                            </Stack>
-
-
-                        </AccordionPanel>
-                    </AccordionItem>
-                    <AccordionItem mb="15px">
-
-                        <AccordionButton _hover={{ border: "1px solid #EA5937", color: "#000" }} _focus={{ outline: "none" }} border="1px solid #fff" _expanded={{ rounded: "8px 8px 0px 0px", border: 0 }} bg="#fff" color="#000" rounded="8px">
-                            <Box as='span' flex='1' textAlign='left'>
-                              Pregnancy Summary
-                            </Box>
-                            <AccordionIcon />
-                        </AccordionButton>
-
-                        <AccordionPanel pb={4} bg="#fff" rounded="0px 0px 8px 8px">
-                            <Stack spacing={4}>
-
-
-
-                                <Input leftIcon={<FaNoteSticky />} label="Gravidity" value={Payload.gravidity} onChange={handlePayload} id="gravidity" />
-
-                                <SimpleGrid mt="12px" columns={{ base: 1, md: 2 }} spacing={2}>
-                                    <Input leftIcon={<MdDateRange />} type="date" label="LMP" value={Payload.lmp} onChange={handlePayload} id="lmp" />
-                                    <Input leftIcon={<MdDateRange />} type="date" label="EDD" value={Payload.edd} onChange={handlePayload} id="edd" />
-
-                                </SimpleGrid>
-              
-                            </Stack>
-
-
-                        </AccordionPanel>
-                    </AccordionItem>
-                    <AccordionItem mb="15px">
-
-                        <AccordionButton _hover={{ border: "1px solid #EA5937", color: "#000" }} _focus={{ outline: "none" }} border="1px solid #fff" _expanded={{ rounded: "8px 8px 0px 0px", border: 0 }} bg="#fff" color="#000" rounded="8px">
-                            <Box as='span' flex='1' textAlign='left'>
-                                Post Medical History
-                            </Box>
-                            <AccordionIcon />
-                        </AccordionButton>
-
-                        <AccordionPanel pb={4} bg="#fff" rounded="0px 0px 8px 8px">
-                            <Stack spacing={4} pt="10">
-
-                                <TextArea label="Post Medical History" value={Payload.postmedicalorsurgicalhistory} onChange={handlePayload} id="postmedicalorsurgicalhistory" />
-
-
-
-                            </Stack>
-                            <Flex justifyContent={"flex-end"} mt="2">
-                                <Button
-
-                                    onClick={addPostMedicalHistory}
-
-                                    w={["100%", "100%", "184px", "184px"]}
-
-                                >
+                    {/* Post Medical History Section */}
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
+                        <Text fontSize="xl" fontWeight="bold" mb={4}>Post Medical History</Text>
+                        <Stack spacing={4} mt="10">
+                            <TextArea label="Post Medical History" value={Payload.postmedicalorsurgicalhistory} onChange={handlePayload} id="postmedicalorsurgicalhistory" />
+                            <Flex justifyContent={"flex-end"}>
+                                <Button onClick={addPostMedicalHistory} w={{ base: "100%", md: "184px" }}>
                                     Add
                                 </Button>
                             </Flex>
-
-
-
-                            <SimpleGrid mt="12px" columns={{ base: 2, md: 2 }} spacing={2}>
-
-                                {
-                                    PostMedicalHistory?.map((item, i) => (
-
-                                        <Flex key={i} cursor="pointer" px="10px" py="10px" rounded={"20px"} fontSize="12px" _hover={{ bg: "blue.blue400" }} bg="blue.blue500" w="100%" justifyContent="space-between" alignItems="center" >
-                                            <Text color="#fff" fontWeight="500" textTransform="capitalize" >{item}</Text>
-                                            <Box fontSize="20px" color="#fff" onClick={() => removePostMedicalHistory(item)}><IoIosCloseCircle /></Box>
-                                        </Flex>
-                                    ))
-                                }
-
+                            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={2}>
+                                {PostMedicalHistory?.map((item, i) => (
+                                    <Flex key={i} cursor="pointer" px="10px" py="10px" rounded={"20px"} fontSize="12px" _hover={{ bg: "blue.blue400" }} bg="blue.blue500" w="100%" justifyContent="space-between" alignItems="center" >
+                                        <Text color="#fff" fontWeight="500" textTransform="capitalize" >{item}</Text>
+                                        <Box fontSize="20px" color="#fff" onClick={() => removePostMedicalHistory(item)}><IoIosCloseCircle /></Box>
+                                    </Flex>
+                                ))}
                             </SimpleGrid>
+                        </Stack>
+                    </Box>
 
-
-                        </AccordionPanel>
-                    </AccordionItem>
-                    <AccordionItem mb="15px">
-
-                        <AccordionButton _hover={{ border: "1px solid #EA5937", color: "#000" }} _focus={{ outline: "none" }} border="1px solid #fff" _expanded={{ rounded: "8px 8px 0px 0px", border: 0 }} bg="#fff" color="#000" rounded="8px">
-                            <Box as='span' flex='1' textAlign='left'>
-                                History Of Present Pregnancy
-                            </Box>
-                            <AccordionIcon />
-                        </AccordionButton>
-
-                        <AccordionPanel pb={4} bg="#fff" rounded="0px 0px 8px 8px">
-                            <Stack spacing={4} pt="10">
-
-                                <TextArea label=" History Of Present Pregnancy" value={Payload.historyofpresentpregnancy} onChange={handlePayload} id="historyofpresentpregnancy" />
-
-
-
-                            </Stack>
-                            <Flex justifyContent={"flex-end"} mt="2">
-                                <Button
-
-                                    onClick={addHistoryPresentPregnancy}
-
-                                    w={["100%", "100%", "184px", "184px"]}
-
-                                >
+                    {/* History Of Present Pregnancy Section */}
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
+                        <Text fontSize="xl" fontWeight="bold" mb={4}>History Of Present Pregnancy</Text>
+                        <Stack spacing={4} mt="10">
+                            <TextArea label="History Of Present Pregnancy" value={Payload.historyofpresentpregnancy} onChange={handlePayload} id="historyofpresentpregnancy" />
+                            <Flex justifyContent={"flex-end"}>
+                                <Button onClick={addHistoryPresentPregnancy} w={{ base: "100%", md: "184px" }}>
                                     Add
                                 </Button>
                             </Flex>
-
-
-
-                            <SimpleGrid mt="12px" columns={{ base: 2, md: 2 }} spacing={2}>
-
-                                {
-                                    HistoryPresentPregnancy?.map((item, i) => (
-
-                                        <Flex key={i} cursor="pointer" px="10px" py="10px" rounded={"20px"} fontSize="12px" _hover={{ bg: "blue.blue400" }} bg="blue.blue500" w="100%" justifyContent="space-between" alignItems="center" >
-                                            <Text color="#fff" fontWeight="500" textTransform="capitalize" >{item}</Text>
-                                            <Box fontSize="20px" color="#fff" onClick={() => removeHistoryPresentPregnancy(item)}><IoIosCloseCircle /></Box>
-                                        </Flex>
-                                    ))
-                                }
-
+                            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={2}>
+                                {HistoryPresentPregnancy?.map((item, i) => (
+                                    <Flex key={i} cursor="pointer" px="10px" py="10px" rounded={"20px"} fontSize="12px" _hover={{ bg: "blue.blue400" }} bg="blue.blue500" w="100%" justifyContent="space-between" alignItems="center" >
+                                        <Text color="#fff" fontWeight="500" textTransform="capitalize" >{item}</Text>
+                                        <Box fontSize="20px" color="#fff" onClick={() => removeHistoryPresentPregnancy(item)}><IoIosCloseCircle /></Box>
+                                    </Flex>
+                                ))}
                             </SimpleGrid>
+                        </Stack>
+                    </Box>
 
-
-                        </AccordionPanel>
-                    </AccordionItem>
-
-                    <AccordionItem mb="15px">
-
-                        <AccordionButton _hover={{ border: "1px solid #EA5937", color: "#000" }} _focus={{ outline: "none" }} border="1px solid #fff" _expanded={{ rounded: "8px 8px 0px 0px", border: 0 }} bg="#fff" color="#000" rounded="8px">
-                            <Box as='span' flex='1' textAlign='left'>
-                                Previous pregnancy
+                    {/* Previous Pregnancy Section */}
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
+                        <Text fontSize="xl" fontWeight="bold" mb={4}>Previous Pregnancy</Text>
+                        <Tooltip label='Previous Pregnancy'>
+                            <Box onClick={() => setOpenObstetricHistoryModal(true)} cursor="pointer" px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500" textAlign="center">
+                                Previous Pregnancy
                             </Box>
-                            <AccordionIcon />
-                        </AccordionButton>
+                        </Tooltip>
+                    </Box>
+                </Stack>
 
-                        <AccordionPanel pb={4} bg="#fff" rounded="0px 0px 8px 8px">
+                <PreviousPregnancyModal isOpen={OpenObstetricHistoryModal} onClose={() => setOpenObstetricHistoryModal(false)} setOldPayload={setPayload} oldPayload={Payload} type={ModalState} activateNotifications={activateNotifications} />
 
-
-
-
-                            <Tooltip label='Previous Pregnancy'>
-                                <Box onClick={() => setOpenObstetricHistoryModal(true)} cursor="pointer" px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500">Previous Pregnancy </Box>
-                            </Tooltip>
-
-
-                        </AccordionPanel>
-                        <PreviousPregnancyModal isOpen={OpenObstetricHistoryModal} onClose={() => setOpenObstetricHistoryModal(false)} setOldPayload={setPayload} oldPayload={Payload} type={ModalState} activateNotifications={activateNotifications} />
-                    </AccordionItem>
-
-
-                </Accordion>
-
-                <Flex justifyContent="center">
-
+                <Flex justifyContent="center" mt={8}>
                     <Flex
                         justifyContent="space-between"
                         flexWrap="wrap"
-                        mt={["10px", "10px", "10px", "10px"]}
-                        w={["100%", "100%", "60%", "60%"]}
+                        w={{ base: "100%", md: "60%" }}
                     >
                         <Button
-                            mt={["10px", "10px", "0px", "0px"]}
-
-                            background="#f8ddd1 "
+                            mt={{ base: "10px", md: "0px" }}
+                            background="#f8ddd1"
                             border="1px solid #EA5937"
                             color="blue.blue500"
-                            w={["100%", "100%", "144px", "144px"]}
-                            onClick={() => {
-                                setOpenPreview(true)
-
-                            }
-                            }
+                            w={{ base: "100%", md: "144px" }}
+                            onClick={() => setOpenPreview(true)}
                         >
                             Preview
                         </Button>
@@ -425,16 +353,13 @@ export default function AddANCv3() {
                             disabled={Disabled}
                             onClick={handleCompleted}
                             isLoading={LoadingCompleted}
-                            w={["100%", "100%", "184px", "184px"]}
-
+                            w={{ base: "100%", md: "184px" }}
                         >
                             Submit
                         </Button>
-
                     </Flex>
                 </Flex>
                 <PreviewANC isOpen={OpenPreview} onClose={() => setOpenPreview(false)} setOldPayload={setPayload} oldPayload={Payload} />
-
             </Box>
         </MainLayout>
     )

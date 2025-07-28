@@ -22,7 +22,7 @@ import { BiSearch } from "react-icons/bi";
 import { IoFilter } from "react-icons/io5";
 import moment from "moment";
 import Seo from "../Utils/Seo";
-import CreateTestOrderModal from "../Components/CreateTestOrderModal";
+import CreateHistopathologyResult from "../Components/CreateHistopathologyResult";
 import CreateHistopathologyModal from "../Components/CreateHistopathologyModal";
 import ConfirmLabOrderModal from "../Components/ConfirmLabOrderModal";
 import { GetAllHistopathologyApi, GetAllHistopathologyFilteredApi } from "../Utils/ApiCalls";
@@ -574,7 +574,7 @@ export default function Histopathology() {
                     lmp={moment(item.diagnosisForm?.lmp).format("lll")}
                     wholeOrgan={item.diagnosisForm?.wholeOrgan}
                     labStatus={item.status}
-                    status={item.testPaymentStatus}
+                    status={item.paymentInfo?.status}
                     onConfirmClick={() => {
                       console.log("Confirm action triggered for item:", item);
                       confirmLab(item);
@@ -595,12 +595,17 @@ export default function Histopathology() {
                 FilteredData?.map((item, i) => (
                   <TableRow
                     key={i}
-                    type="histopatholgy-process"
+                  type="histopatholgy-process"
                     name={`${item.patient?.firstName} ${item.patient?.lastName}`}
-                    mrn={item.patient?.MRN}
-                    testName={item.testname}
-                    date={moment(item.createdAt).format("lll")}
+                    testName={item.testName}
+                    biopsyType={item.diagnosisForm?.biopsyType}
+                    mrn={item.patient?.mrn}
+                    phone={item.diagnosisForm?.phoneNumber}
+                    previousBiopsy={item.diagnosisForm?.previousBiopsy ? "Yes" : "No"}
+                    lmp={moment(item.diagnosisForm?.lmp).format("lll")}
+                    wholeOrgan={item.diagnosisForm?.wholeOrgan}
                     labStatus={item.status}
+                   status={item.paymentInfo?.status}
                     onConfirmClick={() => {
                       console.log("Confirm action triggered for item:", item);
                       confirmLab(item);
@@ -634,7 +639,7 @@ export default function Histopathology() {
       </Box>
 
       {/* Modals */}
-      <CreateTestOrderModal
+      <CreateHistopathologyResult
         isOpen={isOpen}
         oldPayload={OldPayload}
         onClose={onClose}

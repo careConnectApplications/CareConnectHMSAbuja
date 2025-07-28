@@ -17,7 +17,7 @@ import { AiOutlineMail } from 'react-icons/ai';
   export default function Input({
     id = '',
     val = false,
-    label = '',
+    label = ``,
     bColor = "#6B7280",
     hoverBColor = "#7A27AB",
     isRequired = false,
@@ -63,9 +63,10 @@ import { AiOutlineMail } from 'react-icons/ai';
           color={color}
           bg={ active ? labelBg :labelBg}
           px="4px"
+          textTransform="capitalize"
         >
 
-          {label}
+          {label.charAt(0).toLowerCase() + label.slice(1)}
         </FormLabel>
   
         <InputGroup>
