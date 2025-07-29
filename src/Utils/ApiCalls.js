@@ -3268,8 +3268,8 @@ export const ProcessHistopathologyApi = (payload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.msg) {
-        throw new Error(error.response.data.msg);
+      if (error.response.data.message) {
+        throw new Error(error.response.data.message);
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {

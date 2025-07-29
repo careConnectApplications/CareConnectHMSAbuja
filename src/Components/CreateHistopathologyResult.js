@@ -31,6 +31,7 @@ export default function CreateHistopathologyResult({
 }) {
   const [loading, setLoading] = useState(false);
   const [payload, setPayload] = useState({
+
     firstDayLMP: "",
     postMenopausal: "",
     oralContraceptive: "",
@@ -86,7 +87,8 @@ export default function CreateHistopathologyResult({
       ...payload,
       histopathologyId: oldPayload.histopathologyId,
       serviceName: oldPayload.serviceName,
-      testTypeId: oldPayload.testTypeId,
+      testTypeId: oldPayload?.testName,
+      parity: payload.parity || 0,
     };
 
     console.log("Final Payload:", finalPayload);
@@ -95,12 +97,14 @@ export default function CreateHistopathologyResult({
       // Assuming ProcessHistopathologyApi can handle this new structure.
       // You might need to adjust the API endpoint or the data transformation.
       const result = await ProcessHistopathologyApi(finalPayload, oldPayload._id);
-      if (result.status === 200) {
+      console.log("API Response:", result);
+      if (result.status === 201) {
         setLoading(false);
         onClose();
         activateNotifications("Histopathology Result Submitted Successfully", "success");
       }
     } catch (e) {
+      console.error("Error submitting histopathology result:", e);
       setLoading(false);
       activateNotifications(e.message, "error");
     }
@@ -130,7 +134,7 @@ export default function CreateHistopathologyResult({
             />
             <Input
               label="Parity"
-              type="text"
+              type="number"
               name="parity"
               leftIcon={<FaNoteSticky />}
               value={payload.parity}

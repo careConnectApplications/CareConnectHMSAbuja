@@ -22,6 +22,7 @@ import ScheduleProcedure from "../Pages/ScheduleProcedure";
 import DoctorScheduleDetails from "../Pages/DoctorScheduleDetails";
 import LabProcessing from "../Pages/LabProcessing";
 import Histopathology from "../Pages/Histopathology";
+import HistopathologyReport from "../Pages/HistopathologyReport";
 import LabReport from "../Pages/LabReport";
 import PrintLabReport from "../Pages/PrintLabReport";
 import Encounter from "../Pages/Encounter";
@@ -141,6 +142,10 @@ export default function IndexRoutes() {
             <Route
               path="/dashboard/histopathology-process/histopathology"
               element={<Histopathology />}
+            />
+            <Route
+              path="/dashboard/histopathology-process/report"
+              element={<HistopathologyReport />}
             />
             <Route
               path="/dashboard/lab-process/report"

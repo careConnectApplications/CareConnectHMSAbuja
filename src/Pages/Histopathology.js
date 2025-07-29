@@ -292,20 +292,6 @@ export default function Histopathology() {
 
               </Text>
             </Box>
-            <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={filterAwaitingConfirmation}>
-              <Text
-                py="8.5px"
-                px="12px"
-                bg={AwaitingConfirmation ? "#fff" : "transparent"}
-                rounded="7px"
-                color={"#1F2937"}
-                fontWeight={"500"}
-                fontSize={"13px"}
-              >
-                Awaiting Confirmation
-
-              </Text>
-            </Box>
             <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={filterProcessed}>
               <Text
                 py="8.5px"
@@ -573,7 +559,7 @@ export default function Histopathology() {
                     previousBiopsy={item.diagnosisForm?.previousBiopsy ? "Yes" : "No"}
                     lmp={moment(item.diagnosisForm?.lmp).format("lll")}
                     wholeOrgan={item.diagnosisForm?.wholeOrgan}
-                    labStatus={item.status}
+                    labStatus={item.testPaymentStatus}
                     status={item.paymentInfo?.status}
                     onConfirmClick={() => {
                       console.log("Confirm action triggered for item:", item);
@@ -604,7 +590,7 @@ export default function Histopathology() {
                     previousBiopsy={item.diagnosisForm?.previousBiopsy ? "Yes" : "No"}
                     lmp={moment(item.diagnosisForm?.lmp).format("lll")}
                     wholeOrgan={item.diagnosisForm?.wholeOrgan}
-                    labStatus={item.status}
+                    labStatus={item.testPaymentStatus}
                    status={item.paymentInfo?.status}
                     onConfirmClick={() => {
                       console.log("Confirm action triggered for item:", item);

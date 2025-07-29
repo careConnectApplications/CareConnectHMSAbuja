@@ -47,7 +47,8 @@ export default function AddANCv3() {
 
         lmp: "",
         edd: "",
-        gravidity: "",
+        ega: "",
+        gravida: "",
         cycle: "",
         breasts: "",
         height: "",
@@ -215,6 +216,21 @@ export default function AddANCv3() {
         }
     }, [Payload.lmp]);
 
+    useEffect(() => {
+        if (Payload.lmp) {
+            const lmpDate = new Date(Payload.lmp);
+            const today = new Date();
+            
+            let months = (today.getFullYear() - lmpDate.getFullYear()) * 12;
+            months -= lmpDate.getMonth();
+            months += today.getMonth();
+            
+            const egaInMonths = months <= 0 ? 0 : months;
+
+            setPayload(prev => ({ ...prev, ega: `${egaInMonths} month(s)` }));
+        }
+    }, [Payload.lmp]);
+
 
 
     const nav = useNavigate()
@@ -255,9 +271,33 @@ export default function AddANCv3() {
                             <Input leftIcon={<FaNoteSticky />} label="bp" value={Payload.bp} onChange={handlePayload} id="bp" />
                             <Input leftIcon={<FaNoteSticky />} label="urine" value={Payload.urine} onChange={handlePayload} id="urine" />
                             <Input leftIcon={<FaNoteSticky />} label="hb" value={Payload.hb} onChange={handlePayload} id="hb" />
-                            <Input leftIcon={<FaNoteSticky />} label="bloodGroup" value={Payload.bloodGroup} onChange={handlePayload} id="bloodGroup" />
-                            <Input leftIcon={<FaNoteSticky />} label="groupRh" value={Payload.groupRh} onChange={handlePayload} id="groupRh" />
-                            <Input leftIcon={<FaNoteSticky />} label="genotype" value={Payload.genotype} onChange={handlePayload} id="genotype" />
+                            <Select placeholder="Select Blood Group" value={Payload.bloodGroup} onChange={handlePayload} id="bloodGroup">
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                            </Select>
+                            <Select placeholder="Select Group RH" value={Payload.groupRh} onChange={handlePayload} id="groupRh">
+                                <option value="A+">A+ (A positive)</option>
+                                <option value="A-">A− (A negative)</option>
+                                <option value="B+">B+ (B positive)</option>
+                                <option value="B-">B− (B negative)</option>
+                                <option value="AB+">AB+ (AB positive)</option>
+                                <option value="AB-">AB− (AB negative)</option>
+                                <option value="O+">O+ (O positive)</option>
+                                <option value="O-">O− (O negative)</option> 
+                            </Select>
+                            <Select placeholder="Select genotype" value={Payload.genotype} onChange={handlePayload} id="genotype">
+                                <option value="AA">AA</option>
+                                <option value="AS">AS</option>
+                                <option value="AC">AC</option>
+                                <option value="SS">SS</option>
+                                <option value="SC">SC</option> 
+                            </Select>
                             <Input leftIcon={<FaNoteSticky />} label="VDRL" value={Payload.VDRL} onChange={handlePayload} id="VDRL" />
                             <Input leftIcon={<FaNoteSticky />} label="others" value={Payload.others} onChange={handlePayload} id="others" />
                             <Input leftIcon={<FaNoteSticky />} label="comments" value={Payload.comments} onChange={handlePayload} id="comments" />
@@ -284,8 +324,10 @@ export default function AddANCv3() {
                                 <Input leftIcon={<MdDateRange />} type="date" label="booking Date" value={Payload.bookingDate} onChange={handlePayload} id="bookingDate" />
                                 <Input leftIcon={<MdDateRange />} type="date" label="LMP" value={Payload.lmp} onChange={handlePayload} id="lmp" />
                                 <Input leftIcon={<MdDateRange />} type="date" label="EDD" value={Payload.edd} val={Payload.edd !=="" ? true: false} onChange={handlePayload} id="edd" readOnly={true} />
+                              
                             </SimpleGrid>
-                            <Input leftIcon={<FaNoteSticky />} label="Gravidity" value={Payload.gravidity} onChange={handlePayload} id="gravidity" />
+                            <Input leftIcon={<FaNoteSticky />} type="text" label="Expected Gestational Age" value={Payload.ega} val={Payload.ega !=="" ? true: false} onChange={handlePayload} id="ega" readOnly={true} />
+                            <Input leftIcon={<FaNoteSticky />} label="gravida" value={Payload.gravida} onChange={handlePayload} id="gravida" />
                             <Input leftIcon={<FaNoteSticky />} label="indication" value={Payload.indication} onChange={handlePayload} id="indication" />
                             <Input leftIcon={<FaNoteSticky />} label="specialPoint" value={Payload.specialPoint} onChange={handlePayload} id="specialPoint" />
                             <Input leftIcon={<FaNoteSticky />} label="consultant" value={Payload.consultant} onChange={handlePayload} id="consultant" />

@@ -1337,7 +1337,7 @@ export default function TableRow({
     <Td>
       <HStack
         color={
-          labStatus === "complete"
+          labStatus === "processed"
             ? "#027A48"
             : labStatus === "scheduled"
             ? "#FFA30C"
@@ -1349,7 +1349,7 @@ export default function TableRow({
           w="8px"
           h="8px"
           bg={
-            labStatus === "complete"
+            labStatus === "processed"
               ? "#027A48"
               : labStatus === "scheduled"
               ? "#FFA30C"
