@@ -30,23 +30,23 @@ export default function PreviousPregnancyCard({ Payload, setPayload, oldItem = [
         setPayload({ ...Payload, previouspregnancy: itemToUpdate });
     }
    
-    const handledurationpregnancy = (e) => {
+    const handledurationPregnancy = (e) => {
         //get the item index to update
         let objIndex = itemToUpdate.findIndex((obj, index) => index == i);
 
         // console.log("idd", objIndex, itemToUpdate[objIndex]);
 
-        itemToUpdate[objIndex].durationpregnancy = e.target.value
+        itemToUpdate[objIndex].durationPregnancy = e.target.value
 
         setPayload({ ...Payload, previouspregnancy: itemToUpdate });
     }
-    const handleantenatalcomplication = (e) => {
+    const handleantenatalComplication = (e) => {
         //get the item index to update
         let objIndex = itemToUpdate.findIndex((obj, index) => index == i);
 
         // console.log("idd", objIndex, itemToUpdate[objIndex]);
 
-        itemToUpdate[objIndex].antenatalcomplication = e.target.value
+        itemToUpdate[objIndex].antenatalComplication = e.target.value
 
         setPayload({ ...Payload, previouspregnancy: itemToUpdate });
     }
@@ -133,8 +133,8 @@ export default function PreviousPregnancyCard({ Payload, setPayload, oldItem = [
 
                             <Input leftIcon={<MdDateRange />} onChange={handleYear} label="Year" type="date"  value={data.year}  id="year" val={data.year !== "" ? true : false} />
                           
-                            <Input leftIcon={<BiUnite />} label="Duration of Pregnancy"  onChange={handledurationpregnancy}  value={data.durationpregnancy}  id="durationpregnancy" val={data.durationpregnancy !== "" ? true : false} />
-                            <Input leftIcon={<BiUnite />} label="Antenatal Complication"  onChange={handleantenatalcomplication}  value={data.antenatalcomplication}  id="antenatalcomplication" val={data.antenatalcomplication !== "" ? true : false} />
+                            <Input leftIcon={<BiUnite />} label="Duration of Pregnancy"  onChange={handledurationPregnancy}  value={data.durationPregnancy}  id="durationPregnancy" val={data.durationPregnancy !== "" ? true : false} />
+                            <Input leftIcon={<BiUnite />} label="Antenatal Complication"  onChange={handleantenatalComplication}  value={data.antenatalComplication}  id="antenatalComplication" val={data.antenatalComplication !== "" ? true : false} />
                             <Input leftIcon={<BiUnite />} label="Labour"  onChange={handlelabour}  value={data.labour}  id="labour" val={data.labour !== "" ? true : false} />
                             <Input leftIcon={<BiUnite />} label="Puerperium"  onChange={handlepuerperium}  value={data.puerperium}  id="puerperium" val={data.puerperium !== "" ? true : false} />
                             <Input leftIcon={<BiUnite />} label="Sex"  onChange={handlesex}  value={data.sex}  id="sex" val={data.sex !== "" ? true : false} />

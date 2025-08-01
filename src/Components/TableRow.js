@@ -1408,7 +1408,7 @@ export default function TableRow({
               }}
             >
               Confirm
-            </MenuItem>
+            </MenuItem> 
           ) : (
             <MenuItem
               onClick={onClick}
@@ -1424,6 +1424,133 @@ export default function TableRow({
               Process
             </MenuItem>
           )}
+        </MenuList>
+      </Menu>
+    </Td>
+  </>
+)}
+{type === "histopatholgy-report" && (
+  <>
+    
+    <Td>
+      <HStack>
+        <Avatar size="sm" name={name} />
+        <Box>
+          <Text color={"#101828"} fontWeight={"500"} fontSize={"13px"}>
+            {name}
+          </Text>
+          <Text color={"#667085"} fontWeight={"400"} fontSize={"11px"}>
+            MRN ~ {mrn}
+          </Text>
+        </Box>
+      </HStack>
+    </Td>
+      <Td>
+      <Text fontWeight="400" fontSize="12px">
+        {testName}
+      </Text>
+    </Td>
+    <Td>
+      <Text fontWeight="400" fontSize="12px">
+        {biopsyType}
+      </Text>
+    </Td>
+
+    <Td>
+      <Text fontWeight="400" fontSize="12px">
+        {lmp}
+      </Text>
+    </Td>
+    <Td>
+      <Text fontWeight="400" fontSize="12px">
+        {phone}
+      </Text>
+    </Td>
+    <Td>
+      <Text fontWeight="400" fontSize="12px">   
+        {previousBiopsy}
+      </Text>
+    </Td>
+      <Td>
+        <Text fontWeight="400" fontSize="12px">
+          {wholeOrgan}
+        </Text>
+      </Td>
+
+    <Td>
+      <HStack
+        color={
+          labStatus === "processed"
+            ? "#027A48"
+            : labStatus === "scheduled"
+            ? "#FFA30C"
+            : "#FF0000" // changed to red
+        }
+      >
+        <Box
+          rounded="100%"
+          w="8px"
+          h="8px"
+          bg={
+            labStatus === "processed"
+              ? "#027A48"
+              : labStatus === "scheduled"
+              ? "#FFA30C"
+              : "#FF0000" // changed to red
+          }
+        ></Box>
+        <Text fontWeight="400" fontSize={"13px"}>
+          {labStatus}
+        </Text>
+      </HStack>
+    </Td>
+    <Td>
+      <HStack
+        color={
+                status === "paid"
+            ? "#027A48"
+            : status === "pending payment"
+            ? "#FFA30C"
+            : "#FF0000" // changed to red
+        }
+      >
+        <Box
+          rounded="100%"
+          w="8px"
+          h="8px"
+          bg={
+            status === "paid"
+              ? "#027A48"
+              : status === "pending payment"
+              ? "#FFA30C"
+              : "#FF0000" // changed to red
+          }
+        ></Box>
+        <Text fontWeight="400" fontSize={"13px"}>
+          {status}
+        </Text>
+      </HStack>
+    </Td>
+
+    <Td>
+      <Menu>
+        <MenuButton as={Box}>
+          <BsThreeDots />
+        </MenuButton>
+        <MenuList>
+         <MenuItem
+              onClick={onClick}
+              textTransform="capitalize"
+              fontWeight={"500"}
+              color="#2F2F2F"
+              _hover={{
+                color: "#fff",
+                fontWeight: "400",
+                bg: "blue.blue500",
+              }}
+            >
+              View Result
+            </MenuItem> 
         </MenuList>
       </Menu>
     </Td>
