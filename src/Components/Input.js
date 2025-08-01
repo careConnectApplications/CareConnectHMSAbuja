@@ -57,7 +57,7 @@ import { AiOutlineMail } from 'react-icons/ai';
           pos="absolute"
           transform={`translateY(${active || val ? '-19px' : '8px'}) translateX(30px)`}
           bottom={'3'}
-          zIndex="10"
+          zIndex="1"
           fontSize={active ? 'xs' : '12px'}
           fontWeight="400"
           color={color}

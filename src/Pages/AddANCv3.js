@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react'
 import MainLayout from "../Layouts/Index";
 import Seo from "../Utils/Seo";
 import Button from "../Components/Button";
+import DatePickerComponent from '../Components/DatePicker';
+import { format } from 'date-fns';
 import Input from "../Components/Input";
 import TextArea from "../Components/TextArea";
 import ShowToast from "../Components/ToastNotification";
@@ -70,7 +72,7 @@ export default function AddANCv3() {
         bleeding: "",
         discharge: "",
         swellingAnkles: "",
-        urinarySymtoms: "",
+        urinarySymptoms: "",
         bookingDate: "",
         indication: "",
         specialPoint: "",
@@ -89,14 +91,24 @@ export default function AddANCv3() {
 
     };
 
-    const handlePayload = (e) => {
-        const { id, value } = e.target;
-        if (id === 'lmp' && value === '') {
+const handlePayload = (e) => {
+    const { id, value } = e.target;
+    setPayload({ ...Payload, [id]: value });
+}
+
+const handleDateChange = (date, id) => {
+    if (!date) {
+        if (id === 'lmp') {
             setPayload({ ...Payload, lmp: '', edd: '' });
         } else {
-            setPayload({ ...Payload, [id]: value });
+            setPayload({ ...Payload, [id]: '' });
         }
+        return;
     }
+
+    const formattedDate = format(date, 'dd/MM/yyyy');
+    setPayload({ ...Payload, [id]: formattedDate });
+};
 
     const addPostMedicalHistory = () => {
         setPostMedicalHistory([...PostMedicalHistory, Payload.postmedicalorsurgicalhistory])
@@ -170,8 +182,10 @@ export default function AddANCv3() {
 
             }, id);
 
+            
+console.log("result from ANC:", result)
 
-            if (result.status === 200) {
+            if (result.status === 201) {
                 setLoadingCompleted(false)
                 activateNotifications("ANC Created Successfully. Redirecting...", "success")
 
@@ -208,26 +222,36 @@ export default function AddANCv3() {
 
     useEffect(() => {
         if (Payload.lmp) {
-            const lmpDate = new Date(Payload.lmp);
+            const [day, month, year] = Payload.lmp.split('/');
+            if (!day || !month || !year) return;
+            const lmpDate = new Date(`${year}-${month}-${day}`);
+            if (isNaN(lmpDate)) return;
+
             lmpDate.setMonth(lmpDate.getMonth() + 9);
             lmpDate.setDate(lmpDate.getDate() + 7);
-            const eddDate = lmpDate.toISOString().split('T')[0];
+            const eddDate = format(lmpDate, 'dd/MM/yyyy');
             setPayload(prev => ({ ...prev, edd: eddDate }));
+        } else {
+            setPayload(prev => ({ ...prev, edd: '' }));
         }
     }, [Payload.lmp]);
 
     useEffect(() => {
         if (Payload.lmp) {
-            const lmpDate = new Date(Payload.lmp);
+            const [day, month, year] = Payload.lmp.split('/');
+            if (!day || !month || !year) return;
+            const lmpDate = new Date(`${year}-${month}-${day}`);
+            if (isNaN(lmpDate)) return;
+
             const today = new Date();
             
-            let months = (today.getFullYear() - lmpDate.getFullYear()) * 12;
-            months -= lmpDate.getMonth();
-            months += today.getMonth();
+            const monthDiff = today.getMonth() - lmpDate.getMonth() + (12 * (today.getFullYear() - lmpDate.getFullYear()));
             
-            const egaInMonths = months <= 0 ? 0 : months;
+            const egaInMonths = monthDiff < 0 ? 0 : monthDiff;
 
             setPayload(prev => ({ ...prev, ega: `${egaInMonths} month(s)` }));
+        } else {
+            setPayload(prev => ({ ...prev, ega: '' }));
         }
     }, [Payload.lmp]);
 
@@ -312,7 +336,7 @@ export default function AddANCv3() {
                                 <Input leftIcon={<FaNoteSticky />} label="bleeding" value={Payload.bleeding} onChange={handlePayload} id="bleeding" />
                                 <Input leftIcon={<FaNoteSticky />} type="text" label="discharge" value={Payload.discharge} onChange={handlePayload} id="discharge" />
                                 <Input leftIcon={<FaNoteSticky />} type="text" label="swelling Ankles" value={Payload.swellingAnkles} onChange={handlePayload} id="swellingAnkles" />
-                                <Input leftIcon={<FaNoteSticky />} type="text" label="urinary Symtoms" value={Payload.urinarySymtoms} onChange={handlePayload} id="urinarySymtoms" />
+                                <Input leftIcon={<FaNoteSticky />} type="text" label="urinary Symptoms" value={Payload.urinarySymptoms} onChange={handlePayload} id="urinarySymptoms" />
                             </SimpleGrid>
                         </Stack>
                     </Box>
@@ -321,9 +345,25 @@ export default function AddANCv3() {
                         <Text fontSize="xl" fontWeight="bold" mb={4}>Booking Information </Text>
                         <Stack spacing={4}>
                             <SimpleGrid columns={{ base: 1, md: 3 }} spacing={2}>
-                                <Input leftIcon={<MdDateRange />} type="date" label="booking Date" value={Payload.bookingDate} onChange={handlePayload} id="bookingDate" />
-                                <Input leftIcon={<MdDateRange />} type="date" label="LMP" value={Payload.lmp} onChange={handlePayload} id="lmp" />
-                                <Input leftIcon={<MdDateRange />} type="date" label="EDD" value={Payload.edd} val={Payload.edd !=="" ? true: false} onChange={handlePayload} id="edd" readOnly={true} />
+<DatePickerComponent
+    id="bookingDate"
+    label="Booking Date"
+    selected={Payload.bookingDate ? new Date(Payload.bookingDate.split('/').reverse().join('-')) : null}
+    onChange={(date) => handleDateChange(date, 'bookingDate')}
+/>
+<DatePickerComponent
+    id="lmp"
+    label="LMP"
+    selected={Payload.lmp ? new Date(Payload.lmp.split('/').reverse().join('-')) : null}
+    onChange={(date) => handleDateChange(date, 'lmp')}
+/>
+<DatePickerComponent
+    id="edd"
+    label="EDD"
+    selected={Payload.edd ? new Date(Payload.edd.split('/').reverse().join('-')) : null}
+    onChange={(date) => handleDateChange(date, 'edd')}
+    readOnly={true}
+/>
                               
                             </SimpleGrid>
                             <Input leftIcon={<FaNoteSticky />} type="text" label="Expected Gestational Age" value={Payload.ega} val={Payload.ega !=="" ? true: false} onChange={handlePayload} id="ega" readOnly={true} />

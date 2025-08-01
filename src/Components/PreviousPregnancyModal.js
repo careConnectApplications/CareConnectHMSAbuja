@@ -34,8 +34,8 @@ export default function PreviousPregnancyModal({ isOpen, onClose, setOldPayload,
         previouspregnancy: [
             {
                 year: "",
-                durationpregnancy: "",
-                antenatalcomplication: "",
+                durationPregnancy: "",
+                antenatalComplication: "",
                 labour: "",
                 puerperium: "",
                 sex: "",
@@ -43,6 +43,14 @@ export default function PreviousPregnancyModal({ isOpen, onClose, setOldPayload,
 
             }
         ],
+
+        "year": "2025-04-05",
+    //       "durationPregnancy": "Term",
+    //       "antenatalComplication": "Gestational diabetes",
+//       "labour": "Spontaneous vaginal delivery",
+//       "causeofdeath": "",
+//       "sex": "female",
+//       "birthWeight": "1.84"
     })
 
     const handlePayload = (e) => {
@@ -101,8 +109,8 @@ export default function PreviousPregnancyModal({ isOpen, onClose, setOldPayload,
                                 ...Payload,
                                 previouspregnancy: [...Payload.previouspregnancy, {
                                     year: "",
-                                    durationpregnancy: "",
-                                    antenatalcomplication: "",
+                                    durationPregnancy: "",
+                                    antenatalComplication: "",
                                     labour: "",
                                     puerperium: "",
                                     sex: "",
