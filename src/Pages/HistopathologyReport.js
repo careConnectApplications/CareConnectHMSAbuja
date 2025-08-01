@@ -23,6 +23,7 @@ import { IoFilter } from "react-icons/io5";
 import moment from "moment";
 import Seo from "../Utils/Seo";
 import CreateHistopathologyResult from "../Components/CreateHistopathologyResult";
+import ViewHistopathologyResultModal from "../Components/ViewHistopathologyResultModal";
 import CreateHistopathologyModal from "../Components/CreateHistopathologyModal";
 import ConfirmLabOrderModal from "../Components/ConfirmLabOrderModal";
 import { GetAllHistopathologyApi, GetAllHistopathologyFilteredApi,GetSingleHistopathologyApi } from "../Utils/ApiCalls";
@@ -42,6 +43,11 @@ export default function HistopathologyReport() {
   const [OpenOrderModal, setOpenOrderModal] = useState(false);
   const [OldPayload, setOldPayload] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isViewOpen,
+    onOpen: onViewOpen,
+    onClose: onViewClose,
+  } = useDisclosure();
 
   // Used to trigger refresh when a new order is created
   const [Trigger, setTrigger] = useState(false);
@@ -174,6 +180,7 @@ export default function HistopathologyReport() {
       if (result.status === true) {
         setIsLoading(false);
        setResultData(result.data[0]);
+       onViewOpen();
       }
     } catch (e) {
       console.error(e.message);
@@ -602,6 +609,11 @@ export default function HistopathologyReport() {
         labOrderId={OldPayload?._id}
         onClose={onConfirmClose}
         onSuccess={() => setTrigger((prev) => !prev)}
+      />
+      <ViewHistopathologyResultModal
+        isOpen={isViewOpen}
+        onClose={onViewClose}
+        Resultdata={ResultData}
       />
     </MainLayout>
   );
