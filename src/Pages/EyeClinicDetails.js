@@ -13,6 +13,7 @@ import MainLayout from "../Layouts/Index";
 import Seo from "../Utils/Seo";
 import Examine from "./Examine";
 import EyePreliminaryTest from "./EyePreliminaryTest";
+import EyeExamination from "./EyeExamination";
 import SingleLabReport from "./SingleLabReport";
 import Prescription from "./Prescription";
 import SingleAdmission from "./SingleAdmission";
@@ -104,6 +105,10 @@ export default function EyeClinicDetails() {
           
           <TabPanel p="0">
             <EyePreliminaryTest  />
+          </TabPanel>
+          
+          <TabPanel p="0">
+            <EyeExamination  />
           </TabPanel>
         
         </TabPanels>

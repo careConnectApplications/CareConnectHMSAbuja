@@ -48,17 +48,14 @@ const formatDateValue = (value) => {
   return value;
 };
 
-// Utility function to process preliminary test data
-const processPreliminaryTestData = (preliminaryTest) => {
-  const stringFields = ["eyeColour", "hyperEye", "npc", "stereopsis"];
+// Utility function to process examination data
+const processExaminationData = (examination) => {
   const complexFields = {};
   const others = {};
 
-  Object.keys(preliminaryTest).forEach((key) => {
-    if (stringFields.includes(key)) {
-      others[key] = preliminaryTest[key];
-    } else if (key !== "_id" && key !== "createdAt" && key !== "updatedAt") {
-      complexFields[key] = preliminaryTest[key];
+  Object.keys(examination).forEach((key) => {
+    if (key !== "_id" && key !== "createdAt" && key !== "updatedAt") {
+      complexFields[key] = examination[key];
     }
   });
 
@@ -93,12 +90,12 @@ const renderODOSPairs = (data, title) => {
   );
 };
 
-// Render function for visual acuity structures (far/near/pH)
-const renderVisualAcuity = (data, title) => {
+// Render function for biomicroscopic examination
+const renderBiomicroscopicFields = (data, title) => {
   if (!data) return null;
 
   const hasData = Object.values(data).some(
-    (section) => section && Object.values(section).some((value) => value)
+    (field) => field && (field.OD || field.OS)
   );
 
   if (!hasData) return null;
@@ -114,254 +111,48 @@ const renderVisualAcuity = (data, title) => {
       >
         {formatFieldName(title)}
       </Text>
-      {data.far && (
-        <SimpleGrid
-          mt="12px"
-          mb="5"
-          columns={{ base: 1, md: 2, lg: 2 }}
-          spacing={5}
-        >
-          {data.far.DIST && (
-            <PreviewCard title="(Far, Dist.)" value={data.far.DIST} />
-          )}
-          {data.far.OD && <PreviewCard title="(Far, OD)" value={data.far.OD} />}
-          {data.far.OS && <PreviewCard title="(Far, OS)" value={data.far.OS} />}
-          {data.far.OU && <PreviewCard title="(Far, OU)" value={data.far.OU} />}
-        </SimpleGrid>
-      )}
-      {data.near && (
-        <SimpleGrid
-          mt="12px"
-          mb="5"
-          columns={{ base: 1, md: 2, lg: 2 }}
-          spacing={5}
-        >
-          {data.near.DIST && (
-            <PreviewCard title="(Near, Dist.)" value={data.near.DIST} />
-          )}
-          {data.near.OD && (
-            <PreviewCard title="(Near, OD)" value={data.near.OD} />
-          )}
-          {data.near.OS && (
-            <PreviewCard title="(Near, OS)" value={data.near.OS} />
-          )}
-          {data.near.OU && (
-            <PreviewCard title="(Near, OU)" value={data.near.OU} />
-          )}
-        </SimpleGrid>
-      )}
-      {data.pH && (
-        <SimpleGrid
-          mt="12px"
-          mb="5"
-          columns={{ base: 1, md: 2, lg: 2 }}
-          spacing={5}
-        >
-          {data.pH.DIST && (
-            <PreviewCard title="(pH, Dist.)" value={data.pH.DIST} />
-          )}
-          {data.pH.OD && <PreviewCard title="(pH, OD)" value={data.pH.OD} />}
-          {data.pH.OS && <PreviewCard title="(pH, OS)" value={data.pH.OS} />}
-          {data.pH.OU && <PreviewCard title="(pH, OU)" value={data.pH.OU} />}
-        </SimpleGrid>
-      )}
+      {Object.entries(data).map(([fieldName, fieldData]) => {
+        if (!fieldData || (!fieldData.OD && !fieldData.OS)) return null;
+        
+        return (
+          <Box key={fieldName}>
+            <Text
+              fontSize="13px"
+              mt="8px"
+              fontWeight={"600"}
+              textTransform="capitalize"
+              color="gray.600"
+            >
+              {formatFieldName(fieldName)}
+            </Text>
+            <SimpleGrid
+              mt="8px"
+              mb="3"
+              columns={{ base: 1, md: 2, lg: 2 }}
+              spacing={3}
+            >
+              {fieldData.OD && (
+                <PreviewCard title="OD" value={fieldData.OD} />
+              )}
+              {fieldData.OS && (
+                <PreviewCard title="OS" value={fieldData.OS} />
+              )}
+            </SimpleGrid>
+          </Box>
+        );
+      })}
     </Box>
   );
 };
 
-// Render function for light projection
-const renderLightProjection = (data, title) => {
-  if (!data || (!data.OD && !data.OS)) return null;
-
-  return (
-    <Box>
-      <Text
-        fontSize="15px"
-        mt="12px"
-        fontWeight={"700"}
-        textTransform="capitalize"
-        color="blue.blue500"
-      >
-        {formatFieldName(title)}
-      </Text>
-      {data.OD && (
-        <SimpleGrid
-          mt="12px"
-          mb="5"
-          columns={{ base: 1, md: 2, lg: 2 }}
-          spacing={5}
-        >
-          {data.OD.top && <PreviewCard title="OD Top" value={data.OD.top} />}
-          {data.OD.bottom && (
-            <PreviewCard title="OD Bottom" value={data.OD.bottom} />
-          )}
-          {data.OD.left && <PreviewCard title="OD Left" value={data.OD.left} />}
-          {data.OD.right && (
-            <PreviewCard title="OD Right" value={data.OD.right} />
-          )}
-        </SimpleGrid>
-      )}
-      {data.OS && (
-        <SimpleGrid
-          mt="12px"
-          mb="5"
-          columns={{ base: 1, md: 2, lg: 2 }}
-          spacing={5}
-        >
-          {data.OS.top && <PreviewCard title="OS Top" value={data.OS.top} />}
-          {data.OS.bottom && (
-            <PreviewCard title="OS Bottom" value={data.OS.bottom} />
-          )}
-          {data.OS.left && <PreviewCard title="OS Left" value={data.OS.left} />}
-          {data.OS.right && (
-            <PreviewCard title="OS Right" value={data.OS.right} />
-          )}
-        </SimpleGrid>
-      )}
-    </Box>
-  );
-};
-
-// Render function for pachymetry/tonometry with name and date/time
-const renderNameDatePairs = (data, title) => {
-  if (!data || (!data.OD && !data.OS)) return null;
-
-  return (
-    <Box>
-      <Text
-        fontSize="15px"
-        mt="12px"
-        fontWeight={"700"}
-        textTransform="capitalize"
-        color="blue.blue500"
-      >
-        {formatFieldName(title)}
-      </Text>
-      {data.OD && (
-        <SimpleGrid
-          mt="12px"
-          mb="5"
-          columns={{ base: 1, md: 2, lg: 2 }}
-          spacing={5}
-        >
-          {data.OD.name && <PreviewCard title="OD Name" value={data.OD.name} />}
-          {data.OD.date && (
-            <PreviewCard
-              title="OD Date"
-              value={formatDateValue(data.OD.date)}
-            />
-          )}
-          {data.OD.methodOrTime && (
-            <PreviewCard
-              title="OD Time"
-              value={formatDateValue(data.OD.methodOrTime)}
-            />
-          )}
-        </SimpleGrid>
-      )}
-      {data.OS && (
-        <SimpleGrid
-          mt="12px"
-          mb="5"
-          columns={{ base: 1, md: 2, lg: 2 }}
-          spacing={5}
-        >
-          {data.OS.name && <PreviewCard title="OS Name" value={data.OS.name} />}
-          {data.OS.date && (
-            <PreviewCard
-              title="OS Date"
-              value={formatDateValue(data.OS.date)}
-            />
-          )}
-          {data.OS.methodOrTime && (
-            <PreviewCard
-              title="OS Time"
-              value={formatDateValue(data.OS.methodOrTime)}
-            />
-          )}
-        </SimpleGrid>
-      )}
-    </Box>
-  );
-};
-
-// Render function for glaucoma flowsheet
-const renderGlaucomaFlowsheet = (data, title) => {
+// Render function for phorias with special column structure
+const renderPhoriasFields = (data, title) => {
   if (!data) return null;
 
-  return (
-    <Box>
-      <Text
-        fontSize="15px"
-        mt="12px"
-        fontWeight={"700"}
-        textTransform="capitalize"
-        color="blue.blue500"
-      >
-        {formatFieldName(title)}
-      </Text>
-      {data.visualFields && (
-        <SimpleGrid
-          mt="12px"
-          mb="5"
-          columns={{ base: 1, md: 2, lg: 2 }}
-          spacing={5}
-        >
-          {data.visualFields.OD && (
-            <PreviewCard
-              title="Visual Fields OD"
-              value={data.visualFields.OD}
-            />
-          )}
-          {data.visualFields.OS && (
-            <PreviewCard
-              title="Visual Fields OS"
-              value={data.visualFields.OS}
-            />
-          )}
-        </SimpleGrid>
-      )}
-      {data.cupDiskRatio && (
-        <SimpleGrid
-          mt="12px"
-          mb="5"
-          columns={{ base: 1, md: 2, lg: 2 }}
-          spacing={5}
-        >
-          {data.cupDiskRatio.OD && (
-            <PreviewCard
-              title="Cup Disk Ratio OD"
-              value={data.cupDiskRatio.OD}
-            />
-          )}
-          {data.cupDiskRatio.OS && (
-            <PreviewCard
-              title="Cup Disk Ratio OS"
-              value={data.cupDiskRatio.OS}
-            />
-          )}
-        </SimpleGrid>
-      )}
-      {data.iop && (
-        <SimpleGrid
-          mt="12px"
-          mb="5"
-          columns={{ base: 1, md: 2, lg: 2 }}
-          spacing={5}
-        >
-          {data.iop.OD && <PreviewCard title="IOP OD" value={data.iop.OD} />}
-          {data.iop.OS && <PreviewCard title="IOP OS" value={data.iop.OS} />}
-        </SimpleGrid>
-      )}
-    </Box>
+  const hasData = Object.values(data).some(
+    (field) => field && Object.values(field).some((value) => value)
   );
-};
 
-// Render function for simple key-value objects
-const renderSimpleObject = (data, title) => {
-  if (!data || typeof data !== "object") return null;
-
-  const hasData = Object.values(data).some((value) => value);
   if (!hasData) return null;
 
   return (
@@ -375,30 +166,49 @@ const renderSimpleObject = (data, title) => {
       >
         {formatFieldName(title)}
       </Text>
-      <SimpleGrid
-        mt="12px"
-        mb="5"
-        columns={{ base: 1, md: 2, lg: 2 }}
-        spacing={5}
-      >
-        {Object.entries(data).map(
-          ([key, value]) =>
-            value && (
-              <PreviewCard
-                key={key}
-                title={formatFieldName(key)}
-                value={value}
-              />
-            )
-        )}
-      </SimpleGrid>
+      {Object.entries(data).map(([fieldName, fieldData]) => {
+        if (!fieldData || !Object.values(fieldData).some((value) => value)) return null;
+        
+        return (
+          <Box key={fieldName}>
+            <Text
+              fontSize="13px"
+              mt="8px"
+              fontWeight={"600"}
+              textTransform="capitalize"
+              color="gray.600"
+            >
+              {formatFieldName(fieldName)}
+            </Text>
+            <SimpleGrid
+              mt="8px"
+              mb="3"
+              columns={{ base: 1, md: 2, lg: 4 }}
+              spacing={3}
+            >
+              {fieldData.horizontal && (
+                <PreviewCard title="Horizontal" value={fieldData.horizontal} />
+              )}
+              {fieldData.vertical && (
+                <PreviewCard title="Vertical" value={fieldData.vertical} />
+              )}
+              {fieldData.base && (
+                <PreviewCard title="Base" value={fieldData.base} />
+              )}
+              {fieldData.refEye && (
+                <PreviewCard title="Ref Eye" value={fieldData.refEye} />
+              )}
+            </SimpleGrid>
+          </Box>
+        );
+      })}
     </Box>
   );
 };
 
-// Main render function for preliminary test fields
-const renderPreliminaryTestFields = (preliminaryTest) => {
-  const { complexFields, others } = processPreliminaryTestData(preliminaryTest);
+// Main render function for examination fields
+const renderExaminationFields = (examination) => {
+  const { complexFields } = processExaminationData(examination);
 
   return (
     <>
@@ -406,51 +216,24 @@ const renderPreliminaryTestFields = (preliminaryTest) => {
       {Object.entries(complexFields).map(([fieldName, fieldData]) => {
         if (!fieldData) return null;
 
-        // Visual acuity fields
-        if (fieldName.includes("visualAcuity")) {
+        // Phorias fields
+        if (fieldName === "phorias") {
           return (
             <React.Fragment key={fieldName}>
-              {renderVisualAcuity(fieldData, fieldName)}
+              {renderPhoriasFields(fieldData, fieldName)}
             </React.Fragment>
           );
         }
 
-        // Light projection
-        if (fieldName === "lightProjection") {
-          return (
-            <React.Fragment key={fieldName}>
-              {renderLightProjection(fieldData, fieldName)}
-            </React.Fragment>
-          );
-        }
-
-        // Pachymetry and tonometry
-        if (fieldName === "pachymetry" || fieldName === "tonometry") {
-          return (
-            <React.Fragment key={fieldName}>
-              {renderNameDatePairs(fieldData, fieldName)}
-            </React.Fragment>
-          );
-        }
-
-        // Glaucoma flowsheet
-        if (fieldName === "glaucomaFlowsheet") {
-          return (
-            <React.Fragment key={fieldName}>
-              {renderGlaucomaFlowsheet(fieldData, fieldName)}
-            </React.Fragment>
-          );
-        }
-
-        // Pupillary distance (far/near structure)
+        // Biomicroscopic, Ophthalmoscopy, and Refraction fields
         if (
-          fieldName === "pupillaryDistance" &&
-          fieldData.far &&
-          fieldData.near
+          fieldName === "biomicroscopic" ||
+          fieldName === "ophthalmoscopy" ||
+          fieldName === "refraction"
         ) {
           return (
             <React.Fragment key={fieldName}>
-              {renderVisualAcuity(fieldData, fieldName)}
+              {renderBiomicroscopicFields(fieldData, fieldName)}
             </React.Fragment>
           );
         }
@@ -464,50 +247,13 @@ const renderPreliminaryTestFields = (preliminaryTest) => {
           );
         }
 
-        // Simple objects
-        return (
-          <React.Fragment key={fieldName}>
-            {renderSimpleObject(fieldData, fieldName)}
-          </React.Fragment>
-        );
+        return null;
       })}
-
-      {/* Render others section for string fields */}
-      {Object.keys(others).length > 0 && (
-        <Box>
-          <Text
-            fontSize="15px"
-            mt="12px"
-            fontWeight={"700"}
-            textTransform="capitalize"
-            color="blue.blue500"
-          >
-            Others
-          </Text>
-          <SimpleGrid
-            mt="12px"
-            mb="5"
-            columns={{ base: 1, md: 2, lg: 2 }}
-            spacing={5}
-          >
-            {Object.entries(others).map(
-              ([key, value]) =>
-                value && (
-                  <PreviewCard
-                    key={key}
-                    title={formatFieldName(key)}
-                    value={value}
-                  />
-                )
-            )}
-          </SimpleGrid>
-        </Box>
-      )}
     </>
   );
 };
 
-export default function EyePreliminaryTest({ hide = false, index }) {
+export default function EyeExamination({ hide = false, index }) {
   const [IsLoading, setIsLoading] = useState(true);
   const [All, setAll] = useState(true);
   const [InProgress, setInProgress] = useState(false);
@@ -566,13 +312,16 @@ export default function EyePreliminaryTest({ hide = false, index }) {
     setIsLoading(true);
 
     try {
+      // TODO: Replace with actual eye examination API call
+      // For now, using the same API as preliminary test
       const result = await GetPreviousEyeRecordsApi(PatientId);
 
       console.log("GetSingleRecord", result);
 
       if (result.status === "success") {
         setIsLoading(false);
-        setData(result.data);
+        // Filter for examination records only (when API is ready)
+        setData(result.data || []);
       }
     } catch (e) {
       activateNotifications(e.message, "error");
@@ -622,13 +371,8 @@ export default function EyePreliminaryTest({ hide = false, index }) {
   const nav = useNavigate();
   const { pathname } = useLocation();
 
-  const AddPreliminaryTest = () => {
-    nav(`/dashboard/add-eye-preliminary-test/${id}`);
-    localStorage.setItem("pathname", pathname);
-  };
-
-  const ViewLabResult = (id) => {
-    nav(`/dashboard/lab-process/report/${id}`);
+  const AddExamination = () => {
+    nav(`/dashboard/add-eye-examination/${id}`);
     localStorage.setItem("pathname", pathname);
   };
 
@@ -666,7 +410,7 @@ export default function EyePreliminaryTest({ hide = false, index }) {
       tempDiv.innerHTML = `
         <div style="text-align: center; margin-bottom: 30px; border-bottom: 2px solid #2B6CB0; padding-bottom: 20px;">
           <h1 style="color: #2B6CB0; margin: 0; font-size: 24px; margin-bottom: 10px;">${FacilityName}</h1>
-          <h2 style="color: #2B6CB0; margin: 0; font-size: 20px; margin-bottom: 15px;">Eye Preliminary Test Report</h2>
+          <h2 style="color: #2B6CB0; margin: 0; font-size: 20px; margin-bottom: 15px;">Eye Examination Report</h2>
           <table style="width: 100%; margin-top: 15px; border-collapse: collapse;">
             <tr>
               <td style="width: 50%; vertical-align: top; padding-right: 20px;">
@@ -755,7 +499,7 @@ export default function EyePreliminaryTest({ hide = false, index }) {
       document.body.removeChild(tempDiv);
       
       // Save PDF
-      const fileName = `Eye_Preliminary_Test_${patientName.replace(/\s+/g, '_')}_${currentDate}.pdf`;
+      const fileName = `Eye_Examination_${patientName.replace(/\s+/g, '_')}_${currentDate}.pdf`;
       pdf.save(fileName);
       
       activateNotifications("PDF exported successfully!", "success");
@@ -964,11 +708,11 @@ export default function EyePreliminaryTest({ hide = false, index }) {
           gap="10px"
         >
           <Button
-            w={["100%", "100%", "220px", "220px"]}
-            onClick={AddPreliminaryTest}
+            w={["100%", "100%", "200px", "200px"]}
+            onClick={AddExamination}
             rightIcon={<SlPlus />}
           >
-            Add Preliminary Test
+            Add Examination
           </Button>
           
           {Data.length > 0 && (
@@ -1001,80 +745,85 @@ export default function EyePreliminaryTest({ hide = false, index }) {
         overflowX="auto"
       >
         <Text mb="20px" fontWeight="700" fontSize="16px" color="blue.blue500">
-          Previous Preliminary Test
+          Previous Examinations
         </Text>
 
-        {Data.map((item, i) => (
-          <Box key={i} mt="20px">
-            <HStack
-              bg="orange.orange500"
-              py="10px"
-              px="10px"
-              rounded="10px"
-              color="blue.blue500"
-              justifyContent="space-between"
-              fontStyle="italic"
-              fontSize="14px"
-              fontWeight="500"
-            >
-              <HStack alignItems="center">
-                <Box color="blue.blue500">
-                  <BsCalendar2DateFill />
-                </Box>
-                <Text textAlign="center">
-                  {moment(item.createdAt).format("L")}{" "}
-                </Text>
-                <Box color="blue.blue500">
-                  <FaClock />
-                </Box>
-                <Text textAlign="center">
-                  {" "}
-                  {moment(item.createdAt).format("LT")}{" "}
-                </Text>
+        {Data.length === 0 ? (
+          <Text textAlign="center" color="gray.500" py="20px">
+            No examination records found
+          </Text>
+        ) : (
+          Data.map((item, i) => (
+            <Box key={i} mt="20px">
+              <HStack
+                bg="orange.orange500"
+                py="10px"
+                px="10px"
+                rounded="10px"
+                color="blue.blue500"
+                justifyContent="space-between"
+                fontStyle="italic"
+                fontSize="14px"
+                fontWeight="500"
+              >
+                <HStack alignItems="center">
+                  <Box color="blue.blue500">
+                    <BsCalendar2DateFill />
+                  </Box>
+                  <Text textAlign="center">
+                    {moment(item.createdAt).format("L")}{" "}
+                  </Text>
+                  <Box color="blue.blue500">
+                    <FaClock />
+                  </Box>
+                  <Text textAlign="center">
+                    {" "}
+                    {moment(item.createdAt).format("LT")}{" "}
+                  </Text>
+                </HStack>
               </HStack>
-            </HStack>
-            {item.doctor && (
-              <Box>
-                <Text
-                  fontSize="15px"
-                  mt="12px"
-                  fontWeight={"700"}
-                  textTransform="capitalize"
-                  color="blue.blue500"
-                >
-                  Doctors Details
-                </Text>
-                <SimpleGrid
-                  mt="12px"
-                  mb="5"
-                  columns={{ base: 1, md: 2, lg: 2 }}
-                  spacing={5}
-                >
-                  <PreviewCard
-                    title="first name"
-                    value={item.doctor?.firstName}
-                  />
-                  <PreviewCard
-                    title="last name"
-                    value={item.doctor?.lastName}
-                  />
-                  <PreviewCard title="email" value={item.doctor?.email} />
-                  <PreviewCard
-                    title="phone number"
-                    value={item.doctor?.phoneNumber}
-                  />
-                  <PreviewCard
-                    title="Specialization details"
-                    value={item.doctor?.specializationDetails}
-                  />
-                  <PreviewCard title="staff id" value={item.doctor?.staffId} />
-                </SimpleGrid>
-              </Box>
-            )}
-            {item.preliminaryTest &&
-              renderPreliminaryTestFields(item.preliminaryTest)}
-          </Box>
-        ))}
+              {item.doctor && (
+                <Box>
+                  <Text
+                    fontSize="15px"
+                    mt="12px"
+                    fontWeight={"700"}
+                    textTransform="capitalize"
+                    color="blue.blue500"
+                  >
+                    Doctors Details
+                  </Text>
+                  <SimpleGrid
+                    mt="12px"
+                    mb="5"
+                    columns={{ base: 1, md: 2, lg: 2 }}
+                    spacing={5}
+                  >
+                    <PreviewCard
+                      title="first name"
+                      value={item.doctor?.firstName}
+                    />
+                    <PreviewCard
+                      title="last name"
+                      value={item.doctor?.lastName}
+                    />
+                    <PreviewCard title="email" value={item.doctor?.email} />
+                    <PreviewCard
+                      title="phone number"
+                      value={item.doctor?.phoneNumber}
+                    />
+                    <PreviewCard
+                      title="Specialization details"
+                      value={item.doctor?.specializationDetails}
+                    />
+                    <PreviewCard title="staff id" value={item.doctor?.staffId} />
+                  </SimpleGrid>
+                </Box>
+              )}
+              {item.examination && renderExaminationFields(item.examination)}
+            </Box>
+          ))
+        )}
       </Box>
     </Box>
   );
