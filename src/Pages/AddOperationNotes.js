@@ -134,7 +134,7 @@ export default function AddOperationNotes() {
         formData.append('FFA', payload.FFA);
       }
 
-      const result = await AddOperationNoteApi(formData,payload.appointmentId,payload.patientId);
+      const result = await AddOperationNoteApi(formData,payload.appointmentId,payload.patientId);   
 
     
       console.log("Operation note payload:", result);
