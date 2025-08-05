@@ -17,6 +17,7 @@ import Settings from "../Pages/Settings";
 import ProfileSettings from "../Pages/ProfileSettings";
 import EyeClinicSchedule from "../Pages/EyeClinicSchedule";
 import AddEyePreliminaryTest from "../Pages/AddEyePreliminaryTest";
+import AddEyeExamination from "../Pages/AddEyeExamination";
 import EyeClinicDetails from "../Pages/EyeClinicDetails";
 import SinglePatient from "../Pages/SinglePatient";
 import ScheduleAppointment from "../Pages/ScheduleAppointment";
@@ -103,7 +104,10 @@ export default function IndexRoutes() {
           <Route
             path="/dashboard/add-eye-preliminary-test/:id"
             element={<AddEyePreliminaryTest />}
-           
+          />
+          <Route
+            path="/dashboard/add-eye-examination/:id"
+            element={<AddEyeExamination />}
           />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route element={<RecordsRoutes />}>
