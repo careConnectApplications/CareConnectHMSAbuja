@@ -15,6 +15,10 @@ import PaymentGroup from "../Pages/PaymentGroup";
 import PrintPaymentReceipt from "../Pages/PrintPaymentReceipt";
 import Settings from "../Pages/Settings";
 import ProfileSettings from "../Pages/ProfileSettings";
+import EyeClinicSchedule from "../Pages/EyeClinicSchedule";
+import AddEyePreliminaryTest from "../Pages/AddEyePreliminaryTest";
+import AddEyeExamination from "../Pages/AddEyeExamination";
+import EyeClinicDetails from "../Pages/EyeClinicDetails";
 import SinglePatient from "../Pages/SinglePatient";
 import ScheduleAppointment from "../Pages/ScheduleAppointment";
 import DoctorSchedule from "../Pages/DoctorSchedule";
@@ -84,9 +88,26 @@ export default function IndexRoutes() {
       <Routes>
         <Route path="/" element={<SignIn />} />
         <Route element={<PrivateRoutes />}>
+
           <Route
             path="/dashboard/profile-settings"
             element={<ProfileSettings />}
+          />
+          <Route
+            path="/dashboard/eye-clinic"
+            element={<EyeClinicSchedule />}
+          />
+          <Route
+            path="/dashboard/eye-clinic-details/:id"
+            element={<EyeClinicDetails />}
+          />
+          <Route
+            path="/dashboard/add-eye-preliminary-test/:id"
+            element={<AddEyePreliminaryTest />}
+          />
+          <Route
+            path="/dashboard/add-eye-examination/:id"
+            element={<AddEyeExamination />}
           />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route element={<RecordsRoutes />}>
