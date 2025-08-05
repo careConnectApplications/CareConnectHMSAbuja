@@ -301,7 +301,7 @@ export default function CreateAppointmentModal({
               <FormControl>
                 <FormLabel>Date</FormLabel>
                 <Input
-                  type="datetime-local"
+                  type="date"
                   name="appointmentdate"
                   value={formData.appointmentdate}
                   onChange={handleInputChange}
