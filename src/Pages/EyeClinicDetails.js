@@ -25,16 +25,8 @@ import ANC from "./ANC";
 import ANC3 from "./ANC3";
 import LabAppointment from "./LabAppointment";
 import { useNavigate, useParams } from "react-router-dom";
-import SingleVitalChart from "./SingleVitalChart";
-import SingleMedicationChart from "./SingleMedicationChart";
-import Radiology from "./Radiology";
-import SingleProcedure from "./SingleProcedure";
-import PathographyChart from "./PathographyChart";
-import SingleReferral from "./SingleReferral";
-import SingleDeliveryNote from "./SingleDeliveryNote";
-import ReferTheatreAdmissionPage from "./ReferTheatreAdmissionPage";
-import NutritionPage from "./NutritionPage";
-import PsychiatricEvaluations from "./PsychiatricEvaluations";
+import LensPrescription from "./LensPrescription";
+import OperationNotes from "./OperationNotes";
 
 export default function EyeClinicDetails() {
   const { id } = useParams();
@@ -109,6 +101,16 @@ export default function EyeClinicDetails() {
           
           <TabPanel p="0">
             <EyeExamination  />
+          </TabPanel>
+
+          <TabPanel p="0">
+            {/* Operational Note component - to be implemented */}
+            <Text>Operational Note - Coming Soon</Text>
+            <OperationNotes />
+          </TabPanel>
+
+          <TabPanel p="0">
+            <LensPrescription />
           </TabPanel>
         
         </TabPanels>

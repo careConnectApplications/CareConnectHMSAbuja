@@ -137,6 +137,15 @@ import { AddEyePreliminaryTestApi } from "../Utils/ApiCalls";
           message: error.message,
           status: "error",
         });
+
+          setTimeout(() => {
+            
+         setShowToast({  
+          show: false,
+          message: error.message,
+          status: "error",
+        });
+        }, 5000);
       } finally {
         setIsLoading(false);
       }
