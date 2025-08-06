@@ -37,11 +37,19 @@ import {
 
 export default function DentalEncounterForm() {
   const { id } = useParams();
+  const [toast, setToast] = useState({ show: false, message: "", status: "" });
   const [Loading, setLoading] = useState(false);
   const [SearchICD, setSearchICD] = useState("");
   const [DiagnosisICD, setDiagnosisICD] = useState([]);
   const nav = useNavigate();
   const pathname = localStorage.getItem("pathname");
+
+  const activateNotifications = (message, status) => {
+    setToast({ show: true, message, status });
+    setTimeout(() => {
+      setToast({ show: false, message: "", status: "" });
+    }, 5000);
+  };
 
   // Selected values for multi-select fields
   const [selectedArrays, setSelectedArrays] = useState({
@@ -192,7 +200,7 @@ export default function DentalEncounterForm() {
       setDiagnosisICD(result.queryresult || []);
     } catch (e) {
       console.error("Failed to fetch ICD codes:", e);
-      ShowToast("Failed to fetch diagnosis codes", "error");
+      activateNotifications("Failed to fetch diagnosis codes", "error");
     }
   };
 
@@ -244,7 +252,7 @@ export default function DentalEncounterForm() {
 
   const handleSubmit = async () => {
     if (!Payload.appointmentoradmissionunderscoreid) {
-      ShowToast("Appointment ID is required", "error");
+      activateNotifications("Appointment ID is required", "error");
       return;
     }
 
@@ -257,18 +265,21 @@ export default function DentalEncounterForm() {
       });
 
       if (result.status === 200) {
-        ShowToast("Dental encounter submitted successfully", "success");
+        activateNotifications(
+          "Dental encounter submitted successfully",
+          "success"
+        );
         nav(`${pathname}`);
       }
     } catch (e) {
       if (e.response?.data?.msg) {
-        ShowToast(e.response.data.msg, "error");
+        activateNotifications(e.response.data.msg, "error");
       } else if (e.response?.data) {
-        ShowToast(e.response.data, "error");
+        activateNotifications(e.response.data, "error");
       } else if (e.request) {
-        ShowToast("No response from server", "error");
+        activateNotifications("No response from server", "error");
       } else {
-        ShowToast(e.message, "error");
+        activateNotifications(e.message, "error");
       }
     } finally {
       setLoading(false);
@@ -455,6 +466,9 @@ export default function DentalEncounterForm() {
 
   return (
     <MainLayout>
+      {toast.show && (
+        <ShowToast message={toast.message} status={toast.status} />
+      )}
       <Seo title="Add Dental Encounter" description="Dental Encounter Form" />
       <Box>
         <Button

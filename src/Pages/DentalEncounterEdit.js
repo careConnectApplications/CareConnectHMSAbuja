@@ -34,22 +34,24 @@ import {
   GetDiagnosisICApi,
 } from "../Utils/ApiCalls";
 import PatientInfoCard from "../Components/PatientInfoCard";
-import { useToast } from "@chakra-ui/react"; 
 
 export default function DentalEncounterEdit() {
   const { id } = useParams();
+  const [toast, setToast] = useState({ show: false, message: "", status: "" });
   const [Settings, setSettings] = useState(null);
   const [Loading, setLoading] = useState(false);
   const [SearchICD, setSearchICD] = useState("");
   const [DiagnosisICD, setDiagnosisICD] = useState([]);
   const [OldPayload, setOldPayload] = useState(null);
-  const [showToast, setShowToast] = useState({
-    show: false,
-    message: "",
-    status: "",
-  });
   const nav = useNavigate();
   const pathname = localStorage.getItem("pathname") || "/default-path";
+
+  const activateNotifications = (message, status) => {
+    setToast({ show: true, message, status });
+    setTimeout(() => {
+      setToast({ show: false, message: "", status: "" });
+    }, 5000);
+  };
 
   // Selected values for multi-select fields
   const [selectedArrays, setSelectedArrays] = useState({
@@ -194,12 +196,9 @@ export default function DentalEncounterEdit() {
     },
   };
 
-
-
   const getAllICD = async (value) => {
     try {
       const result = await GetDiagnosisICApi({ diagnosis: value });
-      console.log("GetDiagnosisIC API Response:", result);
       setDiagnosisICD(result.queryresult || []);
     } catch (e) {
       console.error("Failed to fetch ICD codes:", e);
@@ -256,7 +255,6 @@ export default function DentalEncounterEdit() {
   const getSettings = async () => {
     try {
       const result = await SettingsApi();
-      console.log("Settings API Response:", result);
       setSettings(result);
     } catch (e) {
       console.error("Failed to fetch settings:", e);
@@ -267,7 +265,6 @@ export default function DentalEncounterEdit() {
   const getDentalEncounter = async () => {
     try {
       const result = await ReadOneDentalEncounterApi(id);
-      console.log("ReadOneDentalEncounter API Response:", result);
       if (result.status === true) {
         const encounter = result.queryresult;
         setOldPayload(encounter);
@@ -398,9 +395,7 @@ export default function DentalEncounterEdit() {
     setLoading(true);
 
     try {
-      console.log("Sending payload to API:", JSON.stringify(Payload, null, 2));
       const result = await UpdateDentalEncounterApi(id, Payload);
-      console.log("UpdateDentalEncounter API Response:", result);
 
       if (result.status === 200) {
         activateNotifications(
@@ -411,7 +406,6 @@ export default function DentalEncounterEdit() {
           nav(pathname);
         }, 3000);
       } else {
-        console.error("Update failed:", result);
         activateNotifications(
           result.message || "Failed to update dental encounter",
           "error"
@@ -419,7 +413,6 @@ export default function DentalEncounterEdit() {
       }
     } catch (e) {
       console.error("API Error:", e);
-      console.error("Error details:", e.response?.data);
       activateNotifications(
         e.message || "An error occurred while updating the encounter",
         "error"
@@ -614,6 +607,9 @@ export default function DentalEncounterEdit() {
 
   return (
     <MainLayout>
+      {toast.show && (
+        <ShowToast message={toast.message} status={toast.status} />
+      )}
       <Seo
         title="Edit Dental Encounter"
         description="Edit Dental Encounter Form"
@@ -623,7 +619,7 @@ export default function DentalEncounterEdit() {
           leftIcon={<IoMdArrowRoundBack />}
           px="40px"
           w="100px"
-          onClick={() => nav(`${pathname}`)}
+          onClick={() => nav(pathname)}
           mb="4"
           bg="#EA5937"
           color="white"
