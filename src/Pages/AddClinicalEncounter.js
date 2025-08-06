@@ -74,6 +74,7 @@ export default function AddClinicalEncounter() {
     const [Disabled, setDisabled] = useState(true);
     const [Loading, setLoading] = useState(false);
     const [LoadingCompleted, setLoadingCompleted] = useState(false);
+
     const [Payload, setPayload] = useState({
         diagnosisnote: "",
         diagnosisicd10: "",
