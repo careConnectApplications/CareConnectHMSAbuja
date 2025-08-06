@@ -18,12 +18,15 @@ import Preloader from "../Components/Preloader";
 import { SlPlus } from "react-icons/sl";
 import { useNavigate, useLocation } from "react-router-dom";
 import { FaClock } from "react-icons/fa";
+import { MdEdit } from "react-icons/md";
 import { BsCalendar2DateFill } from "react-icons/bs";
 import { AiOutlineDownload } from "react-icons/ai";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { FacilityName } from "../Utils/ApiConfig";
 import { GetPreviousEyeRecordsApi } from "../Utils/ApiCalls";
+import { baseUrl } from "../Utils/ApiConfig";
+
 
 // Utility function to format field names
 const formatFieldName = (fieldName) => {
@@ -43,18 +46,19 @@ const formatDateValue = (value) => {
 
 // Render function for operation note images
 const renderOperationNoteImages = (operationNote) => {
-  if (!operationNote) return null;
+ 
 
-  const hasImages = operationNote.CVF || operationNote.OCT || 
-                   operationNote.FundusPhotograph || operationNote.FFA;
+  const hasImages = operationNote.length > 0;
 
   if (!hasImages) return null;
 
   return (
     <>
       {/* CVF Image */}
-      {operationNote.CVF && (
-        <Box>
+
+      {
+        operationNote.map((note,index) =>(
+           <Box>
           <Text
             fontSize="15px"
             mt="12px"
@@ -62,11 +66,11 @@ const renderOperationNoteImages = (operationNote) => {
             textTransform="capitalize"
             color="blue.blue500"
           >
-            CVF (Computerized Visual Field)
+           {note.resultType}
           </Text>
           <Box mt="12px" mb="5">
             <img 
-              src={operationNote.CVF} 
+              src={`${baseUrl}/${note.fileUrl}`} 
               alt="CVF" 
               style={{ 
                 maxWidth: "100%", 
@@ -77,88 +81,10 @@ const renderOperationNoteImages = (operationNote) => {
             />
           </Box>
         </Box>
-      )}
+        ))
+      }
 
-      {/* OCT Image */}
-      {operationNote.OCT && (
-        <Box>
-          <Text
-            fontSize="15px"
-            mt="12px"
-            fontWeight={"700"}
-            textTransform="capitalize"
-            color="blue.blue500"
-          >
-            OCT (Optical Coherence Tomography)
-          </Text>
-          <Box mt="12px" mb="5">
-            <img 
-              src={operationNote.OCT} 
-              alt="OCT" 
-              style={{ 
-                maxWidth: "100%", 
-                height: "auto", 
-                border: "1px solid #E2E8F0", 
-                borderRadius: "8px" 
-              }} 
-            />
-          </Box>
-        </Box>
-      )}
-
-      {/* Fundus Photograph */}
-      {operationNote.FundusPhotograph && (
-        <Box>
-          <Text
-            fontSize="15px"
-            mt="12px"
-            fontWeight={"700"}
-            textTransform="capitalize"
-            color="blue.blue500"
-          >
-            Fundus Photograph
-          </Text>
-          <Box mt="12px" mb="5">
-            <img 
-              src={operationNote.FundusPhotograph} 
-              alt="Fundus Photograph" 
-              style={{ 
-                maxWidth: "100%", 
-                height: "auto", 
-                border: "1px solid #E2E8F0", 
-                borderRadius: "8px" 
-              }} 
-            />
-          </Box>
-        </Box>
-      )}
-
-      {/* FFA Image */}
-      {operationNote.FFA && (
-        <Box>
-          <Text
-            fontSize="15px"
-            mt="12px"
-            fontWeight={"700"}
-            textTransform="capitalize"
-            color="blue.blue500"
-          >
-            FFA (Fluorescein Fundus Angiography)
-          </Text>
-          <Box mt="12px" mb="5">
-            <img 
-              src={operationNote.FFA} 
-              alt="FFA" 
-              style={{ 
-                maxWidth: "100%", 
-                height: "auto", 
-                border: "1px solid #E2E8F0", 
-                borderRadius: "8px" 
-              }} 
-            />
-          </Box>
-        </Box>
-      )}
+     
     </>
   );
 };
@@ -222,29 +148,7 @@ export default function OperationNotes({ hide = false, index }) {
 
       console.log("GetSingleRecord", result);
       
-      // Mock data for testing
-      const mockData = [
-        {
-          _id: "1",
-          createdAt: new Date(),
-          appointment: id,
-          operationNote: {
-            CVF: "https://example.com/cvf-image.jpg",
-            OCT: "https://example.com/oct-image.jpg",
-            FundusPhotograph: "https://example.com/fundus-image.jpg",
-            FFA: "https://example.com/ffa-image.jpg"
-          },
-          doctor: {
-            firstName: "Dr. John",
-            lastName: "Smith",
-            email: "dr.smith@example.com",
-            phoneNumber: "+1234567890",
-            specializationDetails: "Ophthalmologist",
-            staffId: "DOC001"
-          }
-        }
-      ];
-
+    
       if (result.status === "success") {
         setIsLoading(false);
         // Filter for operation note records only (when API is ready)
@@ -301,6 +205,13 @@ export default function OperationNotes({ hide = false, index }) {
   const AddOperationNote = () => {
     nav(`/eye-module/operational-notes/appointment/${id}/patient/${PatientId}`);
     localStorage.setItem("pathname", pathname);
+    localStorage.setItem("state", "new");
+  };
+
+  const EditOperationNote = () => {
+    nav(`/eye-module/operational-notes/appointment/${id}/patient/${PatientId}`);
+    localStorage.setItem("pathname", pathname);
+     localStorage.setItem("state", "edit");
   };
 
   // PDF Export Function
@@ -703,10 +614,13 @@ export default function OperationNotes({ hide = false, index }) {
                   {moment(item.createdAt).format("LT")}{" "}
                 </Text>
               </HStack>
+               <Box color="blue.blue500" fontSize="24px" fontWeight="500" cursor="pointer" onClick={EditOperationNote}>
+                 <MdEdit />
+                </Box>
             </HStack>
 
-            {item.operationNote &&
-              renderOperationNoteImages(item.operationNote)}
+            {item.operationalTest &&
+              renderOperationNoteImages(item.operationalTest)}
           </Box>
         ))}
       </Box>

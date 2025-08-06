@@ -82,7 +82,13 @@ import AddHistologyRequestForm from "../Pages/AddHistologyRequestForm";
 import EditHistologyRequestForm from "../Pages/EditHistologyRequestForm";
 import AddPsychiatricEvaluation from "../Pages/AddPsychiatricEvaluation";
 import EditPsychiatricEvaluation from "../Pages/EditPsychiatricEvaluation";
+import EditPhysiotherapyAssessment from "../Pages/EditPhysiotherapyAssessment";
+import AddPhysiotherapyAssessment from "../Pages/AddPhysiotherapyAssessment";
 import PsychiatricEvaluations from "../Pages/PsychiatricEvaluations";
+import Hematology from "../Pages/Hematology";
+import ChemicalPathology from "../Pages/ChemicalPathology";
+import DentalEncounterForm from "../Pages/DentalEncounterForm";
+import DentalEncounterEdit from "../Pages/DentalEncounterEdit";
 
 export default function IndexRoutes() {
   return (
@@ -181,6 +187,14 @@ export default function IndexRoutes() {
             <Route
               path="/dashboard/lab-process/report"
               element={<LabReport />}
+            />
+            <Route
+              path="/dashboard/lab-process/hematology"
+              element={<Hematology />}
+            />
+            <Route
+              path="/dashboard/lab-process/chemical-pathology"
+              element={<ChemicalPathology />}
             />
             <Route
               path="/dashboard/lab-process/report/:id"
@@ -283,7 +297,6 @@ export default function IndexRoutes() {
               path="/dashboard/add-theatre-anaesthesia-form/:id"
               element={<AddAnaesthesiaForm />}
             />
-
             <Route
               path="/dashboard/edit-preAnathetics/:id"
               element={<EditPreAnathetics />}
@@ -324,7 +337,6 @@ export default function IndexRoutes() {
               path="/dashboard/edit-post-anaesthetic-recovery-chart/:id"
               element={<EditPostAnaestheticRecoveryChartForm />}
             />
-
             <Route
               path="/dashboard/vital-sign-scores/:id"
               element={<TheatreVitalSignScores />}
@@ -337,7 +349,6 @@ export default function IndexRoutes() {
               path="/dashboard/add-histology-request-form/:id"
               element={<AddHistologyRequestForm />}
             />
-
             <Route
               path="/dashboard/add-psychiatric-evaluation/:id"
               element={<AddPsychiatricEvaluation />}
@@ -345,6 +356,23 @@ export default function IndexRoutes() {
             <Route
               path="/dashboard/edit-psychiatric-evaluation/:id"
               element={<EditPsychiatricEvaluation />}
+            />
+            
+            <Route
+              path="/dashboard/edit-physiotherapy-assessment/:id"
+              element={<EditPhysiotherapyAssessment />}
+            />
+            <Route
+              path="/dashboard/add-physiotherapy-assessment/:id"
+              element={<AddPhysiotherapyAssessment />}
+            />
+                        <Route
+              path="/dashboard/edit-dental-encounter/:id"
+              element={<DentalEncounterEdit />}
+            />
+                                    <Route
+              path="/dashboard/add-dental-encounter/:id"
+              element={<DentalEncounterForm />}
             />
           </Route>
         </Route>

@@ -22,8 +22,13 @@ import {
   MenuItem,
 } from "@chakra-ui/react";
 import PaymentGroupModal from "../Components/PaymentGroupModal";
-import { GetAllPaidPaymentGroupApi, GetAllFilteredPaymentGroupOptApi, GetAllPaymentGroupOptApi } from "../Utils/ApiCalls";
+import {
+  GetAllPaidPaymentGroupApi,
+  GetAllFilteredPaymentGroupOptApi,
+  GetAllPaymentGroupOptApi,
+} from "../Utils/ApiCalls";
 import moment from "moment";
+import { GetCashierTotalApi } from "../Utils/ApiCalls";
 import Seo from "../Utils/Seo";
 import { HiOutlineDocumentArrowUp } from "react-icons/hi2";
 import { BiSearch } from "react-icons/bi";
@@ -47,6 +52,8 @@ export default function Payment() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [FilterUser, setFilterUser] = useState({});
 
+  const [CashierTotal, setCashierTotal] = useState(0);
+
   // Search Filter settings to follow
   const [SearchInput, setSearchInput] = useState("");
   const [FilteredData, setFilteredData] = useState(null);
@@ -58,10 +65,9 @@ export default function Payment() {
 
   const handleInputChange = (e) => {
     setSearchInput(e.target.value);
-    setCurrentPage(1)
+    setCurrentPage(1);
   };
 
- 
   // Pagination settings to follow
   const [CurrentPage, setCurrentPage] = useState(1);
   const [PostPerPage, setPostPerPage] = useState(configuration.sizePerPage);
@@ -84,16 +90,22 @@ export default function Payment() {
   const [Value, setValue] = useState("");
 
   const getFilteredBilling = async (key, value) => {
-    setKey(key)
-    setValue(value)
+    setKey(key);
+    setValue(value);
 
     try {
       setIsLoading(true);
-      const result = await GetAllFilteredPaymentGroupOptApi(Status, key, value, CurrentPage, PostPerPage);
+      const result = await GetAllFilteredPaymentGroupOptApi(
+        Status,
+        key,
+        value,
+        CurrentPage,
+        PostPerPage
+      );
       console.log("all fitlered payment", result);
       if (result.status === true) {
         setFilteredData(result.queryresult.paymentdetails);
-        setTotalData(result.queryresult.totalpaymentdetails)
+        setTotalData(result.queryresult.totalpaymentdetails);
       }
     } catch (e) {
       console.error(e.message);
@@ -106,51 +118,47 @@ export default function Payment() {
     console.log("filter checking", title);
 
     if (title === "mrn") {
-      getFilteredBilling("MRN", SearchInput)
+      getFilteredBilling("MRN", SearchInput);
     } else if (title === "email") {
-      getFilteredBilling("email", SearchInput)
-     
+      getFilteredBilling("email", SearchInput);
     } else if (title === "firstName") {
-      
-      getFilteredBilling("firstName", SearchInput)   
-      
+      getFilteredBilling("firstName", SearchInput);
     } else if (title === "lastName") {
-      
-      getFilteredBilling("lastName", SearchInput)
-      
+      getFilteredBilling("lastName", SearchInput);
     } else if (title === "phoneNumber") {
-      getFilteredBilling("phoneNumber", SearchInput)
-    }else if (title === "ref") {
-      getFilteredBilling("paymentreference", SearchInput)
-    }else if (title === "hmoId") {
-      getFilteredBilling("HMOId", SearchInput)
-    }else if (title === "date") {
-      // add 1 day to end date 
-      let endDate = new Date(EndDate)
+      getFilteredBilling("phoneNumber", SearchInput);
+    } else if (title === "ref") {
+      getFilteredBilling("paymentreference", SearchInput);
+    } else if (title === "hmoId") {
+      getFilteredBilling("HMOId", SearchInput);
+    } else if (title === "date") {
+      // add 1 day to end date
+      let endDate = new Date(EndDate);
       endDate.setDate(endDate.getDate() + 1);
       // format date back
-      let formatedEndDate = endDate.toISOString().split('T')[0]
+      let formatedEndDate = endDate.toISOString().split("T")[0];
       let filter = Data.filter(
         (item) =>
           item.createdAt >= StartDate && item.createdAt <= formatedEndDate
       );
       setFilteredData(filter);
-      setSearchInput("s")
-
+      setSearchInput("s");
     }
   };
-
-
 
   const getAllPayment = async (status) => {
     try {
       setIsLoading(true);
-      const result = await GetAllPaymentGroupOptApi(CurrentPage, PostPerPage, status);
+      const result = await GetAllPaymentGroupOptApi(
+        CurrentPage,
+        PostPerPage,
+        status
+      );
       console.log("result getAllPaymentGroup", result);
       if (result.status === true) {
         setData(result.queryresult.paymentdetails);
         setFilterData(result.queryresult.paymentdetails);
-        setTotalData(result.queryresult.totalpaymentdetails)
+        setTotalData(result.queryresult.totalpaymentdetails);
       }
     } catch (e) {
       console.error(e.message);
@@ -159,48 +167,47 @@ export default function Payment() {
     }
   };
 
-
-
-  
   const filterAll = () => {
-
     setAll(true);
     setPaid(false);
-    getAllPayment("pending payment")
-    setStatus("pending payment")
-    setCurrentPage(1)
-
+    getAllPayment("pending payment");
+    setStatus("pending payment");
+    setCurrentPage(1);
   };
   const filterPaid = () => {
-
     setAll(false);
     setPaid(true);
-    getAllPayment("paid")
-    setStatus("paid")
-    setCurrentPage(1)
-
-
+    getAllPayment("paid");
+    setStatus("paid");
+    setCurrentPage(1);
   };
-
 
   const onChangeStatus = async (item) => {
-    setOldPayload(item)
-    onOpen()
-
-
+    setOldPayload(item);
+    onOpen();
   };
 
-  const { pathname } = useLocation()
+  const getCashierTotal = async () => {
+    try {
+      const result = await GetCashierTotalApi();
+      console.log("Cashier total response:", result.data);
+      if (result.status === true) {
+        setCashierTotal(result.data.totalAmount);
+      }
+    } catch (error) {
+      console.error("Error fetching cashier total:", error);
+    }
+  };
+
+  const { pathname } = useLocation();
   const nav = useNavigate();
 
   const PrintReceipt = (item) => {
-    nav(`/dashboard/billing-payment/receipt/${item.paymentreference}`)
+    nav(`/dashboard/billing-payment/receipt/${item.paymentreference}`);
 
-    localStorage.setItem("pathname", pathname)
-
-  }
+    localStorage.setItem("pathname", pathname);
+  };
   const activateNotifications = (message, status) => {
-
     setShowToast({
       show: true,
       message: message,
@@ -211,30 +218,22 @@ export default function Payment() {
       setShowToast({
         show: false,
       });
-
-    }, 5000)
-  }
-
-
+    }, 5000);
+  };
 
   useEffect(() => {
+    getCashierTotal(); // Add this line
 
-    if(FilteredData?.length > 0 || FilteredData !== null ){
-      getFilteredBilling(Key,Value) 
-    }else{
-
-      if(All === true){
-        getAllPayment("pending payment")
-      }else{
-        getAllPayment("paid")
+    if (FilteredData?.length > 0 || FilteredData !== null) {
+      getFilteredBilling(Key, Value);
+    } else {
+      if (All === true) {
+        getAllPayment("pending payment");
+      } else {
+        getAllPayment("paid");
       }
-
-     
     }
-   
-   
   }, [isOpen, Trigger, CurrentPage]);
-
   return (
     <MainLayout>
       {IsLoading && <Preloader />}
@@ -243,14 +242,29 @@ export default function Payment() {
       {showToast.show && (
         <ShowToast message={showToast.message} status={showToast.status} />
       )}
-      <HStack>
-        <Text color="#1F2937" fontWeight="600" fontSize="19px">
-          Payment
-        </Text>
-        <Text color="#667085" fontWeight="400" fontSize="18px">
-          ({TotalData.toLocaleString()})
-        </Text>
-      </HStack>
+      <Flex justifyContent="space-between" alignItems="center" mb={4}>
+        <HStack spacing={4}>
+          <Text color="#1F2937" fontWeight="600" fontSize="19px">
+            Payment
+          </Text>
+          <Text color="#667085" fontWeight="400" fontSize="18px">
+            ({TotalData.toLocaleString()})
+          </Text>
+        </HStack>
+
+        <Box
+          bg="green.50"
+          px={4}
+          py={2}
+          borderRadius="md"
+          border="1px solid"
+          borderColor="green.100"
+        >
+          <Text color="green.700" fontWeight="600" fontSize="18px">
+            Total: ₦{CashierTotal?.toLocaleString() || "0"}
+          </Text>
+        </Box>
+      </Flex>
       <Text color="#686C75" mt="9px" fontWeight="400" fontSize="15px">
         Confirm and manage pending payment from patient from one place
       </Text>
@@ -286,7 +300,6 @@ export default function Payment() {
                 fontSize={"13px"}
               >
                 All Pending
-
               </Text>
             </Box>
             <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={filterPaid}>
@@ -300,10 +313,8 @@ export default function Payment() {
                 fontSize={"13px"}
               >
                 Paid
-
               </Text>
             </Box>
-          
           </Flex>
 
           <Flex
@@ -316,8 +327,9 @@ export default function Payment() {
               {ByDate === false ? (
                 <Input
                   label="Search"
-                  onChange={(e) => {setSearchInput(e.target.value);
-                    setCurrentPage(1)
+                  onChange={(e) => {
+                    setSearchInput(e.target.value);
+                    setCurrentPage(1);
                   }}
                   value={SearchInput}
                   bColor="#E4E4E4"
@@ -376,7 +388,6 @@ export default function Payment() {
                   </HStack>
                 </MenuButton>
                 <MenuList>
-
                   <MenuItem
                     onClick={() => filterBy("firstName")}
                     textTransform="capitalize"
@@ -474,8 +485,8 @@ export default function Payment() {
                       setByDate(false);
                       setStartDate("");
                       setEndDate("");
-                      filterAll()
-                      setCurrentPage(1)
+                      filterAll();
+                      setCurrentPage(1);
                     }}
                     textTransform="capitalize"
                     fontWeight={"500"}
@@ -510,7 +521,7 @@ export default function Payment() {
           <TableContainer>
             <Table variant="striped">
               <Thead bg="#fff">
-                 <Tr>
+                <Tr>
                   <Th
                     fontSize="13px"
                     textTransform="capitalize"
@@ -543,7 +554,6 @@ export default function Payment() {
                   >
                     age
                   </Th>
-
 
                   <Th
                     fontSize="13px"
@@ -580,62 +590,50 @@ export default function Payment() {
                 </Tr>
               </Thead>
               <Tbody>
-
-
-
-                {
-                  SearchInput === "" || FilteredData === null ? (
-                    FilterData?.map((item, i) => (
-                      <TableRow
-                        key={i}
-                        type= "payment-group"
-                        name={`${item?.firstName||""} ${item?.lastName||""}`}
-                        email={item.email}
-                        age={item.age}
-                        phone={item.phoneNumber}
-                        mrn={item.MRN}
-                        reference={item.paymentreference}
-                        quantity={item.qty}
-                        total={item.amount}
-                        status={item.status}
-                        paymentType={item.paymentype}
-                        date={moment(item.createdAt).format("lll")}
-                        onClick={() => onChangeStatus(item)}
-                        onPrint={() => PrintReceipt(item)}
-                      />
-                    ))
-                  ) : (
-
-                    SearchInput !== "" && FilteredData?.length > 0 ? (
-                      FilteredData?.map((item, i) => (
-                        <TableRow
-                          key={i}
-                          type="payment-group"
-                          name={`${item?.firstName||""} ${item?.lastName||""}`}
-                          email={item.email}
-                          age={item.age}
-                          phone={item.phoneNumber}
-                          mrn={item.MRN}
-                          total={item.amount}
-                          status={item.status}
-                          reference={item.paymentreference}
-                          quantity={item.qty}
-                          paymentType={item.paymentype}
-                          date={moment(item.createdAt).format("lll")}
-                          onClick={() => onChangeStatus(item)}
-                        />
-                      ))
-                    ) : (
-
-                      <Text textAlign={"center"} mt="32px" color="black">*--No record found--*</Text>
-                    )
-
-                  )
-
-
-                }
-
-
+                {SearchInput === "" || FilteredData === null ? (
+                  FilterData?.map((item, i) => (
+                    <TableRow
+                      key={i}
+                      type="payment-group"
+                      name={`${item?.firstName || ""} ${item?.lastName || ""}`}
+                      email={item.email}
+                      age={item.age}
+                      phone={item.phoneNumber}
+                      mrn={item.MRN}
+                      reference={item.paymentreference}
+                      quantity={item.qty}
+                      total={item.amount}
+                      status={item.status}
+                      paymentType={item.paymentype}
+                      date={moment(item.createdAt).format("lll")}
+                      onClick={() => onChangeStatus(item)}
+                      onPrint={() => PrintReceipt(item)}
+                    />
+                  ))
+                ) : SearchInput !== "" && FilteredData?.length > 0 ? (
+                  FilteredData?.map((item, i) => (
+                    <TableRow
+                      key={i}
+                      type="payment-group"
+                      name={`${item?.firstName || ""} ${item?.lastName || ""}`}
+                      email={item.email}
+                      age={item.age}
+                      phone={item.phoneNumber}
+                      mrn={item.MRN}
+                      total={item.amount}
+                      status={item.status}
+                      reference={item.paymentreference}
+                      quantity={item.qty}
+                      paymentType={item.paymentype}
+                      date={moment(item.createdAt).format("lll")}
+                      onClick={() => onChangeStatus(item)}
+                    />
+                  ))
+                ) : (
+                  <Text textAlign={"center"} mt="32px" color="black">
+                    *--No record found--*
+                  </Text>
+                )}
               </Tbody>
             </Table>
           </TableContainer>
@@ -658,4 +656,4 @@ export default function Payment() {
       />
     </MainLayout>
   );
-} 
+}

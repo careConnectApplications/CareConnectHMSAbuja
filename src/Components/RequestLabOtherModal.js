@@ -12,6 +12,8 @@ import {
   SimpleGrid,
   Flex,
   Text,
+  HStack,
+  Badge,
 } from "@chakra-ui/react";
 import Button from "../Components/Button";
 import Input from "./Input";
@@ -24,8 +26,8 @@ import {
   SettingsApi,
   RequestLabOrderStandAloneApi,
   SearchPatientApi,
-  SearchTestApi, // API for test search
-  GetAllClinicApi,  // Used to fetch clinic details for labs
+  SearchTestApi,
+  GetAllClinicApi,
 } from "../Utils/ApiCalls";
 import Preloader from "./Preloader";
 
@@ -35,39 +37,36 @@ export default function RequestLabOtherModal({
   type,
   activateNotifications,
   oldPayload,
-  onSuccess, // Callback to notify parent on success
+  onSuccess,
 }) {
   const [Loading, setLoading] = useState(false);
   const [Settings, setSettings] = useState({});
   const [TestNames, setTestNames] = useState([]);
-  // We now rely solely on search results instead of pre-loading patients.
   const [searchResults, setSearchResults] = useState([]);
-  // State to track whether patient search is in progress
   const [isLoadingPatients, setIsLoadingPatients] = useState(false);
 
+
+  const [selectedPatientInfo, setSelectedPatientInfo] = useState(null);
+
   // New states for test search
+
   const [searchTestQuery, setSearchTestQuery] = useState("");
   const [testSearchResults, setTestSearchResults] = useState([]);
   const [isLoadingTests, setIsLoadingTests] = useState(false);
-
-  // New state for Lab list (departments)
   const [labs, setLabs] = useState([]);
-
-  // Update payload to store the lab name under "department", along with testNames and patient id.
   const [Payload, setPayload] = useState({
     department: "",
     testNames: "",
     id: "",
+    notes: "", // Added notes field
+    priority: "", // Added priority field
   });
   const [searchMRN, setSearchMRN] = useState("");
 
-  // Log the payload on every update.
   useEffect(() => {
     console.log("Payload:", Payload);
   }, [Payload]);
 
-  // Generic handler to update the payload.
-  // For test selection, we also add the selected test to TestNames.
   const handlePayload = (e) => {
     setPayload({ ...Payload, [e.target.id]: e.target.value });
     if (e.target.id === "testNames") {
@@ -84,7 +83,6 @@ export default function RequestLabOtherModal({
     }
   };
 
-  // Fetch labs from the clinic API by filtering for items with type "lab"
   const getLabs = async () => {
     try {
       const result = await GetAllClinicApi();
@@ -99,24 +97,33 @@ export default function RequestLabOtherModal({
     }
   };
 
-  // Trigger lab order request with the selected patient, department (lab), and tests.
   const RequestLabOrder = async () => {
     setLoading(true);
     try {
-      // Pass the payload with "department" key instead of "lab".
       const result = await RequestLabOrderStandAloneApi(
-        { testname: TestNames, notfromappointment: true, department: Payload.department },
+        {
+          testname: TestNames,
+          notfromappointment: true,
+          department: Payload.department,
+          notes: Payload.notes, // Include notes in the request
+          priority: Payload.priority, // Include priority in the request
+        },
         Payload.id
       );
       if (result.status === 200) {
         setLoading(false);
         onClose();
-        // Reset payload and test names.
-        setPayload({ department: "", testNames: "", id: "" });
+        setPayload({
+          department: "",
+          testNames: "",
+          id: "",
+          notes: "",
+          priority: "",
+        });
         setTestNames([]);
         activateNotifications("Lab Order Created Successfully", "success");
         if (onSuccess) {
-          onSuccess(); // Trigger parent's refresh callback
+          onSuccess();
         }
       }
     } catch (e) {
@@ -131,7 +138,6 @@ export default function RequestLabOtherModal({
     setTestNames(updatedTestNames);
   };
 
-  // Handler for searching a patient using MRN or first/last name.
   const handleSearchPatient = async () => {
     setIsLoadingPatients(true);
     try {
@@ -148,7 +154,6 @@ export default function RequestLabOtherModal({
     }
   };
 
-  // Trigger test search on every change in searchTestQuery.
   useEffect(() => {
     const fetchTests = async () => {
       if (searchTestQuery.trim() !== "") {
@@ -168,7 +173,6 @@ export default function RequestLabOtherModal({
           setIsLoadingTests(false);
         }
       } else {
-        // If no search query, clear search results so that default list is shown.
         setTestSearchResults([]);
       }
     };
@@ -176,7 +180,6 @@ export default function RequestLabOtherModal({
     fetchTests();
   }, [searchTestQuery]);
 
-  // Fetch settings and labs when the component mounts or modal is opened.
   useEffect(() => {
     getSettings();
   }, []);
@@ -187,27 +190,112 @@ export default function RequestLabOtherModal({
     }
   }, [isOpen]);
 
+
+
+  // Auto-search functionality with debouncing
+  useEffect(() => {
+    const searchPatients = async (searchTerm) => {
+      if (!searchTerm || searchTerm.trim().length < 2) {
+        setSearchResults([]);
+        return;
+      }
+
+      // Don't search if a patient is already selected and the search term matches
+      if (selectedPatientInfo && searchTerm.includes(selectedPatientInfo.mrn)) {
+        return;
+      }
+
+      try {
+        setIsLoadingPatients(true);
+        const results = await SearchPatientApi(searchTerm);
+        if (results?.queryresult?.patientdetails) {
+          setSearchResults(results.queryresult.patientdetails);
+        } else {
+          setSearchResults([]);
+        }
+      } catch (e) {
+        console.error("Error searching patient:", e.message);
+        setSearchResults([]);
+      } finally {
+        setIsLoadingPatients(false);
+      }
+    };
+
+    const timeoutId = setTimeout(() => {
+      searchPatients(searchMRN);
+    }, 300); // 300ms debounce
+
+    return () => clearTimeout(timeoutId);
+  }, [searchMRN, selectedPatientInfo]);
+
+  // Handle patient selection from search results
+  const handlePatientSelect = (patient) => {
+    setPayload((prev) => ({
+      ...prev,
+      id: patient._id,
+    }));
+    setSelectedPatientInfo({
+      name: `${patient.firstName} ${patient.lastName}`,
+      mrn: patient.MRN,
+    });
+    setSearchResults([]); // Clear search results
+    setSearchMRN(`${patient.firstName} ${patient.lastName} (MRN: ${patient.MRN})`);
+  };
+
+  // Handle search input change and clear selection if user starts typing new search
+  const handleSearchInputChange = (e) => {
+    const value = e.target.value;
+    setSearchMRN(value);
+    
+    // Clear selected patient if user modifies the search significantly
+    if (selectedPatientInfo && !value.includes(selectedPatientInfo.mrn)) {
+      setSelectedPatientInfo(null);
+      setPayload((prev) => ({
+        ...prev,
+        id: "",
+      }));
+    }
+  };
+
   // Reset fields when the modal closes.
+
   useEffect(() => {
     if (!isOpen) {
       setSearchMRN("");
       setSearchResults([]);
+      setSelectedPatientInfo(null);
       setSearchTestQuery("");
       setTestSearchResults([]);
-      setPayload({ department: "", testNames: "", id: "" });
+      setPayload({
+        department: "",
+        testNames: "",
+        id: "",
+        notes: "",
+        priority: "",
+      });
       setTestNames([]);
     }
   }, [isOpen]);
 
-  // Form is complete if a department, a patient, and at least one test are selected.
   const isFormComplete =
-    Payload.department && Payload.id && TestNames.length > 0 && Payload.testNames;
+    Payload.department &&
+    Payload.id &&
+    TestNames.length > 0 &&
+    Payload.testNames;
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} isCentered size="lg">
+    <Modal isOpen={isOpen} onClose={onClose} isCentered size="lg" scrollBehavior="inside" >
       <ModalOverlay />
       {Loading ? (
-        <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height="100vh"
+                 maxH="90vh"
+          overflow="hidden"
+
+        >
           <Preloader />
         </Box>
       ) : (
@@ -215,7 +303,7 @@ export default function RequestLabOtherModal({
           <ModalHeader> Request Lab Order </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            {/* Department (Lab) Selection Dropdown – this is the first input */}
+            {/* Department (Lab) Selection Dropdown */}
             <Box mb={4}>
               <Select
                 onChange={handlePayload}
@@ -235,24 +323,50 @@ export default function RequestLabOtherModal({
               </Select>
             </Box>
 
+            {/* Priority Dropdown */}
+            <Box mb={4}>
+              <Select
+                onChange={handlePayload}
+                placeholder="Select Priority"
+                border="2px solid"
+                id="priority"
+                value={Payload.priority}
+                size="lg"
+                fontSize={Payload.priority !== "" ? "16px" : "13px"}
+                borderColor="gray.500"
+              >
+                {Settings?.priority?.map((item, i) => (
+                  <option key={i} value={item}>
+                    {item}
+                  </option>
+                ))}
+              </Select>
+            </Box>
+
             {/* Patient Search Section */}
             <Box mt="32px">
-              <Flex mb={2} gap={4}>
+              <Text mb={2} fontWeight="medium">Patient</Text>
+              <Box position="relative">
                 <Input
                   label="Search for Patient"
                   placeholder="Enter MRN, first name, or last name"
                   value={searchMRN}
-                  onChange={(e) => setSearchMRN(e.target.value)}
+                  onChange={handleSearchInputChange}
                   leftIcon={<FiSearch size={16} color="blue.500" />}
-                  flex="1"
                 />
-                <Button onClick={handleSearchPatient} w={["100%", "100%", "165px", "205px"]}>
+
+                <Button
+                  onClick={handleSearchPatient}
+                  w={["100%", "100%", "165px", "205px"]}
+                >
                   Search
                 </Button>
               </Flex>
               <Select
                 onChange={handlePayload}
-                placeholder={isLoadingPatients ? "Loading patients..." : "Select Patient"}
+                placeholder={
+                  isLoadingPatients ? "Loading patients..." : "Select Patient"
+                }
                 border="2px solid"
                 id="id"
                 value={Payload.id}
@@ -269,6 +383,78 @@ export default function RequestLabOtherModal({
                 ))}
               </Select>
 
+                
+                {/* Selected Patient Display */}
+                {selectedPatientInfo && (
+                  <Box mt={2} p={3} bg="blue.50" borderRadius="md" border="1px solid" borderColor="blue.200">
+                    <HStack spacing={2}>
+                      <Badge colorScheme="blue" variant="solid">Selected</Badge>
+                      <Text fontWeight="medium">{selectedPatientInfo.name}</Text>
+                      <Text fontSize="sm" color="gray.600">MRN: {selectedPatientInfo.mrn}</Text>
+                    </HStack>
+                  </Box>
+                )}
+
+                {/* Search Results Dropdown */}
+                {searchResults.length > 0 && !selectedPatientInfo && (
+                  <Box
+                    position="absolute"
+                    top="100%"
+                    left={0}
+                    right={0}
+                    zIndex={10}
+                    bg="white"
+                    border="1px solid"
+                    borderColor="gray.200"
+                    borderRadius="md"
+                    boxShadow="lg"
+                    maxH="200px"
+                    overflowY="auto"
+                    mt={1}
+                  >
+                    {searchResults.map((patient) => (
+                      <Box
+                        key={patient._id}
+                        p={3}
+                        cursor="pointer"
+                        _hover={{ bg: "blue.50" }}
+                        onClick={() => handlePatientSelect(patient)}
+                        borderBottom="1px solid"
+                        borderColor="gray.100"
+                        _last={{ borderBottom: "none" }}
+                      >
+                        <Text fontWeight="medium">
+                          {`${patient.firstName} ${patient.lastName}`}
+                        </Text>
+                        <Text fontSize="sm" color="gray.600">
+                          MRN: {patient.MRN}
+                        </Text>
+                      </Box>
+                    ))}
+                  </Box>
+                )}
+
+                {/* Loading Indicator */}
+                {isLoadingPatients && (
+                  <Box
+                    position="absolute"
+                    top="100%"
+                    left={0}
+                    right={0}
+                    zIndex={10}
+                    bg="white"
+                    border="1px solid"
+                    borderColor="gray.200"
+                    borderRadius="md"
+                    p={3}
+                    mt={1}
+                  >
+                    <Text color="gray.500">Searching patients...</Text>
+                  </Box>
+                )}
+              </Box>
+
+
               {/* Test Search Section */}
               <Box mt={4}>
                 <Input
@@ -281,7 +467,9 @@ export default function RequestLabOtherModal({
               </Box>
               <Select
                 onChange={handlePayload}
-                placeholder={isLoadingTests ? "Loading tests..." : "Select Test"}
+                placeholder={
+                  isLoadingTests ? "Loading tests..." : "Select Test"
+                }
                 border="2px solid"
                 id="testNames"
                 value={Payload.testNames}
@@ -304,6 +492,19 @@ export default function RequestLabOtherModal({
                     ))}
               </Select>
             </Box>
+
+            {/* Notes TextArea */}
+            <Box mt="35px">
+              <TextArea
+                label="Notes"
+                placeholder="Enter any additional notes"
+                value={Payload.notes}
+                onChange={(e) =>
+                  setPayload({ ...Payload, notes: e.target.value })
+                }
+              />
+            </Box>
+
             <SimpleGrid mt="12px" columns={{ base: 2, md: 4 }} spacing={2}>
               {TestNames?.map((item, i) => (
                 <Flex
@@ -319,10 +520,18 @@ export default function RequestLabOtherModal({
                   justifyContent="space-between"
                   alignItems="center"
                 >
-                  <Text color="#fff" fontWeight="500" textTransform="capitalize">
+                  <Text
+                    color="#fff"
+                    fontWeight="500"
+                    textTransform="capitalize"
+                  >
                     {item}
                   </Text>
-                  <Box fontSize="20px" color="#fff" onClick={() => removeTestName(item)}>
+                  <Box
+                    fontSize="20px"
+                    color="#fff"
+                    onClick={() => removeTestName(item)}
+                  >
                     <IoIosCloseCircle />
                   </Box>
                 </Flex>

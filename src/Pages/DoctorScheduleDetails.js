@@ -34,6 +34,8 @@ import SingleDeliveryNote from "./SingleDeliveryNote";
 import ReferTheatreAdmissionPage from "./ReferTheatreAdmissionPage";
 import NutritionPage from "./NutritionPage";
 import PsychiatricEvaluations from "./PsychiatricEvaluations";
+import Dental from "./Dental";
+import PhysiotherapyAssessments from "./PhysiotherapyAssessments";
 
 export default function DoctorScheduleDetails() {
   const { id } = useParams();
@@ -144,12 +146,12 @@ export default function DoctorScheduleDetails() {
           >
             Family Planning{" "}
           </Tab>
-        
+
           <Tab
             _focus={{ outline: "none" }}
             _selected={{ color: "blue.blue500", fontWeight: "700" }}
           >
-            ANC 
+            ANC
           </Tab>
           <Tab
             _focus={{ outline: "none" }}
@@ -192,6 +194,18 @@ export default function DoctorScheduleDetails() {
             _selected={{ color: "blue.blue500", fontWeight: "700" }}
           >
             Psychiatric
+          </Tab>
+          <Tab
+            _focus={{ outline: "none" }}
+            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+          >
+            Dental Encounter
+          </Tab>
+          <Tab
+            _focus={{ outline: "none" }}
+            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+          >
+            Physiotherapy
           </Tab>
         </TabList>
         {/* <TabIndicator mt='-1.5px' height='2px' bg='blue.blue500' borderRadius='1px' /> */}
@@ -255,6 +269,12 @@ export default function DoctorScheduleDetails() {
           </TabPanel>
           <TabPanel p="0">
             <PsychiatricEvaluations />
+          </TabPanel>
+          <TabPanel p="0">
+            <Dental />
+          </TabPanel>
+          <TabPanel p="0">
+            <PhysiotherapyAssessments />
           </TabPanel>
         </TabPanels>
       </Tabs>

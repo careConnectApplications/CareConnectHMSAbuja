@@ -94,8 +94,7 @@ export default function CreateHistopathologyResult({
     console.log("Final Payload:", finalPayload);
 
     try {
-      // Assuming ProcessHistopathologyApi can handle this new structure.
-      // You might need to adjust the API endpoint or the data transformation.
+
       const result = await ProcessHistopathologyApi(finalPayload, oldPayload._id);
       console.log("API Response:", result);
       if (result.status === 201) {

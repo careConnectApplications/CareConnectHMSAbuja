@@ -104,8 +104,6 @@ export default function EyeClinicDetails() {
           </TabPanel>
 
           <TabPanel p="0">
-            {/* Operational Note component - to be implemented */}
-            <Text>Operational Note - Coming Soon</Text>
             <OperationNotes />
           </TabPanel>
 

@@ -21,6 +21,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import { IoMdArrowRoundBack, IoIosCloseCircle } from "react-icons/io";
 import { CreatePsychiatricEvaluationApi, SettingsApi } from "../Utils/ApiCalls";
 import PsychiatricEvaluations from "./PsychiatricEvaluations";
+import { Tooltip } from "@chakra-ui/react";
+import LabRequestModal from "../Components/LabRequestModal";
+import RadiologyOrderRequestModal from "../Components/RadiologyOrderRequestModal";
+import CreateProcedureModal from "../Components/CreateProcedureModal";
+import CreateReferralModal from "../Components/CreateReferralModal";
+import AdmissionModal from "../Components/AdmissionModal";
+import CreatePrescriptionModal from "../Components/CreatePrescriptionModal";
 
 export default function AddPsychiatricEvaluation() {
   const { id } = useParams();
@@ -66,6 +73,14 @@ export default function AddPsychiatricEvaluation() {
   const [AssessmentDiagnosis, setAssessmentDiagnosis] = useState([]);
   const [PlanManagement, setPlanManagement] = useState([]);
   const [Disabled, setDisabled] = useState(true);
+
+  const [OpenLabModal, setOpenLabModal] = useState(false);
+  const [OpenPrescriptionModal, setOpenPrescriptionModal] = useState(false);
+  const [OpenRadiologyModal, setOpenRadiologyModal] = useState(false);
+  const [OpenProcedureModal, setOpenProcedureModal] = useState(false);
+  const [OpenReferralModal, setOpenReferralModal] = useState(false);
+  const [OpenAdmissionModal, setOpenAdmissionModal] = useState(false);
+  const [ModalState, setModalState] = useState("");
 
   const nav = useNavigate();
   const pathname = localStorage.getItem("pathname");
@@ -296,7 +311,7 @@ export default function AddPsychiatricEvaluation() {
       premorbidhistory: PremorbidHistory,
       assessmentdiagnosis: AssessmentDiagnosis,
       planmanagement: PlanManagement,
-      appointmentunderscoreid: appointmentId,
+      appointmentoradmissionunderscoreid: appointmentId,
     };
     console.log("Payload sent to CreatePsychiatricEvaluationApi:", apiPayload);
     try {
@@ -1342,10 +1357,148 @@ export default function AddPsychiatricEvaluation() {
                     </Flex>
                   ))}
                 </SimpleGrid>
+                <Flex
+                  justifyContent="space-between"
+                  flexWrap="wrap"
+                  mt="15px"
+                  w={["100%", "100%", "100%", "100%"]}
+                >
+                  <Tooltip label="Lab Order">
+                    <Box
+                      onClick={() => setOpenLabModal(true)}
+                      cursor="pointer"
+                      px="25px"
+                      py="10px"
+                      rounded="8px"
+                      border="1px solid #EA5937"
+                      color="blue.blue500"
+                      bg="orange.orange500"
+                    >
+                      Lab
+                    </Box>
+                  </Tooltip>
+                  <Tooltip label="Radiology Order">
+                    <Box
+                      onClick={() => setOpenRadiologyModal(true)}
+                      cursor="pointer"
+                      px="25px"
+                      py="10px"
+                      rounded="8px"
+                      border="1px solid #EA5937"
+                      color="blue.blue500"
+                      bg="orange.orange500"
+                    >
+                      Radiology
+                    </Box>
+                  </Tooltip>
+                  <Tooltip label="Prescribe Drug">
+                    <Box
+                      cursor="pointer"
+                      onClick={() => setOpenPrescriptionModal(true)}
+                      px="25px"
+                      py="10px"
+                      rounded="8px"
+                      border="1px solid #EA5937"
+                      color="blue.blue500"
+                      bg="orange.orange500"
+                    >
+                      Prescription
+                    </Box>
+                  </Tooltip>
+                  <Tooltip label="Admit Patient">
+                    <Box
+                      onClick={() => setOpenAdmissionModal(true)}
+                      cursor="pointer"
+                      px="25px"
+                      py="10px"
+                      rounded="8px"
+                      border="1px solid #EA5937"
+                      color="blue.blue500"
+                      bg="orange.orange500"
+                    >
+                      Admission
+                    </Box>
+                  </Tooltip>
+                  <Tooltip label="Procedure">
+                    <Box
+                      onClick={() => setOpenProcedureModal(true)}
+                      cursor="pointer"
+                      px="25px"
+                      py="10px"
+                      rounded="8px"
+                      border="1px solid #EA5937"
+                      color="blue.blue500"
+                      bg="orange.orange500"
+                    >
+                      Procedure
+                    </Box>
+                  </Tooltip>
+                  <Tooltip label="Refer Patient To Another Doctor">
+                    <Box
+                      onClick={() => setOpenReferralModal(true)}
+                      cursor="pointer"
+                      px="25px"
+                      py="10px"
+                      rounded="8px"
+                      border="1px solid #EA5937"
+                      color="blue.blue500"
+                      bg="orange.orange500"
+                    >
+                      Referral
+                    </Box>
+                  </Tooltip>
+                </Flex>
               </Stack>
             </AccordionPanel>
           </AccordionItem>
         </Accordion>
+        <AdmissionModal
+          isOpen={OpenAdmissionModal}
+          oldPayload={{ _id: id, appointmentid: id }}
+          onClose={() => setOpenAdmissionModal(false)}
+          type={ModalState}
+          activateNotifications={activateNotifications}
+        />
+
+        <RadiologyOrderRequestModal
+          isOpen={OpenRadiologyModal}
+          onClose={() => setOpenRadiologyModal(false)}
+          admissionId={null}
+          type={"create"}
+          initialData={null}
+          oldPayload={{ id: id }}
+          onSuccess={activateNotifications}
+        />
+
+        <CreateProcedureModal
+          isOpen={OpenProcedureModal}
+          onClose={() => setOpenProcedureModal(false)}
+          type={"new"}
+          activateNotifications={activateNotifications}
+          oldPayload={{ id: id }}
+        />
+
+        <CreateReferralModal
+          isOpen={OpenReferralModal}
+          onClose={() => setOpenReferralModal(false)}
+          type={ModalState}
+          activateNotifications={activateNotifications}
+        />
+
+        <LabRequestModal
+          isOpen={OpenLabModal}
+          oldPayload={{ _id: id, appointmentid: id }}
+          onClose={() => setOpenLabModal(false)}
+          type={ModalState}
+          activateNotifications={activateNotifications}
+        />
+
+        <CreatePrescriptionModal
+          isOpen={OpenPrescriptionModal}
+          onClose={() => setOpenPrescriptionModal(false)}
+          onSuccess={activateNotifications}
+          oldPayload={{ id: id }}
+        />
 
         <Flex justifyContent="flex-end" mt="32px">
           <Button
