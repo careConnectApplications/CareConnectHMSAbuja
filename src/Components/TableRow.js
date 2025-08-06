@@ -1515,28 +1515,6 @@ export default function TableRow({
         </>
       )}
 
-              Confirm
-            </MenuItem> 
-          ) : (
-            <MenuItem
-              onClick={onClick}
-              textTransform="capitalize"
-              fontWeight={"500"}
-              color="#2F2F2F"
-              _hover={{
-                color: "#fff",
-                fontWeight: "400",
-                bg: "blue.blue500",
-              }}
-            >
-              Process
-            </MenuItem>
-          )}
-        </MenuList>
-      </Menu>
-    </Td>
-  </>
-)}
 {type === "histopatholgy-report" && (
   <>
     

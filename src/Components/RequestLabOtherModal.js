@@ -278,10 +278,7 @@ export default function RequestLabOtherModal({
   }, [isOpen]);
 
   const isFormComplete =
-    Payload.department &&
-    Payload.id &&
-    TestNames.length > 0 &&
-    Payload.testNames;
+    Payload.department && Payload.id && TestNames.length > 0;
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered size="lg" scrollBehavior="inside" >
@@ -347,21 +344,22 @@ export default function RequestLabOtherModal({
             <Box mt="32px">
               <Text mb={2} fontWeight="medium">Patient</Text>
               <Box position="relative">
-                <Input
-                  label="Search for Patient"
-                  placeholder="Enter MRN, first name, or last name"
-                  value={searchMRN}
-                  onChange={handleSearchInputChange}
-                  leftIcon={<FiSearch size={16} color="blue.500" />}
-                />
+                <Flex>
+                  <Input
+                    label="Search for Patient"
+                    placeholder="Enter MRN, first name, or last name"
+                    value={searchMRN}
+                    onChange={handleSearchInputChange}
+                    leftIcon={<FiSearch size={16} color="blue.500" />}
+                  />
 
-                <Button
-                  onClick={handleSearchPatient}
-                  w={["100%", "100%", "165px", "205px"]}
-                >
-                  Search
-                </Button>
-              </Flex>
+                  <Button
+                    onClick={handleSearchPatient}
+                    w={["100%", "100%", "165px", "205px"]}
+                  >
+                    Search
+                  </Button>
+                </Flex>
               <Select
                 onChange={handlePayload}
                 placeholder={
