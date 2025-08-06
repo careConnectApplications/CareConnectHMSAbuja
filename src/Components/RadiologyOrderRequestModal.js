@@ -11,8 +11,10 @@ import {
   SimpleGrid,
   Text,
   Flex,
-  Stack,
   Select,
+  Stack,
+  HStack,
+  Badge,
 } from "@chakra-ui/react";
 import Button from "../Components/Button";
 import Input from "../Components/Input";
