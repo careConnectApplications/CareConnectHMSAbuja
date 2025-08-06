@@ -397,21 +397,8 @@ export default function AddEyeExamination() {
             <Text fontSize="xl" fontWeight="bold" mb={4}>
               Patient & Appointment Information
             </Text>
-            <SimpleGrid columns={{ base: 1, md: 3 }} spacing="6">
-              <Input
-                leftIcon={<FaNoteSticky />}
-                label="Patient ID"
-                value={formData.patientId}
-                onChange={(e) => handleGeneralInputChange("patientId", e.target.value)}
-                placeholder="Enter Patient ID"
-              />
-              <Input
-                leftIcon={<FaNoteSticky />}
-                label="Appointment ID"
-                value={formData.appointmentId}
-                onChange={(e) => handleGeneralInputChange("appointmentId", e.target.value)}
-                placeholder="Enter Appointment ID"
-              />
+            <SimpleGrid columns={{ base: 1, md: 2 }} spacing="6">
+            
               <Input
                 leftIcon={<FaNoteSticky />}
                 label="Next Appointment Date"
