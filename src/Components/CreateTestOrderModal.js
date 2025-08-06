@@ -25,7 +25,7 @@ export default function CreateTestOrderModal({ isOpen, onClose, type, activateNo
         unit: ""
       }
     ]
-  });
+  }); 
 
   // Fetch the subcomponents for the test name passed in oldPayload when the modal opens
   useEffect(() => {

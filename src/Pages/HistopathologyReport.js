@@ -23,9 +23,10 @@ import { IoFilter } from "react-icons/io5";
 import moment from "moment";
 import Seo from "../Utils/Seo";
 import CreateHistopathologyResult from "../Components/CreateHistopathologyResult";
+import ViewHistopathologyResultModal from "../Components/ViewHistopathologyResultModal";
 import CreateHistopathologyModal from "../Components/CreateHistopathologyModal";
 import ConfirmLabOrderModal from "../Components/ConfirmLabOrderModal";
-import { GetAllHistopathologyApi, GetAllHistopathologyFilteredApi } from "../Utils/ApiCalls";
+import { GetAllHistopathologyApi, GetAllHistopathologyFilteredApi,GetSingleHistopathologyApi } from "../Utils/ApiCalls";
 import Pagination from "../Components/Pagination";
 import { configuration } from "../Utils/Helpers";
 import Preloader from "../Components/Preloader";
@@ -42,6 +43,11 @@ export default function HistopathologyReport() {
   const [OpenOrderModal, setOpenOrderModal] = useState(false);
   const [OldPayload, setOldPayload] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isViewOpen,
+    onOpen: onViewOpen,
+    onClose: onViewClose,
+  } = useDisclosure();
 
   // Used to trigger refresh when a new order is created
   const [Trigger, setTrigger] = useState(false);
@@ -65,6 +71,7 @@ export default function HistopathologyReport() {
   const [CurrentPage, setCurrentPage] = useState(1);
   const [PostPerPage, setPostPerPage] = useState(configuration.sizePerPage);
   const [TotalData, setTotalData] = useState("");
+  const [ResultData, setResultData] = useState({});
   const [Status, setStatus] = useState("processed");
 
 
@@ -148,7 +155,7 @@ export default function HistopathologyReport() {
 
 
 
-  const getAllScheduledPathology = async (status) => {
+  const getAllScheduledPathology  = async (status) => {
     setIsLoading(true);
     try {
       const result = await GetAllHistopathologyApi(PostPerPage, CurrentPage, status);
@@ -163,6 +170,24 @@ export default function HistopathologyReport() {
       console.error(e.message);
     }
   };
+
+
+  const getSinglehistopathology = async (name,id) => {
+    setIsLoading(true);
+    try {
+      const result = await GetSingleHistopathologyApi(name,id);
+      console.log("getSinglehistopathology", result);
+      if (result.status === true) {
+        setIsLoading(false);
+       setResultData(result.data[0]);
+       onViewOpen();
+      }
+    } catch (e) {
+      console.error(e.message);
+    }
+  };
+
+
 
   const activateNotifications = (message, status) => {
     setShowToast({
@@ -515,7 +540,7 @@ export default function HistopathologyReport() {
                 FilterData?.map((item, i) => (
                   <TableRow
                     key={i}
-                    type="histopatholgy-process"
+                    type="histopatholgy-report"
                     name={`${item.patient?.firstName} ${item.patient?.lastName}`}
                     testName={item.testName}
                     biopsyType={item.diagnosisForm?.biopsyType}
@@ -526,27 +551,14 @@ export default function HistopathologyReport() {
                     wholeOrgan={item.diagnosisForm?.wholeOrgan}
                     labStatus={item.testPaymentStatus}
                     status={item.paymentInfo?.status}
-                    onConfirmClick={() => {
-                      console.log("Confirm action triggered for item:", item);
-                      confirmLab(item);
-                    }}
-                    onClick={() => {
-                      if (
-                        item.status?.trim().toLowerCase() === "awaiting confirmation"
-                      ) {
-                        console.log("Confirm action triggered for item:", item);
-                        confirmLab(item);
-                      } else {
-                        ProcessLab(item);
-                      }
-                    }}
+                    onClick={()=>getSinglehistopathology(item.testName,item.histopathologyId) }
                   />
                 ))
               ) : SearchInput !== "" && FilteredData?.length > 0 ? (
                 FilteredData?.map((item, i) => (
                   <TableRow
                     key={i}
-                  type="histopatholgy-process"
+                  type="histopatholgy-report"
                     name={`${item.patient?.firstName} ${item.patient?.lastName}`}
                     testName={item.testName}
                     biopsyType={item.diagnosisForm?.biopsyType}
@@ -557,20 +569,8 @@ export default function HistopathologyReport() {
                     wholeOrgan={item.diagnosisForm?.wholeOrgan}
                     labStatus={item.testPaymentStatus}
                    status={item.paymentInfo?.status}
-                    onConfirmClick={() => {
-                      console.log("Confirm action triggered for item:", item);
-                      confirmLab(item);
-                    }}
-                    onClick={() => {
-                      if (
-                        item.status?.trim().toLowerCase() === "awaiting confirmation"
-                      ) {
-                        console.log("Confirm action triggered for item:", item);
-                        confirmLab(item);
-                      } else {
-                        ProcessLab(item);
-                      }
-                    }}
+                  
+                   onClick={()=>getSinglehistopathology(item.testName,item.histopathologyId) }
                   />
                 ))
               ) : (
@@ -609,6 +609,11 @@ export default function HistopathologyReport() {
         labOrderId={OldPayload?._id}
         onClose={onConfirmClose}
         onSuccess={() => setTrigger((prev) => !prev)}
+      />
+      <ViewHistopathologyResultModal
+        isOpen={isViewOpen}
+        onClose={onViewClose}
+        Resultdata={ResultData}
       />
     </MainLayout>
   );

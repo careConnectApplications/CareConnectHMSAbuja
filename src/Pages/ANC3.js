@@ -428,27 +428,60 @@ export default function ANC3({ hide = false }) {
 
                                         <Text fontSize="15px" mt="12px" fontWeight={"700"} textTransform="capitalize" color="blue.blue500">General Examination</Text>
                                         <SimpleGrid mt="12px" mb="5" columns={{ base: 1, md: 2, lg: 2 }} spacing={5}>
-                                            {/* <PreviewCard title="lmp" value={moment(item.reproductiveprofile?.lmp).format("ll")} /> */}
                                             <PreviewCard title="abdomen" value={item.generalexamination?.abdomen} />
+                                            <PreviewCard title="VDRL" value={item.generalexamination?.VDRL} />
+                                            <PreviewCard title="bp" value={item.generalexamination?.bp} />
+                                            <PreviewCard title="cycle" value={item.generalexamination?.cycle} />
+                                            <PreviewCard title="bloodGroup" value={item.generalexamination?.bloodGroup} />
+                                            <PreviewCard title="genotype" value={item.generalexamination?.genotype} />
+                                            <PreviewCard title="groupRh" value={item.generalexamination?.groupRh} />
+                                            <PreviewCard title="hb" value={item.generalexamination?.hb} />
+                                            <PreviewCard title="others" value={item.generalexamination?.others} />
+                                            <PreviewCard title="retroviral" value={item.generalexamination?.retroviral} />
+                                            <PreviewCard title="urine" value={item.generalexamination?.urine} />
                                             <PreviewCard title="breasts" value={item.generalexamination?.breasts} />
                                             <PreviewCard title="cvs" value={item.generalexamination?.cvs} />
                                             <PreviewCard title="height" value={item.generalexamination?.height} />
+                                            <PreviewCard title="weight" value={item.generalexamination?.weight} />
                                             <PreviewCard title="pelvis" value={item.generalexamination?.pelvis} />
                                             <PreviewCard title="rs" value={item.generalexamination?.rs} />
+                                            <PreviewCard title="comments" value={item.generalexamination?.comments} />
                                           
                                         </SimpleGrid>
                                     </Box>
                                 )
                             }
                             {
-                                item.pregnancysummary && (
+                                item.bookingInformation && (
                                     <Box>
 
-                                        <Text fontSize="15px" mt="12px" fontWeight={"700"} textTransform="capitalize" color="blue.blue500">Pregnancy Summary</Text>
+                                        <Text fontSize="15px" mt="12px" fontWeight={"700"} textTransform="capitalize" color="blue.blue500">booking Information</Text>
                                         <SimpleGrid mt="12px" mb="5" columns={{ base: 1, md: 2, lg: 2 }} spacing={5}>
-                                            <PreviewCard title="lmp" value={moment(item.pregnancysummary?.lmp).format("ll")} />
-                                            <PreviewCard title="edd" value={moment(item.pregnancysummary?.edd).format("ll")} />
-                                            <PreviewCard title="gravidity" value={item.pregnancysummary?.gravidity} />
+                                            <PreviewCard title="lmp" value={moment(item.bookingInformation?.lmp).format("ll")} />
+                                            <PreviewCard title="edd" value={moment(item.bookingInformation?.edd).format("ll")} />
+                                            <PreviewCard title="bookingDate" value={moment(item.bookingInformation?.bookingDate).format("ll")} />
+                                            <PreviewCard title="Expected gestational age" value={item.bookingInformation?.ega} />
+                                            <PreviewCard title="gravida" value={item.bookingInformation?.gravida} />
+                                            <PreviewCard title="indication" value={item.bookingInformation?.indication} />
+                                            <PreviewCard title="specialPoint" value={item.bookingInformation?.gravida} />
+                                            <PreviewCard title="consultant" value={item.bookingInformation?.consultant} />
+                                          
+                                          
+                                        </SimpleGrid>
+                                    </Box>
+                                )
+                            }
+                            {
+                                item.presentPregnancy && (
+                                    <Box>
+
+                                        <Text fontSize="15px" mt="12px" fontWeight={"700"} textTransform="capitalize" color="blue.blue500">present Pregnancy</Text>
+                                        <SimpleGrid mt="12px" mb="5" columns={{ base: 1, md: 2, lg: 2 }} spacing={5}>
+                                          
+                                            <PreviewCard title="bleeding" value={item.presentPregnancy?.bleeding} />
+                                            <PreviewCard title="discharge" value={item.presentPregnancy?.discharge} />        
+                                            <PreviewCard title="swelling Ankles" value={item.presentPregnancy?.swellingAnkles} />
+                                            <PreviewCard title="urinary Symptoms" value={item.presentPregnancy?.urinarySymptoms} />
                                           
                                           
                                         </SimpleGrid>
@@ -465,11 +498,11 @@ export default function ANC3({ hide = false }) {
                                             <SimpleGrid mt="12px" mb="5" columns={{ base: 1, md: 2, lg: 2 }} spacing={5}>
                                                 <PreviewCard title="year" value={moment(item.year).format("ll")} />
                                                 <PreviewCard title="labour" value={item.labour} />
-                                                <PreviewCard title="durationpregnancy" value={item.durationpregnancy} />
-                                                <PreviewCard title="antenatalcomplication" value={item.antenatalcomplication} />
-                                                <PreviewCard title="ageifalive" value={item.ageifalive} />
-                                                <PreviewCard title="ageifdead" value={item.ageifdead} />
-                                                <PreviewCard title="causeofdeath" value={item.causeofdeath} />
+                                                <PreviewCard title="durationPregnancy" value={item.durationPregnancy} />
+                                                <PreviewCard title="antenatalComplication" value={item.antenatalComplication} />
+                                                <PreviewCard title="birthWeight" value={item.birthWeight} />
+                                                <PreviewCard title="puerperium" value={item.puerperium} />
+                                                <PreviewCard title="sex" value={item.sex} />
                                               
                                             </SimpleGrid>
                                         </Box>

@@ -12,6 +12,8 @@ import {
   SimpleGrid,
   Flex,
   Text,
+  HStack,
+  Badge,
 } from "@chakra-ui/react";
 import Button from "../Components/Button";
 import Input from "./Input";
@@ -42,6 +44,12 @@ export default function RequestLabOtherModal({
   const [TestNames, setTestNames] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [isLoadingPatients, setIsLoadingPatients] = useState(false);
+
+
+  const [selectedPatientInfo, setSelectedPatientInfo] = useState(null);
+
+  // New states for test search
+
   const [searchTestQuery, setSearchTestQuery] = useState("");
   const [testSearchResults, setTestSearchResults] = useState([]);
   const [isLoadingTests, setIsLoadingTests] = useState(false);
@@ -182,10 +190,80 @@ export default function RequestLabOtherModal({
     }
   }, [isOpen]);
 
+
+
+  // Auto-search functionality with debouncing
+  useEffect(() => {
+    const searchPatients = async (searchTerm) => {
+      if (!searchTerm || searchTerm.trim().length < 2) {
+        setSearchResults([]);
+        return;
+      }
+
+      // Don't search if a patient is already selected and the search term matches
+      if (selectedPatientInfo && searchTerm.includes(selectedPatientInfo.mrn)) {
+        return;
+      }
+
+      try {
+        setIsLoadingPatients(true);
+        const results = await SearchPatientApi(searchTerm);
+        if (results?.queryresult?.patientdetails) {
+          setSearchResults(results.queryresult.patientdetails);
+        } else {
+          setSearchResults([]);
+        }
+      } catch (e) {
+        console.error("Error searching patient:", e.message);
+        setSearchResults([]);
+      } finally {
+        setIsLoadingPatients(false);
+      }
+    };
+
+    const timeoutId = setTimeout(() => {
+      searchPatients(searchMRN);
+    }, 300); // 300ms debounce
+
+    return () => clearTimeout(timeoutId);
+  }, [searchMRN, selectedPatientInfo]);
+
+  // Handle patient selection from search results
+  const handlePatientSelect = (patient) => {
+    setPayload((prev) => ({
+      ...prev,
+      id: patient._id,
+    }));
+    setSelectedPatientInfo({
+      name: `${patient.firstName} ${patient.lastName}`,
+      mrn: patient.MRN,
+    });
+    setSearchResults([]); // Clear search results
+    setSearchMRN(`${patient.firstName} ${patient.lastName} (MRN: ${patient.MRN})`);
+  };
+
+  // Handle search input change and clear selection if user starts typing new search
+  const handleSearchInputChange = (e) => {
+    const value = e.target.value;
+    setSearchMRN(value);
+    
+    // Clear selected patient if user modifies the search significantly
+    if (selectedPatientInfo && !value.includes(selectedPatientInfo.mrn)) {
+      setSelectedPatientInfo(null);
+      setPayload((prev) => ({
+        ...prev,
+        id: "",
+      }));
+    }
+  };
+
+  // Reset fields when the modal closes.
+
   useEffect(() => {
     if (!isOpen) {
       setSearchMRN("");
       setSearchResults([]);
+      setSelectedPatientInfo(null);
       setSearchTestQuery("");
       setTestSearchResults([]);
       setPayload({
@@ -267,15 +345,16 @@ export default function RequestLabOtherModal({
 
             {/* Patient Search Section */}
             <Box mt="32px">
-              <Flex mb={2} gap={4}>
+              <Text mb={2} fontWeight="medium">Patient</Text>
+              <Box position="relative">
                 <Input
                   label="Search for Patient"
                   placeholder="Enter MRN, first name, or last name"
                   value={searchMRN}
-                  onChange={(e) => setSearchMRN(e.target.value)}
+                  onChange={handleSearchInputChange}
                   leftIcon={<FiSearch size={16} color="blue.500" />}
-                  flex="1"
                 />
+
                 <Button
                   onClick={handleSearchPatient}
                   w={["100%", "100%", "165px", "205px"]}
@@ -303,6 +382,78 @@ export default function RequestLabOtherModal({
                   </option>
                 ))}
               </Select>
+
+                
+                {/* Selected Patient Display */}
+                {selectedPatientInfo && (
+                  <Box mt={2} p={3} bg="blue.50" borderRadius="md" border="1px solid" borderColor="blue.200">
+                    <HStack spacing={2}>
+                      <Badge colorScheme="blue" variant="solid">Selected</Badge>
+                      <Text fontWeight="medium">{selectedPatientInfo.name}</Text>
+                      <Text fontSize="sm" color="gray.600">MRN: {selectedPatientInfo.mrn}</Text>
+                    </HStack>
+                  </Box>
+                )}
+
+                {/* Search Results Dropdown */}
+                {searchResults.length > 0 && !selectedPatientInfo && (
+                  <Box
+                    position="absolute"
+                    top="100%"
+                    left={0}
+                    right={0}
+                    zIndex={10}
+                    bg="white"
+                    border="1px solid"
+                    borderColor="gray.200"
+                    borderRadius="md"
+                    boxShadow="lg"
+                    maxH="200px"
+                    overflowY="auto"
+                    mt={1}
+                  >
+                    {searchResults.map((patient) => (
+                      <Box
+                        key={patient._id}
+                        p={3}
+                        cursor="pointer"
+                        _hover={{ bg: "blue.50" }}
+                        onClick={() => handlePatientSelect(patient)}
+                        borderBottom="1px solid"
+                        borderColor="gray.100"
+                        _last={{ borderBottom: "none" }}
+                      >
+                        <Text fontWeight="medium">
+                          {`${patient.firstName} ${patient.lastName}`}
+                        </Text>
+                        <Text fontSize="sm" color="gray.600">
+                          MRN: {patient.MRN}
+                        </Text>
+                      </Box>
+                    ))}
+                  </Box>
+                )}
+
+                {/* Loading Indicator */}
+                {isLoadingPatients && (
+                  <Box
+                    position="absolute"
+                    top="100%"
+                    left={0}
+                    right={0}
+                    zIndex={10}
+                    bg="white"
+                    border="1px solid"
+                    borderColor="gray.200"
+                    borderRadius="md"
+                    p={3}
+                    mt={1}
+                  >
+                    <Text color="gray.500">Searching patients...</Text>
+                  </Box>
+                )}
+              </Box>
+
 
               {/* Test Search Section */}
               <Box mt={4}>

@@ -35,6 +35,132 @@ export const ProviderLoginApi = (Payload) => {
     });
 };
 
+export const AddEyePreliminaryTestApi = (payload) => {
+  let data = JSON.stringify(payload);
+  let config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/eye-module/preliminary-test`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data: data,
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response.data.message) {
+        throw new Error(error.response.data.message);
+      } else if (error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.message);
+      } else {
+        throw new Error(error.message);
+      }
+    });
+};
+export const AddLensPrescriptionApi = (payload) => {
+  let data = JSON.stringify(payload);
+  let config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/eye-module/lens-prescription`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data: data,
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response.data.message) {
+        throw new Error(error.response.data.message);
+      } else if (error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.message);
+      } else {
+        throw new Error(error.message);
+      }
+    });
+};
+
+export const AddOperationNoteApi = (formData, appointmentId, patientId) => {
+  let config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/eye-module/operational-notes/appointment/${appointmentId}/patient/${patientId}`,
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: `Bearer ${token}`,
+    },
+    data: formData,
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response.data.message) {
+        throw new Error(error.response.data.message);
+      } else if (error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.message);
+      } else {
+        throw new Error(error.message);
+      }
+    });
+};
+
+export const AddEyeExaminationApi = (payload) => {
+  let data = JSON.stringify(payload);
+  let config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/eye-module/create-examination`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data: data,
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response.data.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
+
 export const CreateHistologyApi = (payload) => {
   let data = JSON.stringify(payload);
   let config = {
@@ -77,6 +203,37 @@ export const GetAllHistopathologyApi = (postPerPage, pageNo, status) => {
       Authorization: `Bearer ${token}`,
     },
   };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response.data; // Return the data part of the response
+    })
+    .catch((error) => {
+      console.log("Error fetching users:", error.response);
+      if (error.response && error.response.data.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response && error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
+export const GetSingleHistopathologyApi = (name,id) => {
+  console.log("name", name, "id", id);
+  // Configure the GET request
+  let config = {
+    method: "get",
+    url: `${baseUrl}/histopathology-test/test-details/${id}?servicename=${name}`,
+    headers: {
+      "Content-Type": "application/json", 
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  console.log("url", config.url);
 
   return axios
     .request(config)
@@ -1341,6 +1498,35 @@ export const GetPreviousClinicalEncounterApi = (id) => {
   let config = {
     method: "get",
     url: `${baseUrl}/appointment/getallpreviousclinicalencounter/${id}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response.data; // Return the data part of the response
+    })
+    .catch((error) => {
+      console.log("Error fetching users:", error.response);
+      if (error.response && error.response.data.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response && error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
+export const GetPreviousEyeRecordsApi = (id) => {
+  // Configure the GET request
+  let config = {
+    method: "get",
+    url: `${baseUrl}/eye-module/patient/${id}`,
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,

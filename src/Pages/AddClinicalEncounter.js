@@ -634,7 +634,7 @@ export default function AddClinicalEncounter() {
 
                         />
 
-                        <CreateReferralModal isOpen={OpenReferralModal} onClose={() => setOpenReferralModal(false)} type={ModalState} activateNotifications={activateNotifications} />
+                        <CreateReferralModal isOpen={OpenReferralModal} onClose={() => setOpenReferralModal(false)} type={"new"} activateNotifications={activateNotifications} />
 
                     </AccordionItem>
 
@@ -671,8 +671,8 @@ export default function AddClinicalEncounter() {
 
                     </Flex>
                 </Flex>
-                <LabRequestModal isOpen={OpenLabModal} oldPayload={{ _id: id, appointmentid: id }} onClose={() => setOpenLabModal(false)} type={ModalState} activateNotifications={activateNotifications} />
                 <PreviewEncounter isOpen={OpenPreview} onClose={() => setOpenPreview(false)} setOldPayload={setPayload} oldPayload={Payload} />
+                <LabRequestModal isOpen={OpenLabModal} oldPayload={{ _id: id, appointmentid: id }} onClose={() => setOpenLabModal(false)} type={ModalState} activateNotifications={activateNotifications} />
                 <CreatePrescriptionModal
                     isOpen={OpenPrescriptionModal}
                     onClose={() => setOpenPrescriptionModal(false)}

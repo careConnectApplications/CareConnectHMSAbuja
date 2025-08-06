@@ -14,7 +14,9 @@ import { ImLab } from "react-icons/im";
 import { MdInventory2 } from "react-icons/md";
 import { MdLocalPharmacy } from "react-icons/md";
 import { FaRadiation } from "react-icons/fa";
+import { FaEye } from "react-icons/fa";
 import { MdLocalHospital } from 'react-icons/md';
+
 export const NavList = (location) => {
   const checkActiveLab = () => {
     let result = "";
@@ -168,6 +170,13 @@ export const NavList = (location) => {
           display: isLabStaff(),
         },
       ],
+    },
+    {
+      name: "eye Clinic",
+      icon: <FaEye />,
+      link: "/dashboard/eye-clinic",
+      active: isActive(location, "/dashboard/eye-clinic"),
+      display: true,
     },
     {
       name: "radiology",
