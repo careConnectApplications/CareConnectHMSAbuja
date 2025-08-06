@@ -18,6 +18,8 @@ import ProfileSettings from "../Pages/ProfileSettings";
 import EyeClinicSchedule from "../Pages/EyeClinicSchedule";
 import AddEyePreliminaryTest from "../Pages/AddEyePreliminaryTest";
 import AddEyeExamination from "../Pages/AddEyeExamination";
+import AddLensPrescription from "../Pages/AddLensPrescription";
+import AddOperationNotes from "../Pages/AddOperationNotes";
 import EyeClinicDetails from "../Pages/EyeClinicDetails";
 import SinglePatient from "../Pages/SinglePatient";
 import ScheduleAppointment from "../Pages/ScheduleAppointment";
@@ -108,6 +110,14 @@ export default function IndexRoutes() {
           <Route
             path="/dashboard/add-eye-examination/:id"
             element={<AddEyeExamination />}
+          />
+          <Route
+            path="/dashboard/add-lens-prescription/:id"
+            element={<AddLensPrescription />}
+          />
+          <Route
+            path="/eye-module/operational-notes/appointment/:appointmentId/patient/:patientId"
+            element={<AddOperationNotes />}
           />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route element={<RecordsRoutes />}>
