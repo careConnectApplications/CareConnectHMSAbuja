@@ -46,7 +46,7 @@ export default function EditPsychiatricEvaluation() {
     premorbidhistory: "",
     assessmentdiagnosis: "",
     planmanagement: "",
-    appointmentunderscoreid: localStorage.getItem("appointmentId") || "",
+    appointmentoradmissionunderscoreid: localStorage.getItem("appointmentId") || "",
   });
   const [PresentingComplaints, setPresentingComplaints] = useState([]);
   const [HistoryOfPresentingComplaints, setHistoryOfPresentingComplaints] =
@@ -304,7 +304,7 @@ export default function EditPsychiatricEvaluation() {
     setPlanManagement(evaluation.planmanagement || []);
     setPayload({
       ...Payload,
-      appointmentunderscoreid: localStorage.getItem("appointmentId") || "",
+      appointmentoradmissionunderscoreid: localStorage.getItem("appointmentId") || "",
     });
   };
 
@@ -326,7 +326,7 @@ export default function EditPsychiatricEvaluation() {
         premorbidhistory: PremorbidHistory,
         assessmentdiagnosis: AssessmentDiagnosis,
         planmanagement: PlanManagement,
-        appointmentunderscoreid: Payload.appointmentunderscoreid,
+        appointmentoradmissionunderscoreid: Payload.appointmentoradmissionunderscoreid,
       });
 
       if (result.status === 200) {

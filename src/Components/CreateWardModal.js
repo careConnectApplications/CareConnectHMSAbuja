@@ -33,7 +33,7 @@ export default function CreateWardModal({ isOpen, onClose, type, activateNotific
         wardname: "",
         totalbed: "",
         price: "",
-        occupiedbed: ""
+        
     });
 
     const [UpdatedPayload, setUpdatedPayload] = useState({
@@ -41,7 +41,7 @@ export default function CreateWardModal({ isOpen, onClose, type, activateNotific
         wardname: "",
         totalbed: "",
         price: "",
-        occupiedbed: ""
+       
     });
 
     const handleUpdatedPayload = (e) => {
@@ -78,7 +78,7 @@ export default function CreateWardModal({ isOpen, onClose, type, activateNotific
                     wardname: "",
                     totalbed: "",
                     price: "",
-                    occupiedbed: ""
+                    
                 })
 
                 activateNotifications("Ward Added Successfully", "success")
@@ -123,7 +123,7 @@ export default function CreateWardModal({ isOpen, onClose, type, activateNotific
             wardname: oldPayload?.wardname,
             totalbed: oldPayload?.totalbed,
             price: oldPayload?.price,
-            occupiedbed: oldPayload?.occupiedbed
+            
         })
        
         getSettings();
@@ -170,7 +170,7 @@ export default function CreateWardModal({ isOpen, onClose, type, activateNotific
                                     <Input val={Payload.wardname !== "" ? true : false} leftIcon={<FaClinicMedical />} onChange={handlePayload} id="wardname" value={Payload.wardname} label="Ward Name" />
                                     <Input val={Payload.totalbed !== "" ? true : false} leftIcon={<FaBed />} onChange={handlePayload} type="number" id="totalbed" value={Payload.totalbed} label="Total bed" />
                                     <Input val={Payload.price !== "" ? true : false} leftIcon={<IoMdPricetags />} onChange={handlePayload} type="number" id="price" value={Payload.price} label="Price" />
-                                    <Input val={Payload.occupiedbed !== "" ? true : false} leftIcon={<FaBed />} onChange={handlePayload} type="number" id="occupiedbed" value={Payload.occupiedbed} label="Occupied Bed" />
+
 
 
 
@@ -202,7 +202,7 @@ export default function CreateWardModal({ isOpen, onClose, type, activateNotific
                                     <Input val={UpdatedPayload.wardname !== "" ? true : false} leftIcon={<FaClinicMedical />} onChange={handleUpdatedPayload} id="wardname" value={UpdatedPayload.wardname} label="Ward Name" />
                                     <Input val={UpdatedPayload.totalbed !== "" ? true : false} leftIcon={<FaBed />} onChange={handleUpdatedPayload} type="number" id="totalbed" value={UpdatedPayload.totalbed} label="Total bed" />
                                     <Input val={UpdatedPayload.price !== "" ? true : false} leftIcon={<IoMdPricetags />} onChange={handleUpdatedPayload} type="number" id="price" value={UpdatedPayload.price} label="Price" />
-                                    <Input val={UpdatedPayload.occupiedbed !== "" ? true : false} leftIcon={<FaBed />} onChange={handleUpdatedPayload} type="number" id="occupiedbed" value={UpdatedPayload.occupiedbed} label="Occupied Bed" />
+                                    
 
                                 </Stack>
                                 <Button mt="32px" isLoading={Loading} onClick={UpdateWard}>Update Ward</Button>

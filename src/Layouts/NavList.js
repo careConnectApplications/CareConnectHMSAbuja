@@ -131,6 +131,20 @@ export const NavList = (location) => {
           active: isActive(location, "/dashboard/lab-process/report"),
           display: isLabStaff(),
         },
+                {
+          name: "hematology",
+          icon: <MdOutlineAnalytics />,
+          link: "/dashboard/lab-process/hematology",
+          active: isActive(location, "/dashboard/lab-process/hematology"),
+          display: isLabStaff(),
+        },
+                        {
+          name: "chemical pathology",
+          icon: <MdOutlineAnalytics />,
+          link: "/dashboard/lab-process/chemical-pathology",
+          active: isActive(location, "/dashboard/lab-process/chemical-pathology"),
+          display: isLabStaff(),
+        },
       ],
     },
     {
