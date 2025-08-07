@@ -50,6 +50,7 @@ import NutritionPage from "./NutritionPage";
 import PsychiatricEvaluations from "./PsychiatricEvaluations";
 import Dental from "./Dental";
 import PhysiotherapyAssessments from "./PhysiotherapyAssessments";
+import CustomBilling from "./CustomBilling";
 
 export default function DoctorScheduleDetails() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -267,6 +268,12 @@ export default function DoctorScheduleDetails() {
           >
             Physiotherapy
           </Tab>
+          <Tab
+            _focus={{ outline: "none" }}
+            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+          >
+            Custom Billing
+          </Tab>
         </TabList>
         {/* <TabIndicator mt='-1.5px' height='2px' bg='blue.blue500' borderRadius='1px' /> */}
         <TabPanels>
@@ -335,6 +342,9 @@ export default function DoctorScheduleDetails() {
           </TabPanel>
           <TabPanel p="0">
             <PhysiotherapyAssessments />
+          </TabPanel>
+          <TabPanel p="0">
+            <CustomBilling />
           </TabPanel>
         </TabPanels>
       </Tabs>

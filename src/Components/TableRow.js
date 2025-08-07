@@ -681,6 +681,78 @@ export default function TableRow({
         </>
       )}
 
+      {type === "custom-billing-history" && (
+        <>
+        <Td onClick={onClick}>
+            <HStack>
+              <Avatar size="sm" name={name} />
+              <Box>
+                <Text color={"#101828"} fontWeight={"500"} fontSize={"13px"}>
+                  {name}
+                </Text>
+                <Text color={"#667085"} fontWeight={"400"} fontSize={"11px"}>
+                  MRN ~ {mrn}
+                </Text>
+              </Box>
+            </HStack>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {date}
+            </Text>
+          </Td>
+         
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {category}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {paymentType}
+            </Text>
+          </Td>
+         
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {quantity}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {amountPaid}
+            </Text>
+          </Td>
+          <Td>
+            <HStack
+              color={
+                status === "paid"
+                  ? "#027A48"
+                  : status === "pending payment"
+                  ? "#FFA30C"
+                  : "#FD4739"
+              }
+            >
+              <Box
+                rounded="100%"
+                w="8px"
+                h="8px"
+                bg={
+                  status === "paid"
+                    ? "#027A48"
+                    : status === "pending payment"
+                    ? "#FFA30C"
+                    : "#FD4739"
+                }
+              ></Box>
+              <Text fontWeight="400" fontSize={"13px"}>
+                {status}
+              </Text>
+            </HStack>
+          </Td>
+        </>
+      )}
+
       {type === "appointment" && (
         <>
           <Td>
