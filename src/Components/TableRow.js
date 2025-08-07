@@ -140,6 +140,8 @@ export default function TableRow({
   appointmentdate,
   vitalStatus,
   onVital,
+  onClinicalInfo,
+  onSpecialNeeds,
   price,
   occupiedBed,
   totalBed,
@@ -958,6 +960,36 @@ export default function TableRow({
                 >
                   <HStack fontSize="14px">
                     <Text>Take Vitals</Text>
+                  </HStack>
+                </MenuItem>
+                <MenuItem
+                  onClick={onClinicalInfo}
+                  textTransform="capitalize"
+                  fontWeight={"500"}
+                  color="#2F2F2F"
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                >
+                  <HStack fontSize="14px">
+                    <Text>Add Clinical Information</Text>
+                  </HStack>
+                </MenuItem>
+                <MenuItem
+                  onClick={onSpecialNeeds}
+                  textTransform="capitalize"
+                  fontWeight={"500"}
+                  color="#2F2F2F"
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                >
+                  <HStack fontSize="14px">
+                    <Text>Add Special Need</Text>
                   </HStack>
                 </MenuItem>
               </MenuList>
