@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useNavigate,useLocation } from "react-router-dom";
 import MainLayout from "../Layouts/Index";
 import { Text, Flex, HStack, Box, useDisclosure } from "@chakra-ui/react";
@@ -36,20 +36,63 @@ import Pagination from "../Components/Pagination";
 import { configuration } from "../Utils/Helpers";
 export default function UserManagement() {
   const [IsLoading, setIsLoading] = useState(true);
-  const [All, setAll] = useState(true);
-  const [Active, setActive] = useState(false);
-  const [InActive, setInActive] = useState(false);
   const [Trigger, setTrigger] = useState(false);
   const [Data, setData] = useState([]);
-  const [FilterData, setFilterData] = useState([]);
   const [ModalState, setModalState] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [FilterUser, setFilterUser] = useState({});
-
-  // filter by date
   const [ByDate, setByDate] = useState(false);
-  const [StartDate, setStartDate] = useState("");
-  const [EndDate, setEndDate] = useState("");
+
+  const [filters, setFilters] = useState({
+    status: "all", // 'all', 'active', or 'inactive'
+    searchTerm: "",
+    searchField: "all", // e.g., 'name', 'email', 'role'
+    startDate: "",
+    endDate: "",
+  });
+
+  const filteredData = useMemo(() => {
+    let filtered = Data;
+
+    // Status filter
+    if (filters.status !== "all") {
+      filtered = filtered.filter((item) => item.status === filters.status);
+    }
+
+    // Search filter
+    if (filters.searchTerm) {
+      filtered = filtered.filter((item) => {
+        if (filters.searchField === "all") {
+          return (
+            item.role?.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
+            item.email?.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
+            item.firstName?.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
+            item.lastName?.toLowerCase().includes(filters.searchTerm.toLowerCase())
+          );
+        }
+        if (filters.searchField === "name") {
+          return (
+            item.firstName?.toLowerCase().includes(filters.searchTerm.toLowerCase()) ||
+            item.lastName?.toLowerCase().includes(filters.searchTerm.toLowerCase())
+          );
+        }
+        return item[filters.searchField]?.toLowerCase().includes(filters.searchTerm.toLowerCase());
+      });
+    }
+
+    // Date range filter
+    if (filters.startDate && filters.endDate) {
+      let endDate = new Date(filters.endDate);
+      endDate.setDate(endDate.getDate() + 1);
+      let formatedEndDate = endDate.toISOString().split("T")[0];
+      filtered = filtered.filter(
+        (item) =>
+          item.createdAt >= filters.startDate && item.createdAt <= formatedEndDate
+      );
+    }
+
+    return filtered;
+  }, [Data, filters]);
 
   // Pagination settings to follow
   const [CurrentPage, setCurrentPage] = useState(1);
@@ -58,72 +101,16 @@ export default function UserManagement() {
   //get current post
   const indexOfLastSra = CurrentPage * PostPerPage;
   const indexOfFirstSra = indexOfLastSra - PostPerPage;
-  const PaginatedData = FilterData.slice(indexOfFirstSra, indexOfLastSra);
+  const PaginatedData = filteredData.slice(indexOfFirstSra, indexOfLastSra);
   //change page
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
-  // Pagination settings to follow end here
-
-  // Search Filter settings to follow
-  const [SearchInput, setSearchInput] = useState("");
-  const [FilteredData, setFilteredData] = useState(null);
-
-  const handleInputChange = (e) => {
-    let filter = Data.filter(
-      (item) =>
-        item.role?.toLowerCase().includes(e.target.value.toLowerCase()) ||
-        item.email?.toLowerCase().includes(e.target.value.toLowerCase()) ||
-        item.firstName?.toLowerCase().includes(e.target.value.toLowerCase()) ||
-        item.lastName?.toLowerCase().includes(e.target.value.toLowerCase())
-    );
-    console.log("filter checking", filter);
-    setFilteredData(filter);
-    setSearchInput(e.target.value);
+  const handleFilterChange = (filterName, value) => {
+    setFilters((prev) => ({ ...prev, [filterName]: value }));
+     setCurrentPage(1);
   };
-
-  const filterBy = (title) => {
-    console.log("filter checking", title);
-
-    if (title === "role") {
-      let filter = Data.filter((item) =>
-        item.role?.toLowerCase().includes(SearchInput.toLowerCase())
-      );
-      setFilteredData(filter);
-      console.log("filter checking", filter);
-    } else if (title === "email") {
-      let filter = Data.filter((item) =>
-        item.email?.toLowerCase().includes(SearchInput.toLowerCase())
-      );
-      setFilteredData(filter);
-      console.log("filter checking", filter);
-    } else if (title === "name") {
-      let filter = Data.filter(
-        (item) =>
-          item.firstName?.toLowerCase().includes(SearchInput.toLowerCase()) ||
-          item.lastName?.toLowerCase().includes(SearchInput.toLowerCase())
-      );
-      setFilteredData(filter);
-      console.log("filter checking", filter);
-    }else if (title === "date") {
-      // add 1 day to end date 
-      let endDate = new Date (EndDate)
-      endDate.setDate(endDate.getDate() + 1);
-      // format date back
-      let formatedEndDate = endDate.toISOString().split('T')[0]
-      let filter = Data.filter(
-        (item) =>
-          item.createdAt >= StartDate && item.createdAt <= formatedEndDate
-      );
-      setFilteredData(filter);
-      setSearchInput("s")
-      console.log(" Date filter checking", filter);
-      console.log(" Date plus  checking", endDate.toISOString());
-    }
-  };
-
-  // Search Filter settings to follow end here
 
   const [showToast, setShowToast] = useState({
     show: false,
@@ -143,43 +130,12 @@ export default function UserManagement() {
       if (result.status === true) {
         setIsLoading(false);
         setData(result.queryresult.userdetails);
-        setFilterData(result.queryresult.userdetails);
       }
     } catch (e) {
       console.log(e.message);
     }
   };
 
-  const testing = () => {
-    alert("hello");
-  };
-
-  const filterAll = () => {
-    setAll(true);
-    setActive(false);
-    setInActive(false);
-
-    setFilterData(Data);
-  };
-  const filterActive = () => {
-    setAll(false);
-    setActive(true);
-    setInActive(false);
-
-    const filterData = Data.filter((item) => item.status === "active");
-
-    setFilterData(filterData);
-  };
-
-  const filterInactive = () => {
-    setAll(false);
-    setActive(false);
-    setInActive(true);
-
-    const filterData = Data.filter((item) => item.status === "inactive");
-
-    setFilterData(filterData);
-  };
 
   const onEdit = (id) => {
     let filteredUser = Data.filter((user) => user._id === id);
@@ -305,11 +261,11 @@ export default function UserManagement() {
             cursor="pointer"
             mt={["10px", "10px", "0px", "0px"]}
           >
-            <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={filterAll}>
+            <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={() => handleFilterChange("status", "all")}>
               <Text
                 py="8.5px"
                 px="12px"
-                bg={All ? "#fff" : "transparent"}
+                bg={filters.status === "all" ? "#fff" : "transparent"}
                 rounded="7px"
                 color={"#1F2937"}
                 fontWeight={"500"}
@@ -324,12 +280,12 @@ export default function UserManagement() {
             <Box
               borderRight="1px solid #EDEFF2"
               pr="5px"
-              onClick={filterActive}
+              onClick={() => handleFilterChange("status", "active")}
             >
               <Text
                 py="8.5px"
                 px="12px"
-                bg={Active ? "#fff" : "transparent"}
+                bg={filters.status === "active" ? "#fff" : "transparent"}
                 rounded="7px"
                 color={"#1F2937"}
                 fontWeight={"500"}
@@ -341,12 +297,12 @@ export default function UserManagement() {
             <Box
               borderRight="1px solid #EDEFF2"
               pr="5px"
-              onClick={filterInactive}
+              onClick={() => handleFilterChange("status", "inactive")}
             >
               <Text
                 py="8.5px"
                 px="12px"
-                bg={InActive ? "#fff" : "transparent"}
+                bg={filters.status === "inactive" ? "#fff" : "transparent"}
                 rounded="7px"
                 color={"#1F2937"}
                 fontWeight={"500"}
@@ -366,38 +322,32 @@ export default function UserManagement() {
             <HStack  >
             {ByDate === false ? (
               <Input
-           
                 label="Search"
-                onChange={handleInputChange}
-                value={SearchInput}
+                onChange={(e) => handleFilterChange("searchTerm", e.target.value)}
+                value={filters.searchTerm}
                 bColor="#E4E4E4"
                 leftIcon={<BiSearch />}
               />
-            ):(
-              <HStack flexWrap={["wrap","nowrap"]}>
-              <Input
-            
-                label="Start Date"
-                type="date"
-                onChange={(e)=>setStartDate(e.target.value)}
-                value={StartDate}
-                bColor="#E4E4E4"
-                leftIcon={<FaCalendarAlt />}
-              />
-              <Input
-                label="End Date"
-                type="date"
-                onChange={(e)=>setEndDate(e.target.value)}
-                value={EndDate}
-                bColor="#E4E4E4"
-                leftIcon={<FaCalendarAlt />}
-              />
-
-              <Flex onClick={() => filterBy("date")} cursor="pointer" px="5px" py="3px" rounded="5px" bg="blue.blue500" color="#fff" justifyContent="center" alignItems="center" >
-                <BiSearch/>
-              </Flex>
+            ) : (
+              <HStack flexWrap={["wrap", "nowrap"]}>
+                <Input
+                  label="Start Date"
+                  type="date"
+                  onChange={(e) => handleFilterChange("startDate", e.target.value)}
+                  value={filters.startDate}
+                  bColor="#E4E4E4"
+                  leftIcon={<FaCalendarAlt />}
+                />
+                <Input
+                  label="End Date"
+                  type="date"
+                  onChange={(e) => handleFilterChange("endDate", e.target.value)}
+                  value={filters.endDate}
+                  bColor="#E4E4E4"
+                  leftIcon={<FaCalendarAlt />}
+                />
               </HStack>
-             )} 
+            )}
              
 
               <Menu isLazy>
@@ -419,7 +369,10 @@ export default function UserManagement() {
                 </MenuButton>
                 <MenuList>
                   <MenuItem
-                    onClick={() => filterBy("name")}
+                    onClick={() => {
+                      handleFilterChange("searchField", "name");
+                      setByDate(false);
+                    }}
                     textTransform="capitalize"
                     fontWeight={"500"}
                     color="#2F2F2F"
@@ -434,7 +387,10 @@ export default function UserManagement() {
                     </HStack>
                   </MenuItem>
                   <MenuItem
-                    onClick={() => filterBy("email")}
+                    onClick={() => {
+                      handleFilterChange("searchField", "email");
+                      setByDate(false);
+                    }}
                     textTransform="capitalize"
                     fontWeight={"500"}
                     color="#2F2F2F"
@@ -449,7 +405,10 @@ export default function UserManagement() {
                     </HStack>
                   </MenuItem>
                   <MenuItem
-                    onClick={() => filterBy("phoneNumber")}
+                    onClick={() => {
+                      handleFilterChange("searchField", "phoneNumber");
+                      setByDate(false);
+                    }}
                     textTransform="capitalize"
                     fontWeight={"500"}
                     color="#2F2F2F"
@@ -464,7 +423,10 @@ export default function UserManagement() {
                     </HStack>
                   </MenuItem>
                   <MenuItem
-                    onClick={() => filterBy("role")}
+                    onClick={() => {
+                      handleFilterChange("searchField", "role");
+                      setByDate(false);
+                    }}
                     textTransform="capitalize"
                     fontWeight={"500"}
                     color="#2F2F2F"
@@ -495,11 +457,14 @@ export default function UserManagement() {
                   </MenuItem>
                   <MenuItem
                     onClick={() => {
-                      setFilteredData(null);
-                      setSearchInput("");
-                      setByDate(false)
-                      setStartDate("")
-                      setEndDate("")
+                      setFilters({
+                        status: "all",
+                        searchTerm: "",
+                        searchField: "all",
+                        startDate: "",
+                        endDate: "",
+                      });
+                      setByDate(false);
                     }}
                     textTransform="capitalize"
                     fontWeight={"500"}
@@ -621,27 +586,8 @@ export default function UserManagement() {
                 </Tr>
               </Thead>
               <Tbody>
-                {SearchInput === "" || FilteredData === null ? (
-                  PaginatedData?.map((item, i) => (
-                    <TableRow
-                      key={i}
-                      type="user-management"
-                      name={`${item.firstName} ${item.lastName}`}
-                      email={item.email}
-                      role={item.role}
-                      clinic={item.clinic}
-                      status={item.status}
-                      onRemove={onOpen}
-                      date={moment(item.createdAt).format("lll")}
-                      phone={item.phoneNumber}
-                      onEdit={() => onEdit(item._id)}
-                      onPermission={() => onPermission(item)}
-                      onChangeStatus={() => onChangeStatus(item._id)}
-                      onReset={() => onReset(item._id)}
-                    />
-                  ))
-                ) : SearchInput !== "" && FilteredData?.length > 0 ? (
-                  FilteredData?.map((item, i) => (
+                {PaginatedData?.length > 0 ? (
+                  PaginatedData.map((item, i) => (
                     <TableRow
                       key={i}
                       type="user-management"
@@ -671,7 +617,7 @@ export default function UserManagement() {
           <Pagination
             postPerPage={PostPerPage}
             currentPage={CurrentPage}
-            totalPosts={Data.length}
+            totalPosts={filteredData.length}
             paginate={paginate}
           />
         </Box>

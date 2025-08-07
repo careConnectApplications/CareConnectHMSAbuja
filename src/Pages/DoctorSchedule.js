@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import MainLayout from "../Layouts/Index";
 import { Text, Flex, HStack, Box, useDisclosure } from "@chakra-ui/react";
@@ -7,6 +7,8 @@ import TableRow from "../Components/TableRow";
 import Button from "../Components/Button";
 import Input from "../Components/Input";
 import VitalsModal from "../Components/VitalsModal";
+import UpdateClinicalInfoModal from "../Components/UpdateClinicalInfoModal";
+import AddSpecialNeedsModal from "../Components/AddSpecialNeedsModal";
 import ShowToast from "../Components/ToastNotification";
 import { BiSearch } from "react-icons/bi";
 import { IoFilter } from "react-icons/io5";
@@ -24,91 +26,74 @@ import Preloader from "../Components/Preloader";
 
 export default function DoctoerSchedule() {
   const [IsLoading, setIsLoading] = useState(false);
-  const [All, setAll] = useState(true);
-  const [TodayQueue, setTodayQueue] = useState(false);
-  const [Completed, setCompleted] = useState(false);
-  const [Inprogress, setInprogress] = useState(false);
-  const [Clinic, setClinic] = useState(null);
   const [ClinicData, setClinicData] = useState([]);
   const [Loading, setLoading] = useState(false);
   const [Trigger, setTrigger] = useState(false);
   const [OldPayload, setOldPayload] = useState({});
-
-  const [Data, setData] = useState(JSON.parse(localStorage.getItem("patientList")) ? JSON.parse(localStorage.getItem("patientList")) : []);
+  const [Data, setData] = useState([]);
   const [QueueData, setQueueData] = useState([]);
-
-  const [FilterData, setFilterData] = useState(Data);
   const [ModalState, setModalState] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isClinicalInfoModalOpen, setIsClinicalInfoModalOpen] = useState(false);
+  const [isSpecialNeedsModalOpen, setIsSpecialNeedsModalOpen] = useState(false);
+  const [selectedPatient, setSelectedPatient] = useState(null);
+  const [TotalData, setTotalData] = useState("");
+
+  const [filters, setFilters] = useState({
+    clinic: null,
+    status: "scheduled",
+    searchTerm: "",
+    searchField: "firstName",
+  });
+
   // Pagination settings to follow
   const [CurrentPage, setCurrentPage] = useState(1);
   const [PostPerPage, setPostPerPage] = useState(configuration.sizePerPage);
-  const [TotalData, setTotalData] = useState("");
-  const [Status, setStatus] = useState("scheduled");
 
-  //get current post
-  const indexOfLastSra = CurrentPage * PostPerPage;
-  const indexOfFirstSra = indexOfLastSra - PostPerPage;
-  const PaginatedData = FilterData.slice(indexOfFirstSra, indexOfLastSra);
-  //change page 
-  const paginate = (pageNumber) => {
-    setCurrentPage(pageNumber)
-  }
+  const handleFilterChange = (filterName, value) => {
+    
+    setFilters((prev) => ({ ...prev, [filterName]: value }));
+    setCurrentPage(1);
+  };
 
-  // Pagination settings to follow end here 
-
-
-  // Search Filter settings to follow 
-  const [SearchInput, setSearchInput] = useState("");
-
-  const [FilteredData, setFilteredData] = useState(null);
-
-  const [Key, setKey] = useState("");
-  const [Value, setValue] = useState("");
-
-  const getFilteredScheduled = async (key, value) => {
-    setKey(key)
-    setValue(value)
-
+  const fetchData = async () => {
+    if (!filters.clinic) return;
+    setIsLoading(true);
     try {
-      setIsLoading(true);
-      const result = await GetAllPatientsHistoryFilteredApi(Clinic, PostPerPage, CurrentPage, Status, key, value);
-      console.log("all fitlered payment", result);
+      let result;
+      if (filters.searchTerm) {
+        result = await GetAllPatientsHistoryFilteredApi(
+          filters.clinic,
+          PostPerPage,
+          CurrentPage,
+          filters.status,
+          filters.searchField,
+          filters.searchTerm
+        );
+      } else {
+        result = await GetAllPatientsHistoryApi(
+          filters.clinic,
+          PostPerPage,
+          CurrentPage,
+          filters.status
+        );
+      }
+
       if (result.status === true) {
-        setFilteredData(result.queryresult.appointmentdetails);
-        setTotalData(result.queryresult.totalappointmentdetails)
+        setData(result.queryresult.appointmentdetails);
+        setTotalData(result.queryresult.totalappointmentdetails);
+        localStorage.setItem(
+          "patientList",
+          JSON.stringify(result.queryresult.appointmentdetails)
+        );
       }
     } catch (e) {
       console.error(e.message);
     } finally {
       setIsLoading(false);
+      setLoading(false);
     }
   };
-
-
-  const filterBy = (title) => {
-
-    if (title === "appointmentId") {
-      getFilteredScheduled("appointmentid", SearchInput)
-    } else if (title === "firstName") {
-      getFilteredScheduled("firstName", SearchInput)
-
-    } else if (title === "lastName") {
-      getFilteredScheduled("lastName", SearchInput)
-
-    } else if (title === "mrn") {
-      getFilteredScheduled("MRN", SearchInput)
-
-    } else if (title === "appointmentType") {
-      getFilteredScheduled("appointmenttype", SearchInput)
-
-    }
-
-  }
-
-
-
-  // Search Filter settings to follow end here
 
   const [showToast, setShowToast] = useState({
     show: false,
@@ -116,85 +101,24 @@ export default function DoctoerSchedule() {
     status: "",
   });
 
-  const getAllPatientHistory = async (status) => {
-    setIsLoading(true)
-    try {
-      const result = await GetAllPatientsHistoryApi(Clinic, PostPerPage, CurrentPage, status);
-      console.log("getAllPatientHistory", result)
-      if (result.status === true) {
-        setIsLoading(false)
-        setLoading(false)
-        setData(result.queryresult.appointmentdetails);
-        setFilterData(result.queryresult.appointmentdetails);
-        setTotalData(result.queryresult.totalappointmentdetails)
-
-
-        localStorage.setItem("patientList", JSON.stringify(result.queryresult.appointmentdetails))
-      }
-    } catch (e) {
-      console.error(e.message);
-    }
-  };
-
-
   const nav = useNavigate();
-
-
-  const filterAll = () => {
-    setAll(true);
-    setInprogress(false);
-    setCompleted(false);
-    setTodayQueue(false);
-    getAllPatientHistory("scheduled")
-    setStatus("scheduled")
-    setCurrentPage(1)
-  };
-
-  const filterTodayQueue = () => {
-    setAll(false);
-    setTodayQueue(true);
-    setFilterData(QueueData);
-  };
-
-  const filterCompleted = () => {
-    setAll(false);
-    setTodayQueue(false);
-    setCompleted(true);
-    setInprogress(false);
-    getAllPatientHistory("complete")
-    setStatus("complete")
-    setCurrentPage(1)
-  };
-  const filterInprogress = () => {
-    setAll(false);
-    setTodayQueue(false);
-    setCompleted(false);
-    setInprogress(true);
-    getAllPatientHistory("inprogress")
-    setStatus("inprogress")
-    setCurrentPage(1)
-  };
 
 
   const getAllClinic = async () => {
     try {
       const result = await GetOnlyClinicApi();
-      console.log("getonlyClinic", result);
-      setClinicData(result.queryresult.clinicdetails)
-
+      setClinicData(result.queryresult.clinicdetails);
     } catch (e) {
       // activateNotifications(e.message, "error");
     }
   };
 
   const getAllTodayQueue = async () => {
+    if (!filters.clinic) return;
     try {
-      const result = await GetAllTodayQueueHistoryApi(Clinic);
-      console.log("getAllTodayQueue", result)
+      const result = await GetAllTodayQueueHistoryApi(filters.clinic);
       if (result.status === true) {
-        setLoading(false)
         setQueueData(result.queryresult.appointmentdetails);
-
       }
     } catch (e) {
       console.error(e.message);
@@ -232,38 +156,33 @@ export default function DoctoerSchedule() {
     setModalState("new")
   }
 
+  const openClinicalInfoModal = (item) => {
+    setSelectedPatient(item);
+    setIsClinicalInfoModalOpen(true);
+  };
 
-  const fetchPatient = () => {
-    setLoading(true)
-    getAllPatientHistory("scheduled");
-    getAllTodayQueue()
-  }
+  const closeClinicalInfoModal = () => {
+    setIsClinicalInfoModalOpen(false);
+    setSelectedPatient(null);
+  };
+
+  const openSpecialNeedsModal = (item) => {
+    setSelectedPatient(item);
+    setIsSpecialNeedsModalOpen(true);
+  };
+
+  const closeSpecialNeedsModal = () => {
+    setIsSpecialNeedsModalOpen(false);
+    setSelectedPatient(null);
+  };
+
   useEffect(() => {
+    getAllClinic();
+  }, []);
 
-    getAllClinic()
-
-    if (Clinic != null) {
-
-      if (FilteredData?.length > 0 || FilteredData !== null) {
-        getFilteredScheduled(Key, Value)
-      } else {
-
-        if (All === true) {
-          getAllPatientHistory("scheduled");
-        } else if (Completed === true) {
-          getAllPatientHistory("complete");
-        } else if (Inprogress === true) {
-
-          getAllPatientHistory("inprogress");
-        }
-
-      }
-
-
-    }
-
-
-  }, [isOpen, Trigger, CurrentPage]);
+  useEffect(() => {
+    fetchData();
+  }, [filters, CurrentPage, Trigger, isOpen, isClinicalInfoModalOpen, isSpecialNeedsModalOpen]);
 
 
 
@@ -298,10 +217,10 @@ export default function DoctoerSchedule() {
       <SimpleGrid mt="5px" columns={{ base: 1, md: 2, lg: 2 }} spacing={10}>
         <Select
           id="type"
-          value={Clinic}
-          onChange={(e) => setClinic(e.target.value)}
+          value={filters.clinic}
+          onChange={(e) => handleFilterChange("clinic", e.target.value)}
           placeholder="Select Clinic"
-          fontSize={Clinic !== "" ? "16px" : "13px"}
+          fontSize={filters.clinic ? "16px" : "13px"}
         >
           {
             ClinicData?.map((item, i) => (
@@ -312,8 +231,6 @@ export default function DoctoerSchedule() {
 
 
         </Select>
-
-        <Button isLoading={Loading} onClick={fetchPatient} disabled={Clinic !== "" ? false : true}>  Fetch Patient</Button>
       </SimpleGrid>
 
 
@@ -338,11 +255,11 @@ export default function DoctoerSchedule() {
             cursor="pointer"
             mt={["10px", "10px", "0px", "0px"]}
           >
-            <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={filterAll}>
+            <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={() => handleFilterChange("status", "scheduled")}>
               <Text
                 py="8.5px"
                 px="12px"
-                bg={All ? "#fff" : "transparent"}
+                bg={filters.status === "scheduled" ? "#fff" : "transparent"}
                 rounded="7px"
                 color={"#1F2937"}
                 fontWeight={"500"}
@@ -352,11 +269,11 @@ export default function DoctoerSchedule() {
 
               </Text>
             </Box>
-            <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={filterTodayQueue}>
+            <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={() => handleFilterChange("status", "today_queue")}>
               <Text
                 py="8.5px"
                 px="12px"
-                bg={TodayQueue ? "#fff" : "transparent"}
+                bg={filters.status === "today_queue" ? "#fff" : "transparent"}
                 rounded="7px"
                 color={"#1F2937"}
                 fontWeight={"500"}
@@ -368,11 +285,11 @@ export default function DoctoerSchedule() {
                 </Box>
               </Text>
             </Box>
-            <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={filterCompleted}>
+            <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={() => handleFilterChange("status", "complete")}>
               <Text
                 py="8.5px"
                 px="12px"
-                bg={Completed ? "#fff" : "transparent"}
+                bg={filters.status === "complete" ? "#fff" : "transparent"}
                 rounded="7px"
                 color={"#1F2937"}
                 fontWeight={"500"}
@@ -382,11 +299,11 @@ export default function DoctoerSchedule() {
 
               </Text>
             </Box>
-            <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={filterInprogress}>
+            <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={() => handleFilterChange("status", "inprogress")}>
               <Text
                 py="8.5px"
                 px="12px"
-                bg={Inprogress ? "#fff" : "transparent"}
+                bg={filters.status === "inprogress" ? "#fff" : "transparent"}
                 rounded="7px"
                 color={"#1F2937"}
                 fontWeight={"500"}
@@ -406,11 +323,13 @@ export default function DoctoerSchedule() {
             justifyContent={"flex-end"}
           >
             <HStack>
-              <Input label="Search" onChange={(e) => {
-                setSearchInput(e.target.value);
-                setCurrentPage(1)
-              }} value={SearchInput} bColor="#E4E4E4" leftIcon={<BiSearch />} />
-
+              <Input
+                label="Search"
+                onChange={(e) => handleFilterChange("searchTerm", e.target.value)}
+                value={filters.searchTerm}
+                bColor="#E4E4E4"
+                leftIcon={<BiSearch />}
+              />
               <Menu isLazy>
                 <MenuButton as={Box}>
 
@@ -429,38 +348,86 @@ export default function DoctoerSchedule() {
                     <IoFilter />
                   </HStack>
                 </MenuButton>
-                <MenuList >
-
-                  <MenuItem onClick={() => filterBy("firstName")} textTransform="capitalize" fontWeight={"500"} color='#2F2F2F' _hover={{ color: "#fff", fontWeight: "400", bg: "blue.blue500" }}>
+                <MenuList>
+                  <MenuItem
+                    onClick={() => handleFilterChange("searchField", "firstName")}
+                    textTransform="capitalize"
+                    fontWeight={"500"}
+                    color="#2F2F2F"
+                    _hover={{
+                      color: "#fff",
+                      fontWeight: "400",
+                      bg: "blue.blue500",
+                    }}
+                  >
                     <HStack fontSize="14px">
-
                       <Text>by First Name</Text>
                     </HStack>
                   </MenuItem>
-                  <MenuItem onClick={() => filterBy("lastName")} textTransform="capitalize" fontWeight={"500"} color='#2F2F2F' _hover={{ color: "#fff", fontWeight: "400", bg: "blue.blue500" }}>
+                  <MenuItem
+                    onClick={() => handleFilterChange("searchField", "lastName")}
+                    textTransform="capitalize"
+                    fontWeight={"500"}
+                    color="#2F2F2F"
+                    _hover={{
+                      color: "#fff",
+                      fontWeight: "400",
+                      bg: "blue.blue500",
+                    }}
+                  >
                     <HStack fontSize="14px">
-
                       <Text>by Last Name</Text>
                     </HStack>
                   </MenuItem>
-                  <MenuItem onClick={() => filterBy("mrn")} textTransform="capitalize" fontWeight={"500"} color='#2F2F2F' _hover={{ color: "#fff", fontWeight: "400", bg: "blue.blue500" }}>
+                  <MenuItem
+                    onClick={() => handleFilterChange("searchField", "MRN")}
+                    textTransform="capitalize"
+                    fontWeight={"500"}
+                    color="#2F2F2F"
+                    _hover={{
+                      color: "#fff",
+                      fontWeight: "400",
+                      bg: "blue.blue500",
+                    }}
+                  >
                     <HStack fontSize="14px">
-
                       <Text>by MRN</Text>
                     </HStack>
                   </MenuItem>
-                  <MenuItem onClick={() => filterBy("appointmentType")} textTransform="capitalize" fontWeight={"500"} color='#2F2F2F' _hover={{ color: "#fff", fontWeight: "400", bg: "blue.blue500" }}>
+                  <MenuItem
+                    onClick={() =>
+                      handleFilterChange("searchField", "appointmenttype")
+                    }
+                    textTransform="capitalize"
+                    fontWeight={"500"}
+                    color="#2F2F2F"
+                    _hover={{
+                      color: "#fff",
+                      fontWeight: "400",
+                      bg: "blue.blue500",
+                    }}
+                  >
                     <HStack fontSize="14px">
-
                       <Text>by Appointment Type</Text>
                     </HStack>
                   </MenuItem>
-                  <MenuItem onClick={() => {
-                    setFilteredData(null)
-                    setSearchInput("")
-                    filterAll()
-                    setCurrentPage(1)
-                  }} textTransform="capitalize" fontWeight={"500"} color='#2F2F2F' _hover={{ color: "#fff", fontWeight: "400", bg: "blue.blue500" }}>
+                  <MenuItem
+                    onClick={() => {
+                      setFilters((prev) => ({
+                        ...prev,
+                        searchTerm: "",
+                        searchField: "firstName",
+                      }));
+                    }}
+                    textTransform="capitalize"
+                    fontWeight={"500"}
+                    color="#2F2F2F"
+                    _hover={{
+                      color: "#fff",
+                      fontWeight: "400",
+                      bg: "blue.blue500",
+                    }}
+                  >
                     <HStack fontSize="14px">
 
                       <Text>clear filter</Text>
@@ -567,63 +534,56 @@ export default function DoctoerSchedule() {
                 </Tr>
               </Thead>
               <Tbody>
-
-
-                {
-
-                  SearchInput === "" || FilteredData === null ? (
-                    FilterData.map((item, i) => (
-                      <TableRow
-                        key={i}
-                        type="schedule-appointment"
-                        date={moment(item.appointmentdate).format("lll")}
-                        reason={item.reason}
-                        appointment={item.appointmentcategory}
-                        appointmentType={item.appointmenttype}
-                        name={`${item.patient?.firstName} ${item.patient?.lastName}`}
-                        mrn={`${item.patient?.MRN} `}
-                        clinic={item.clinic}
-                        status={item.status}
-                        vitalStatus={item?.vitalstatus}
-                        onClick={() => ExaminePatient(item)}
-                        onVital={() => takeVitals(item)}
-
-                      />
-                    ))
-                  ) : (
-                    SearchInput !== "" && FilteredData?.length > 0 ? (
-                      FilteredData.map((item, i) => (
-                        <TableRow
-                          key={i}
-                          type="schedule-appointment"
-                          date={moment(item.appointmentdate).format("lll")}
-                          reason={item.reason}
-                          appointment={item.appointmentcategory}
-                          appointmentType={item.appointmenttype}
-                          name={`${item.patient?.firstName} ${item.patient?.lastName}`}
-                          mrn={`${item.patient?.MRN} `}
-                          clinic={item.clinic}
-                          status={item.status}
-                          vitalStatus={item?.vitalstatus}
-                        onClick={() => ExaminePatient(item)}
-                          onVital={() => takeVitals(item)}
-
-                        />
-                      ))
-                    ) : (
-                      <Text textAlign={"center"} mt="32px" color="black">*--No record found--*</Text>
-                    )
-                  )
-
-                }
+                {Data.length > 0 ? (
+                  Data.map((item, i) => (
+                    <TableRow
+                      key={i}
+                      type="schedule-appointment"
+                      date={moment(item.appointmentdate).format("lll")}
+                      reason={item.reason}
+                      appointment={item.appointmentcategory}
+                      appointmentType={item.appointmenttype}
+                      name={`${item.patient?.firstName} ${item.patient?.lastName}`}
+                      mrn={`${item.patient?.MRN} `}
+                      clinic={item.clinic}
+                      status={item.status}
+                      vitalStatus={item?.vitalstatus}
+                      onClick={() => ExaminePatient(item)}
+                      onVital={() => takeVitals(item)}
+                      onClinicalInfo={() => openClinicalInfoModal(item)}
+                      onSpecialNeeds={() => openSpecialNeedsModal(item)}
+                    />
+                  ))
+                ) : (
+                  <Text textAlign={"center"} mt="32px" color="black">
+                    *--No record found--*
+                  </Text>
+                )}
               </Tbody>
             </Table>
           </TableContainer>
 
-          <Pagination postPerPage={PostPerPage} currentPage={CurrentPage} totalPosts={TotalData} paginate={paginate} />
+          <Pagination
+            postPerPage={PostPerPage}
+            currentPage={CurrentPage}
+            totalPosts={TotalData}
+            paginate={(page) => setCurrentPage(page)}
+          />
         </Box>
 
         <VitalsModal isOpen={isOpen} oldPayload={OldPayload} onClose={onClose} type={ModalState} activateNotifications={activateNotifications} />
+        <UpdateClinicalInfoModal
+          isOpen={isClinicalInfoModalOpen}
+          onClose={closeClinicalInfoModal}
+          patient={selectedPatient}
+          activateNotifications={activateNotifications}
+        />
+        <AddSpecialNeedsModal
+          isOpen={isSpecialNeedsModalOpen}
+          onClose={closeSpecialNeedsModal}
+          patient={selectedPatient}
+          activateNotifications={activateNotifications}
+        />
       </Box>
 
     </MainLayout>
