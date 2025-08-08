@@ -30,6 +30,8 @@ export default function TableRowY({
   onUpdateStock,
   name,
   category,
+  coverage,
+  onAssignDoctor,
   quantity,
   createdDate,
   updatedDate,
@@ -37,6 +39,7 @@ export default function TableRowY({
   prescribersName,
   pharmacyName,
   prescriptionDate,
+  handleAssignDoctor,
   paymentStatus,
   dispenseStatus,
   onPharmacyAction,
@@ -118,6 +121,8 @@ export default function TableRowY({
   referedtheatre,
   doctorname,
   onUpdate,
+  onDelete,
+  onRestore,
   onTransfer,
   onDischarge,
   onConfirm,
@@ -127,7 +132,10 @@ export default function TableRowY({
   paymentype,
   paymentcategory,
   paymentreference,
-
+  bednumber,
+  isDeleted,
+  assignedPatient,
+  assignedDate,
   createdAt,
   cashieremail,
   cashierid,
@@ -220,11 +228,10 @@ export default function TableRowY({
   outreachmedicationid,
   firstName,
   lastName,
-  
+
   chiefComplaint,
   gingivalAssessment,
   oralCancerScreening,
-
 }) {
   const isServed = servedstatus?.toLowerCase() === "served";
   const isUnserved = servedstatus?.toLowerCase() === "unserved";
@@ -314,6 +321,16 @@ export default function TableRowY({
                   onClick={onEdit}
                 >
                   Edit
+                </MenuItem>
+                <MenuItem
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                  onClick={onAssignDoctor}
+                >
+                  Assign Doctor
                 </MenuItem>
               </MenuList>
             </Menu>
@@ -2073,6 +2090,11 @@ export default function TableRowY({
               {id}
             </Text>
           </Td>
+                    <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {coverage}
+            </Text>
+          </Td>
           <Td>
             <Text fontWeight="400" fontSize="12px">
               {createdAt}
@@ -3013,8 +3035,6 @@ export default function TableRowY({
             </Text>
           </Td>
 
-
-
           {/* Chief Complaint */}
           <Td>
             <Text fontWeight="400" fontSize="13px">
@@ -3066,7 +3086,6 @@ export default function TableRowY({
                   }}
                 >
                   <HStack fontSize="14px">
-                    
                     <Text>View</Text>
                   </HStack>
                 </MenuItem>
@@ -3084,10 +3103,103 @@ export default function TableRowY({
                   }}
                 >
                   <HStack fontSize="14px">
-                    
                     <Text>Edit</Text>
                   </HStack>
                 </MenuItem>
+              </MenuList>
+            </Menu>
+          </Td>
+        </>
+      )}
+      {type === "bed-management" && (
+        <>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {bednumber}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {ward?.wardname || "N/A"}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {ward?.bedspecialization || "N/A"}
+            </Text>
+          </Td>
+          <Td>
+            <HStack
+              color={
+                status === "vacant"
+                  ? "#027A48"
+                  : status === "occupied"
+                  ? "#FD4739"
+                  : "#808080"
+              }
+            >
+              <Box
+                rounded="100%"
+                w="8px"
+                h="8px"
+                bg={
+                  status === "vacant"
+                    ? "#027A48"
+                    : status === "occupied"
+                    ? "#FD4739"
+                    : "#808080"
+                }
+              ></Box>
+              <Text fontWeight="400" fontSize={"13px"}>
+                {status || "N/A"}
+              </Text>
+            </HStack>
+          </Td>
+
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {isDeleted ? "Inactive" : "Active"}
+            </Text>
+          </Td>
+          <Td>
+            <Menu>
+              <MenuButton as={Box}>
+                <BsThreeDots />
+              </MenuButton>
+              <MenuList>
+                <MenuItem
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.500",
+                  }}
+                  onClick={onEdit}
+                >
+                  Edit
+                </MenuItem>
+                {isDeleted ? (
+                  <MenuItem
+                    _hover={{
+                      color: "#fff",
+                      fontWeight: "400",
+                      bg: "green.500",
+                    }}
+                    onClick={onRestore}
+                  >
+                    Restore
+                  </MenuItem>
+                ) : (
+                  <MenuItem
+                    _hover={{
+                      color: "#fff",
+                      fontWeight: "400",
+                      bg: "red.500",
+                    }}
+                    onClick={onDelete}
+                  >
+                    Delete
+                  </MenuItem>
+                )}
               </MenuList>
             </Menu>
           </Td>

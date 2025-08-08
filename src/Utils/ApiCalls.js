@@ -35,17 +35,30 @@ export const ProviderLoginApi = (Payload) => {
     });
 };
 
+
+export const CreateBedApi = (payload) => {
+  const data = JSON.stringify(payload);
+  const config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/settings/createbed`,
+
 export const CreateCustomBillApi = (payload, patientId) => {
   let data = JSON.stringify(payload);
   let config = {
     method: "post",
     maxBodyLength: Infinity,
     url: `${baseUrl}/billing/${patientId}`,
+
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
+
+    data,
+
     data: data,
+
   };
 
   return axios
@@ -55,6 +68,24 @@ export const CreateCustomBillApi = (payload, patientId) => {
     })
     .catch((error) => {
       console.log("error", error.response);
+
+      if (error.response?.data?.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response?.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.message);
+      } else {
+        throw new Error(error.message);
+      }
+    });
+};
+
+export const GetAllBedsApi = () => {
+  const config = {
+    method: "get",
+    url: `${baseUrl}/settings/getallbeds`,
+
       if (error.response.data.msg) {
         throw new Error(error.response.data.msg);
       } else if (error.response.data) {
@@ -71,6 +102,7 @@ export const GetPatientBillingHistoryApi = (patientId) => {
   let config = {
     method: "get",
     url: `${baseUrl}/billing/getpatientbillinghistory/${patientId}`,
+
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
@@ -79,6 +111,87 @@ export const GetPatientBillingHistoryApi = (patientId) => {
 
   return axios
     .request(config)
+
+    .then((response) => response.data)
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response?.data?.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response?.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.message);
+      } else {
+        throw new Error(error.message);
+      }
+    });
+};
+
+export const SoftDeleteRestoreBedApi = (id, payload) => {
+  // Ensure payload is properly formatted
+  const validatedPayload = {
+    isDeleted: Boolean(payload?.isDeleted), // Force boolean conversion
+  };
+
+  const config = {
+    method: "put",
+    url: `${baseUrl}/settings/softdeleterestorebed/${id}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data: validatedPayload, // Directly pass the object, axios will stringify it
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      // Ensure we have a successful response
+      if (response.status >= 200 && response.status < 300) {
+        return response.data;
+      }
+      throw new Error(response.data?.message || "Operation failed");
+    })
+    .catch((error) => {
+      // Improved error handling
+      const errorMessage =
+        error.response?.data?.message ||
+        error.response?.data?.msg ||
+        error.message ||
+        "Failed to update bed status";
+      console.error("API Error:", errorMessage);
+      throw new Error(errorMessage);
+    });
+};
+export const UpdateBedNumberApi = (id, payload) => {
+  const data = JSON.stringify(payload);
+  const config = {
+    method: "put",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/settings/updatebednumber/${id}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data,
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response?.data?.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response?.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.message);
+      } else {
+        throw new Error(error.message);
+
     .then((response) => {
       return response.data;
     })
@@ -92,6 +205,7 @@ export const GetPatientBillingHistoryApi = (patientId) => {
         throw new Error(error.msg);
       } else {
         throw new Error(error.msg);
+
       }
     });
 };
@@ -283,14 +397,14 @@ export const GetAllHistopathologyApi = (postPerPage, pageNo, status) => {
       }
     });
 };
-export const GetSingleHistopathologyApi = (name,id) => {
+export const GetSingleHistopathologyApi = (name, id) => {
   console.log("name", name, "id", id);
   // Configure the GET request
   let config = {
     method: "get",
     url: `${baseUrl}/histopathology-test/test-details/${id}?servicename=${name}`,
     headers: {
-      "Content-Type": "application/json", 
+      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
   };
@@ -8513,17 +8627,11 @@ export const ReadOneDentalEncounterApi = (dentalEncounterId) => {
   return axios
     .request(config)
     .then((response) => {
-      console.log(
-        "ReadOneDentalEncounterApi response:",
-        response.data
-      );
+      console.log("ReadOneDentalEncounterApi response:", response.data);
       return response.data;
     })
     .catch((error) => {
-      console.error(
-        "ReadOneDentalEncounterApi error:",
-        error.response
-      );
+      console.error("ReadOneDentalEncounterApi error:", error.response);
       if (error.response?.data?.msg) {
         throw new Error(error.response.data.msg);
       } else if (error.response?.data) {
@@ -8533,5 +8641,270 @@ export const ReadOneDentalEncounterApi = (dentalEncounterId) => {
       } else {
         throw new Error(error.message);
       }
+    });
+};
+export const UpdateAdmissionStatusApiDoc = (admissionId, updateData) => {
+  console.log("admissionId", admissionId, "updateData", updateData);
+
+  // Configure the PUT request (matching your structure)
+  let config = {
+    method: "put",
+    url: `${baseUrl}/admission/updateadmissionstatus/${admissionId}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data: updateData, // Includes status, transfterto, bed_id
+  };
+  console.log("url", config.url);
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response.data; // Returns success message + updatedAdmission
+    })
+    .catch((error) => {
+      console.log("Error updating admission:", error.response);
+      // Follows your error handling pattern exactly
+      if (error.response && error.response.data.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response && error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
+export const DischargePatientApi = (admissionId) => {
+  console.log("Discharging admission ID:", admissionId);
+
+  const config = {
+    method: "put",
+    url: `${baseUrl}/admission/updateadmissionstatus/${admissionId}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data: { status: "discharged" },
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      console.log("Discharge successful:", response.data);
+      return response.data;
+    })
+    .catch((error) => {
+      console.error("Discharge error:", error);
+
+      let errorMessage = "Failed to discharge patient";
+      if (error.response) {
+        // Handle HTTP errors (4xx, 5xx)
+        if (error.response.data && error.response.data.msg) {
+          errorMessage = error.response.data.msg;
+        } else if (error.response.statusText) {
+          errorMessage = error.response.statusText;
+        }
+      } else if (error.request) {
+        // Handle network errors
+        errorMessage = "Network error - no response received";
+      } else {
+        // Handle other errors
+        errorMessage = error.message || "Unknown error occurred";
+      }
+
+      throw new Error(errorMessage);
+    });
+};
+export const GetAvailableBedsByWardApi = (wardId) => {
+  console.log("wardId", wardId);
+
+  // Configure the GET request (identical structure to your example)
+  let config = {
+    method: "get",
+    url: `${baseUrl}/settings/getavailablebedsbyward/${wardId}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+  console.log("url", config.url);
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response.data; // Returns array of available beds
+    })
+    .catch((error) => {
+      console.log("Error fetching available beds:", error.response);
+      // Same error handling pattern as your original API
+      if (error.response && error.response.data.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response && error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
+export const GetDoctorsByClinicApi = (clinicName) => {
+  if (!clinicName || typeof clinicName !== "string") {
+    throw new Error("Clinic name is required and must be a string");
+  }
+
+  const encodedClinicName = encodeURIComponent(clinicName);
+
+  let config = {
+    method: "get",
+    url: `${baseUrl}/appointment/getdoctorsbyclinic/${encodedClinicName}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios(config)
+    .then((response) => {
+      console.log("Full API Response:", response.data); // For debugging
+
+      // Handle both possible response structures
+      const doctorsData =
+        response.data.doctors?.userdetails ||
+        response.data.queryresult?.userdetails;
+
+      if (Array.isArray(doctorsData)) {
+        return {
+          status: response.data.status,
+          doctors: {
+            userdetails: doctorsData,
+            totaluserdetails: response.data.queryresult?.totaluserdetails || 0,
+          },
+        };
+      }
+      throw new Error("No doctors data found in response");
+    })
+    .catch((error) => {
+      console.error(
+        "API Error Details:",
+        error.response?.data || error.message
+      );
+      if (error.response) {
+        throw new Error(
+          error.response.data?.message ||
+            "Failed to fetch doctors (server error)"
+        );
+      }
+      throw new Error(error.message || "Failed to fetch doctors");
+    });
+};
+export const assignDoctorToAppointmentApi = (apiPayload) => {
+  console.log("assignDoctorToAppointmentApi", apiPayload);
+  let data = JSON.stringify(apiPayload);
+
+  let config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/appointment/assigndoctortoappointment`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data: data,
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response && error.response.data.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response && error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
+export const SearchAdmissionRecordsApi = (params = {}) => {
+  // Clean parameters - remove empty values
+  const cleanParams = {};
+  Object.keys(params).forEach((key) => {
+    if (params[key]) {
+      cleanParams[key] = params[key];
+    }
+  });
+
+  const queryString = new URLSearchParams(cleanParams).toString();
+  const config = {
+    method: "get",
+    url: `${baseUrl}/admission/searchadmissionrecords?${queryString}`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios(config)
+    .then((response) => response.data)
+    .catch((error) => {
+      console.error("Search API error:", error);
+      throw error;
+    });
+};
+export const countPatientsPerDoctorApi = (clinicName) => {
+  if (!clinicName || typeof clinicName !== "string") {
+    throw new Error("Clinic name is required and must be a string");
+  }
+
+  const encodedClinicName = encodeURIComponent(clinicName);
+
+  let config = {
+    method: "get",
+    url: `${baseUrl}/appointment/countpatientsperdoctor/${encodedClinicName}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios(config)
+    .then((response) => {
+      console.log("Full API Response:", response.data); // For debugging
+
+      // Handle both possible response structures
+      const countsData = response.data.counts || response.data.queryresult;
+
+      if (countsData) {
+        return {
+          status: response.data.status || true,
+          counts: {
+            clinic: countsData.clinic || clinicName,
+            doctors: countsData.doctors || [],
+            totalPatients: countsData.totalPatients || 0,
+          },
+        };
+      }
+      throw new Error("No patient count data found in response");
+    })
+    .catch((error) => {
+      console.error(
+        "API Error Details:",
+        error.response?.data || error.message
+      );
+      if (error.response) {
+        throw new Error(
+          error.response.data?.message ||
+            "Failed to fetch patient counts (server error)"
+        );
+      }
+      throw new Error(error.message || "Failed to fetch patient counts");
     });
 };

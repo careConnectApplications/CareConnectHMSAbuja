@@ -7,6 +7,7 @@ import {
   HStack,
   Select,
   SimpleGrid,
+  useDisclosure,
 } from "@chakra-ui/react";
 import {
   Table,
@@ -27,6 +28,7 @@ import {
   GetAllReferredForAdmissionApi,
   UpdateAdmissionStatusApi,
   GetAllWardApi,
+  DischargePatientApi,
 } from "../Utils/ApiCalls";
 import { useNavigate } from "react-router-dom";
 import { BiSearch } from "react-icons/bi";
@@ -35,6 +37,7 @@ import { FaCalendarAlt } from "react-icons/fa";
 import Input from "../Components/Input";
 import { configuration } from "../Utils/Helpers";
 import Button from "../Components/Button";
+import ToTransferModal from "../Components/ToTransferModal";
 
 const InPatientAdmission = () => {
   const [filter, setFilter] = useState("all");
@@ -50,14 +53,14 @@ const InPatientAdmission = () => {
   const [StartDate, setStartDate] = useState("");
   const [EndDate, setEndDate] = useState("");
   const [searchInput, setSearchInput] = useState("");
-
-  // New state variables for wards
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [selectedAdmission, setSelectedAdmission] = useState(null);
   const [wards, setWards] = useState([]);
   const [selectedWard, setSelectedWard] = useState("");
 
   const nav = useNavigate();
 
-  // Fetch the list of wards on mount
+  // Fetch wards on component mount
   useEffect(() => {
     const fetchWards = async () => {
       try {
@@ -70,13 +73,12 @@ const InPatientAdmission = () => {
     fetchWards();
   }, []);
 
-  // Function to fetch admissions for the selected ward
+  // Fetch admissions when ward is selected
   const fetchAdmissions = async () => {
     if (!selectedWard) return;
     try {
       setLoading(true);
       const response = await GetAllReferredForAdmissionApi(selectedWard);
-      console.log("Admissions API Response: ", response); // Console log the API response
       if (response?.queryresult?.admissiondetails) {
         setAdmissionData(response.queryresult.admissiondetails);
       } else {
@@ -85,6 +87,10 @@ const InPatientAdmission = () => {
     } catch (err) {
       console.error("API Fetch Error:", err);
       setError("Failed to fetch data");
+      setToast({
+        status: "error",
+        message: "Failed to fetch admission data",
+      });
     } finally {
       setLoading(false);
     }
@@ -108,7 +114,7 @@ const InPatientAdmission = () => {
     localStorage.setItem("inPatient", JSON.stringify(item));
   };
 
-  // The dynamic status update handler:
+  // Handle status updates (admit/transfer)
   const handleStatusUpdate = async (admissionId, currentStatus) => {
     const normStatus = currentStatus.toLowerCase();
     let newStatus;
@@ -131,23 +137,53 @@ const InPatientAdmission = () => {
         status: "success",
         message: `Patient ${newStatus} successfully!`,
       });
-
-      setAdmissionData((prevData) =>
-        prevData.map((item) =>
-          item._id === admissionId ? { ...item, status: newStatus } : item
-        )
-      );
+      fetchAdmissions(); // Refresh data
     } catch (error) {
       setToast({
         status: "error",
-        message: error.message || "Failed to update admission.",
+        message: error.message || "Failed to update admission status",
       });
     } finally {
       setUpdating(null);
-      setTimeout(() => setToast(null), 3000);
     }
   };
 
+  // Enhanced discharge handler with proper error handling and feedback
+  const handleDischarge = async (admissionId) => {
+    setUpdating(admissionId);
+    try {
+      const result = await DischargePatientApi(admissionId);
+
+      if (result.status === true) {
+        setToast({
+          status: "success",
+          message: "Patient discharged successfully!",
+        });
+        fetchAdmissions(); // Refresh the data
+      } else {
+        setToast({
+          status: "error",
+          message: result.queryresult || "Failed to discharge patient",
+        });
+      }
+    } catch (error) {
+      console.error("Discharge error:", error);
+      setToast({
+        status: "error",
+        message: error.message || "Failed to discharge patient",
+      });
+    } finally {
+      setUpdating(null);
+    }
+  };
+
+  // Handle transfer functionality
+  const handleTransfer = (admission) => {
+    setSelectedAdmission(admission);
+    onOpen();
+  };
+
+  // Filter functions
   const filterBy = (title) => {
     let filtered = admissionData;
     if (title === "patient") {
@@ -188,6 +224,7 @@ const InPatientAdmission = () => {
     setFilteredData(filtered);
   };
 
+  // Pagination calculations
   const indexOfLastPost = currentPage * postPerPage;
   const indexOfFirstPost = indexOfLastPost - postPerPage;
   const paginatedData = filteredData.slice(indexOfFirstPost, indexOfLastPost);
@@ -202,10 +239,12 @@ const InPatientAdmission = () => {
       rounded="10px"
     >
       {toast && <ShowToast status={toast.status} message={toast.message} />}
+
       <Text color="blue.blue500" mt="9px" fontWeight="400" fontSize="15px">
         Kindly Select Clinic you want to manage
       </Text>
-      {/* Updated Ward Selection and Fetch Admissions Button */}
+
+      {/* Ward Selection and Fetch Button */}
       <SimpleGrid mt="5px" columns={{ base: 1, md: 2, lg: 2 }} spacing={10}>
         <Select
           id="ward"
@@ -229,11 +268,7 @@ const InPatientAdmission = () => {
         </Button>
       </SimpleGrid>
 
-      {!selectedWard ? (
-        <Text fontSize="lg" color="gray.500" textAlign="center" mt="20px">
-          {/* No ward selected */}
-        </Text>
-      ) : (
+      {selectedWard && (
         <>
           {/* Filter Controls */}
           <Flex justifyContent="space-between" flexWrap="wrap" mt="20px">
@@ -454,7 +489,7 @@ const InPatientAdmission = () => {
             </Flex>
           </Flex>
 
-          {/* Table of Admissions */}
+          {/* Admission Table */}
           <Box
             bg="#fff"
             border="1px solid #EFEFEF"
@@ -508,23 +543,31 @@ const InPatientAdmission = () => {
                       <TableRowY
                         key={item._id}
                         type="in-patientAdmission"
-                        mrn={item.patient.MRN || "-"}
+                        mrn={item.patient?.MRN || item.MRN || "-"}
                         patient={
-                          item.patient?.firstName + " " + item.patient?.lastName
+                          item.patient
+                            ? `${item.patient?.firstName || ""} ${
+                                item.patient?.lastName || ""
+                              }`.trim()
+                            : "-"
                         }
-                        doctor={item.doctorname}
-                        specialization={item.admittospecialization}
-                        remark={item.alldiagnosis}
-                        referredDate={new Date(
+                        doctor={item.doctorname || "-"}
+                        specialization={item.admittospecialization || "-"}
+                        remark={item.alldiagnosis || "-"}
+                        referredDate={
                           item.referddate
-                        ).toLocaleDateString()}
-                        status={item.status}
+                            ? new Date(item.referddate).toLocaleDateString()
+                            : "-"
+                        }
+                        status={item.status || "-"}
                         onAdmit={() =>
                           handleStatusUpdate(item._id, item.status)
                         }
                         onView={() =>
                           GetPatientTimeline(item.patient?._id, item.patient)
                         }
+                        onDischarge={() => handleDischarge(item._id)}
+                        onTransfer={() => handleTransfer(item)}
                         isUpdating={updating === item._id}
                       />
                     ))}
@@ -533,6 +576,20 @@ const InPatientAdmission = () => {
               </TableContainer>
             )}
           </Box>
+
+          {/* Transfer Modal */}
+          <ToTransferModal
+            isOpen={isOpen}
+            oldPayload={selectedAdmission}
+            onClose={onClose}
+            onSuccess={() => {
+              fetchAdmissions();
+              setToast({
+                status: "success",
+                message: "Patient transferred successfully!",
+              });
+            }}
+          />
 
           {/* Pagination */}
           {!loading && filteredData.length > 0 && (
