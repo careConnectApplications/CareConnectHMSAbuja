@@ -24,11 +24,15 @@ import { SlPlus } from "react-icons/sl";
 import CreateAppointmentModal from "../Components/CreateAppointmentModal";
 import moment from "moment";
 import Seo from "../Utils/Seo";
-import { GetAllSchedulesApi, GetAllFilteredScheduledApi } from "../Utils/ApiCalls";
+import {
+  GetAllSchedulesApi,
+  GetAllFilteredScheduledApi,
+} from "../Utils/ApiCalls";
 import { configuration } from "../Utils/Helpers";
 import Pagination from "../Components/Pagination";
 import Preloader from "../Components/Preloader";
 import { FaCalendarAlt } from "react-icons/fa";
+import AssignDoctorModal from "../Components/AssignDoctorModal";
 
 export default function ScheduleAppointment() {
   const [IsLoading, setIsLoading] = useState(true);
@@ -43,16 +47,27 @@ export default function ScheduleAppointment() {
   const [FilterAppointment, setFilterAppointment] = useState({});
   const [selectedAppointmentData, setSelectedAppointmentData] = useState(null);
 
+  // Assign Doctor Modal
+  const {
+    isOpen: isAssignDoctorOpen,
+    onOpen: onAssignDoctorOpen,
+    onClose: onAssignDoctorClose,
+  } = useDisclosure();
+  const [selectedAppointmentForDoctor, setSelectedAppointmentForDoctor] =
+    useState({
+      id: "",
+      clinic: "",
+    });
+
   // filter by date
   const [ByDate, setByDate] = useState(false);
   const [StartDate, setStartDate] = useState("");
   const [EndDate, setEndDate] = useState("");
 
-  // Pagination settings to follow
+  // Pagination settings
   const [CurrentPage, setCurrentPage] = useState(1);
   const [PostPerPage, setPostPerPage] = useState(configuration.sizePerPage);
   const [TotalData, setTotalData] = useState("");
-
 
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -64,48 +79,66 @@ export default function ScheduleAppointment() {
   const [Key, setKey] = useState("");
   const [Value, setValue] = useState("");
 
+  // Toast notification state
+  const [showToast, setShowToast] = useState({
+    show: false,
+    message: "",
+    status: "",
+  });
+
+  // Toast timeout effect
+  useEffect(() => {
+    let timer;
+    if (showToast.show) {
+      timer = setTimeout(() => {
+        setShowToast({ show: false, message: "", status: "" });
+      }, 3000); // 3 seconds timeout
+    }
+    return () => clearTimeout(timer);
+  }, [showToast.show]);
+
+  const showNotification = (message, status) => {
+    setShowToast({ show: true, message, status });
+  };
 
   const getFilteredScheduled = async (key, value) => {
-    setKey(key)
-    setValue(value)
+    setKey(key);
+    setValue(value);
 
     try {
       setIsLoading(true);
-      const result = await GetAllFilteredScheduledApi(key, value, CurrentPage, PostPerPage);
-      console.log("all fitlered scheduled", result);
+      const result = await GetAllFilteredScheduledApi(
+        key,
+        value,
+        CurrentPage,
+        PostPerPage
+      );
       if (result.status === true) {
         setFilteredData(result.queryresult.appointmentdetails);
-        setTotalData(result.queryresult.totalappointentdetails)
+        setTotalData(result.queryresult.totalappointentdetails);
       }
     } catch (e) {
-      console.error(e.message);
+      showNotification("Error fetching filtered appointments", "error");
     } finally {
       setIsLoading(false);
     }
   };
 
+
   const filterBy = (title) => {
     if (title === "mrn") {
-      getFilteredScheduled("MRN", SearchInput)
+      getFilteredScheduled("MRN", SearchInput);
     } else if (title === "appointment") {
-      getFilteredScheduled("appointmentcategory", SearchInput)
-
+      getFilteredScheduled("appointmentcategory", SearchInput);
     } else if (title === "firstName") {
-
-      getFilteredScheduled("firstName", SearchInput)
-
+      getFilteredScheduled("firstName", SearchInput);
     } else if (title === "lastName") {
-
-      getFilteredScheduled("lastName", SearchInput)
-
+      getFilteredScheduled("lastName", SearchInput);
     } else if (title === "type") {
-
-      getFilteredScheduled("appointmenttype", SearchInput)
+      getFilteredScheduled("appointmenttype", SearchInput);
     } else if (title === "date") {
-      // add 1 day to end date
       let endDate = new Date(EndDate);
       endDate.setDate(endDate.getDate() + 1);
-      // format date back
       let formatedEndDate = endDate.toISOString().split("T")[0];
       let filter = Data.filter(
         (item) =>
@@ -114,15 +147,8 @@ export default function ScheduleAppointment() {
       );
       setFilteredData(filter);
       setSearchInput("s");
-      console.log("filterdate", filter);
     }
   };
-
-  const [showToast, setShowToast] = useState({
-    show: false,
-    message: "",
-    status: "",
-  });
 
   const router = useNavigate();
 
@@ -130,18 +156,16 @@ export default function ScheduleAppointment() {
     setIsLoading(true);
     try {
       let response = await GetAllSchedulesApi(CurrentPage, PostPerPage);
-
-      console.log("response", response)
       if (response.status === true) {
         setIsLoading(false);
         setData(response.queryresult.appointmentdetails);
         setFilterData(response.queryresult.appointmentdetails);
         setTotalData(response.queryresult.totalappointentdetails);
       }
-    } catch (e) { }
+    } catch (e) {
+      showNotification("Error fetching schedules", "error");
+    }
   };
-
-
 
   const filterAll = () => {
     setAll(true);
@@ -176,11 +200,24 @@ export default function ScheduleAppointment() {
         appointmenttype: appointment.appointmenttype,
         patient: appointment.patient._id,
         clinic: appointment.clinic,
-        id: appointment._id, // Pass the ID for editing
+        id: appointment._id,
       });
       setModalState("edit");
       onOpen();
     }
+  };
+
+  const handleAssignDoctor = (id, clinic) => {
+    setSelectedAppointmentForDoctor({
+      id: id,
+      clinic: clinic,
+    });
+    onAssignDoctorOpen();
+  };
+
+  const handleAssignDoctorSuccess = (message, status) => {
+    showNotification(message, status);
+    setTrigger(!Trigger);
   };
 
   const CreateAppointment = () => {
@@ -191,13 +228,12 @@ export default function ScheduleAppointment() {
 
   useEffect(() => {
     if (FilteredData?.length > 0 || FilteredData !== null) {
-      getFilteredScheduled(Key, Value)
+      getFilteredScheduled(Key, Value);
     } else {
-
-
       getSchedules();
     }
   }, [Trigger, isOpen, CurrentPage]);
+
   return (
     <MainLayout>
       {IsLoading && <Preloader />}
@@ -219,6 +255,7 @@ export default function ScheduleAppointment() {
         update details, and manage schedules as needed.
       </Text>
 
+
       <Box
         bg="#fff"
         border="1px solid #EFEFEF"
@@ -238,7 +275,7 @@ export default function ScheduleAppointment() {
             cursor="pointer"
             mt={["10px", "10px", "0px", "0px"]}
           >
-            <Box borderRight="1px solid #EDEFF2" pr="5px" >
+            <Box borderRight="1px solid #EDEFF2" pr="5px">
               <Text
                 py="8.5px"
                 px="12px"
@@ -301,10 +338,9 @@ export default function ScheduleAppointment() {
                 <Input
                   label="Search"
                   onChange={(e) => {
-                    setSearchInput(e.target.value)
-                    setCurrentPage(1)
-                  }
-                  }
+                    setSearchInput(e.target.value);
+                    setCurrentPage(1);
+                  }}
                   value={SearchInput}
                   bColor="#E4E4E4"
                   leftIcon={<BiSearch />}
@@ -460,7 +496,7 @@ export default function ScheduleAppointment() {
                       setStartDate("");
                       setEndDate("");
                       getSchedules();
-                      setCurrentPage(1)
+                      setCurrentPage(1);
                     }}
                     textTransform="capitalize"
                     fontWeight={"500"}
@@ -518,7 +554,7 @@ export default function ScheduleAppointment() {
                   >
                     Date
                   </Th>
-                 
+
                   <Th
                     fontSize="13px"
                     textTransform="capitalize"
@@ -592,6 +628,9 @@ export default function ScheduleAppointment() {
                       clinic={item.clinic}
                       status={item.status}
                       onEdit={() => onEdit(item._id)}
+                      onAssignDoctor={() =>
+                        handleAssignDoctor(item._id, item.clinic)
+                      }
                     />
                   ))
                 ) : SearchInput !== "" && FilteredData?.length > 0 ? (
@@ -608,6 +647,9 @@ export default function ScheduleAppointment() {
                       clinic={item.clinic}
                       status={item.status}
                       onEdit={() => onEdit(item._id)}
+                      onAssignDoctor={() =>
+                        handleAssignDoctor(item._id, item.clinic)
+                      }
                     />
                   ))
                 ) : (
@@ -632,6 +674,13 @@ export default function ScheduleAppointment() {
         onClose={onClose}
         type={ModalState}
         initialData={selectedAppointmentData}
+      />
+      <AssignDoctorModal
+        isOpen={isAssignDoctorOpen}
+        onClose={onAssignDoctorClose}
+        appointmentId={selectedAppointmentForDoctor.id}
+        clinic={selectedAppointmentForDoctor.clinic}
+        activateNotifications={handleAssignDoctorSuccess}
       />
     </MainLayout>
   );

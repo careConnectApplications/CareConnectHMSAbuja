@@ -77,12 +77,12 @@ const PatientInfoCard = () => {
         <Heading as="h5" size="sm" mb={3}>
           Clinical Information
         </Heading>
-        <Text color="gray.600">Blood Group: {clinicalInformation.bloodGroup || "Not Specified"}</Text>
-        <Text color="gray.600">Genotype: {clinicalInformation.genotype || "Not Specified"}</Text>
-        <Text color="gray.600">BP: {clinicalInformation.bp || "Not Specified"}</Text>
-        <Text color="gray.600">Heart Rate: {clinicalInformation.heartRate || "Not Specified"} </Text>
-        <Text color="gray.600">Temperature: {clinicalInformation.temperature || "Not Specified"}</Text>
-        <Text color="gray.600">Disability: {clinicalInformation.disability || "Not Specified"}</Text>
+        <Text color="gray.600">Blood Group: {clinicalInformation?.bloodGroup || "Not Specified"}</Text>
+        <Text color="gray.600">Genotype: {clinicalInformation?.genotype || "Not Specified"}</Text>
+        <Text color="gray.600">BP: {clinicalInformation?.bp || "Not Specified"}</Text>
+        <Text color="gray.600">Heart Rate: {clinicalInformation?.heartRate || "Not Specified"} </Text>
+        <Text color="gray.600">Temperature: {clinicalInformation?.temperature || "Not Specified"}</Text>
+        <Text color="gray.600">Disability: {clinicalInformation?.disability || "Not Specified"}</Text>
       </Box>
 
       <Box flex={1} minW="200px" m={2}>

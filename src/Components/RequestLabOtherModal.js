@@ -105,8 +105,8 @@ export default function RequestLabOtherModal({
           testname: TestNames,
           notfromappointment: true,
           department: Payload.department,
-          notes: Payload.notes, // Include notes in the request
-          priority: Payload.priority, // Include priority in the request
+          notes: Payload.notes,
+          priority: Payload.priority, 
         },
         Payload.id
       );

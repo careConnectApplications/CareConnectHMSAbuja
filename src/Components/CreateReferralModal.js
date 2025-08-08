@@ -39,7 +39,7 @@ export default function CreateReferralModal({ isOpen, onClose, setOldPayload, ac
 
         referredclinic: "",
         referraldate: currentDate,
-        referredby: "",
+  
         receivingclinic: "",
         preferredconsultant: "",
         priority: "",
@@ -65,7 +65,7 @@ export default function CreateReferralModal({ isOpen, onClose, setOldPayload, ac
     const [UpdatedPayload, setUpdatedPayload] = useState({
         referredclinic: "",
         referraldate: currentDate,
-        referredby: "",
+      
         receivingclinic: "",
         preferredconsultant: "",
         priority: "",
@@ -177,7 +177,7 @@ export default function CreateReferralModal({ isOpen, onClose, setOldPayload, ac
         setUpdatedPayload({
             referredclinic: oldPayload?.referredclinic,
             referraldate: oldPayload?.referraldate,
-            referredby: oldPayload?.referredby,
+           
             receivingclinic: oldPayload?.receivingclinic,
             preferredconsultant: oldPayload?.preferredconsultant,
             priority: oldPayload?.priority,
@@ -208,7 +208,7 @@ export default function CreateReferralModal({ isOpen, onClose, setOldPayload, ac
                     {
                         type === "new" ? (
                             <>
-                                <Text fontSize="15px" fontWeight={"700"} color="blue.blue500">Referral Organization</Text>
+                                <Text fontSize="15px" fontWeight={"700"} color="blue.blue500">Referral Clinic</Text>
 
 
                                 <SimpleGrid mt="12px" mb="5" columns={{ base: 1, md: 2, lg: 2 }} spacing={5}>
@@ -224,7 +224,7 @@ export default function CreateReferralModal({ isOpen, onClose, setOldPayload, ac
                                     </Select>
                                     <Input leftIcon={<FaCalendarAlt />} val={Payload.referraldate !== "" ? true : false} label="Referred Date" type='date' value={Payload.referraldate} onChange={handlePayload} id="referraldate" />
 
-                                    <Input leftIcon={<FaNoteSticky />} label="Referred By " type='text' value={Payload.referredby} onChange={handlePayload} id="referredby" />
+      
 
 
                                 </SimpleGrid>
@@ -336,7 +336,7 @@ export default function CreateReferralModal({ isOpen, onClose, setOldPayload, ac
                                     </Select>
                                     <Input leftIcon={<FaCalendarAlt />} val={UpdatedPayload.referraldate !== "" ? true : false} label="Referred Date" type='date' value={UpdatedPayload.referraldate} onChange={handleUpdatedPayload} id="referraldate" />
 
-                                    <Input leftIcon={<FaNoteSticky />} label="Referred By " type='text' value={UpdatedPayload.referredby} onChange={handleUpdatedPayload} id="referredby" />
+               
 
 
                                 </SimpleGrid>
@@ -448,7 +448,6 @@ export default function CreateReferralModal({ isOpen, onClose, setOldPayload, ac
                                     </Select>
                                     <Input isDisabled={true} leftIcon={<FaCalendarAlt />} val={UpdatedPayload.referraldate !== "" ? true : false} label="Referred Date" type='date' value={UpdatedPayload.referraldate} onChange={handleUpdatedPayload} id="referraldate" />
 
-                                    <Input isDisabled={true} leftIcon={<FaNoteSticky />} label="Referred By " type='text' value={UpdatedPayload.referredby} onChange={handleUpdatedPayload} id="referredby" />
 
 
                                 </SimpleGrid>  
