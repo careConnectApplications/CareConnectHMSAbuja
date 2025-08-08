@@ -31,22 +31,19 @@ export default function FluidBalanceModal({
   isOpen,
   onClose,
   admissionId,
+  patientId,
   onSuccess,
   type = "create",
   initialData,
 }) {
 
   const initialFormState = {
-    datetime: "",
-    intaketype: "",
-    intakeroute: "",
-    intakeamount: "",
-    outputtype: "",
-    outputroute: "",
+    patientId: patientId,
+    inputamount: "",
     outputamount: "",
   };
 
-  const [formData, setFormData] = useState(initialFormState);
+  const [formData, setFormData] = useState(initialFormState); 
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState(null);
 
@@ -58,17 +55,20 @@ export default function FluidBalanceModal({
   const handleInputChange = ({ target: { name, value } }) =>
     setFormData((p) => ({ ...p, [name]: value }));
 
+  // Calculate fluid balance
+  const fluidBalance = () => {
+    const input = parseFloat(formData.inputamount) || 0;
+    const output = parseFloat(formData.outputamount) || 0;
+    return input - output;
+  };
+
 
   useEffect(() => {
     if (isOpen) {
       if (type === "edit" && initialData) {
         setFormData({
           datetime: initialData.datetime || "",
-          intaketype: initialData.intaketype || "",
-          intakeroute: initialData.intakeroute || "",
-          intakeamount: initialData.intakeamount || "",
-          outputtype: initialData.outputtype || "",
-          outputroute: initialData.outputroute || "",
+          inputamount: initialData.inputamount || "",
           outputamount: initialData.outputamount || "",
         });
       } else {
@@ -79,15 +79,24 @@ export default function FluidBalanceModal({
 
  
   const handleSubmit = async () => {
-    if (Object.values(formData).some((v) => v === "")) {
-      showToast({ status: "error", message: "All fields are required." });
+    // Only require inputamount and outputamount, datetime is optional
+    if (!formData.inputamount || !formData.outputamount) {
+      showToast({ status: "error", message: "Input amount and output amount are required." });
       return;
     }
+    
     setLoading(true);
     try {
+      // Create the simplified payload structure
+      const payload = {
+        inputamount: formData.inputamount,
+        outputamount: formData.outputamount,
+        ...(formData.datetime && { datetime: formData.datetime }) // Only include datetime if provided
+      };
+      
       if (type === "edit") {
         await UpdateFluidBalanceApi(
-          formData,
+          payload,
           initialData._id || initialData.id
         );
         showToast({
@@ -95,7 +104,7 @@ export default function FluidBalanceModal({
           message: "Fluid balance updated successfully!",
         });
       } else {
-        await CreateFluidBalanceApi(formData, admissionId);
+        await CreateFluidBalanceApi(payload, admissionId);
         showToast({
           status: "success",
           message: "Fluid balance created successfully!",
@@ -117,7 +126,8 @@ export default function FluidBalanceModal({
     }
   };
 
-  const isFormComplete = Object.values(formData).every(Boolean);
+  // Updated validation - only require input and output amounts
+  const isFormComplete = formData.inputamount && formData.outputamount;
 
   return (
     <>
@@ -137,121 +147,28 @@ export default function FluidBalanceModal({
           <ModalCloseButton />
           <ModalBody pb={6} mt={2}>
 
-            <Text fontSize="md" fontWeight="bold" color="blue.blue500" mb={2}>
-              Date / Time
-            </Text>
-            <FormControl mb={4}>
-              <InputGroup>
-                <InputLeftElement pointerEvents="none">
-                  <Icon as={AiOutlineCalendar} color="gray.300" />
-                </InputLeftElement>
-                <Input
-                  type="datetime-local"
-                  name="datetime"
-                  value={formData.datetime}
-                  onChange={handleInputChange}
-                  label="Date & Time"
-                />
-              </InputGroup>
-            </FormControl>
-
-
-            <Text fontSize="md" fontWeight="bold" color="blue.blue500" mb={2}>
-              Fluid Intake
-            </Text>
-            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
-              {/* Intake Type */}
-              <FormControl>
-                <InputGroup>
-                  <InputLeftElement pointerEvents="none">
-                    <Icon as={GiWaterDrop} color="gray.300" />
-                  </InputLeftElement>
-                  <Input
-                    label="Intake Type"
-                    type="text"
-                    name="intaketype"
-                    value={formData.intaketype}
-                    onChange={handleInputChange}
-                    placeholder="e.g., Oral, IV"
-                  />
-                </InputGroup>
-              </FormControl>
-              {/* Intake Route */}
-              <FormControl>
-                <InputGroup>
-                  <InputLeftElement pointerEvents="none">
-                    <Icon as={FaSyringe} color="gray.300" />
-                  </InputLeftElement>
-                  <Input
-                    label="Intake Route"
-                    type="text"
-                    name="intakeroute"
-                    value={formData.intakeroute}
-                    onChange={handleInputChange}
-                    placeholder="e.g., PO, IV drip"
-                  />
-                </InputGroup>
-              </FormControl>
-              {/* Intake Amount */}
-              
-              <FormControl>
-                <InputGroup>
-                  <InputLeftElement pointerEvents="none">
-                    <Icon as={FaHashtag} color="gray.300" />
-                  </InputLeftElement>
-                  <Input
-                    label="Intake Amount (ml)"
-                    type="text"
-                    name="intakeamount"
-                    value={formData.intakeamount}
-                    onChange={handleInputChange}
-                    placeholder="Enter amount (ml)"
-                  />
-                </InputGroup>
-              </FormControl>
-            </SimpleGrid>
-
-            <Divider my={4} />
-
-
-            <Text fontSize="md" fontWeight="bold" color="blue.blue500" mb={2}>
-              Fluid Output
-            </Text>
-            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
-              {/* Output Type */}
-              <FormControl>
-                <InputGroup>
-                  <InputLeftElement pointerEvents="none">
-                    <Icon as={GiWaterDrop} color="gray.300" />
-                  </InputLeftElement>
-                  <Input
-                    label="Output Type"
-                    type="text"
-                    name="outputtype"
-                    value={formData.outputtype}
-                    onChange={handleInputChange}
-                    placeholder="e.g., Urine"
-                  />
-                </InputGroup>
-              </FormControl>
-              {/* Output Route */}
-              <FormControl>
-                <InputGroup>
-                  <InputLeftElement pointerEvents="none">
-                    <Icon as={FaSyringe} color="gray.300" />
-                  </InputLeftElement>
-                  <Input
-                    label="Output Route"
-                    type="text"
-                    name="outputroute"
-                    value={formData.outputroute}
-                    onChange={handleInputChange}
-                    placeholder="e.g., Catheter"
-                  />
-                </InputGroup>
-              </FormControl>
-              {/* Output Amount */}
+           
             
+
+            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4} mb={4}>
+              {/* Input Amount */}
+              <FormControl>
+                <InputGroup>
+                  <InputLeftElement pointerEvents="none">
+                    <Icon as={GiWaterDrop} color="gray.300" />
+                  </InputLeftElement>
+                  <Input
+                    label="Input Amount (ml)"
+                    type="number"
+                    name="inputamount"
+                    value={formData.inputamount}
+                    onChange={handleInputChange}
+                    placeholder="Enter input amount (ml)"
+                  />
+                </InputGroup>
+              </FormControl>
+
+              {/* Output Amount */}
               <FormControl>
                 <InputGroup>
                   <InputLeftElement pointerEvents="none">
@@ -259,34 +176,39 @@ export default function FluidBalanceModal({
                   </InputLeftElement>
                   <Input
                     label="Output Amount (ml)"
-                    type="text"
+                    type="number"
                     name="outputamount"
                     value={formData.outputamount}
                     onChange={handleInputChange}
-                    placeholder="Enter amount (ml)"
+                    placeholder="Enter output amount (ml)"
                   />
                 </InputGroup>
               </FormControl>
             </SimpleGrid>
 
+            <Divider my={4} />
 
-            {/*
-            -------- Old Intake fields (no longer in payload) --------
-            - oralfluids
-            - tubefeedingvolume
-            - IVfluidtype / volume / rate
-            - medication
-            - totalintake
-            -------- Old Output fields (no longer in payload) --------
-            - urineoutput
-            - stoolfrequency / stoolamount / consistency
-            - vomitamount
-            - drainage
-            - totaloutput
-            -------- Old Net Balance -------------------------------
-            - netfliudbalancefor24hours
-            ---------------------------------------------------------
-            */}
+            {/* Fluid Balance Calculation */}
+            <Text fontSize="md" fontWeight="bold" color="blue.blue500" mb={2}>
+              Fluid Balance
+            </Text>
+            <FormControl>
+              <InputGroup>
+                <InputLeftElement pointerEvents="none">
+                  <Icon as={FaHashtag} color="gray.300" />
+                </InputLeftElement>
+                <Input
+                  label="Fluid Balance (ml)"
+                  type="text"
+                  value={`${fluidBalance()} ml`}
+                  readOnly
+                  bg="gray.50"
+                  color={fluidBalance() >= 0 ? "green.600" : "red.600"}
+                  fontWeight="bold"
+                />
+              </InputGroup>
+            </FormControl>
+
           </ModalBody>
 
           <ModalFooter>

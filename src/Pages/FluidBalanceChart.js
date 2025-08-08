@@ -74,6 +74,7 @@ const FluidBalanceChart = () => {
       if (!admissionId) return;
       try {
         const res = await ReadAllFluidBalanceByAdmissionApi(admissionId);
+        console.log("response",res);
         const list =
           res?.queryresult?.fluidbalancesdetails && Array.isArray(res.queryresult.fluidbalancesdetails)
             ? res.queryresult.fluidbalancesdetails
@@ -277,6 +278,7 @@ const FluidBalanceChart = () => {
       <FluidBalanceModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
+        patientId={localStorage.getItem("patientId")}
         admissionId={getAdmissionId()}
         onSuccess={() => setTrigger((p) => !p)}
         type={modalType}
