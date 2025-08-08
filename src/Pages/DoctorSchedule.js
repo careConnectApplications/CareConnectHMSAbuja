@@ -7,6 +7,8 @@ import TableRow from "../Components/TableRow";
 import Button from "../Components/Button";
 import Input from "../Components/Input";
 import VitalsModal from "../Components/VitalsModal";
+import UpdateClinicalInfoModal from "../Components/UpdateClinicalInfoModal";
+import AddSpecialNeedsModal from "../Components/AddSpecialNeedsModal";
 import ShowToast from "../Components/ToastNotification";
 import { BiSearch } from "react-icons/bi";
 import { IoFilter } from "react-icons/io5";
@@ -32,6 +34,9 @@ export default function DoctoerSchedule() {
   const [QueueData, setQueueData] = useState([]);
   const [ModalState, setModalState] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isClinicalInfoModalOpen, setIsClinicalInfoModalOpen] = useState(false);
+  const [isSpecialNeedsModalOpen, setIsSpecialNeedsModalOpen] = useState(false);
+  const [selectedPatient, setSelectedPatient] = useState(null);
   const [TotalData, setTotalData] = useState("");
 
   const [filters, setFilters] = useState({
@@ -151,13 +156,33 @@ export default function DoctoerSchedule() {
     setModalState("new")
   }
 
+  const openClinicalInfoModal = (item) => {
+    setSelectedPatient(item);
+    setIsClinicalInfoModalOpen(true);
+  };
+
+  const closeClinicalInfoModal = () => {
+    setIsClinicalInfoModalOpen(false);
+    setSelectedPatient(null);
+  };
+
+  const openSpecialNeedsModal = (item) => {
+    setSelectedPatient(item);
+    setIsSpecialNeedsModalOpen(true);
+  };
+
+  const closeSpecialNeedsModal = () => {
+    setIsSpecialNeedsModalOpen(false);
+    setSelectedPatient(null);
+  };
+
   useEffect(() => {
     getAllClinic();
   }, []);
 
   useEffect(() => {
     fetchData();
-  }, [filters, CurrentPage, Trigger, isOpen]);
+  }, [filters, CurrentPage, Trigger, isOpen, isClinicalInfoModalOpen, isSpecialNeedsModalOpen]);
 
 
 
@@ -525,6 +550,8 @@ export default function DoctoerSchedule() {
                       vitalStatus={item?.vitalstatus}
                       onClick={() => ExaminePatient(item)}
                       onVital={() => takeVitals(item)}
+                      onClinicalInfo={() => openClinicalInfoModal(item)}
+                      onSpecialNeeds={() => openSpecialNeedsModal(item)}
                     />
                   ))
                 ) : (
@@ -545,6 +572,18 @@ export default function DoctoerSchedule() {
         </Box>
 
         <VitalsModal isOpen={isOpen} oldPayload={OldPayload} onClose={onClose} type={ModalState} activateNotifications={activateNotifications} />
+        <UpdateClinicalInfoModal
+          isOpen={isClinicalInfoModalOpen}
+          onClose={closeClinicalInfoModal}
+          patient={selectedPatient}
+          activateNotifications={activateNotifications}
+        />
+        <AddSpecialNeedsModal
+          isOpen={isSpecialNeedsModalOpen}
+          onClose={closeSpecialNeedsModal}
+          patient={selectedPatient}
+          activateNotifications={activateNotifications}
+        />
       </Box>
 
     </MainLayout>

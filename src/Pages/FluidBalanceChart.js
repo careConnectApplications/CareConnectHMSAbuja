@@ -255,7 +255,6 @@ const FluidBalanceChart = () => {
                   outputRoute={item.outputroute}
                   outputAmount={item.outputamount}
                   servedBy={item.staffname}
-                  createdOn={new Date(item.createdAt).toLocaleString()}
                   onEdit={() => handleViewFluidBalance(item._id)}
                 />
               ))}

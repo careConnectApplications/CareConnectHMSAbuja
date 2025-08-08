@@ -140,6 +140,8 @@ export default function TableRow({
   appointmentdate,
   vitalStatus,
   onVital,
+  onClinicalInfo,
+  onSpecialNeeds,
   price,
   occupiedBed,
   totalBed,
@@ -679,6 +681,78 @@ export default function TableRow({
         </>
       )}
 
+      {type === "custom-billing-history" && (
+        <>
+        <Td onClick={onClick}>
+            <HStack>
+              <Avatar size="sm" name={name} />
+              <Box>
+                <Text color={"#101828"} fontWeight={"500"} fontSize={"13px"}>
+                  {name}
+                </Text>
+                <Text color={"#667085"} fontWeight={"400"} fontSize={"11px"}>
+                  MRN ~ {mrn}
+                </Text>
+              </Box>
+            </HStack>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {date}
+            </Text>
+          </Td>
+         
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {category}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {paymentType}
+            </Text>
+          </Td>
+         
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {quantity}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {amountPaid}
+            </Text>
+          </Td>
+          <Td>
+            <HStack
+              color={
+                status === "paid"
+                  ? "#027A48"
+                  : status === "pending payment"
+                  ? "#FFA30C"
+                  : "#FD4739"
+              }
+            >
+              <Box
+                rounded="100%"
+                w="8px"
+                h="8px"
+                bg={
+                  status === "paid"
+                    ? "#027A48"
+                    : status === "pending payment"
+                    ? "#FFA30C"
+                    : "#FD4739"
+                }
+              ></Box>
+              <Text fontWeight="400" fontSize={"13px"}>
+                {status}
+              </Text>
+            </HStack>
+          </Td>
+        </>
+      )}
+
       {type === "appointment" && (
         <>
           <Td>
@@ -958,6 +1032,36 @@ export default function TableRow({
                 >
                   <HStack fontSize="14px">
                     <Text>Take Vitals</Text>
+                  </HStack>
+                </MenuItem>
+                <MenuItem
+                  onClick={onClinicalInfo}
+                  textTransform="capitalize"
+                  fontWeight={"500"}
+                  color="#2F2F2F"
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                >
+                  <HStack fontSize="14px">
+                    <Text>Add Clinical Information</Text>
+                  </HStack>
+                </MenuItem>
+                <MenuItem
+                  onClick={onSpecialNeeds}
+                  textTransform="capitalize"
+                  fontWeight={"500"}
+                  color="#2F2F2F"
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                >
+                  <HStack fontSize="14px">
+                    <Text>Add Special Need</Text>
                   </HStack>
                 </MenuItem>
               </MenuList>

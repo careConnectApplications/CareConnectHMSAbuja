@@ -35,17 +35,30 @@ export const ProviderLoginApi = (Payload) => {
     });
 };
 
+
 export const CreateBedApi = (payload) => {
   const data = JSON.stringify(payload);
   const config = {
     method: "post",
     maxBodyLength: Infinity,
     url: `${baseUrl}/settings/createbed`,
+
+export const CreateCustomBillApi = (payload, patientId) => {
+  let data = JSON.stringify(payload);
+  let config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/billing/${patientId}`,
+
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
+
     data,
+
+    data: data,
+
   };
 
   return axios
@@ -55,6 +68,7 @@ export const CreateBedApi = (payload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
+
       if (error.response?.data?.msg) {
         throw new Error(error.response.data.msg);
       } else if (error.response?.data) {
@@ -71,6 +85,24 @@ export const GetAllBedsApi = () => {
   const config = {
     method: "get",
     url: `${baseUrl}/settings/getallbeds`,
+
+      if (error.response.data.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
+
+export const GetPatientBillingHistoryApi = (patientId) => {
+  let config = {
+    method: "get",
+    url: `${baseUrl}/billing/getpatientbillinghistory/${patientId}`,
+
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
@@ -79,6 +111,7 @@ export const GetAllBedsApi = () => {
 
   return axios
     .request(config)
+
     .then((response) => response.data)
     .catch((error) => {
       console.log("error", error.response);
@@ -158,6 +191,21 @@ export const UpdateBedNumberApi = (id, payload) => {
         throw new Error(error.message);
       } else {
         throw new Error(error.message);
+
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.log("Error fetching billing history:", error.response);
+      if (error.response && error.response.data.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response && error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+
       }
     });
 };

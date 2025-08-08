@@ -57,8 +57,7 @@ export default function HMOPatientManagement() {
   const postsPerPage = configuration.sizePerPage; // using configuration posts per page
 
   // Determine which dataset to display: either the search/date-filtered data or the status-filtered data
-  const dataToDisplay =
-    searchInput === "" || filteredData === null ? filterData : filteredData;
+  const dataToDisplay = filteredData !== null ? filteredData : filterData;
 
   // Pagination calculations
   const indexOfLastPost = currentPage * postsPerPage;
@@ -95,6 +94,13 @@ export default function HMOPatientManagement() {
     setActiveStatus(false);
     setInactiveStatus(false);
     setFilterData(data);
+    setCurrentPage(1); // Reset pagination
+    // Clear other filters when changing status
+    setFilteredData(null);
+    setSearchInput("");
+    setByDate(false);
+    setStartDate("");
+    setEndDate("");
   };
 
   const filterActiveStatus = () => {
@@ -105,6 +111,13 @@ export default function HMOPatientManagement() {
       (item) => item.isHMOCover.toLowerCase() === "yes"
     );
     setFilterData(filtered);
+    setCurrentPage(1); // Reset pagination
+    // Clear other filters when changing status
+    setFilteredData(null);
+    setSearchInput("");
+    setByDate(false);
+    setStartDate("");
+    setEndDate("");
   };
 
   const filterInactiveStatus = () => {
@@ -115,56 +128,100 @@ export default function HMOPatientManagement() {
       (item) => item.isHMOCover.toLowerCase() !== "yes"
     );
     setFilterData(filtered);
+    setCurrentPage(1); // Reset pagination
+    // Clear other filters when changing status
+    setFilteredData(null);
+    setSearchInput("");
+    setByDate(false);
+    setStartDate("");
+    setEndDate("");
   };
 
   // Search input change handler: filters by full name, MRN, or HMO Id
   const handleInputChange = (e) => {
     const value = e.target.value.toLowerCase();
     setSearchInput(value);
-    const filtered = data.filter((item) => {
+    
+    if (value === "") {
+      setFilteredData(null);
+      return;
+    }
+    
+    // Filter from filterData (status-filtered data) instead of data
+    const filtered = filterData.filter((item) => {
       const fullName = `${item.title ? item.title + " " : ""}${item.firstName} ${item.middleName ? item.middleName + " " : ""}${item.lastName}`.toLowerCase();
       const mrn = String(item.MRN || "").toLowerCase();
       const hmoId = String(item.HMOId || "").toLowerCase();
       return fullName.includes(value) || mrn.includes(value) || hmoId.includes(value);
     });
     setFilteredData(filtered);
+    setCurrentPage(1); // Reset pagination
   };
 
   // Filter by specific field: "patient", "mrn", or "hmo"
   const filterBy = (field) => {
+    if (!searchInput.trim()) {
+      activateNotifications("Please enter a search term first", "warning");
+      return;
+    }
+
+    let filtered = [];
+    
     if (field === "patient") {
-      const filtered = data.filter((item) => {
+      filtered = filterData.filter((item) => {
         const fullName = `${item.title ? item.title + " " : ""}${item.firstName} ${item.middleName ? item.middleName + " " : ""}${item.lastName}`.toLowerCase();
         return fullName.includes(searchInput.toLowerCase());
       });
-      setFilteredData(filtered);
     } else if (field === "mrn") {
-      const filtered = data.filter((item) => {
+      filtered = filterData.filter((item) => {
         const mrn = String(item.MRN || "").toLowerCase();
         return mrn.includes(searchInput.toLowerCase());
       });
-      setFilteredData(filtered);
     } else if (field === "hmo") {
-      const filtered = data.filter((item) => {
+      filtered = filterData.filter((item) => {
         const hmoId = String(item.HMOId || "").toLowerCase();
         return hmoId.includes(searchInput.toLowerCase());
       });
-      setFilteredData(filtered);
+    }
+    
+    setFilteredData(filtered);
+    setCurrentPage(1); // Reset pagination
+    
+    if (filtered.length === 0) {
+      activateNotifications(`No patients found matching the search criteria for ${field}`, "info");
     }
   };
 
   // Filter by date (using startDate and endDate)
   const filterByDate = () => {
     if (startDate && endDate) {
+      // Validate date range
+      if (new Date(startDate) > new Date(endDate)) {
+        activateNotifications("Start date cannot be after end date", "error");
+        return;
+      }
+
       let endDateObj = new Date(endDate);
       // Include the entire end date
       endDateObj.setDate(endDateObj.getDate() + 1);
       const formattedEndDate = endDateObj.toISOString().split("T")[0];
-      const filtered = data.filter((item) => {
+      
+      // Filter from filterData (status-filtered data) instead of data
+      const filtered = filterData.filter((item) => {
+        if (!item.createdAt) return false;
         const createdDate = item.createdAt.split("T")[0];
         return createdDate >= startDate && createdDate <= formattedEndDate;
       });
+      
       setFilteredData(filtered);
+      setCurrentPage(1); // Reset pagination to first page
+      
+      // Show feedback if no results found
+      if (filtered.length === 0) {
+        activateNotifications("No patients found for the selected date range", "info");
+      }
+    } else {
+      activateNotifications("Please select both start and end dates", "warning");
     }
   };
 
@@ -174,6 +231,7 @@ export default function HMOPatientManagement() {
     setByDate(false);
     setStartDate("");
     setEndDate("");
+    setCurrentPage(1); // Reset pagination
   };
 
   // Dummy action handlers for viewing and editing a patient
@@ -338,7 +396,11 @@ export default function HMOPatientManagement() {
                 by HMO Id
               </MenuItem>
               <MenuItem
-                onClick={() => setByDate(true)}
+                onClick={() => {
+                  setByDate(true);
+                  setSearchInput(""); // Clear search input when switching to date mode
+                  setFilteredData(null); // Clear any existing filters
+                }}
                 textTransform="capitalize"
                 fontWeight="500"
                 _hover={{ color: "#fff", fontWeight: "400", bg: "blue.blue500" }}

@@ -1,4 +1,18 @@
-import { HStack, Text } from "@chakra-ui/react";
+import {
+  HStack,
+  Text,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Button,
+  useDisclosure,
+  Box,
+  Flex,
+} from "@chakra-ui/react";
 import {
   Tabs,
   TabList,
@@ -8,7 +22,7 @@ import {
   TabIndicator,
   Image,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect } from "react";
 import MainLayout from "../Layouts/Index";
 import Seo from "../Utils/Seo";
 import Examine from "./Examine";
@@ -36,14 +50,27 @@ import NutritionPage from "./NutritionPage";
 import PsychiatricEvaluations from "./PsychiatricEvaluations";
 import Dental from "./Dental";
 import PhysiotherapyAssessments from "./PhysiotherapyAssessments";
+import CustomBilling from "./CustomBilling";
 
 export default function DoctorScheduleDetails() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const { id } = useParams();
+  const [audio] = React.useState(new Audio("/beep.mp3"));
 
   localStorage.setItem("patientId", id);
   let patientName = localStorage.getItem("PatientName");
   let pathName = localStorage.getItem("pathLocation");
   let patientDetails = JSON.parse(localStorage.getItem("patientDetails"));
+
+  useEffect(() => {
+    if (patientDetails?.specialNeeds) {
+      audio.loop = true;
+      audio.play();
+    }
+    return () => {
+      audio.pause();
+    };
+  }, [audio, patientDetails?.specialNeeds]);
 
   const nav = useNavigate();
   return (
@@ -52,6 +79,40 @@ export default function DoctorScheduleDetails() {
         title="Doctor Schedule Details"
         description="Care Connect Doctor Schedule Details"
       />
+      {patientDetails?.specialNeeds && (
+        <Flex
+          justifyContent="center"
+          alignItems="center"
+          p="2"
+          bg="red.100"
+          cursor="pointer"
+          onClick={() => {
+            onOpen();
+            audio.pause();
+          }}
+        >
+          <div className="blinking-dot"></div>
+          <Text ml="2" color="red.600" fontWeight="bold">
+            This patient has special needs. Click to view.
+          </Text>
+        </Flex>
+      )}
+
+      <Modal isOpen={isOpen} onClose={onClose}   isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Special Needs</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>{patientDetails?.specialNeeds}</Text>
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="blue.blue500" mr={3} onClick={onClose}>
+              Close
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
 
       <HStack cursor="pointer">
         <Text
@@ -207,6 +268,12 @@ export default function DoctorScheduleDetails() {
           >
             Physiotherapy
           </Tab>
+          <Tab
+            _focus={{ outline: "none" }}
+            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+          >
+            Custom Billing
+          </Tab>
         </TabList>
         {/* <TabIndicator mt='-1.5px' height='2px' bg='blue.blue500' borderRadius='1px' /> */}
         <TabPanels>
@@ -275,6 +342,9 @@ export default function DoctorScheduleDetails() {
           </TabPanel>
           <TabPanel p="0">
             <PhysiotherapyAssessments />
+          </TabPanel>
+          <TabPanel p="0">
+            <CustomBilling />
           </TabPanel>
         </TabPanels>
       </Tabs>
