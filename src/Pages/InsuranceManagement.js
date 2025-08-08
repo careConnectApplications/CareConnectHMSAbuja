@@ -92,7 +92,14 @@ export default function InsuranceManagement() {
   }, [isOpen, trigger]);
 
   return (
-    <Box bg="#fff" border="1px solid #EFEFEF" mt="10px" py="17px" px={["18px", "18px"]} rounded="10px">
+    <Box
+      bg="#fff"
+      border="1px solid #EFEFEF"
+      mt="10px"
+      py="17px"
+      px={["18px", "18px"]}
+      rounded="10px"
+    >
       {showToast.show && (
         <ShowToast message={showToast.message} status={showToast.status} />
       )}
@@ -137,7 +144,11 @@ export default function InsuranceManagement() {
               Active
             </Text>
           </Box>
-          <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={filterInactive}>
+          <Box
+            borderRight="1px solid #EDEFF2"
+            pr="5px"
+            onClick={filterInactive}
+          >
             <Text
               py="8.5px"
               px="12px"
@@ -165,17 +176,40 @@ export default function InsuranceManagement() {
       </Flex>
 
       {/* Table Section */}
-      <Box bg="#fff" border="1px solid #EFEFEF" mt="12px" py="15px" px="15px" rounded="10px" overflowX="auto">
+      <Box
+        bg="#fff"
+        border="1px solid #EFEFEF"
+        mt="12px"
+        py="15px"
+        px="15px"
+        rounded="10px"
+        overflowX="auto"
+      >
         <TableContainer>
           <Table variant="striped">
             <Thead bg="#fff">
               <Tr>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">S/N</Th>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">HMO Name</Th>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">ID</Th>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">Created Date</Th>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">Updated Date</Th>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">Actions</Th>
+                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  S/N
+                </Th>
+                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  HMO Name
+                </Th>
+                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  ID
+                </Th>
+                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  Coverage
+                </Th>
+                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  Created Date
+                </Th>
+                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  Updated Date
+                </Th>
+                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  Actions
+                </Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -186,6 +220,7 @@ export default function InsuranceManagement() {
                   sn={i + 1}
                   hmoname={item.hmoname}
                   id={item.id}
+                  coverage={item.hmopercentagecover}
                   createdAt={moment(item.createdAt).format("lll")}
                   updatedAt={moment(item.updatedAt).format("lll")}
                   onEdit={() => editInsurance(item)}

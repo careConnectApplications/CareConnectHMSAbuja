@@ -143,21 +143,37 @@ export default function LabProcessing() {
   const getAllScheduledLab = async (status) => {
     setIsLoading(true);
     try {
+      console.log(`Fetching lab tests with status: ${status}`);
       const result = await GetAllScheduledLabApi(
         PostPerPage,
         CurrentPage,
         status
       );
-      console.log("getAllScheduledLab", result);
-      console.log("[API] GetAllScheduledLabApi response:", result);
+
+      console.log("API Response for status", status, ":", result);
+
       if (result.status === true) {
         setIsLoading(false);
         setData(result.queryresult.labdetails);
         setFilterData(result.queryresult.labdetails);
         setTotalData(result.queryresult.totallabdetails);
+
+        // Debug log to confirm rejected tests are being returned
+        if (status === "rejected") {
+          console.log("Rejected tests:", result.queryresult.labdetails);
+        }
+      } else {
+        activateNotifications(
+          result.message || "Failed to fetch lab data",
+          "error"
+        );
       }
     } catch (e) {
-      console.error(e.message);
+      console.error(`Error fetching ${status} tests:`, e.message);
+      activateNotifications(
+        `Failed to fetch ${status} tests: ${e.message}`,
+        "error"
+      );
     }
   };
   const sortToHematology = async (testid) => {
@@ -322,7 +338,6 @@ export default function LabProcessing() {
     setStatus("rejected");
     setCurrentPage(1);
   };
-
   const ProcessLab = (item) => {
     setOldPayload(item);
     onOpen();
@@ -338,17 +353,25 @@ export default function LabProcessing() {
     if (FilteredData?.length > 0 || FilteredData !== null) {
       getFilteredScheduledlab(Key, Value);
     } else {
-      if (Scheduled === true) {
+      if (Scheduled) {
         getAllScheduledLab("scheduled");
-      } else if (Processed === true) {
+      } else if (Processed) {
         getAllScheduledLab("processed");
-      } else if (AwaitingConfirmation === true) {
+      } else if (AwaitingConfirmation) {
         getAllScheduledLab("awaiting confirmation");
-      } else if (Rejected === true) {
+      } else if (Rejected) {
         getAllScheduledLab("rejected");
       }
     }
-  }, [isOpen, Trigger, CurrentPage]);
+  }, [
+    isOpen,
+    Trigger,
+    CurrentPage,
+    Scheduled,
+    Processed,
+    AwaitingConfirmation,
+    Rejected,
+  ]);
 
   return (
     <MainLayout>

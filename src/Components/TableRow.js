@@ -2074,7 +2074,7 @@ export default function TableRow({
                   }}
                   onClick={onTransfer}
                 >
-                  To Transfer
+                  Transfer
                 </MenuItem>
                 <MenuItem
                   _hover={{
@@ -2084,7 +2084,7 @@ export default function TableRow({
                   }}
                   onClick={onClick}
                 >
-                  To Discharge
+                  Discharge
                 </MenuItem>
               </MenuList>
             </Menu>
@@ -2435,11 +2435,7 @@ export default function TableRow({
               {receivingUnit}
             </Text>
           </Td>
-          <Td>
-            <Text fontWeight="400" fontSize={"13px"}>
-              {doctor}
-            </Text>
-          </Td>
+
           <Td>
             <Text fontWeight="400" fontSize={"13px"}>
               {date}
