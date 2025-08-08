@@ -26,7 +26,6 @@ import Pagination from "../Components/Pagination";
 import ShowToast from "../Components/ToastNotification";
 import {
   GetAllReferredForAdmissionApi,
-  UpdateAdmissionStatusApi,
   GetAllWardApi,
   DischargePatientApi,
 } from "../Utils/ApiCalls";
@@ -115,38 +114,6 @@ const InPatientAdmission = () => {
   };
 
   // Handle status updates (admit/transfer)
-  const handleStatusUpdate = async (admissionId, currentStatus) => {
-    const normStatus = currentStatus.toLowerCase();
-    let newStatus;
-
-    if (normStatus === "toadmit") {
-      newStatus = "admited";
-    } else if (normStatus === "totransfer") {
-      newStatus = "transfered";
-    } else if (normStatus === "todischarge") {
-      newStatus = "discharged";
-    } else {
-      return;
-    }
-
-    setUpdating(admissionId);
-    try {
-      const payload = { status: newStatus };
-      await UpdateAdmissionStatusApi(admissionId, payload);
-      setToast({
-        status: "success",
-        message: `Patient ${newStatus} successfully!`,
-      });
-      fetchAdmissions(); // Refresh data
-    } catch (error) {
-      setToast({
-        status: "error",
-        message: error.message || "Failed to update admission status",
-      });
-    } finally {
-      setUpdating(null);
-    }
-  };
 
   // Enhanced discharge handler with proper error handling and feedback
   const handleDischarge = async (admissionId) => {
@@ -560,9 +527,6 @@ const InPatientAdmission = () => {
                             : "-"
                         }
                         status={item.status || "-"}
-                        onAdmit={() =>
-                          handleStatusUpdate(item._id, item.status)
-                        }
                         onView={() =>
                           GetPatientTimeline(item.patient?._id, item.patient)
                         }

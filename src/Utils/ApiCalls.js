@@ -35,13 +35,37 @@ export const ProviderLoginApi = (Payload) => {
     });
 };
 
-
 export const CreateBedApi = (payload) => {
   const data = JSON.stringify(payload);
   const config = {
     method: "post",
     maxBodyLength: Infinity,
     url: `${baseUrl}/settings/createbed`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data: data,
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response.data.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
 
 export const CreateCustomBillApi = (payload, patientId) => {
   let data = JSON.stringify(payload);
@@ -55,10 +79,7 @@ export const CreateCustomBillApi = (payload, patientId) => {
       Authorization: `Bearer ${token}`,
     },
 
-    data,
-
     data: data,
-
   };
 
   return axios
@@ -85,7 +106,19 @@ export const GetAllBedsApi = () => {
   const config = {
     method: "get",
     url: `${baseUrl}/settings/getallbeds`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
 
+  return axios
+    .request(config)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
       if (error.response.data.msg) {
         throw new Error(error.response.data.msg);
       } else if (error.response.data) {
@@ -191,21 +224,6 @@ export const UpdateBedNumberApi = (id, payload) => {
         throw new Error(error.message);
       } else {
         throw new Error(error.message);
-
-    .then((response) => {
-      return response.data;
-    })
-    .catch((error) => {
-      console.log("Error fetching billing history:", error.response);
-      if (error.response && error.response.data.msg) {
-        throw new Error(error.response.data.msg);
-      } else if (error.response && error.response.data) {
-        throw new Error(error.response);
-      } else if (error.request) {
-        throw new Error(error.msg);
-      } else {
-        throw new Error(error.msg);
-
       }
     });
 };
@@ -4426,41 +4444,6 @@ export const GetAllAdmittedApi = (ward) => {
     });
 };
 
-export const UpdateAdmissionStatusApi = (id, payload) => {
-  let data = JSON.stringify(payload);
-  let config = {
-    method: "put",
-    maxBodyLength: Infinity,
-    url: `${baseUrl}/admission/updateadmissionstatus/${id}`,
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    data: data,
-  };
-
-  return axios
-    .request(config)
-    .then((response) => {
-      console.log(
-        "Update Admission Status Success:",
-        JSON.stringify(response.data)
-      );
-      return response;
-    })
-    .catch((error) => {
-      console.error("Error updating admission status:", error.response);
-      if (error.response?.data?.msg) {
-        throw new Error(error.response.data.msg);
-      } else if (error.response?.data) {
-        throw new Error(JSON.stringify(error.response.data));
-      } else if (error.request) {
-        throw new Error("No response received from the server.");
-      } else {
-        throw new Error(error.message);
-      }
-    });
-};
 export const CreateVitalChartApi = (payload, admissionId) => {
   // console.log("CreateVitalChartApi Id payload:", payload);
   console.log("CreateVitalChartApi Id :", admissionId);
