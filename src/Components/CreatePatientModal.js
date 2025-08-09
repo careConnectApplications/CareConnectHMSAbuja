@@ -322,6 +322,22 @@ export default function CreatePatientModal({
     });
   }, [isOpen]);
 
+  // Helper function to calculate age from date of birth
+  const calculateAge = (dateOfBirth) => {
+    if (!dateOfBirth) return "";
+    
+    const today = new Date();
+    const birthDate = new Date(dateOfBirth);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    
+    return age.toString();
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
@@ -336,6 +352,14 @@ export default function CreatePatientModal({
         ...prev,
         [name]: cleanedValue,
       }));
+    } else if (name === "dateOfBirth") {
+      // Auto-populate age when date of birth changes
+      const calculatedAge = calculateAge(value);
+      setPatientData((prev) => ({
+        ...prev,
+        [name]: value,
+        age: calculatedAge,
+      }));
     } else {
       setPatientData((prev) => ({
         ...prev,
@@ -346,10 +370,21 @@ export default function CreatePatientModal({
 
   const handleUpdatedPayload = (e) => {
     const { name, value } = e.target;
-    setUpdatedPayload((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    
+    if (name === "dateOfBirth") {
+      // Auto-populate age when date of birth changes in edit mode
+      const calculatedAge = calculateAge(value);
+      setUpdatedPayload((prev) => ({
+        ...prev,
+        [name]: value,
+        age: calculatedAge,
+      }));
+    } else {
+      setUpdatedPayload((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async () => {
@@ -581,6 +616,7 @@ export default function CreatePatientModal({
                     id="age"
                     label="Age"
                     value={patientData.age}
+                    val={patientData.age !=="" ? true: false}
                     onChange={handleInputChange}
                     name="age"
                     type="number"
@@ -759,7 +795,7 @@ export default function CreatePatientModal({
                 </Text>
                 <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4}>
                   <Input
-                    type="datetime-local"
+                    type="date"
                     name="appointmentdate"
                     label="Appointment Date"
                     value={patientData.appointmentdate}
