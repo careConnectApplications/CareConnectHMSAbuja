@@ -1,4 +1,4 @@
-import { HStack, Text, Box, Flex, Select, Stack, useDisclosure, SimpleGrid, Tooltip } from '@chakra-ui/react'
+import { HStack, Text, Box, Flex, Select, Stack, useDisclosure, SimpleGrid, Tooltip, VStack, Badge } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import MainLayout from "../Layouts/Index";
 import Seo from "../Utils/Seo";
@@ -8,37 +8,15 @@ import TextArea from "../Components/TextArea";
 import LabRequestModal from "../Components/LabRequestModal";
 import ShowToast from "../Components/ToastNotification";
 import ClinicalEncounter from "./ClinicalEncounter";
-import GeneralExaminationModal from "../Components/GeneralExaminationModal";
-import HistoryCvsModal from "../Components/HistoryCvsModal";
-import HistoryRespModal from "../Components/HistoryRespModal";
-import HistoryGiModal from "../Components/HistoryGiModal";
-import HistoryGuModal from "../Components/HistoryGuModal";
-import HistoryNeuroModal from "../Components/HistoryNeuroModal";
-import HistoryMskModal from "../Components/HistoryMskModal";
-import MedicalHistoryModal from "../Components/MedicalHistoryModal";
-import PostnatalHistoryModal from "../Components/PostnatalHistoryModal";
-import DevelopmentalHistoryModal from "../Components/DevelopmentalHistoryModal";
-import ImmunizationHistoryModal from "../Components/ImmunizationHistoryModal";
-import CvsExaminationModal from "../Components/CvsExaminationModal";
-import RespExaminationModal from "../Components/RespExaminationModal";
-import GiExaminationModal from "../Components/GiExaminationModal";
-import GuExaminationModal from "../Components/GuExaminationModal";
-import NeuroExaminationModal from "../Components/NeuroExaminationModal";
 import AdmissionModal from "../Components/AdmissionModal";
 import RadiologyOrderRequestModal from "../Components/RadiologyOrderRequestModal";
 import CreateProcedureModal from "../Components/CreateProcedureModal";
 import CreateReferralModal from "../Components/CreateReferralModal";
-import MskExaminationModal from "../Components/MskExaminationModal";
 import PreviewEncounter from "../Components/PreviewEncounter";
 import CreatePrescriptionModal from "../Components/CreatePrescriptionModal";
 import { useNavigate } from 'react-router-dom';
-import { IoMdArrowRoundBack } from "react-icons/io"; import {
-    Accordion,
-    AccordionItem,
-    AccordionButton,
-    AccordionPanel,
-    AccordionIcon,
-} from '@chakra-ui/react'
+import { IoMdArrowRoundBack } from "react-icons/io"; 
+import { FiSearch } from "react-icons/fi";
 import { SettingsApi, GetDiagnosisICApi,GetAllVitalsApi, AddClinicalEncounterAPI } from "../Utils/ApiCalls";
 import { FaNoteSticky } from "react-icons/fa6";
 import { IoIosCloseCircle } from "react-icons/io";
@@ -47,7 +25,6 @@ import { FaTextHeight, FaHeartbeat } from "react-icons/fa";
 import { MdBloodtype } from "react-icons/md";
 import { GiEnergyBreath } from "react-icons/gi";
 import { GiWeight } from "react-icons/gi";
-import { TbMichelinStarFilled } from "react-icons/tb";
 import { useParams } from 'react-router-dom';
 import PatientInfoCard from '../Components/PatientInfoCard';
 
@@ -61,6 +38,9 @@ export default function AddClinicalEncounter() {
     const [OpenReferralModal, setOpenReferralModal] = useState(false);
     const [OpenPreview, setOpenPreview] = useState(false);
     const [SearchICD, setSearchICD] = useState("");
+    const [selectedICDInfo, setSelectedICDInfo] = useState(null);
+    const [icdSearchResults, setICDSearchResults] = useState([]);
+    const [isLoadingICD, setIsLoadingICD] = useState(false);
     const [OpenAdmissionModal, setOpenAdmissionModal] = useState(false);
     const [Complaints, setComplaints] = useState([]);
     const [ClinicalNotes, setClinicalNotes] = useState([]);
@@ -97,19 +77,76 @@ export default function AddClinicalEncounter() {
     const getAllICD = async (value) => {
         try {
             const result = await GetDiagnosisICApi({ diagnosis: value });
-
             setDiagnosisICD(result.queryresult);
         } catch (e) {
-
+            console.error("Error fetching ICD codes:", e.message);
         }
     };
 
-    const handleSearch = (e) => {
+    // Handler for ICD selection from search results
+    const handleICDSelect = (icdItem) => {
+        setPayload((prev) => ({
+            ...prev,
+            diagnosisicd10: icdItem[1],
+        }));
+        setSelectedICDInfo({
+            name: icdItem[0],
+            code: icdItem[1],
+        });
+        setICDSearchResults([]); // Clear search results
+        setSearchICD(`${icdItem[0]} (${icdItem[1]})`);
+    };
 
-        setSearchICD(e.target.value)
-        getAllICD(e.target.value)
+    // Auto-search functionality with debouncing for ICD
+    useEffect(() => {
+        const searchICD = async (searchTerm) => {
+            if (!searchTerm || searchTerm.trim().length < 2) {
+                setICDSearchResults([]);
+                return;
+            }
 
-    }
+            // Don't search if an ICD is already selected and the search term matches
+            if (selectedICDInfo && searchTerm.includes(selectedICDInfo.code)) {
+                return;
+            }
+
+            try {
+                setIsLoadingICD(true);
+                const result = await GetDiagnosisICApi({ diagnosis: searchTerm });
+                if (result?.queryresult) {
+                    setICDSearchResults(result.queryresult);
+                } else {
+                    setICDSearchResults([]);
+                }
+            } catch (e) {
+                console.error("Error searching ICD codes:", e.message);
+                setICDSearchResults([]);
+            } finally {
+                setIsLoadingICD(false);
+            }
+        };
+
+        const timeoutId = setTimeout(() => {
+            searchICD(SearchICD);
+        }, 300); // 300ms debounce
+
+        return () => clearTimeout(timeoutId);
+    }, [SearchICD, selectedICDInfo]);
+
+    // Handle search input change and clear selection if user starts typing new search
+    const handleSearchInputChange = (e) => {
+        const value = e.target.value;
+        setSearchICD(value);
+        
+        // Clear selected ICD if user modifies the search significantly
+        if (selectedICDInfo && !value.includes(selectedICDInfo.code)) {
+            setSelectedICDInfo(null);
+            setPayload((prev) => ({
+                ...prev,
+                diagnosisicd10: "",
+            }));
+        }
+    };
 
     const handleSuccess = (message, status) => {
         setShowToast({ show: true, message, status });
@@ -286,11 +323,17 @@ export default function AddClinicalEncounter() {
 
 
     useEffect(() => {
-
-
         getAllVitals()
         getSettings();
+    }, []);
 
+    // Clear search input and ICD list when component unmounts or resets
+    useEffect(() => {
+        return () => {
+            setSearchICD("");
+            setICDSearchResults([]);
+            setSelectedICDInfo(null);
+        };
     }, []);
 
 
@@ -308,369 +351,278 @@ export default function AddClinicalEncounter() {
             <Box>
                 <Button leftIcon={<IoMdArrowRoundBack />} px="40px" w="100px" onClick={() => nav(`${pathname}`)}>Back</Button>
                 <PatientInfoCard />
-                <Accordion defaultIndex={[7]} mt="32px" allowToggle>
-                    <AccordionItem mb="15px" >
+                
+                <Stack spacing={5} mt="32px">
+                    {/* Previous Clinical Encounter Section */}
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
+                        <Text fontSize="xl" fontWeight="bold" mb={4}>Previous Clinical Encounter</Text>
+                        <ClinicalEncounter hide={true} />
+                    </Box>
 
-                        <AccordionButton _hover={{ border: "1px solid #EA5937", color: "#000" }} _focus={{ outline: "none" }} border="1px solid #fff" _expanded={{ rounded: "8px 8px 0px 0px", border: 0 }} bg="#fff" color="#000" rounded="8px">
-                            <Box as='span' flex='1' textAlign='left'>
-                                Previous Clinical Encounter
-                            </Box>
-                            <AccordionIcon />
-                        </AccordionButton>
+                    {/* Vitals Section */}
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
+                        <Text fontSize="xl" fontWeight="bold" mb={4}>Vitals</Text>
+                        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={5}>
+                            <Input type="number" leftIcon={<FaTemperatureHigh />} label="Temperature (C)" value={Payload.temperature} val={Payload.temperature !=="" ? true: false  } onChange={handlePayload} id="temperature" />
+                            <Input type="number" leftIcon={<FaHeartbeat />} label="Heart Rate (bpm)" value={Payload.heartrate} val={Payload.heartrate !=="" ? true: false  } onChange={handlePayload} id="heartrate" />
+                            <Input type="number" leftIcon={<MdBloodtype />} label="Blood Pressure (systolic)(mmHg)" value={Payload.bloodpressuresystolic} val={Payload.bloodpressuresystolic !=="" ? true: false  } onChange={handlePayload} id="bloodpressuresystolic" />
+                            <Input type="number" leftIcon={<MdBloodtype />} label="Blood Pressure (Diastolic)(mmHg)" value={Payload.bloodpressurediastolic} val={Payload.bloodpressurediastolic !=="" ? true: false  } onChange={handlePayload} id="bloodpressurediastolic" />
+                            <Input type="number" leftIcon={<GiEnergyBreath />} label="Respiration (bpm)" value={Payload.respiration} val={Payload.respiration !=="" ? true: false  } onChange={handlePayload} id="respiration" />
+                            <Input type="number" leftIcon={<FaHeartCircleCheck />} label="O2 Saturation (%)" value={Payload.saturation} val={Payload.saturation !=="" ? true: false  } onChange={handlePayload} id="saturation" />
+                            <Input type="number" leftIcon={<FaTextHeight />} label="Height (cm)" value={Payload.height} val={Payload.height !=="" ? true: false  } onChange={handlePayload} id="height" />
+                            <Input type="number" leftIcon={<GiWeight />} label="Weight (kg)" value={Payload.weight} val={Payload.weight !=="" ? true: false  } onChange={handlePayload} id="weight" />
+                        </SimpleGrid>
+                        <Text color="red" mt="20px">Note: Please add at least one vital information</Text>
+                    </Box>
 
-                        <AccordionPanel pb={4} bg="#fff" rounded="0px 0px 8px 8px" >
-                            <ClinicalEncounter hide={true} />
-                        </AccordionPanel>
-                    </AccordionItem>
-                    <AccordionItem mb="15px">
-
-                        <AccordionButton _hover={{ border: "1px solid #EA5937", color: "#000" }} _focus={{ outline: "none" }} border="1px solid #fff" _expanded={{ rounded: "8px 8px 0px 0px", border: 0 }} bg="#fff" color="#000" rounded="8px">
-                            <Box as='span' flex='1' textAlign='left'>
-                                Vital
-                            </Box>
-                            <AccordionIcon />
-                        </AccordionButton>
-
-                        <AccordionPanel pb={4} bg="#fff" rounded="0px 0px 8px 8px">
-                            <SimpleGrid mt="32px" columns={{ base: 1, md: 2 }} spacing={5}>
-                                <Input type="number" leftIcon={<FaTemperatureHigh />} label="Temperature (C)" value={Payload.temperature} val={Payload.temperature !=="" ? true: false  } onChange={handlePayload} id="temperature" />
-                                <Input type="number" leftIcon={<FaHeartbeat />} label="Heart Rate (bpm)" value={Payload.heartrate} val={Payload.heartrate !=="" ? true: false  } onChange={handlePayload} id="heartrate" />
-                                <Input type="number" leftIcon={<MdBloodtype />} label="Blood Pressure (systolic)(mmHg)" value={Payload.bloodpressuresystolic} val={Payload.bloodpressuresystolic !=="" ? true: false  } onChange={handlePayload} id="bloodpressuresystolic" />
-                                <Input type="number" leftIcon={<MdBloodtype />} label="Blood Pressure (Diastolic)(mmHg)" value={Payload.bloodpressurediastolic} val={Payload.bloodpressurediastolic !=="" ? true: false  } onChange={handlePayload} id="bloodpressurediastolic" />
-                                <Input type="number" leftIcon={<GiEnergyBreath />} label="Respiration (bpm)" value={Payload.respiration} val={Payload.respiration !=="" ? true: false  } onChange={handlePayload} id="respiration" />
-                                <Input type="number" leftIcon={<FaHeartCircleCheck />} label="O2 Saturation (%)" value={Payload.saturation} val={Payload.saturation !=="" ? true: false  } onChange={handlePayload} id="saturation" />
-                                <Input type="number" leftIcon={<FaTextHeight />} label="Height (cm)" value={Payload.height} val={Payload.height !=="" ? true: false  } onChange={handlePayload} id="height" />
-                                <Input type="number" leftIcon={<GiWeight />} label="Weight (kg)" value={Payload.weight} val={Payload.weight !=="" ? true: false  } onChange={handlePayload} id="weight" />
-
-
-                            </SimpleGrid>
-                            <Text color="red" mt="20px">Note: Please add at least one vital information </Text>
-                        </AccordionPanel>
-                    </AccordionItem>
-
-                    <AccordionItem mb="15px">
-
-                        <AccordionButton _hover={{ border: "1px solid #EA5937", color: "#000" }} _focus={{ outline: "none" }} border="1px solid #fff" _expanded={{ rounded: "8px 8px 0px 0px", border: 0 }} bg="#fff" color="#000" rounded="8px">
-                            <Box as='span' flex='1' textAlign='left'>
-                                Clinical Notes
-                            </Box>
-                            <AccordionIcon />
-                        </AccordionButton>
-
-                        <AccordionPanel pb={4} bg="#fff" rounded="0px 0px 8px 8px">
-                            <Stack spacing={4} pt="10">
-
-                                <TextArea label="Clinical Note" value={Payload.clinicalnote} onChange={handlePayload} id="clinicalnote" />
-
-
-                            </Stack>
-                            <Flex justifyContent={"flex-end"} mt="2">
-                                <Button
-
-                                    onClick={addClinicalNotes}
-
-                                    w={["100%", "100%", "184px", "184px"]}
-
-                                >
+                    {/* Clinical Notes Section */}
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
+                        <Text fontSize="xl" fontWeight="bold" mb={10}>Clinical Notes</Text>
+                        <Stack spacing={4}>
+                            <TextArea label="Clinical Note" value={Payload.clinicalnote} onChange={handlePayload} id="clinicalnote" />
+                            <Flex justifyContent="flex-end">
+                                <Button onClick={addClinicalNotes} w={{ base: "100%", md: "184px" }}>
                                     Add
                                 </Button>
                             </Flex>
-
-
-
-                            <SimpleGrid mt="12px" columns={{ base: 2, md: 2 }} spacing={2}>
-
-                                {
-                                    ClinicalNotes?.map((item, i) => (
-
-                                        <Flex key={i} cursor="pointer" px="10px" py="10px" rounded={"20px"} fontSize="12px" _hover={{ bg: "blue.blue400" }} bg="blue.blue500" w="100%" justifyContent="space-between" alignItems="center" >
-                                            <Text color="#fff" fontWeight="500" textTransform="capitalize" >{item}</Text>
-                                            <Box fontSize="20px" color="#fff" onClick={() => removeClinicalNotes(item)}><IoIosCloseCircle /></Box>
-                                        </Flex>
-                                    ))
-                                }
-
+                            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={2}>
+                                {ClinicalNotes?.map((item, i) => (
+                                    <Flex key={i} cursor="pointer" px="10px" py="10px" rounded="20px" fontSize="12px" _hover={{ bg: "blue.blue400" }} bg="blue.blue500" w="100%" justifyContent="space-between" alignItems="center" >
+                                        <Text color="#fff" fontWeight="500" textTransform="capitalize" >{item}</Text>
+                                        <Box fontSize="20px" color="#fff" onClick={() => removeClinicalNotes(item)}><IoIosCloseCircle /></Box>
+                                    </Flex>
+                                ))}
                             </SimpleGrid>
+                        </Stack>
+                    </Box>
 
-
-                        </AccordionPanel>
-                    </AccordionItem>
-                    <AccordionItem mb="15px">
-
-                        <AccordionButton _hover={{ border: "1px solid #EA5937", color: "#000" }} _focus={{ outline: "none" }} border="1px solid #fff" _expanded={{ rounded: "8px 8px 0px 0px", border: 0 }} bg="#fff" color="#000" rounded="8px">
-                            <Box as='span' flex='1' textAlign='left'>
-                                Assessment Notes
-                            </Box>
-                            <AccordionIcon />
-                        </AccordionButton>
-
-                        <AccordionPanel pb={4} bg="#fff" rounded="0px 0px 8px 8px">
-                            <Stack spacing={4} pt="10">
-
-                                <TextArea label=" Assessment Note" value={Payload.assessmentnote} onChange={handlePayload} id="assessmentnote" />
-
-
-                            </Stack>
-                            <Flex justifyContent={"flex-end"} mt="2">
-                                <Button
-
-                                    onClick={addAssessmentNotes}
-
-                                    w={["100%", "100%", "184px", "184px"]}
-
-                                >
+                    {/* Assessment Notes Section */}
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
+                        <Text fontSize="xl" fontWeight="bold" mb={10}>Assessment Notes</Text>
+                        <Stack spacing={4}>
+                            <TextArea label="Assessment Note" value={Payload.assessmentnote} onChange={handlePayload} id="assessmentnote" />
+                            <Flex justifyContent="flex-end">
+                                <Button onClick={addAssessmentNotes} w={{ base: "100%", md: "184px" }}>
                                     Add
                                 </Button>
                             </Flex>
-
-
-
-                            <SimpleGrid mt="12px" columns={{ base: 2, md: 2 }} spacing={2}>
-
-                                {
-                                    AssessmentNotes?.map((item, i) => (
-
-                                        <Flex key={i} cursor="pointer" px="10px" py="10px" rounded={"20px"} fontSize="12px" _hover={{ bg: "blue.blue400" }} bg="blue.blue500" w="100%" justifyContent="space-between" alignItems="center" >
-                                            <Text color="#fff" fontWeight="500" textTransform="capitalize" >{item}</Text>
-                                            <Box fontSize="20px" color="#fff" onClick={() => removeAssessment(item)}><IoIosCloseCircle /></Box>
-                                        </Flex>
-                                    ))
-                                }
-
+                            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={2}>
+                                {AssessmentNotes?.map((item, i) => (
+                                    <Flex key={i} cursor="pointer" px="10px" py="10px" rounded="20px" fontSize="12px" _hover={{ bg: "blue.blue400" }} bg="blue.blue500" w="100%" justifyContent="space-between" alignItems="center" >
+                                        <Text color="#fff" fontWeight="500" textTransform="capitalize" >{item}</Text>
+                                        <Box fontSize="20px" color="#fff" onClick={() => removeAssessment(item)}><IoIosCloseCircle /></Box>
+                                    </Flex>
+                                ))}
                             </SimpleGrid>
+                        </Stack>
+                    </Box>
 
-
-                        </AccordionPanel>
-                    </AccordionItem>
-                    <AccordionItem mb="15px">
-
-                        <AccordionButton _hover={{ border: "1px solid #EA5937", color: "#000" }} _focus={{ outline: "none" }} border="1px solid #fff" _expanded={{ rounded: "8px 8px 0px 0px", border: 0 }} bg="#fff" color="#000" rounded="8px">
-                            <Box as='span' flex='1' textAlign='left'>
-                                Diagnosis Notes
-                            </Box>
-                            <AccordionIcon />
-                        </AccordionButton>
-
-                        <AccordionPanel pb={4} bg="#fff" rounded="0px 0px 8px 8px">
-                            <Stack spacing={4} pt="10">
-
-                                <TextArea label=" Diagnosis Note" value={Payload.diagnosisnote} onChange={handlePayload} id="diagnosisnote" />
-
-
-                            </Stack>
-                            <Flex justifyContent={"flex-end"} mt="2">
-                                <Button
-
-                                    onClick={addDiagnosisNotes}
-
-                                    w={["100%", "100%", "184px", "184px"]}
-
-                                >
+                    {/* Diagnosis Notes Section */}
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
+                        <Text fontSize="xl" fontWeight="bold"  mb={10}>Diagnosis Notes</Text>
+                        <Stack spacing={4}>
+                            <TextArea label="Diagnosis Note" value={Payload.diagnosisnote} onChange={handlePayload} id="diagnosisnote" />
+                            <Flex justifyContent="flex-end">
+                                <Button onClick={addDiagnosisNotes} w={{ base: "100%", md: "184px" }}>
                                     Add
                                 </Button>
                             </Flex>
-
-
-
-                            <SimpleGrid mt="12px" columns={{ base: 2, md: 2 }} spacing={2}>
-
-                                {
-                                    DiagnosisNotes?.map((item, i) => (
-
-                                        <Flex key={i} cursor="pointer" px="10px" py="10px" rounded={"20px"} fontSize="12px" _hover={{ bg: "blue.blue400" }} bg="blue.blue500" w="100%" justifyContent="space-between" alignItems="center" >
-                                            <Text color="#fff" fontWeight="500" textTransform="capitalize" >{item}</Text>
-                                            <Box fontSize="20px" color="#fff" onClick={() => removeDiagnosisNotes(item)}><IoIosCloseCircle /></Box>
-                                        </Flex>
-                                    ))
-                                }
-
+                            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={2}>
+                                {DiagnosisNotes?.map((item, i) => (
+                                    <Flex key={i} cursor="pointer" px="10px" py="10px" rounded="20px" fontSize="12px" _hover={{ bg: "blue.blue400" }} bg="blue.blue500" w="100%" justifyContent="space-between" alignItems="center" >
+                                        <Text color="#fff" fontWeight="500" textTransform="capitalize" >{item}</Text>
+                                        <Box fontSize="20px" color="#fff" onClick={() => removeDiagnosisNotes(item)}><IoIosCloseCircle /></Box>
+                                    </Flex>
+                                ))}
                             </SimpleGrid>
+                        </Stack>
+                    </Box>
 
+                    {/* Diagnosis ICD Section */}
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
+                        <Text fontSize="xl" fontWeight="bold" mb={4}>Diagnosis ICD 11</Text>
+                        <Box position="relative">
+                            <Input 
+                                label="Search ICD 11" 
+                                placeholder="Enter diagnosis name or ICD code"
+                                value={SearchICD} 
+                                onChange={handleSearchInputChange}
+                                leftIcon={<FiSearch size={16} color="blue.500" />}
+                            />
+                            
+                            {/* Selected ICD Display */}
+                            {selectedICDInfo && (
+                                <Box mt={2} p={3} bg="blue.50" borderRadius="md" border="1px solid" borderColor="blue.200">
+                                    <HStack spacing={2}>
+                                        <Badge colorScheme="blue" variant="solid">Selected</Badge>
+                                        <Text fontWeight="medium">{selectedICDInfo.name}</Text>
+                                        <Text fontSize="sm" color="gray.600">Code: {selectedICDInfo.code}</Text>
+                                    </HStack>
+                                </Box>
+                            )}
 
-                        </AccordionPanel>
-                    </AccordionItem>
-                    <AccordionItem mb="15px">
-
-                        <AccordionButton _hover={{ border: "1px solid #EA5937", color: "#000" }} _focus={{ outline: "none" }} border="1px solid #fff" _expanded={{ rounded: "8px 8px 0px 0px", border: 0 }} bg="#fff" color="#000" rounded="8px">
-                            <Box as='span' flex='1' textAlign='left'>
-                                Diagnosis ICD
-                            </Box>
-                            <AccordionIcon />
-                        </AccordionButton>
-
-                        <AccordionPanel pb={4} bg="#fff" rounded="0px 0px 8px 8px">
-                            <SimpleGrid mt="12px" pt="12px" columns={{ base: 1, md: 1 }} spacing={2}>
-
-                                <Input label="Search ICD 11" value={SearchICD} onChange={handleSearch} />
-
-                                <Select fontSize={Payload.diagnosisicd10 !== "" ? "16px" : "13px"} h="45px" borderWidth="2px" borderColor="#6B7280" id="diagnosisicd10"
-                                    value={Payload.diagnosisicd10} onChange={handlePayload} placeholder="Select diagnosis icd 11" >
-
-                                    {
-                                        DiagnosisICD.map((item, i) => (
-
-                                            <option key={i} value={`${item[1]}`}>{`${item[0]} ~ ${item[1]}`}</option>
-                                        ))
-                                    }
-
-
-                                </Select>
-
-                            </SimpleGrid>
-
-                        </AccordionPanel>
-                    </AccordionItem>
-                    <AccordionItem mb="15px">
-
-                        <AccordionButton _hover={{ border: "1px solid #EA5937", color: "#000" }} _focus={{ outline: "none" }} border="1px solid #fff" _expanded={{ rounded: "8px 8px 0px 0px", border: 0 }} bg="#fff" color="#000" rounded="8px">
-                            <Box as='span' flex='1' textAlign='left'>
-                                Plan Notes
-                            </Box>
-                            <AccordionIcon />
-                        </AccordionButton>
-
-                        <AccordionPanel pb={4} bg="#fff" rounded="0px 0px 8px 8px">
-                            <Stack spacing={4} pt="10">
-
-                                <TextArea label=" Plan Note" value={Payload.plannote} onChange={handlePayload} id="plannote" />
-
-
-                            </Stack>
-                            <Flex justifyContent={"flex-end"} mt="2">
-                                <Button
-
-                                    onClick={addPlanNotes}
-
-                                    w={["100%", "100%", "184px", "184px"]}
-
+                            {/* Search Results Dropdown */}
+                            {icdSearchResults.length > 0 && !selectedICDInfo && (
+                                <Box
+                                    position="absolute"
+                                    top="100%"
+                                    left={0}
+                                    right={0}
+                                    zIndex={1000}
+                                    bg="white"
+                                    border="1px solid"
+                                    borderColor="gray.200"
+                                    borderRadius="md"
+                                    boxShadow="xl"
+                                    maxH="400px"
+                                    overflowY="auto"
+                                    mt={1}
                                 >
+                                    {icdSearchResults.map((item, index) => (
+                                        <Box
+                                            key={index}
+                                            p={4}
+                                            cursor="pointer"
+                                            _hover={{ bg: "blue.50", borderColor: "blue.200" }}
+                                            onClick={() => handleICDSelect(item)}
+                                            borderBottom="1px solid"
+                                            borderColor="gray.100"
+                                            _last={{ borderBottom: "none" }}
+                                            transition="all 0.2s"
+                                        >
+                                            <Text fontWeight="medium" fontSize="sm" color="gray.800">
+                                                {item[0]}
+                                            </Text>
+                                            <Text fontSize="xs" color="blue.600" mt={1}>
+                                                Code: {item[1]}
+                                            </Text>
+                                        </Box>
+                                    ))}
+                                </Box>
+                            )}
+
+                            {/* Loading Indicator */}
+                            {isLoadingICD && (
+                                <Box
+                                    position="absolute"
+                                    top="100%"
+                                    left={0}
+                                    right={0}
+                                    zIndex={1000}
+                                    bg="white"
+                                    border="1px solid"
+                                    borderColor="gray.200"
+                                    borderRadius="md"
+                                    boxShadow="lg"
+                                    p={4}
+                                    mt={1}
+                                >
+                                    <Text color="gray.500" fontSize="sm">Searching ICD codes...</Text>
+                                </Box>
+                            )}
+                        </Box>
+                    </Box>
+
+                    {/* Plan Notes Section */}
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
+                        <Text fontSize="xl" fontWeight="bold"  mb={10}>Plan Notes</Text>
+                        <Stack spacing={4}>
+                            <TextArea label="Plan Note" value={Payload.plannote} onChange={handlePayload} id="plannote" />
+                            <Flex justifyContent="flex-end">
+                                <Button onClick={addPlanNotes} w={{ base: "100%", md: "184px" }}>
                                     Add
                                 </Button>
                             </Flex>
-
-
-
-                            <SimpleGrid mt="12px" columns={{ base: 2, md: 2 }} spacing={2}>
-
-                                {
-                                    PlanNotes?.map((item, i) => (
-
-                                        <Flex key={i} cursor="pointer" px="10px" py="10px" rounded={"20px"} fontSize="12px" _hover={{ bg: "blue.blue400" }} bg="blue.blue500" w="100%" justifyContent="space-between" alignItems="center" >
-                                            <Text color="#fff" fontWeight="500" textTransform="capitalize" >{item}</Text>
-                                            <Box fontSize="20px" color="#fff" onClick={() => removePlanNotes(item)}><IoIosCloseCircle /></Box>
-                                        </Flex>
-                                    ))
-                                }
-
+                            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={2}>
+                                {PlanNotes?.map((item, i) => (
+                                    <Flex key={i} cursor="pointer" px="10px" py="10px" rounded="20px" fontSize="12px" _hover={{ bg: "blue.blue400" }} bg="blue.blue500" w="100%" justifyContent="space-between" alignItems="center" >
+                                        <Text color="#fff" fontWeight="500" textTransform="capitalize" >{item}</Text>
+                                        <Box fontSize="20px" color="#fff" onClick={() => removePlanNotes(item)}><IoIosCloseCircle /></Box>
+                                    </Flex>
+                                ))}
                             </SimpleGrid>
+                        </Stack>
+                    </Box>
 
-
-                        </AccordionPanel>
-                    </AccordionItem>
-                    <AccordionItem mb="15px">
-
-                        <AccordionButton _hover={{ border: "1px solid #EA5937", color: "#000" }} _focus={{ outline: "none" }} border="1px solid #fff" _expanded={{ rounded: "8px 8px 0px 0px", border: 0 }} bg="#fff" color="#000" rounded="8px">
-                            <Box as='span' flex='1' textAlign='left'>
-                                Plan
-                            </Box>
-                            <AccordionIcon />
-                        </AccordionButton>
-
-                        <AccordionPanel pb={4} bg="#fff" rounded="0px 0px 8px 8px">
-                            <SimpleGrid mt="30px" mb={2} columns={{ base: 1, md: 1 }} spacing={4} >
-
-                                <Select fontSize={Payload.outcome !== "" ? "16px" : "13px"} h="45px" borderWidth="2px" borderColor="#6B7280" id="outcome"
-                                    value={Payload.outcome} onChange={handlePayload} placeholder="Select outcome" >
-                                    <option value={`Treated`}>Treated</option>
-                                    <option value={`Admitted`}>Admitted</option>
-                                    <option value={`Referred`}>Referred</option>
-                                    <option value={`Deceased`}>Deceased</option>
-                                    <option value={`Other`}>Other</option>
-
-                                </Select>
-
-
-                            </SimpleGrid>
-                            <Flex justifyContent="space-between" flexWrap="wrap" mt="15px" w={["100%", "100%", "100%", "100%"]} >
+                    {/* Plan Section */}
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
+                        <Text fontSize="xl" fontWeight="bold" mb={4}>Plan</Text>
+                        <Stack spacing={4}>
+                            <Select fontSize={Payload.outcome !== "" ? "16px" : "13px"} h="45px" borderWidth="2px" borderColor="#6B7280" id="outcome"
+                                value={Payload.outcome} onChange={handlePayload} placeholder="Select outcome" >
+                                <option value={`Treated`}>Treated</option>
+                                <option value={`Admitted`}>Admitted</option>
+                                <option value={`Referred`}>Referred</option>
+                                <option value={`Deceased`}>Deceased</option>
+                                <option value={`Other`}>Other</option>
+                            </Select>
+                            <Flex justifyContent="space-between" flexWrap="wrap" gap={3}>
                                 <Tooltip label='Lab Order'>
-                                    <Box onClick={() => setOpenLabModal(true)} cursor="pointer" px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500">Lab </Box>
-
+                                    <Box onClick={() => setOpenLabModal(true)} cursor="pointer" px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500">Lab</Box>
                                 </Tooltip>
                                 <Tooltip label='Radiology Order'>
-                                    <Box onClick={() => setOpenRadiologyModal(true)} cursor="pointer" px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500">Radiology </Box>
+                                    <Box onClick={() => setOpenRadiologyModal(true)} cursor="pointer" px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500">Radiology</Box>
                                 </Tooltip>
                                 <Tooltip label='Prescribe Drug'>
-                                    <Box cursor="pointer" onClick={() => setOpenPrescriptionModal(true)} px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500">Prescription </Box>
+                                    <Box cursor="pointer" onClick={() => setOpenPrescriptionModal(true)} px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500">Prescription</Box>
                                 </Tooltip>
                                 <Tooltip label='Admit Patient'>
-                                    <Box onClick={() => setOpenAdmissionModal(true)} cursor="pointer" px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500">Admission </Box>
+                                    <Box onClick={() => setOpenAdmissionModal(true)} cursor="pointer" px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500">Admission</Box>
                                 </Tooltip>
                                 <Tooltip label='Procedure'>
-                                    <Box onClick={() => setOpenProcedureModal(true)} cursor="pointer" px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500">Procedure </Box>
+                                    <Box onClick={() => setOpenProcedureModal(true)} cursor="pointer" px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500">Procedure</Box>
                                 </Tooltip>
                                 <Tooltip label='Refer Patient To Another Doctor'>
-                                    <Box onClick={() => setOpenReferralModal(true)} cursor="pointer" px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500">Referral </Box>
+                                    <Box onClick={() => setOpenReferralModal(true)} cursor="pointer" px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500">Referral</Box>
                                 </Tooltip>
                             </Flex>
-                        </AccordionPanel>
-                        <AdmissionModal isOpen={OpenAdmissionModal} oldPayload={{ _id: id, appointmentid: id }} onClose={() => setOpenAdmissionModal(false)} type={ModalState} activateNotifications={activateNotifications} />
+                        </Stack>
+                    </Box>
+                </Stack>
 
-                        <RadiologyOrderRequestModal
-                            isOpen={OpenRadiologyModal}
-                            onClose={() => setOpenRadiologyModal(false)}
-                            admissionId={null}
-                            type={"create"}
-                            initialData={null}
-                            oldPayload={{ id: id }}
-                            onSuccess={handleSuccess}
-                        />
-
-                        <CreateProcedureModal
-                            isOpen={OpenProcedureModal}
-                            onClose={() => setOpenProcedureModal(false)}
-                            type={"new"}
-                            activateNotifications={activateNotifications}
-                            oldPayload={{ id: id }}
-
-                        />
-
-                        <CreateReferralModal isOpen={OpenReferralModal} onClose={() => setOpenReferralModal(false)} type={"new"} activateNotifications={activateNotifications} />
-
-                    </AccordionItem>
-
-
-                </Accordion>
-
-                <Flex justifyContent="center">
-
+                <Flex justifyContent="center" mt={8}>
                     <Flex
                         justifyContent="space-between"
                         flexWrap="wrap"
-                        mt={["10px", "10px", "10px", "10px"]}
-                        w={["100%", "100%", "60%", "60%"]}
+                        w={{ base: "100%", md: "60%" }}
+                        gap={4}
                     >
-                      
                         <Button
-                            w={["100%", "100%", "184px", "184px"]}
+                            w={{ base: "100%", md: "184px" }}
                             onClick={handleInprogress}
                             isLoading={Loading}
-                           
-
                         >
                             Save as In-Progress
                         </Button>
                         <Button
-                           
                             onClick={handleCompleted}
                             isLoading={LoadingCompleted}
-                            w={["100%", "100%", "184px", "184px"]}
-
+                            w={{ base: "100%", md: "184px" }}
                         >
                             Save as Completed
                         </Button>
-
                     </Flex>
                 </Flex>
+
+                {/* Modals */}
+                <AdmissionModal isOpen={OpenAdmissionModal} oldPayload={{ _id: id, appointmentid: id }} onClose={() => setOpenAdmissionModal(false)} type={ModalState} activateNotifications={activateNotifications} />
+                <RadiologyOrderRequestModal
+                    isOpen={OpenRadiologyModal}
+                    onClose={() => setOpenRadiologyModal(false)}
+                    admissionId={null}
+                    type={"create"}
+                    initialData={null}
+                    oldPayload={{ id: id }}
+                    onSuccess={handleSuccess}
+                />
+                <CreateProcedureModal
+                    isOpen={OpenProcedureModal}
+                    onClose={() => setOpenProcedureModal(false)}
+                    type={"new"}
+                    activateNotifications={activateNotifications}
+                    oldPayload={{ id: id }}
+                />
+                <CreateReferralModal isOpen={OpenReferralModal} onClose={() => setOpenReferralModal(false)} type={"new"} activateNotifications={activateNotifications} />
                 <PreviewEncounter isOpen={OpenPreview} onClose={() => setOpenPreview(false)} setOldPayload={setPayload} oldPayload={Payload} />
                 <LabRequestModal isOpen={OpenLabModal} oldPayload={{ _id: id, appointmentid: id }} onClose={() => setOpenLabModal(false)} type={ModalState} activateNotifications={activateNotifications} />
                 <CreatePrescriptionModal
