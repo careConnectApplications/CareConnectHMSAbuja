@@ -25,6 +25,7 @@ import {
   UpdateProcedureAPI,
   GetAllClinicApi,
   SearchProcedureApi,
+  GetPriceOfService,
 } from "../Utils/ApiCalls";
 
 export default function CreateProcedureModal({
@@ -66,6 +67,7 @@ export default function CreateProcedureModal({
   const [searchProcedureQuery, setSearchProcedureQuery] = useState("");
   const [procedureSearchResults, setProcedureSearchResults] = useState([]);
   const [isLoadingProcedures, setIsLoadingProcedures] = useState(false);
+  const [price, setPrice] = useState(0);
 
   const patientId = localStorage.getItem("patientId");
 
@@ -150,11 +152,32 @@ export default function CreateProcedureModal({
 
  
   const handlePayload = (e) => {
-    setPayload({ ...Payload, [e.target.id]: e.target.value });
+    const { id, value } = e.target;
+    setPayload({ ...Payload, [id]: value });
 
-    if (e.target.id === "procedure")   setProcedureArr([...ProcedureArr, e.target.value]);
-    if (e.target.id === "cptcodes")    setCptcodesArr([...CptcodesArr, e.target.value]);
-    if (e.target.id === "dxcodes")     setDxcodesArr([...DxcodesArr, e.target.value]);
+    if (id === "procedure") {
+      setProcedureArr([...ProcedureArr, value]);
+      getPrice(value);
+    }
+    if (id === "cptcodes") setCptcodesArr([...CptcodesArr, value]);
+    if (id === "dxcodes") setDxcodesArr([...DxcodesArr, value]);
+  };
+
+  const getPrice = async (procedureName) => {
+    try {
+      const patientId = localStorage.getItem("patientId");
+      const result = await GetPriceOfService({ servicetype: procedureName }, patientId);
+      if (result.status) {
+        setPrice(result.price);
+      } else {
+        setPrice(0);
+        activateNotifications("Could not fetch price for the selected procedure.", "warning");
+      }
+    } catch (error) {
+      console.error("Error fetching price:", error);
+      setPrice(0);
+      activateNotifications("An error occurred while fetching the price.", "error");
+    }
   };
 
   const handleUpdatedPayload = (e) =>
@@ -372,6 +395,12 @@ export default function CreateProcedureModal({
 
                 <ChipGrid items={DxcodesArr} removeFn={removeDxcodesArr} />
               </SimpleGrid>
+
+              {price > 0 && (
+                <Box mt="4">
+                  <Text fontWeight="bold">Price: {price}</Text>
+                </Box>
+              )}
 
               <Button mt="32px" isLoading={Loading} onClick={handleSubmitNew}>
                 Proceed

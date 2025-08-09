@@ -21,6 +21,7 @@ import {
   SettingsApi,
   RequestLabOrderApi,
   GetAllClinicApi,
+  GetPriceOfService,
 } from "../Utils/ApiCalls";
 import { MdMiscellaneousServices } from "react-icons/md";
 import { FaMoneyBill } from "react-icons/fa";
@@ -42,6 +43,7 @@ export default function LabRequestModal({
   const [Loading, setLoading] = useState(false);
   const [Settings, setSettings] = useState({});
   const [TestNames, setTestNames] = useState([]);
+  const [Price, setPrice] = useState(0);
   // Expanded payload includes department (lab) and testNames
   const [Payload, setPayload] = useState({
     department: "",
@@ -64,9 +66,32 @@ export default function LabRequestModal({
   // Generic handler to update the payload.
   // If the event is for testNames, also append the selected test to TestNames array.
   const handlePayload = (e) => {
-    setPayload({ ...Payload, [e.target.id]: e.target.value });
-    if (e.target.id === "testNames") {
-      setTestNames([...TestNames, e.target.value]);
+    const { id, value } = e.target;
+    setPayload({ ...Payload, [id]: value });
+
+    if (id === "testNames") {
+      if (value && !TestNames.includes(value)) {
+        setTestNames([...TestNames, value]);
+        getPrice(value); // Fetch price for the selected test
+      }
+    }
+  };
+
+  const getPrice = async (testName) => {
+    try {
+      const patientId = localStorage.getItem("patientId");
+      const result = await GetPriceOfService({ servicetype: testName }, patientId);
+      if (result.status) {
+        setPrice(result.price);
+      } else {
+        // Handle case where price is not found or API returns an error
+        setPrice(0);
+        activateNotifications("Could not fetch price for the selected test.", "warning");
+      }
+    } catch (error) {
+      console.error("Error fetching price:", error);
+      setPrice(0);
+      activateNotifications("An error occurred while fetching the price.", "error");
     }
   };
 
@@ -222,6 +247,13 @@ export default function LabRequestModal({
                 </Flex>
               ))}
             </SimpleGrid>
+
+            {/* Display the price */}
+            {Price > 0 && (
+              <Box mt="20px">
+                <Text fontWeight="bold">Price: {Price}</Text>
+              </Box>
+            )}
 
             <Button mt="32px" onClick={RequestLabOrder} isLoading={Loading}>
               Request

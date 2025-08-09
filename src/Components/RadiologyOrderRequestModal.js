@@ -28,6 +28,7 @@ import {
   UpdateRadiologyApi,
   SettingsApi,
   SearchRadiologyApi,
+  GetPriceOfService,
 } from "../Utils/ApiCalls";
 
 export default function RadiologyOrderRequestModal({
@@ -39,25 +40,21 @@ export default function RadiologyOrderRequestModal({
   initialData,
   oldPayload,
 }) {
-
-  const [note, setNote]                    = useState("");
-  const [testNames, setTestNames]          = useState([]);
-  const [testNameInput, setTestNameInput]  = useState("");
-  const [availableTests, setAvailableTests]= useState([]);
-
-  const [searchTestQuery, setSearchTestQuery]       = useState("");
-  const [testSearchResults, setTestSearchResults]   = useState([]);
-  const [isLoadingTests, setIsLoadingTests]         = useState(false);
-
-  const [loading, setLoading]              = useState(false);
-  const [toast, setToast]                  = useState(null);
-
+  const [note, setNote] = useState("");
+  const [testNames, setTestNames] = useState([]);
+  const [testNameInput, setTestNameInput] = useState("");
+  const [availableTests, setAvailableTests] = useState([]);
+  const [searchTestQuery, setSearchTestQuery] = useState("");
+  const [testSearchResults, setTestSearchResults] = useState([]);
+  const [isLoadingTests, setIsLoadingTests] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [toast, setToast] = useState(null);
+  const [testPrices, setTestPrices] = useState({}); // New state for storing test prices
 
   const showToast = ({ status, message }) => {
     setToast({ status, message });
     setTimeout(() => setToast(null), 2000);
   };
-
 
   useEffect(() => {
     if (!isOpen) return;
@@ -94,7 +91,6 @@ export default function RadiologyOrderRequestModal({
     fetchAvailableTests();
   }, [isOpen]);
 
-
   useEffect(() => {
     const fetchTests = async () => {
       if (!searchTestQuery.trim()) {
@@ -115,19 +111,71 @@ export default function RadiologyOrderRequestModal({
     fetchTests();
   }, [searchTestQuery]);
 
+  // New effect to fetch prices when testNames changes
+  useEffect(() => {
+    const fetchTestPrices = async () => {
+      if (testNames.length === 0) {
+        setTestPrices({});
+        return;
+      }
+
+      const patientId = localStorage.getItem("patientId");
+      if (!patientId) return;
+
+      const newPrices = { ...testPrices };
+      let hasChanges = false;
+
+      // Fetch prices for newly added tests that don't have prices yet
+      for (const test of testNames) {
+        if (!newPrices[test]) {
+          try {
+            const response = await GetPriceOfService(
+              { servicetype: test },
+              patientId
+            );
+            newPrices[test] = response.data?.price || "N/A";
+            hasChanges = true;
+          } catch (error) {
+            console.error(`Error fetching price for ${test}:`, error);
+            newPrices[test] = "N/A";
+            hasChanges = true;
+          }
+        }
+      }
+
+      // Remove prices for tests that are no longer in the list
+      Object.keys(newPrices).forEach((test) => {
+        if (!testNames.includes(test)) {
+          delete newPrices[test];
+          hasChanges = true;
+        }
+      });
+
+      if (hasChanges) {
+        setTestPrices(newPrices);
+      }
+    };
+
+    fetchTestPrices();
+  }, [testNames]);
+
   const addTestName = () => {
     if (!testNameInput.trim()) return;
     setTestNames([...testNames, testNameInput.trim()]);
     setTestNameInput("");
   };
-  const removeTestName = (name) =>
-    setTestNames(testNames.filter((t) => t !== name));
 
- 
+  const removeTestName = (name) => {
+    setTestNames(testNames.filter((t) => t !== name));
+    // Don't remove from testPrices immediately - let the useEffect handle it
+  };
 
   const handleSubmit = async () => {
     if (testNames.length === 0) {
-      showToast({ status: "error", message: "At least one test name is required." });
+      showToast({
+        status: "error",
+        message: "At least one test name is required.",
+      });
       return;
     }
     if (!note.trim()) {
@@ -162,10 +210,13 @@ export default function RadiologyOrderRequestModal({
       setTestNameInput("");
       setSearchTestQuery("");
       setTestSearchResults([]);
+      setTestPrices({});
     } catch (err) {
       showToast({
         status: "error",
-        message: `Failed to ${type === "edit" ? "update" : "create"} radiology order: ${err.message}`,
+        message: `Failed to ${
+          type === "edit" ? "update" : "create"
+        } radiology order: ${err.message}`,
       });
       onClose();
     } finally {
@@ -175,6 +226,12 @@ export default function RadiologyOrderRequestModal({
 
   const isSubmitDisabled = loading || testNames.length === 0 || !note.trim();
 
+  // Calculate total price
+  const totalPrice = Object.values(testPrices).reduce((sum, price) => {
+    if (typeof price === "number") return sum + price;
+    return sum;
+  }, 0);
+
   return (
     <>
       {toast && <ShowToast status={toast.status} message={toast.message} />}
@@ -183,7 +240,9 @@ export default function RadiologyOrderRequestModal({
         <ModalOverlay />
         <ModalContent maxW={["90%", "600px"]}>
           <ModalHeader fontSize={["lg", "xl"]}>
-            {type === "edit" ? "Edit Radiology Order Request" : "Create Radiology Order Request"}
+            {type === "edit"
+              ? "Edit Radiology Order Request"
+              : "Create Radiology Order Request"}
           </ModalHeader>
 
           <ModalCloseButton />
@@ -200,15 +259,23 @@ export default function RadiologyOrderRequestModal({
               />
 
               {/* -------- Test dropdown & add button -------- */}
-              <Flex direction={{ base: "column", md: "row" }} alignItems={{ base: "stretch", md: "center" }}>
+              <Flex
+                direction={{ base: "column", md: "row" }}
+                alignItems={{ base: "stretch", md: "center" }}
+              >
                 <Box flex="1" mr={{ base: 0, md: "2" }}>
                   <Select
-                    placeholder={isLoadingTests ? "Loading tests..." : "Select test name"}
+                    placeholder={
+                      isLoadingTests ? "Loading tests..." : "Select test name"
+                    }
                     value={testNameInput}
                     onChange={(e) => setTestNameInput(e.target.value)}
                     isDisabled={isLoadingTests}
                   >
-                    {(searchTestQuery.trim() ? testSearchResults : availableTests).map((t, idx) => (
+                    {(searchTestQuery.trim()
+                      ? testSearchResults
+                      : availableTests
+                    ).map((t, idx) => (
                       <option
                         key={searchTestQuery.trim() ? t._id : idx}
                         value={searchTestQuery.trim() ? t.servicetype : t}
@@ -231,7 +298,7 @@ export default function RadiologyOrderRequestModal({
                 </Button>
               </Flex>
 
-              {/* -------- Test chips -------- */}
+              {/* -------- Test chips with prices -------- */}
               <SimpleGrid columns={{ base: 2, md: 4 }} spacing={2}>
                 {testNames.map((item, idx) => (
                   <Flex
@@ -248,15 +315,37 @@ export default function RadiologyOrderRequestModal({
                     justifyContent="space-between"
                     alignItems="center"
                   >
-                    <Text color="#fff" fontWeight="500" textTransform="capitalize">
-                      {item}
-                    </Text>
-                    <Box fontSize="20px" color="#fff" onClick={() => removeTestName(item)}>
+                    <Box>
+                      <Text
+                        color="#fff"
+                        fontWeight="500"
+                        textTransform="capitalize"
+                      >
+                        {item}
+                      </Text>
+                      <Text fontSize="10px" color="#fff">
+                        Price: {testPrices[item] || "Loading..."}
+                      </Text>
+                    </Box>
+                    <Box
+                      fontSize="20px"
+                      color="#fff"
+                      onClick={() => removeTestName(item)}
+                    >
                       <IoIosCloseCircle />
                     </Box>
                   </Flex>
                 ))}
               </SimpleGrid>
+
+              {/* -------- Total Price -------- */}
+              {testNames.length > 0 && (
+                <Flex justifyContent="flex-end">
+                  <Badge colorScheme="green" fontSize="md" px={3} py={1}>
+                    Total: {totalPrice.toFixed(2)}
+                  </Badge>
+                </Flex>
+              )}
 
               {/* -------- Note -------- */}
               <Input
@@ -271,7 +360,12 @@ export default function RadiologyOrderRequestModal({
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" onClick={handleSubmit} disabled={isSubmitDisabled} isLoading={loading}>
+            <Button
+              colorScheme="blue"
+              onClick={handleSubmit}
+              disabled={isSubmitDisabled}
+              isLoading={loading}
+            >
               {type === "edit" ? "Update" : "Submit"}
             </Button>
           </ModalFooter>
