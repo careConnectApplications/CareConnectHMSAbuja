@@ -335,7 +335,7 @@ export default function CreateHistopathologyModal({
                 <CheckboxGroup colorScheme="blue" onChange={handleCheckboxChange} value={payload.examTypes}>
                   <Stack spacing={2}>
                   {
-                    Settings.map((examType) => (
+                    Settings?.map((examType) => (
                       <Checkbox key={examType} value={examType}>
                         {examType}
                       </Checkbox>
@@ -357,7 +357,7 @@ export default function CreateHistopathologyModal({
               </Box>
 
               <Select id="doctorId" placeholder="Select Doctor" onChange={handlePayload} value={payload.doctorId}>
-                {doctors.map((doctor) => (
+                {doctors?.map((doctor) => (
                   <option key={doctor._id} value={doctor._id}>
                     {doctor.firstName} {doctor.lastName}
                   </option>
