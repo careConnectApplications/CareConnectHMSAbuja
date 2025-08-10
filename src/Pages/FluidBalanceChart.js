@@ -236,7 +236,7 @@ const FluidBalanceChart = () => {
                 <Th fontSize="13px" fontWeight="600">Output Type</Th>
                 <Th fontSize="13px" fontWeight="600">Output Route</Th>
                 <Th fontSize="13px" fontWeight="600">Output Amount (ml)</Th>
-                <Th fontSize="13px" fontWeight="600">Staff Name</Th>
+                <Th fontSize="13px" fontWeight="600"> Fluid Balance</Th>
                 
                 <Th fontSize="13px" fontWeight="600">Actions</Th>
               </Tr>
@@ -251,11 +251,11 @@ const FluidBalanceChart = () => {
                   createdOn={new Date(item.createdAt).toLocaleString()}
                   intakeType={item.intaketype}
                   intakeRoute={item.intakeroute}
-                  intakeAmount={item.intakeamount}
+                  intakeAmount={item.inputamount}
                   outputType={item.outputtype}
                   outputRoute={item.outputroute}
                   outputAmount={item.outputamount}
-                  servedBy={item.staffname}
+                  servedBy={item.balance}
                   onEdit={() => handleViewFluidBalance(item._id)}
                 />
               ))}
