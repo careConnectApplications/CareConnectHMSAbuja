@@ -10,6 +10,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import VitalChart from "./VitalChart"
 import MedicationChart from "./MedicationChart"
 import ProgressReport from "./ProgressReport"
+import WardRound from "./WardRound"
 import InsulinChart from "./InsulinChart"
 import TubeFeedingChart from "./TubeFeedingChart"
 import FluidBalanceChart from "./FluidBalanceChart"
@@ -56,6 +57,7 @@ export default function InPatientTimeline() {
                     <Tab _focus={{outline: "none"}} _selected={{ color: "blue.blue500", fontWeight: "700" }}>Vitals Chart</Tab>
                     <Tab _focus={{outline: "none"}} _selected={{ color: "blue.blue500", fontWeight: "700" }}>Medication Chart </Tab>
                     <Tab _focus={{outline: "none"}} _selected={{ color: "blue.blue500", fontWeight: "700" }}>Progress Report</Tab>
+                    <Tab _focus={{outline: "none"}} _selected={{ color: "blue.blue500", fontWeight: "700" }}>Ward Round</Tab>
                     <Tab _focus={{outline: "none"}} _selected={{ color: "blue.blue500", fontWeight: "700" }}>Nursing Care</Tab>
                     <Tab _focus={{outline: "none"}} _selected={{ color: "blue.blue500", fontWeight: "700" }}>Insulin Chart</Tab>
                     <Tab _focus={{outline: "none"}} _selected={{ color: "blue.blue500", fontWeight: "700" }}>Tube Feeding Chart</Tab>
@@ -76,6 +78,9 @@ export default function InPatientTimeline() {
                     </TabPanel>
                     <TabPanel p="0">
                       <ProgressReport/>
+                    </TabPanel>
+                    <TabPanel p="0">
+                      <WardRound/>
                     </TabPanel>
                     <TabPanel p="0">
                      <NursingCarePlan/>
