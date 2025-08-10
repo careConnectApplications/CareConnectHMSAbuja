@@ -63,14 +63,14 @@ export default function AssignDoctorModal({
         const countsMap = {};
         if (
           countsResult.success &&
-          countsResult.data?.queryresult?.appointmentdetails
+          Array.isArray(countsResult.data?.queryresult)
         ) {
           console.log(
             "Raw appointment details:",
-            countsResult.data.queryresult.appointmentdetails
+            countsResult.data.queryresult
           );
 
-          countsResult.data.queryresult.appointmentdetails.forEach((item) => {
+          countsResult.data.queryresult.forEach((item) => {
             const doctorId = item.doctor.toString(); // Ensure string format
             console.log(
               `Processing count for doctor: ${doctorId} (${typeof doctorId}) - count: ${
