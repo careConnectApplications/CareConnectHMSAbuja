@@ -28,6 +28,7 @@ import {
   UpdateRadiologyApi,
   SettingsApi,
   SearchRadiologyApi,
+  GetPriceOfService,
 } from "../Utils/ApiCalls";
 
 export default function RadiologyOrderRequestModal({
@@ -37,8 +38,9 @@ export default function RadiologyOrderRequestModal({
   onSuccess,
   type = "create",
   initialData,
-  oldPayload,
+  oldPayload = {}, // Provide default empty object
 }) {
+
 
   const [note, setNote]                    = useState("");
   const [testNames, setTestNames]          = useState([]);
@@ -55,11 +57,11 @@ export default function RadiologyOrderRequestModal({
   const [toast, setToast]                  = useState(null);
 
 
+
   const showToast = ({ status, message }) => {
     setToast({ status, message });
     setTimeout(() => setToast(null), 2000);
   };
-
 
   useEffect(() => {
     if (!isOpen) return;
@@ -101,7 +103,6 @@ export default function RadiologyOrderRequestModal({
   }, [isOpen]);
 
 
-  // Enhanced search with debouncing to improve performance
   useEffect(() => {
     const searchTests = async (query) => {
       if (!query || query.trim().length < 2) {
@@ -136,6 +137,7 @@ export default function RadiologyOrderRequestModal({
     return () => clearTimeout(timeoutId);
   }, [searchTestQuery]);
 
+
   // Handle test selection from search results
   const handleTestSelect = (test) => {
     const testName = test.servicetype || test;
@@ -160,6 +162,7 @@ export default function RadiologyOrderRequestModal({
     }
   };
 
+
   const addTestName = () => {
     if (!testNameInput.trim()) return;
     if (!testNames.includes(testNameInput.trim())) {
@@ -168,14 +171,21 @@ export default function RadiologyOrderRequestModal({
     setTestNameInput("");
   };
 
+
   const removeTestName = (name) =>
     setTestNames(testNames.filter((t) => t !== name));
 
- 
+
+  const removeTestName = (name) => {
+    setTestNames(testNames.filter((t) => t !== name));
+  };
 
   const handleSubmit = async () => {
     if (testNames.length === 0) {
-      showToast({ status: "error", message: "At least one test name is required." });
+      showToast({
+        status: "error",
+        message: "At least one test name is required.",
+      });
       return;
     }
     if (!note.trim()) {
@@ -187,7 +197,8 @@ export default function RadiologyOrderRequestModal({
     const payload = {
       testname: testNames,
       note: note.trim(),
-      appointmentid: oldPayload.id,
+      // Safely access id with optional chaining
+      appointmentid: oldPayload?.id || oldPayload?._id || "",
     };
 
     try {
@@ -210,10 +221,13 @@ export default function RadiologyOrderRequestModal({
       setTestNameInput("");
       setSearchTestQuery("");
       setTestSearchResults([]);
+      setTestPrices({});
     } catch (err) {
       showToast({
         status: "error",
-        message: `Failed to ${type === "edit" ? "update" : "create"} radiology order: ${err.message}`,
+        message: `Failed to ${
+          type === "edit" ? "update" : "create"
+        } radiology order: ${err.message}`,
       });
       onClose();
     } finally {
@@ -223,6 +237,11 @@ export default function RadiologyOrderRequestModal({
 
   const isSubmitDisabled = loading || testNames.length === 0 || !note.trim();
 
+  const totalPrice = Object.values(testPrices).reduce((sum, price) => {
+    if (typeof price === "number") return sum + price;
+    return sum;
+  }, 0);
+
   return (
     <>
       {toast && <ShowToast status={toast.status} message={toast.message} />}
@@ -231,13 +250,16 @@ export default function RadiologyOrderRequestModal({
         <ModalOverlay />
         <ModalContent maxW={["90%", "600px"]}>
           <ModalHeader fontSize={["lg", "xl"]}>
-            {type === "edit" ? "Edit Radiology Order Request" : "Create Radiology Order Request"}
+            {type === "edit"
+              ? "Edit Radiology Order Request"
+              : "Create Radiology Order Request"}
           </ModalHeader>
 
           <ModalCloseButton />
 
           <ModalBody>
             <Stack spacing={["10px", "15px"]}>
+
               {/* -------- Enhanced Test Search Input -------- */}
               <Box position="relative" className="search-container">
                 <Input
@@ -346,7 +368,7 @@ export default function RadiologyOrderRequestModal({
                 </Flex>
               </Box>
 
-              {/* -------- Test chips -------- */}
+
               <SimpleGrid columns={{ base: 2, md: 4 }} spacing={2}>
                 {testNames.map((item, idx) => (
                   <Flex
@@ -363,17 +385,37 @@ export default function RadiologyOrderRequestModal({
                     justifyContent="space-between"
                     alignItems="center"
                   >
-                    <Text color="#fff" fontWeight="500" textTransform="capitalize">
-                      {item}
-                    </Text>
-                    <Box fontSize="20px" color="#fff" onClick={() => removeTestName(item)}>
+                    <Box>
+                      <Text
+                        color="#fff"
+                        fontWeight="500"
+                        textTransform="capitalize"
+                      >
+                        {item}
+                      </Text>
+                      <Text fontSize="10px" color="#fff">
+                        Price: {testPrices[item] || "Loading..."}
+                      </Text>
+                    </Box>
+                    <Box
+                      fontSize="20px"
+                      color="#fff"
+                      onClick={() => removeTestName(item)}
+                    >
                       <IoIosCloseCircle />
                     </Box>
                   </Flex>
                 ))}
               </SimpleGrid>
 
-              {/* -------- Note -------- */}
+              {testNames.length > 0 && (
+                <Flex justifyContent="flex-end">
+                  <Badge colorScheme="green" fontSize="md" px={3} py={1}>
+                    Total: {totalPrice.toFixed(2)}
+                  </Badge>
+                </Flex>
+              )}
+
               <Input
                 id="note"
                 value={note}
@@ -386,7 +428,12 @@ export default function RadiologyOrderRequestModal({
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" onClick={handleSubmit} disabled={isSubmitDisabled} isLoading={loading}>
+            <Button
+              colorScheme="blue"
+              onClick={handleSubmit}
+              disabled={isSubmitDisabled}
+              isLoading={loading}
+            >
               {type === "edit" ? "Update" : "Submit"}
             </Button>
           </ModalFooter>

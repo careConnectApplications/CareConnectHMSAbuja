@@ -45,7 +45,6 @@ export default function RequestLabOtherModal({
   const [searchResults, setSearchResults] = useState([]);
   const [isLoadingPatients, setIsLoadingPatients] = useState(false);
 
-
   const [selectedPatientInfo, setSelectedPatientInfo] = useState(null);
 
   // New states for test search
@@ -106,7 +105,7 @@ export default function RequestLabOtherModal({
           notfromappointment: true,
           department: Payload.department,
           notes: Payload.notes,
-          priority: Payload.priority, 
+          priority: Payload.priority,
         },
         Payload.id
       );
@@ -190,8 +189,6 @@ export default function RequestLabOtherModal({
     }
   }, [isOpen]);
 
-
-
   // Auto-search functionality with debouncing
   useEffect(() => {
     const searchPatients = async (searchTerm) => {
@@ -239,14 +236,16 @@ export default function RequestLabOtherModal({
       mrn: patient.MRN,
     });
     setSearchResults([]); // Clear search results
-    setSearchMRN(`${patient.firstName} ${patient.lastName} (MRN: ${patient.MRN})`);
+    setSearchMRN(
+      `${patient.firstName} ${patient.lastName} (MRN: ${patient.MRN})`
+    );
   };
 
   // Handle search input change and clear selection if user starts typing new search
   const handleSearchInputChange = (e) => {
     const value = e.target.value;
     setSearchMRN(value);
-    
+
     // Clear selected patient if user modifies the search significantly
     if (selectedPatientInfo && !value.includes(selectedPatientInfo.mrn)) {
       setSelectedPatientInfo(null);
@@ -281,7 +280,13 @@ export default function RequestLabOtherModal({
     Payload.department && Payload.id && TestNames.length > 0;
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} isCentered size="lg" scrollBehavior="inside" >
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      isCentered
+      size="lg"
+      scrollBehavior="inside"
+    >
       <ModalOverlay />
       {Loading ? (
         <Box
@@ -289,9 +294,8 @@ export default function RequestLabOtherModal({
           justifyContent="center"
           alignItems="center"
           height="100vh"
-                 maxH="90vh"
+          maxH="90vh"
           overflow="hidden"
-
         >
           <Preloader />
         </Box>
@@ -332,17 +336,16 @@ export default function RequestLabOtherModal({
                 fontSize={Payload.priority !== "" ? "16px" : "13px"}
                 borderColor="gray.500"
               >
-                {Settings?.priority?.map((item, i) => (
-                  <option key={i} value={item}>
-                    {item}
-                  </option>
-                ))}
+                <option value="urgent">Urgent</option>
+                <option value="routine">Routine</option>
               </Select>
             </Box>
 
             {/* Patient Search Section */}
             <Box mt="32px">
-              <Text mb={2} fontWeight="medium">Patient</Text>
+              <Text mb={2} fontWeight="medium">
+                Patient
+              </Text>
               <Box position="relative">
                 <Flex>
                   <Input
@@ -360,35 +363,47 @@ export default function RequestLabOtherModal({
                     Search
                   </Button>
                 </Flex>
-              <Select
-                onChange={handlePayload}
-                placeholder={
-                  isLoadingPatients ? "Loading patients..." : "Select Patient"
-                }
-                border="2px solid"
-                id="id"
-                value={Payload.id}
-                size="lg"
-                fontSize={Payload.id !== "" ? "16px" : "13px"}
-                borderColor="gray.500"
-                mt={searchResults.length > 0 ? 4 : 0}
-                isDisabled={isLoadingPatients}
-              >
-                {searchResults.map((item, i) => (
-                  <option key={i} value={item._id}>
-                    {`${item.firstName} ${item.lastName} ~ ${item.MRN}`}
-                  </option>
-                ))}
-              </Select>
+                <Select
+                  onChange={handlePayload}
+                  placeholder={
+                    isLoadingPatients ? "Loading patients..." : "Select Patient"
+                  }
+                  border="2px solid"
+                  id="id"
+                  value={Payload.id}
+                  size="lg"
+                  fontSize={Payload.id !== "" ? "16px" : "13px"}
+                  borderColor="gray.500"
+                  mt={searchResults.length > 0 ? 4 : 0}
+                  isDisabled={isLoadingPatients}
+                >
+                  {searchResults.map((item, i) => (
+                    <option key={i} value={item._id}>
+                      {`${item.firstName} ${item.lastName} ~ ${item.MRN}`}
+                    </option>
+                  ))}
+                </Select>
 
-                
                 {/* Selected Patient Display */}
                 {selectedPatientInfo && (
-                  <Box mt={2} p={3} bg="blue.50" borderRadius="md" border="1px solid" borderColor="blue.200">
+                  <Box
+                    mt={2}
+                    p={3}
+                    bg="blue.50"
+                    borderRadius="md"
+                    border="1px solid"
+                    borderColor="blue.200"
+                  >
                     <HStack spacing={2}>
-                      <Badge colorScheme="blue" variant="solid">Selected</Badge>
-                      <Text fontWeight="medium">{selectedPatientInfo.name}</Text>
-                      <Text fontSize="sm" color="gray.600">MRN: {selectedPatientInfo.mrn}</Text>
+                      <Badge colorScheme="blue" variant="solid">
+                        Selected
+                      </Badge>
+                      <Text fontWeight="medium">
+                        {selectedPatientInfo.name}
+                      </Text>
+                      <Text fontSize="sm" color="gray.600">
+                        MRN: {selectedPatientInfo.mrn}
+                      </Text>
                     </HStack>
                   </Box>
                 )}
@@ -451,7 +466,6 @@ export default function RequestLabOtherModal({
                   </Box>
                 )}
               </Box>
-
 
               {/* Test Search Section */}
               <Box mt={4}>
