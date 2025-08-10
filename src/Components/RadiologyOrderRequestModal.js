@@ -40,16 +40,23 @@ export default function RadiologyOrderRequestModal({
   initialData,
   oldPayload = {}, // Provide default empty object
 }) {
-  const [note, setNote] = useState("");
-  const [testNames, setTestNames] = useState([]);
-  const [testNameInput, setTestNameInput] = useState("");
-  const [availableTests, setAvailableTests] = useState([]);
-  const [searchTestQuery, setSearchTestQuery] = useState("");
-  const [testSearchResults, setTestSearchResults] = useState([]);
-  const [isLoadingTests, setIsLoadingTests] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [toast, setToast] = useState(null);
-  const [testPrices, setTestPrices] = useState({});
+
+
+  const [note, setNote]                    = useState("");
+  const [testNames, setTestNames]          = useState([]);
+  const [testNameInput, setTestNameInput]  = useState("");
+  const [availableTests, setAvailableTests]= useState([]);
+
+  const [searchTestQuery, setSearchTestQuery]       = useState("");
+  const [testSearchResults, setTestSearchResults]   = useState([]);
+  const [isLoadingTests, setIsLoadingTests]         = useState(false);
+  const [selectedTestInfo, setSelectedTestInfo]     = useState(null);
+  const [showSearchResults, setShowSearchResults]   = useState(false);
+
+  const [loading, setLoading]              = useState(false);
+  const [toast, setToast]                  = useState(null);
+
+
 
   const showToast = ({ status, message }) => {
     setToast({ status, message });
@@ -72,6 +79,10 @@ export default function RadiologyOrderRequestModal({
       setNote("");
       setTestNames([]);
       setTestNameInput("");
+      setSearchTestQuery("");
+      setTestSearchResults([]);
+      setSelectedTestInfo(null);
+      setShowSearchResults(false);
     }
   }, [isOpen, type, initialData]);
 
@@ -91,76 +102,79 @@ export default function RadiologyOrderRequestModal({
     fetchAvailableTests();
   }, [isOpen]);
 
+
   useEffect(() => {
-    const fetchTests = async () => {
-      if (!searchTestQuery.trim()) {
+    const searchTests = async (query) => {
+      if (!query || query.trim().length < 2) {
         setTestSearchResults([]);
+        setShowSearchResults(false);
         return;
       }
-      setIsLoadingTests(true);
+
       try {
-        const res = await SearchRadiologyApi(searchTestQuery.trim());
-        setTestSearchResults(res?.queryresult || []);
+        setIsLoadingTests(true);
+        setShowSearchResults(true);
+        const res = await SearchRadiologyApi(query.trim());
+        if (res?.queryresult) {
+          setTestSearchResults(res.queryresult);
+        } else {
+          setTestSearchResults([]);
+        }
       } catch (err) {
         console.error("Error searching radiology:", err.message);
         setTestSearchResults([]);
+        showToast({ status: "error", message: "Search failed. Please try again." });
       } finally {
         setIsLoadingTests(false);
       }
     };
-    fetchTests();
+
+    // 300ms debounce to reduce API calls and improve performance
+    const timeoutId = setTimeout(() => {
+      searchTests(searchTestQuery);
+    }, 300);
+
+    return () => clearTimeout(timeoutId);
   }, [searchTestQuery]);
 
-  useEffect(() => {
-    const fetchTestPrices = async () => {
-      if (testNames.length === 0) {
-        setTestPrices({});
-        return;
-      }
 
-      const patientId = localStorage.getItem("patientId");
-      if (!patientId) return;
+  // Handle test selection from search results
+  const handleTestSelect = (test) => {
+    const testName = test.servicetype || test;
+    if (!testNames.includes(testName)) {
+      setTestNames([...testNames, testName]);
+    }
+    setSelectedTestInfo({ name: testName, id: test._id || null });
+    setSearchTestQuery("");
+    setTestSearchResults([]);
+    setShowSearchResults(false);
+    setTestNameInput("");
+  };
 
-      const newPrices = { ...testPrices };
-      let hasChanges = false;
+  // Handle search input change
+  const handleSearchInputChange = (e) => {
+    const value = e.target.value;
+    setSearchTestQuery(value);
+    
+    if (!value.trim()) {
+      setSelectedTestInfo(null);
+      setShowSearchResults(false);
+    }
+  };
 
-      for (const test of testNames) {
-        if (!newPrices[test]) {
-          try {
-            const response = await GetPriceOfService(
-              { servicetype: test },
-              patientId
-            );
-            newPrices[test] = response.data?.price || "N/A";
-            hasChanges = true;
-          } catch (error) {
-            console.error(`Error fetching price for ${test}:`, error);
-            newPrices[test] = "N/A";
-            hasChanges = true;
-          }
-        }
-      }
-
-      Object.keys(newPrices).forEach((test) => {
-        if (!testNames.includes(test)) {
-          delete newPrices[test];
-          hasChanges = true;
-        }
-      });
-
-      if (hasChanges) {
-        setTestPrices(newPrices);
-      }
-    };
-
-    fetchTestPrices();
-  }, [testNames]);
 
   const addTestName = () => {
     if (!testNameInput.trim()) return;
-    setTestNames([...testNames, testNameInput.trim()]);
+    if (!testNames.includes(testNameInput.trim())) {
+      setTestNames([...testNames, testNameInput.trim()]);
+    }
     setTestNameInput("");
   };
+
+
+  const removeTestName = (name) =>
+    setTestNames(testNames.filter((t) => t !== name));
+
 
   const removeTestName = (name) => {
     setTestNames(testNames.filter((t) => t !== name));
@@ -245,52 +259,115 @@ export default function RadiologyOrderRequestModal({
 
           <ModalBody>
             <Stack spacing={["10px", "15px"]}>
-              <Input
-                label="Search for Test"
-                placeholder="Enter test name"
-                value={searchTestQuery}
-                onChange={(e) => setSearchTestQuery(e.target.value)}
-                leftIcon={<FiSearch size={16} color="blue.500" />}
-              />
 
-              <Flex
-                direction={{ base: "column", md: "row" }}
-                alignItems={{ base: "stretch", md: "center" }}
-              >
-                <Box flex="1" mr={{ base: 0, md: "2" }}>
-                  <Select
-                    placeholder={
-                      isLoadingTests ? "Loading tests..." : "Select test name"
-                    }
-                    value={testNameInput}
-                    onChange={(e) => setTestNameInput(e.target.value)}
-                    isDisabled={isLoadingTests}
+              {/* -------- Enhanced Test Search Input -------- */}
+              <Box position="relative" className="search-container">
+                <Input
+                  label="Search for Radiology Test"
+                  placeholder="Enter test name (minimum 2 characters)"
+                  value={searchTestQuery}
+                  onChange={handleSearchInputChange}
+                  leftIcon={<FiSearch size={16} color="blue.500" />}
+                />
+
+                {/* Search Results Dropdown */}
+                {showSearchResults && (
+                  <Box
+                    position="absolute"
+                    top="100%"
+                    left={0}
+                    right={0}
+                    zIndex={1000}
+                    bg="white"
+                    border="1px solid"
+                    borderColor="gray.200"
+                    borderRadius="md"
+                    boxShadow="xl"
+                    maxH="300px"
+                    overflowY="auto"
+                    mt={1}
                   >
-                    {(searchTestQuery.trim()
-                      ? testSearchResults
-                      : availableTests
-                    ).map((t, idx) => (
-                      <option
-                        key={searchTestQuery.trim() ? t._id : idx}
-                        value={searchTestQuery.trim() ? t.servicetype : t}
-                      >
-                        {searchTestQuery.trim() ? t.servicetype : t}
-                      </option>
-                    ))}
-                  </Select>
-                </Box>
+                    {isLoadingTests ? (
+                      <Box p={4}>
+                        <Text color="gray.500" fontSize="sm" textAlign="center">
+                          Searching tests...
+                        </Text>
+                      </Box>
+                    ) : testSearchResults.length > 0 ? (
+                      testSearchResults.map((test, index) => (
+                        <Box
+                          key={test._id || index}
+                          p={4}
+                          cursor="pointer"
+                          _hover={{ bg: "blue.50", borderColor: "blue.200" }}
+                          onClick={() => handleTestSelect(test)}
+                          borderBottom="1px solid"
+                          borderColor="gray.100"
+                          _last={{ borderBottom: "none" }}
+                          transition="all 0.2s"
+                        >
+                          <Text fontWeight="medium" fontSize="sm" color="gray.800">
+                            {test.servicetype}
+                          </Text>
+                          {test.category && (
+                            <Text fontSize="xs" color="blue.600" mt={1}>
+                              Category: {test.category}
+                            </Text>
+                          )}
+                          {testNames.includes(test.servicetype) && (
+                            <Badge colorScheme="green" size="sm" mt={1}>
+                              Already Added
+                            </Badge>
+                          )}
+                        </Box>
+                      ))
+                    ) : (
+                      <Box p={4}>
+                        <Text color="gray.500" fontSize="sm" textAlign="center">
+                          No tests found matching "{searchTestQuery}"
+                        </Text>
+                      </Box>
+                    )}
+                  </Box>
+                )}
+              </Box>
 
-                <Button
-                  mt={{ base: 2, md: 0 }}
-                  w={{ base: "auto", md: "150px" }}
-                  onClick={addTestName}
-                  rightIcon={<SlPlus />}
-                  size="sm"
-                  disabled={!testNameInput}
-                >
-                  Add
-                </Button>
-              </Flex>
+              {/* -------- Fallback Test dropdown & add button -------- */}
+              <Box>
+                <Text fontSize="sm" fontWeight="medium" mb={2} color="gray.700">
+                  Or select from available tests:
+                </Text>
+                <Flex direction={{ base: "column", md: "row" }} alignItems={{ base: "stretch", md: "center" }}>
+                  <Box flex="1" mr={{ base: 0, md: "2" }}>
+                    <Select
+                      placeholder="Select from available tests"
+                      value={testNameInput}
+                      onChange={(e) => setTestNameInput(e.target.value)}
+                      bg="gray.50"
+                      borderColor="gray.300"
+                    >
+                      {availableTests.map((test, idx) => (
+                        <option key={idx} value={test}>
+                          {test}
+                        </option>
+                      ))}
+                    </Select>
+                  </Box>
+
+                  <Button
+                    mt={{ base: 2, md: 0 }}
+                    w={{ base: "auto", md: "120px" }}
+                    onClick={addTestName}
+                    rightIcon={<SlPlus />}
+                    size="sm"
+                    disabled={!testNameInput}
+                    colorScheme="blue"
+                  >
+                    Add
+                  </Button>
+                </Flex>
+              </Box>
+
 
               <SimpleGrid columns={{ base: 2, md: 4 }} spacing={2}>
                 {testNames.map((item, idx) => (
