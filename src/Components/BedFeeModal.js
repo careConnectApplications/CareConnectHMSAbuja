@@ -18,6 +18,7 @@ import { FaDollarSign } from "react-icons/fa";
 import Button from "./Button";
 import Input from "./Input";
 
+
 const BedFeeModal = ({
   isOpen,
   onClose,

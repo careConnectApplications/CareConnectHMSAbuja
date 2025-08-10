@@ -8784,20 +8784,13 @@ export const GetDoctorsByClinicApi = (clinicName) => {
 
   return axios(config)
     .then((response) => {
-      console.log("Full API Response:", response.data); // For debugging
+      console.log("Full API Response:", response.data);
 
-      // Handle both possible response structures
-      const doctorsData =
-        response.data.doctors?.userdetails ||
-        response.data.queryresult?.userdetails;
-
-      if (Array.isArray(doctorsData)) {
+      // Handle the response structure we're actually getting
+      if (response.data.status && Array.isArray(response.data.queryresult)) {
         return {
-          status: response.data.status,
-          doctors: {
-            userdetails: doctorsData,
-            totaluserdetails: response.data.queryresult?.totaluserdetails || 0,
-          },
+          status: true,
+          queryresult: response.data.queryresult,
         };
       }
       throw new Error("No doctors data found in response");
@@ -8923,14 +8916,157 @@ export const countPatientsPerDoctorApi = (clinicName) => {
       throw new Error(error.message || "Failed to fetch patient counts");
     });
 };
+
+
+// Ward Round API Functions
+export const CreateWardRoundApi = (payload) => {
+  console.log("CreateWardRoundApi payload:", payload);
+
+  const data = JSON.stringify(payload);
+  const config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/doctor-ward-round`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data: data,
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      console.log("CreateWardRoundApi response:", JSON.stringify(response.data));
+      return response;
+    })
+    .catch((error) => {
+      console.error("CreateWardRoundApi error:", error.response);
+      if (error.response?.data?.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response?.data) {
+        throw new Error(error.response.data);
+      } else if (error.request) {
+        throw new Error(error.message);
+      } else {
+        throw new Error(error.message);
+      }
+    });
+};
 export const AddBedFeeApi = (id, apiPayload) => {
-  console.log("AddBedFeeApi", id, apiPayload);
+    console.log("AddBedFeeApi", id, apiPayload);
+  let data = JSON.stringify(apiPayload);
+
+
+  const config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/admission/addBedFee/${id}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data: data,
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      console.log(" Bed response:", JSON.stringify(response.data));
+      return response;
+    })
+    .catch((error) => {
+      console.error("error:", error.response);
+      if (error.response?.data?.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response?.data) {
+        throw new Error(error.response.data);
+      } else if (error.request) {
+        throw new Error(error.message);
+      } else {
+        throw new Error(error.message);
+      }
+    });
+};
+
+
+
+export const ReadAllWardRoundByAdmissionApi = (admissionId) => {
+  const config = {
+    method: "get",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/doctor-ward-round?admissionId=${admissionId}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      console.log("ReadAllWardRoundByAdmissionApi response:", response.data);
+      return response.data;
+    })
+    .catch((error) => {
+      console.error("ReadAllWardRoundByAdmissionApi error:", error.response);
+      if (error.response?.data?.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response?.data) {
+        throw new Error(JSON.stringify(error.response.data));
+      } else if (error.request) {
+        throw new Error(error.message);
+      } else {
+        throw new Error(error.message);
+      }
+    });
+};
+
+export const UpdateWardRoundApi = (payload, wardRoundId) => {
+  console.log("UpdateWardRoundApi payload:", payload, wardRoundId);
+
+  const data = JSON.stringify(payload);
+  const config = {
+    method: "put",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/doctor-ward-round/${wardRoundId}`,
+
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data: data,
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+
+      console.log("UpdateWardRoundApi response:", JSON.stringify(response.data));
+      return response;
+    })
+    .catch((error) => {
+      console.error("UpdateWardRoundApi error:", error.response);
+      if (error.response?.data?.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response?.data) {
+        throw new Error(JSON.stringify(error.response.data));
+      } else if (error.request) {
+        throw new Error(error.message);
+      } else {
+        throw new Error(error.message);
+
+      }
+    });
+};
+export const payAnnualSubscriptionApi = (apiPayload) => {
+  console.log("payAnnualSubscriptionApi", apiPayload);
   let data = JSON.stringify(apiPayload);
 
   let config = {
     method: "post",
     maxBodyLength: Infinity,
-    url: `${baseUrl}/admission/addBedFee/${id}`,
+    url: `${baseUrl}/billing/payannualsubscription`,
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
