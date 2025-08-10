@@ -14,13 +14,11 @@ import {
   Box,
   Alert,
   AlertIcon,
-  Tag,
 } from "@chakra-ui/react";
 import Button from "./Button";
 import {
   GetDoctorsByClinicApi,
   assignDoctorToAppointmentApi,
-  countPatientsPerDoctorApi,
 } from "../Utils/ApiCalls";
 
 export default function AssignDoctorModal({
@@ -35,9 +33,8 @@ export default function AssignDoctorModal({
   const [isFetchingDoctors, setIsFetchingDoctors] = useState(false);
   const [selectedDoctor, setSelectedDoctor] = useState("");
   const [error, setError] = useState(null);
-  const [patientCounts, setPatientCounts] = useState({});
 
-  const fetchDoctorsAndCounts = async () => {
+  const fetchDoctors = async () => {
     if (!clinic) {
       setError("No clinic selected");
       return;
@@ -47,60 +44,16 @@ export default function AssignDoctorModal({
       setIsFetchingDoctors(true);
       setError(null);
 
-      // Fetch doctors first
-      const doctorsResult = await GetDoctorsByClinicApi(clinic);
-      console.log("Doctors API response:", doctorsResult);
+      const result = await GetDoctorsByClinicApi(clinic);
+      console.log("Doctors API response:", result);
 
-      // Then fetch patient counts
-      const countsResult = await countPatientsPerDoctorApi(clinic);
-      console.log("Patient Counts API response:", countsResult);
+      if (result.status && Array.isArray(result.queryresult)) {
+        // Filter to only include medical doctors if needed
+        const medicalDoctors = result.queryresult.filter(
+          (doctor) => doctor.role === "Medical Doctor"
+        );
 
-      // Handle both empty array and missing data cases for doctors
-      if (doctorsResult.doctors?.userdetails?.length > 0) {
-        const doctorsData = doctorsResult.doctors.userdetails;
-
-        // Create a map of doctor IDs to patient counts
-        const countsMap = {};
-        if (
-          countsResult.success &&
-          Array.isArray(countsResult.data?.queryresult)
-        ) {
-          console.log(
-            "Raw appointment details:",
-            countsResult.data.queryresult
-          );
-
-          countsResult.data.queryresult.forEach((item) => {
-            const doctorId = item.doctor.toString(); // Ensure string format
-            console.log(
-              `Processing count for doctor: ${doctorId} (${typeof doctorId}) - count: ${
-                item.patientCount
-              }`
-            );
-            countsMap[doctorId] = item.patientCount;
-          });
-        }
-
-        // Merge patient counts into doctors data
-        const doctorsWithCounts = doctorsData.map((doctor) => {
-          const doctorId = doctor._id.toString(); // Ensure string format
-          const count = countsMap[doctorId] || 0;
-
-          console.log(
-            `Doctor ID: ${doctorId} (${typeof doctorId}), Name: ${
-              doctor.firstName
-            }, Count: ${count}`
-          );
-
-          return {
-            ...doctor,
-            patientCount: count,
-          };
-        });
-
-        console.log("Final doctors with counts:", doctorsWithCounts);
-        setDoctors(doctorsWithCounts);
-        setPatientCounts(countsMap);
+        setDoctors(medicalDoctors); // or use result.queryresult for all staff
       } else {
         setError("No doctors available in this clinic");
       }
@@ -141,7 +94,7 @@ export default function AssignDoctorModal({
 
   useEffect(() => {
     if (isOpen) {
-      fetchDoctorsAndCounts();
+      fetchDoctors();
     }
   }, [isOpen, clinic]);
 
@@ -191,7 +144,7 @@ export default function AssignDoctorModal({
                     {`${doctor.title} ${doctor.firstName} ${doctor.lastName}`}
                     {doctor.specializationDetails &&
                       ` (${doctor.specializationDetails})`}
-                    {` - Patients: ${doctor.patientCount}`}
+                    {` - Patients today: ${doctor.patientCountToday}`}
                   </option>
                 ))}
               </Select>
