@@ -2188,8 +2188,9 @@ export const AddPatientApi = (patientData) => {
     });
 };
 export const AdmitPatientApi = (payload, id) => {
-  console.log("AdmitPatientApi", payload);
+  console.log("AdmitPatientApi payload:", payload);
   let data = JSON.stringify(payload);
+
   let config = {
     method: "post",
     maxBodyLength: Infinity,
@@ -2204,20 +2205,17 @@ export const AdmitPatientApi = (payload, id) => {
   return axios
     .request(config)
     .then((response) => {
-      console.log("patientResponse", response);
       return response;
     })
     .catch((error) => {
-      console.log("error", error.response);
-      if (error.response.data.msg) {
-        throw new Error(error.response.data.msg);
-      } else if (error.response.data) {
-        throw new Error(error.response);
-      } else if (error.request) {
-        throw new Error(error.msg);
-      } else {
-        throw new Error(error.msg);
-      }
+      console.log("API error:", error.response);
+      // Extract the most specific error message available
+      const errorMessage =
+        error.response?.data?.message ||
+        error.response?.data?.msg ||
+        error.message ||
+        "Failed to admit patient";
+      throw new Error(errorMessage);
     });
 };
 export const UpdatePriceSettingAPI = (payload, id) => {
@@ -8917,7 +8915,6 @@ export const countPatientsPerDoctorApi = (clinicName) => {
     });
 };
 
-
 // Ward Round API Functions
 export const CreateWardRoundApi = (payload) => {
   console.log("CreateWardRoundApi payload:", payload);
@@ -8937,7 +8934,10 @@ export const CreateWardRoundApi = (payload) => {
   return axios
     .request(config)
     .then((response) => {
-      console.log("CreateWardRoundApi response:", JSON.stringify(response.data));
+      console.log(
+        "CreateWardRoundApi response:",
+        JSON.stringify(response.data)
+      );
       return response;
     })
     .catch((error) => {
@@ -8954,9 +8954,8 @@ export const CreateWardRoundApi = (payload) => {
     });
 };
 export const AddBedFeeApi = (id, apiPayload) => {
-    console.log("AddBedFeeApi", id, apiPayload);
+  console.log("AddBedFeeApi", id, apiPayload);
   let data = JSON.stringify(apiPayload);
-
 
   const config = {
     method: "post",
@@ -8988,8 +8987,6 @@ export const AddBedFeeApi = (id, apiPayload) => {
       }
     });
 };
-
-
 
 export const ReadAllWardRoundByAdmissionApi = (admissionId) => {
   const config = {
@@ -9041,8 +9038,10 @@ export const UpdateWardRoundApi = (payload, wardRoundId) => {
   return axios
     .request(config)
     .then((response) => {
-
-      console.log("UpdateWardRoundApi response:", JSON.stringify(response.data));
+      console.log(
+        "UpdateWardRoundApi response:",
+        JSON.stringify(response.data)
+      );
       return response;
     })
     .catch((error) => {
@@ -9055,7 +9054,6 @@ export const UpdateWardRoundApi = (payload, wardRoundId) => {
         throw new Error(error.message);
       } else {
         throw new Error(error.message);
-
       }
     });
 };
@@ -9081,14 +9079,18 @@ export const payAnnualSubscriptionApi = (apiPayload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response && error.response.data.msg) {
-        throw new Error(error.response.data.msg);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        throw new Error(error.response.data.message); // Use the message from the server
       } else if (error.response && error.response.data) {
-        throw new Error(error.response);
+        throw new Error(JSON.stringify(error.response.data));
       } else if (error.request) {
-        throw new Error(error.msg);
+        throw new Error("No response received from server");
       } else {
-        throw new Error(error.msg);
+        throw new Error(error.message || "An unknown error occurred");
       }
     });
 };
