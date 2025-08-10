@@ -43,6 +43,7 @@ export default function TableRowY({
   paymentStatus,
   dispenseStatus,
   onPharmacyAction,
+  assignedDoctor,
   serviceCategory,
   serviceType,
   lowStockLevel,
@@ -277,6 +278,11 @@ export default function TableRowY({
           <Td>
             <Text fontWeight="400" fontSize="12px">
               {clinic}
+            </Text>
+          </Td>
+                    <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {assignedDoctor}
             </Text>
           </Td>
           <Td>

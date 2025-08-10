@@ -595,6 +595,14 @@ export default function ScheduleAppointment() {
                   >
                     Clinic
                   </Th>
+                                    <Th
+                    fontSize="13px"
+                    textTransform="capitalize"
+                    color="#534D59"
+                    fontWeight="600"
+                  >
+                    Assigned Doctor
+                  </Th>
                   <Th
                     fontSize="13px"
                     textTransform="capitalize"
@@ -625,6 +633,7 @@ export default function ScheduleAppointment() {
                       appointmentType={item.appointmenttype}
                       patient={`${item.firstName} ${item.lastName}`}
                       mrn={item.MRN}
+                      assignedDoctor={`${item.doctorsfirstName} ${item.doctorslastName}`}
                       clinic={item.clinic}
                       status={item.status}
                       onEdit={() => onEdit(item._id)}
@@ -645,6 +654,7 @@ export default function ScheduleAppointment() {
                       patient={`${item.firstName} ${item.lastName}`}
                       mrn={item.MRN}
                       clinic={item.clinic}
+                      assignedDoctor={`${item.doctorsfirstName} ${item.doctorslastName}`}
                       status={item.status}
                       onEdit={() => onEdit(item._id)}
                       onAssignDoctor={() =>

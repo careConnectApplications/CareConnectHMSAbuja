@@ -28,6 +28,7 @@ import CreateAppointmentModal from "../Components/CreateAppointmentModal";
 import moment from "moment";
 import Seo from "../Utils/Seo";
 import ToTransferModal from "../Components/ToTransferModal";
+import BedFeeModal from "../Components/BedFeeModal"; // Import BedFeeModal
 import {
   GetAllAdmittedApi,
   GetAllWardApi,
@@ -51,6 +52,7 @@ export default function InPatient() {
   const [Trigger, setTrigger] = useState(false);
   const [OldPayload, setOldPayload] = useState({});
   const [updating, setUpdating] = useState(null);
+  const [isDischarging, setIsDischarging] = useState(false); // New state for discharge loading
 
   const [Data, setData] = useState([]);
   const [QueueData, setQueueData] = useState([]);
@@ -63,6 +65,11 @@ export default function InPatient() {
     onOpen: onTransferOpen,
     onClose: onTransferClose,
   } = useDisclosure();
+  const {
+    isOpen: isBedFeeOpen,
+    onOpen: onBedFeeOpen,
+    onClose: onBedFeeClose,
+  } = useDisclosure(); // Bed fee modal
 
   // Pagination settings
   const [CurrentPage, setCurrentPage] = useState(1);
@@ -83,6 +90,14 @@ export default function InPatient() {
   const [admissionSearchInput, setAdmissionSearchInput] = useState("");
   const [FilteredData, setFilteredData] = useState(null);
   const [searchBy, setSearchBy] = useState("name");
+
+  const [showToast, setShowToast] = useState({
+    show: false,
+    message: "",
+    status: "",
+  });
+
+  const nav = useNavigate();
 
   const filterBy = (title) => {
     const lowercasedInput = SearchInput.toLowerCase();
@@ -113,14 +128,6 @@ export default function InPatient() {
     setFilteredData(filteredData);
   };
 
-  const [showToast, setShowToast] = useState({
-    show: false,
-    message: "",
-    status: "",
-  });
-
-  const nav = useNavigate();
-
   const filterAll = () => {
     setAll(true);
     setAdmitted(false);
@@ -147,7 +154,6 @@ export default function InPatient() {
   const getAllWard = async () => {
     try {
       const result = await GetAllWardApi();
-      console.log("getallWard", result);
       setWardData(result.queryresult.wardmanagementdetails);
     } catch (e) {
       activateNotifications(e.message, "error");
@@ -158,7 +164,6 @@ export default function InPatient() {
     setIsLoading(true);
     try {
       const result = await GetAllAdmittedApi(Ward);
-      console.log("GetAllAdmitted", result);
       if (result.status === true) {
         setIsLoading(false);
         setLoading(false);
@@ -187,16 +192,20 @@ export default function InPatient() {
   // Handle discharge functionality
   const handleDischarge = async (admissionId) => {
     setUpdating(admissionId);
+    setIsDischarging(true);
     try {
-      await DischargePatientApi(admissionId);
-      activateNotifications("Patient discharged successfully!", "success");
-      getAllPatientHistory(); // Refresh the data
+      const result = await DischargePatientApi(admissionId);
+      if (result.status === true) {
+        activateNotifications("Patient discharged successfully!", "success");
+        getAllPatientHistory(); // Refresh the data
+      }
     } catch (error) {
       activateNotifications(
         error.message || "Failed to discharge patient",
         "error"
       );
     } finally {
+      setIsDischarging(false);
       setUpdating(null);
     }
   };
@@ -205,6 +214,12 @@ export default function InPatient() {
   const handleTransfer = (admission) => {
     setOldPayload(admission);
     onTransferOpen();
+  };
+
+  // Handle bed fee functionality
+  const handleBedFee = (admission) => {
+    setOldPayload(admission);
+    onBedFeeOpen();
   };
 
   const handleSearchAdmissions = async () => {
@@ -228,7 +243,6 @@ export default function InPatient() {
 
     try {
       const response = await SearchAdmissionRecordsApi(searchPayload);
-      console.log("SearchAdmissionRecordsApi response", response);
       if (response.queryresult && response.queryresult.admissiondetails) {
         setData(response.queryresult.admissiondetails);
         setFilterData(response.queryresult.admissiondetails);
@@ -269,7 +283,7 @@ export default function InPatient() {
 
   useEffect(() => {
     getAllWard();
-  }, [isOpen, isTransferOpen, Trigger]);
+  }, [isOpen, isTransferOpen, Trigger, isBedFeeOpen]);
 
   return (
     <MainLayout>
@@ -559,6 +573,9 @@ export default function InPatient() {
                   <Th fontSize="13px" color="#534D59" fontWeight="600">
                     Ward
                   </Th>
+                                    <Th fontSize="13px" color="#534D59" fontWeight="600">
+                    Bed
+                  </Th>
                   <Th fontSize="13px" color="#534D59" fontWeight="600">
                     Referred Date
                   </Th>
@@ -581,6 +598,7 @@ export default function InPatient() {
                       doctor={item.doctorname}
                       clinic={item.admittospecialization}
                       wardName={item.referedward?.wardname}
+                      BedName={item.bed?.bednumber}
                       mrn={`${item.patient?.MRN} `}
                       status={item.status}
                       onView={() =>
@@ -595,7 +613,9 @@ export default function InPatient() {
                       }
                       onDischarge={() => handleDischarge(item._id)}
                       onTransfer={() => handleTransfer(item)}
+                      onBedFee={() => handleBedFee(item)} // Added bed fee handler
                       isUpdating={updating === item._id}
+                      isDischarging={isDischarging && updating === item._id}
                     />
                   ))
                 ) : SearchInput !== "" && FilteredData?.length > 0 ? (
@@ -608,6 +628,7 @@ export default function InPatient() {
                       doctor={item.doctorname}
                       clinic={item.admittospecialization}
                       wardName={item.referedward?.wardname}
+                      BedName={item.bed?.bednumber}
                       mrn={`${item.patient?.MRN} `}
                       status={item.status}
                       onView={() =>
@@ -622,7 +643,9 @@ export default function InPatient() {
                       }
                       onDischarge={() => handleDischarge(item._id)}
                       onTransfer={() => handleTransfer(item)}
+                      onBedFee={() => handleBedFee(item)} // Added bed fee handler
                       isUpdating={updating === item._id}
+                      isDischarging={isDischarging && updating === item._id}
                     />
                   ))
                 ) : (
@@ -639,10 +662,26 @@ export default function InPatient() {
             isOpen={isTransferOpen}
             oldPayload={OldPayload}
             onClose={onTransferClose}
+            activateNotifications={activateNotifications}
             onSuccess={() => {
-              getAllPatientHistory(); // Refresh the data after transfer
+              getAllPatientHistory();
               activateNotifications(
                 "Patient transferred successfully!",
+                "success"
+              );
+            }}
+          />
+          <BedFeeModal
+            isOpen={isBedFeeOpen}
+            onClose={onBedFeeClose}
+            admissionId={OldPayload._id}
+            activateNotifications={activateNotifications}
+            trigger={Trigger} // Add this
+            setTrigger={setTrigger} // Add this
+            onSuccess={() => {
+              getAllPatientHistory();
+              activateNotifications(
+                "Bed fee processed successfully!",
                 "success"
               );
             }}

@@ -63,30 +63,42 @@ export default function AssignDoctorModal({
         const countsMap = {};
         if (
           countsResult.success &&
-          countsResult.data?.queryresult?.appointmentdetails
+          Array.isArray(countsResult.data?.queryresult)
         ) {
           console.log(
             "Raw appointment details:",
-            countsResult.data.queryresult.appointmentdetails
+            countsResult.data.queryresult
           );
-          countsResult.data.queryresult.appointmentdetails.forEach((item) => {
+
+          countsResult.data.queryresult.forEach((item) => {
+            const doctorId = item.doctor.toString(); // Ensure string format
             console.log(
-              `Doctor ID: ${item.doctor}, Patient Count: ${item.patientCount}`
+              `Processing count for doctor: ${doctorId} (${typeof doctorId}) - count: ${
+                item.patientCount
+              }`
             );
-            countsMap[item.doctor] = item.patientCount;
+            countsMap[doctorId] = item.patientCount;
           });
         }
 
         // Merge patient counts into doctors data
-        const doctorsWithCounts = doctorsData.map((doctor) => ({
-          ...doctor,
-          patientCount: countsMap[doctor._id] || 0,
-        }));
+        const doctorsWithCounts = doctorsData.map((doctor) => {
+          const doctorId = doctor._id.toString(); // Ensure string format
+          const count = countsMap[doctorId] || 0;
 
-        console.log(
-          "Merged doctors data with patient counts:",
-          doctorsWithCounts
-        );
+          console.log(
+            `Doctor ID: ${doctorId} (${typeof doctorId}), Name: ${
+              doctor.firstName
+            }, Count: ${count}`
+          );
+
+          return {
+            ...doctor,
+            patientCount: count,
+          };
+        });
+
+        console.log("Final doctors with counts:", doctorsWithCounts);
         setDoctors(doctorsWithCounts);
         setPatientCounts(countsMap);
       } else {
