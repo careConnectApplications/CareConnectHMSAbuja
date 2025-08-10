@@ -334,8 +334,8 @@ export default function LabProcessing() {
     setProcessed(false);
     setAwaitingConfirmation(false);
     setRejected(true);
-    getAllScheduledLab("rejected");
-    setStatus("rejected");
+    getAllScheduledLab("reject");
+    setStatus("reject");
     setCurrentPage(1);
   };
   const ProcessLab = (item) => {
@@ -360,7 +360,7 @@ export default function LabProcessing() {
       } else if (AwaitingConfirmation) {
         getAllScheduledLab("awaiting confirmation");
       } else if (Rejected) {
-        getAllScheduledLab("rejected");
+        getAllScheduledLab("reject");
       }
     }
   }, [

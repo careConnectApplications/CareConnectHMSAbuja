@@ -34,6 +34,7 @@ export default function ToTransferModal({
   type,
   activateNotifications,
   oldPayload,
+  onSuccess,
 }) {
   const [Ward, setWard] = useState([]);
   const [Loading, setLoading] = useState(false);
@@ -85,6 +86,11 @@ export default function ToTransferModal({
       return;
     }
 
+    if (!oldPayload || !oldPayload._id) {
+      activateNotifications("Invalid patient record", "error");
+      return;
+    }
+
     try {
       setLoading(true);
       const result = await UpdateAdmissionStatusAPI(
@@ -93,7 +99,7 @@ export default function ToTransferModal({
           transfterto: Payload.transfterto,
           bed_id: Payload.bed_id,
         },
-        oldPayload.id
+        oldPayload._id
       );
 
       if (result.status === 200) {
@@ -104,6 +110,11 @@ export default function ToTransferModal({
           bed_id: "",
           status: "transfered",
         });
+        // Call onSuccess if provided
+        if (onSuccess) {
+          // Use the destructured onSuccess directly
+          onSuccess();
+        }
       }
     } catch (e) {
       activateNotifications(e.message, "error");

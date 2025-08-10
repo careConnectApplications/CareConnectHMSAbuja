@@ -35,6 +35,38 @@ export const ProviderLoginApi = (Payload) => {
     });
 };
 
+export const GetPriceOfService = (payload, patientId) => {
+  const data = JSON.stringify(payload);
+  const config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/settings/getpriceofservice/${patientId}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data,
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response?.data?.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response?.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.message);
+      } else {
+        throw new Error(error.message);
+      }
+    });
+};
+
 export const CreateBedApi = (payload) => {
   const data = JSON.stringify(payload);
   const config = {
@@ -8581,7 +8613,7 @@ export const GetCashierTotalApi = () => {
     .request(config)
     .then((response) => {
       console.log("Cashier total retrieved:", JSON.stringify(response.data));
-      return response;
+      return response.data; // Change this line to return response.data instead of response
     })
     .catch((error) => {
       console.log("error", error.response);
@@ -8889,5 +8921,38 @@ export const countPatientsPerDoctorApi = (clinicName) => {
         );
       }
       throw new Error(error.message || "Failed to fetch patient counts");
+    });
+};
+export const AddBedFeeApi = (id, apiPayload) => {
+  console.log("AddBedFeeApi", id, apiPayload);
+  let data = JSON.stringify(apiPayload);
+
+  let config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/admission/addBedFee/${id}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data: data,
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response && error.response.data.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response && error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
     });
 };

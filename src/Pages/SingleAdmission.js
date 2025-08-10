@@ -31,6 +31,7 @@ import {
 } from "../Utils/ApiCalls";
 import Pagination from "../Components/Pagination";
 import ToTransferModal from "../Components/ToTransferModal";
+import BedFeeModal from "../Components/BedFeeModal";
 import AdmissionModal from "../Components/AdmissionModal";
 import { configuration } from "../Utils/Helpers";
 import Preloader from "../Components/Preloader";
@@ -57,7 +58,18 @@ export default function SingleAdmission() {
     status: "",
   });
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  // Modals
+  const {
+    isOpen: isTransferModalOpen,
+    onOpen: onTransferModalOpen,
+    onClose: onTransferModalClose,
+  } = useDisclosure();
+  const {
+    isOpen: isBedFeeModalOpen,
+    onOpen: onBedFeeModalOpen,
+    onClose: onBedFeeModalClose,
+  } = useDisclosure();
+
   const { pathname } = useLocation();
   const nav = useNavigate();
   const id = localStorage.getItem("patientId");
@@ -70,7 +82,7 @@ export default function SingleAdmission() {
 
       if (result.status === true) {
         activateNotifications("Patient Discharged Successfully", "success");
-        setTrigger(!Trigger); // Refresh data without page reload
+        setTrigger(!Trigger);
       } else {
         activateNotifications("Discharge failed: Unexpected response", "error");
       }
@@ -85,9 +97,14 @@ export default function SingleAdmission() {
     }
   };
 
-  const handleTransfer = (id) => {
+  const handleTransfer = (admission) => {
+    setOldPayload(admission); // Pass the entire admission object
+    onTransferModalOpen();
+  };
+
+  const handleBedFee = (id) => {
     setOldPayload({ id: id });
-    onOpen();
+    onBedFeeModalOpen();
   };
 
   const activateNotifications = (message, status) => {
@@ -184,7 +201,7 @@ export default function SingleAdmission() {
 
   useEffect(() => {
     getAllAdmissionHistory();
-  }, [isOpen, OpenAdmissionModal, Trigger]);
+  }, [isTransferModalOpen, OpenAdmissionModal, Trigger, isBedFeeModalOpen]);
 
   const indexOfLastSra = CurrentPage * PostPerPage;
   const indexOfFirstSra = indexOfLastSra - PostPerPage;
@@ -335,6 +352,9 @@ export default function SingleAdmission() {
                   Ward Name
                 </Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  Bed
+                </Th>
+                <Th fontSize="13px" color="#534D59" fontWeight="600">
                   Referred Date
                 </Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">
@@ -351,14 +371,16 @@ export default function SingleAdmission() {
                   key={i}
                   type="patient-admission"
                   name={`${item.patient?.firstName} ${item.patient?.lastName}`}
-                  mrn={item.patient.MRN}
+                  mrn={item.patient?.MRN}
                   doctor={item.doctorname}
                   clinic={item.admittospecialization}
                   date={moment(item.referddate).format("lll")}
                   status={item.status}
-                  wardName={item.referedward.wardname}
-                  onClick={() => handleDischarge(item._id)}
-                  onTransfer={() => handleTransfer(item._id)}
+                  wardName={item.referedward?.wardname}
+                  BedName={item.bed?.bednumber}
+                  onDischarge={() => handleDischarge(item._id)}
+                  onTransfer={() => handleTransfer(item)}
+                  onBedFee={() => handleBedFee(item._id)}
                   isDischarging={isDischarging}
                 />
               ))}
@@ -374,10 +396,19 @@ export default function SingleAdmission() {
         />
 
         <ToTransferModal
-          isOpen={isOpen}
+          isOpen={isTransferModalOpen}
           oldPayload={OldPayload}
-          onClose={onClose}
+          onClose={onTransferModalClose}
           activateNotifications={activateNotifications}
+        />
+
+        <BedFeeModal
+          isOpen={isBedFeeModalOpen}
+          admissionId={OldPayload.id}
+          onClose={onBedFeeModalClose}
+          activateNotifications={activateNotifications}
+          trigger={Trigger}
+          setTrigger={setTrigger}
         />
       </Box>
 

@@ -41,6 +41,10 @@ export default function FluidBalanceModal({
     patientId: patientId,
     inputamount: "",
     outputamount: "",
+    intaketype: "",
+    intakeroute: "",
+    outputtype: "",
+    outputroute: "",
   };
 
   const [formData, setFormData] = useState(initialFormState); 
@@ -70,6 +74,10 @@ export default function FluidBalanceModal({
           datetime: initialData.datetime || "",
           inputamount: initialData.inputamount || "",
           outputamount: initialData.outputamount || "",
+          intaketype: initialData.intaketype || "Oral",
+          intakeroute: initialData.intakeroute || "Mouth",
+          outputtype: initialData.outputtype || "Urine",
+          outputroute: initialData.outputroute || "Catheter",
         });
       } else {
         setFormData(initialFormState);
@@ -87,10 +95,14 @@ export default function FluidBalanceModal({
     
     setLoading(true);
     try {
-      // Create the simplified payload structure
+      // Create the payload structure
       const payload = {
         inputamount: formData.inputamount,
         outputamount: formData.outputamount,
+        intaketype: formData.intaketype,
+        intakeroute: formData.intakeroute,
+        outputtype: formData.outputtype,
+        outputroute: formData.outputroute,
         ...(formData.datetime && { datetime: formData.datetime }) // Only include datetime if provided
       };
       
@@ -181,6 +193,86 @@ export default function FluidBalanceModal({
                     value={formData.outputamount}
                     onChange={handleInputChange}
                     placeholder="Enter output amount (ml)"
+                  />
+                </InputGroup>
+              </FormControl>
+            </SimpleGrid>
+
+            {/* Intake Details */}
+            <Text fontSize="md" fontWeight="bold" color="blue.blue500" mb={2}>
+              Intake Details
+            </Text>
+            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4} mb={4}>
+              {/* Intake Type */}
+              <FormControl>
+                <InputGroup>
+                  <InputLeftElement pointerEvents="none">
+                    <Icon as={FaSyringe} color="gray.300" />
+                  </InputLeftElement>
+                  <Input
+                    label="Intake Type"
+                    type="text"
+                    name="intaketype"
+                    value={formData.intaketype}
+                    onChange={handleInputChange}
+                    placeholder="Enter intake type"
+                  />
+                </InputGroup>
+              </FormControl>
+
+              {/* Intake Route */}
+              <FormControl>
+                <InputGroup>
+                  <InputLeftElement pointerEvents="none">
+                    <Icon as={GiWaterDrop} color="gray.300" />
+                  </InputLeftElement>
+                  <Input
+                    label="Intake Route"
+                    type="text"
+                    name="intakeroute"
+                    value={formData.intakeroute}
+                    onChange={handleInputChange}
+                    placeholder="Enter intake route"
+                  />
+                </InputGroup>
+              </FormControl>
+            </SimpleGrid>
+
+            {/* Output Details */}
+            <Text fontSize="md" fontWeight="bold" color="blue.blue500" mb={2}>
+              Output Details
+            </Text>
+            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4} mb={4}>
+              {/* Output Type */}
+              <FormControl>
+                <InputGroup>
+                  <InputLeftElement pointerEvents="none">
+                    <Icon as={FaHashtag} color="gray.300" />
+                  </InputLeftElement>
+                  <Input
+                    label="Output Type"
+                    type="text"
+                    name="outputtype"
+                    value={formData.outputtype}
+                    onChange={handleInputChange}
+                    placeholder="Enter output type"
+                  />
+                </InputGroup>
+              </FormControl>
+
+              {/* Output Route */}
+              <FormControl>
+                <InputGroup>
+                  <InputLeftElement pointerEvents="none">
+                    <Icon as={FaSyringe} color="gray.300" />
+                  </InputLeftElement>
+                  <Input
+                    label="Output Route"
+                    type="text"
+                    name="outputroute"
+                    value={formData.outputroute}
+                    onChange={handleInputChange}
+                    placeholder="Enter output route"
                   />
                 </InputGroup>
               </FormControl>

@@ -190,9 +190,9 @@ export default function Payment() {
   const getCashierTotal = async () => {
     try {
       const result = await GetCashierTotalApi();
-      console.log("Cashier total response:", result.data);
+      console.log("Cashier total response:", result);
       if (result.status === true) {
-        setCashierTotal(result.data.totalAmount);
+        setCashierTotal(result.queryresult);
       }
     } catch (error) {
       console.error("Error fetching cashier total:", error);
