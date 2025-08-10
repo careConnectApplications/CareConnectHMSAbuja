@@ -40,6 +40,7 @@ import {
   getAllStates,
   getLGAsForState,
   GetOnlyClinicApi,
+  GetAllInsuranceApi,
 } from "../Utils/ApiCalls";
 
 import ShowToast from "./ToastNotification";
@@ -55,6 +56,7 @@ export default function CreatePatientModal({
   const [selectedState, setSelectedState] = useState(""); // The selected state
   const [selectedLga, setSelectedLga] = useState(""); // The selected LGA
   const [ClinicData, setClinicData] = useState([]);
+  const [insuranceOptions, setInsuranceOptions] = useState([]);
 
   // Fetch states on component mount
   useEffect(() => {
@@ -115,6 +117,20 @@ export default function CreatePatientModal({
   useEffect(() => {
     getAllClinic();
   }, []);
+  useEffect(() => {
+    const fetchInsuranceData = async () => {
+      try {
+        const result = await GetAllInsuranceApi();
+        setInsuranceOptions(result.queryresult.hmomanagementdetails);
+      } catch (error) {
+        console.error("Failed to fetch insurance data:", error);
+      }
+    };
+
+    if (isOpen) {
+      fetchInsuranceData();
+    }
+  }, [isOpen]);
 
   const [patientData, setPatientData] = useState({
     title: "",
@@ -787,7 +803,6 @@ export default function CreatePatientModal({
                       ))}
                     </Select>
                   </FormControl>
-
                 </SimpleGrid>
 
                 <Divider my={4} />
@@ -1014,15 +1029,31 @@ export default function CreatePatientModal({
                     </Select>
                   </FormControl>
 
-                  <Input
-                    id="hnoName"
-                    label="HMO Name"
-                    value={patientData.HMOName}
-                    onChange={handleInputChange}
-                    name="HMOName"
-                    placeholder="HMO Name"
-                    leftIcon={<FaMedkit />}
-                  />
+                  <FormControl>
+                    <Select
+                      h="45px"
+                      borderWidth="2px"
+                      borderColor="#6B7280"
+                      name="HMOName"
+                      value={
+                        type === "new"
+                          ? patientData.HMOName
+                          : UpdatedPayload.HMOName
+                      }
+                      onChange={
+                        type === "new"
+                          ? handleInputChange
+                          : handleUpdatedPayload
+                      }
+                      placeholder="Select HMO"
+                    >
+                      {insuranceOptions.map((insurance) => (
+                        <option key={insurance._id} value={insurance.hmoname}>
+                          {insurance.hmoname}
+                        </option>
+                      ))}
+                    </Select>
+                  </FormControl>
 
                   <Input
                     id="hnoPlan"
@@ -1042,7 +1073,7 @@ export default function CreatePatientModal({
                     name="HMOId"
                     leftIcon={<FaMedkit />}
                   />
-                                    <Input
+                  <Input
                     id="facilitypateintreferedfrom"
                     name="facilitypateintreferedfrom"
                     label="Facility Referred From"
@@ -1668,15 +1699,31 @@ export default function CreatePatientModal({
                     </Select>
                   </FormControl>
 
-                  <Input
-                    id="hnoName"
-                    label="HMO Name"
-                    value={UpdatedPayload.HMOName}
-                    onChange={handleUpdatedPayload}
-                    name="HMOName"
-                    placeholder="HMO Name"
-                    leftIcon={<FaMedkit />}
-                  />
+                  <FormControl>
+                    <Select
+                      h="45px"
+                      borderWidth="2px"
+                      borderColor="#6B7280"
+                      name="HMOName"
+                      value={
+                        type === "new"
+                          ? patientData.HMOName
+                          : UpdatedPayload.HMOName
+                      }
+                      onChange={
+                        type === "new"
+                          ? handleInputChange
+                          : handleUpdatedPayload
+                      }
+                      placeholder="Select HMO"
+                    >
+                      {insuranceOptions.map((insurance) => (
+                        <option key={insurance._id} value={insurance.hmoname}>
+                          {insurance.hmoname}
+                        </option>
+                      ))}
+                    </Select>
+                  </FormControl>
 
                   <Input
                     id="hnoPlan"

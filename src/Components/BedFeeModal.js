@@ -81,7 +81,7 @@ const BedFeeModal = ({
           <Stack spacing="15px">
             <Input
               val={formData.bedfee !== ""}
-              leftIcon={<FaDollarSign />}
+              
               onChange={handleChange}
               name="bedfee"
               value={formData.bedfee}

@@ -8930,7 +8930,7 @@ export const AddBedFeeApi = (id, apiPayload) => {
   let config = {
     method: "post",
     maxBodyLength: Infinity,
-    url: `${baseUrl}/api/v1/admission/addBedFee/${id}`,
+    url: `${baseUrl}/admission/addBedFee/${id}`,
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,

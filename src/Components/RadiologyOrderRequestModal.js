@@ -38,7 +38,7 @@ export default function RadiologyOrderRequestModal({
   onSuccess,
   type = "create",
   initialData,
-  oldPayload,
+  oldPayload = {}, // Provide default empty object
 }) {
   const [note, setNote] = useState("");
   const [testNames, setTestNames] = useState([]);
@@ -49,7 +49,7 @@ export default function RadiologyOrderRequestModal({
   const [isLoadingTests, setIsLoadingTests] = useState(false);
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState(null);
-  const [testPrices, setTestPrices] = useState({}); // New state for storing test prices
+  const [testPrices, setTestPrices] = useState({});
 
   const showToast = ({ status, message }) => {
     setToast({ status, message });
@@ -111,7 +111,6 @@ export default function RadiologyOrderRequestModal({
     fetchTests();
   }, [searchTestQuery]);
 
-  // New effect to fetch prices when testNames changes
   useEffect(() => {
     const fetchTestPrices = async () => {
       if (testNames.length === 0) {
@@ -125,7 +124,6 @@ export default function RadiologyOrderRequestModal({
       const newPrices = { ...testPrices };
       let hasChanges = false;
 
-      // Fetch prices for newly added tests that don't have prices yet
       for (const test of testNames) {
         if (!newPrices[test]) {
           try {
@@ -143,7 +141,6 @@ export default function RadiologyOrderRequestModal({
         }
       }
 
-      // Remove prices for tests that are no longer in the list
       Object.keys(newPrices).forEach((test) => {
         if (!testNames.includes(test)) {
           delete newPrices[test];
@@ -167,7 +164,6 @@ export default function RadiologyOrderRequestModal({
 
   const removeTestName = (name) => {
     setTestNames(testNames.filter((t) => t !== name));
-    // Don't remove from testPrices immediately - let the useEffect handle it
   };
 
   const handleSubmit = async () => {
@@ -187,7 +183,8 @@ export default function RadiologyOrderRequestModal({
     const payload = {
       testname: testNames,
       note: note.trim(),
-      appointmentid: oldPayload.id,
+      // Safely access id with optional chaining
+      appointmentid: oldPayload?.id || oldPayload?._id || "",
     };
 
     try {
@@ -226,7 +223,6 @@ export default function RadiologyOrderRequestModal({
 
   const isSubmitDisabled = loading || testNames.length === 0 || !note.trim();
 
-  // Calculate total price
   const totalPrice = Object.values(testPrices).reduce((sum, price) => {
     if (typeof price === "number") return sum + price;
     return sum;
@@ -249,7 +245,6 @@ export default function RadiologyOrderRequestModal({
 
           <ModalBody>
             <Stack spacing={["10px", "15px"]}>
-              {/* -------- Test search input -------- */}
               <Input
                 label="Search for Test"
                 placeholder="Enter test name"
@@ -258,7 +253,6 @@ export default function RadiologyOrderRequestModal({
                 leftIcon={<FiSearch size={16} color="blue.500" />}
               />
 
-              {/* -------- Test dropdown & add button -------- */}
               <Flex
                 direction={{ base: "column", md: "row" }}
                 alignItems={{ base: "stretch", md: "center" }}
@@ -298,7 +292,6 @@ export default function RadiologyOrderRequestModal({
                 </Button>
               </Flex>
 
-              {/* -------- Test chips with prices -------- */}
               <SimpleGrid columns={{ base: 2, md: 4 }} spacing={2}>
                 {testNames.map((item, idx) => (
                   <Flex
@@ -338,7 +331,6 @@ export default function RadiologyOrderRequestModal({
                 ))}
               </SimpleGrid>
 
-              {/* -------- Total Price -------- */}
               {testNames.length > 0 && (
                 <Flex justifyContent="flex-end">
                   <Badge colorScheme="green" fontSize="md" px={3} py={1}>
@@ -347,7 +339,6 @@ export default function RadiologyOrderRequestModal({
                 </Flex>
               )}
 
-              {/* -------- Note -------- */}
               <Input
                 id="note"
                 value={note}

@@ -12,6 +12,7 @@ import {
   Flex,
   Text,
   Box,
+  Badge,
 } from "@chakra-ui/react";
 import Input from "./Input";
 import Button from "./Button";
@@ -33,14 +34,12 @@ export default function CreateProcedureModal({
   onClose,
   setOldPayload,
   activateNotifications,
-  type,                 
+  type,
   oldPayload = {},
 }) {
- 
   const [Loading, setLoading] = useState(false);
   const [Clinics, setClinics] = useState([]);
-  const [Settings, setSettings] = useState("");
-
+  const [Settings, setSettings] = useState({});
   const [Payload, setPayload] = useState({
     clinic: "",
     indicationdiagnosisprocedure: "",
@@ -49,7 +48,6 @@ export default function CreateProcedureModal({
     cptcodes: "",
     dxcodes: "",
   });
-
   const [UpdatedPayload, setUpdatedPayload] = useState({
     clinic: "",
     indicationdiagnosisprocedure: "",
@@ -62,15 +60,17 @@ export default function CreateProcedureModal({
   const [ProcedureArr, setProcedureArr] = useState([]);
   const [CptcodesArr, setCptcodesArr] = useState([]);
   const [DxcodesArr, setDxcodesArr] = useState([]);
-
-
   const [searchProcedureQuery, setSearchProcedureQuery] = useState("");
   const [procedureSearchResults, setProcedureSearchResults] = useState([]);
   const [isLoadingProcedures, setIsLoadingProcedures] = useState(false);
-  const [price, setPrice] = useState(0);
-
+  const [procedurePrices, setProcedurePrices] = useState({}); // Store prices for each procedure
   const patientId = localStorage.getItem("patientId");
 
+  // Calculate total price
+  const totalPrice = Object.values(procedurePrices).reduce((sum, price) => {
+    if (typeof price === "number") return sum + price;
+    return sum;
+  }, 0);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -83,21 +83,31 @@ export default function CreateProcedureModal({
         ]);
         setClinics(clinicRes.queryresult.clinicdetails);
         setSettings(settingsRes);
-      } catch {}
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     }
     fetchAll();
 
-
     setUpdatedPayload({
       clinic: oldPayload?.clinic || "",
-      indicationdiagnosisprocedure: oldPayload?.indicationdiagnosisprocedure || "",
+      indicationdiagnosisprocedure:
+        oldPayload?.indicationdiagnosisprocedure || "",
       procedure: oldPayload?.procedure || "",
       appointmentdate: oldPayload?.appointmentdate || "",
       cptcodes: oldPayload?.cptcodes || "",
       dxcodes: oldPayload?.dxcodes || "",
     });
-  }, [isOpen, oldPayload]);
 
+    // Initialize procedure array if editing
+    if (type === "edit" && oldPayload?.procedure) {
+      setProcedureArr(
+        Array.isArray(oldPayload.procedure)
+          ? oldPayload.procedure
+          : [oldPayload.procedure]
+      );
+    }
+  }, [isOpen, oldPayload, type]);
 
   useEffect(() => {
     async function fetchProcedures() {
@@ -109,7 +119,8 @@ export default function CreateProcedureModal({
       try {
         const res = await SearchProcedureApi(searchProcedureQuery.trim());
         setProcedureSearchResults(res.queryresult || []);
-      } catch {
+      } catch (error) {
+        console.error("Error searching procedures:", error);
         setProcedureSearchResults([]);
       } finally {
         setIsLoadingProcedures(false);
@@ -118,10 +129,53 @@ export default function CreateProcedureModal({
     fetchProcedures();
   }, [searchProcedureQuery]);
 
-
+  // Fetch prices when ProcedureArr changes
   useEffect(() => {
-    if (isOpen) return;          
+    const fetchProcedurePrices = async () => {
+      if (ProcedureArr.length === 0) {
+        setProcedurePrices({});
+        return;
+      }
 
+      const newPrices = { ...procedurePrices };
+      let hasChanges = false;
+
+      // Fetch prices for newly added procedures
+      for (const procedure of ProcedureArr) {
+        if (!newPrices[procedure]) {
+          try {
+            const response = await GetPriceOfService(
+              { servicetype: procedure },
+              patientId
+            );
+            newPrices[procedure] = response.data?.price || "N/A";
+            hasChanges = true;
+          } catch (error) {
+            console.error(`Error fetching price for ${procedure}:`, error);
+            newPrices[procedure] = "N/A";
+            hasChanges = true;
+          }
+        }
+      }
+
+      // Remove prices for procedures no longer in the list
+      Object.keys(newPrices).forEach((procedure) => {
+        if (!ProcedureArr.includes(procedure)) {
+          delete newPrices[procedure];
+          hasChanges = true;
+        }
+      });
+
+      if (hasChanges) {
+        setProcedurePrices(newPrices);
+      }
+    };
+
+    fetchProcedurePrices();
+  }, [ProcedureArr]);
+
+  const handleClose = () => {
+    // Reset all state when closing
     setPayload({
       clinic: "",
       indicationdiagnosisprocedure: "",
@@ -130,7 +184,6 @@ export default function CreateProcedureModal({
       cptcodes: "",
       dxcodes: "",
     });
-
     setUpdatedPayload({
       clinic: "",
       indicationdiagnosisprocedure: "",
@@ -139,56 +192,56 @@ export default function CreateProcedureModal({
       cptcodes: "",
       dxcodes: "",
     });
-
-
     setProcedureArr([]);
     setCptcodesArr([]);
     setDxcodesArr([]);
     setSearchProcedureQuery("");
     setProcedureSearchResults([]);
-    setIsLoadingProcedures(false);
-    setLoading(false);
-  }, [isOpen]);
+    setProcedurePrices({});
+    onClose();
+  };
 
- 
   const handlePayload = (e) => {
     const { id, value } = e.target;
     setPayload({ ...Payload, [id]: value });
 
-    if (id === "procedure") {
+    if (id === "procedure" && value) {
       setProcedureArr([...ProcedureArr, value]);
-      getPrice(value);
+      setPayload((prev) => ({ ...prev, procedure: "" })); // Clear the select after adding
     }
-    if (id === "cptcodes") setCptcodesArr([...CptcodesArr, value]);
-    if (id === "dxcodes") setDxcodesArr([...DxcodesArr, value]);
-  };
-
-  const getPrice = async (procedureName) => {
-    try {
-      const patientId = localStorage.getItem("patientId");
-      const result = await GetPriceOfService({ servicetype: procedureName }, patientId);
-      if (result.status) {
-        setPrice(result.price);
-      } else {
-        setPrice(0);
-        activateNotifications("Could not fetch price for the selected procedure.", "warning");
-      }
-    } catch (error) {
-      console.error("Error fetching price:", error);
-      setPrice(0);
-      activateNotifications("An error occurred while fetching the price.", "error");
+    if (id === "cptcodes" && value) {
+      setCptcodesArr([...CptcodesArr, value]);
+      setPayload((prev) => ({ ...prev, cptcodes: "" }));
+    }
+    if (id === "dxcodes" && value) {
+      setDxcodesArr([...DxcodesArr, value]);
+      setPayload((prev) => ({ ...prev, dxcodes: "" }));
     }
   };
 
-  const handleUpdatedPayload = (e) =>
-    setUpdatedPayload({ ...UpdatedPayload, [e.target.id]: e.target.value });
+  const handleUpdatedPayload = (e) => {
+    const { id, value } = e.target;
+    setUpdatedPayload({ ...UpdatedPayload, [id]: value });
 
-  const removeProcedureArr = (item) => setProcedureArr((arr) => arr.filter((p) => p !== item));
-  const removeCptcodesArr   = (item) => setCptcodesArr((arr) => arr.filter((c) => c !== item));
-  const removeDxcodesArr    = (item) => setDxcodesArr((arr) => arr.filter((d) => d !== item));
+    if (id === "procedure" && value) {
+      setProcedureArr([...ProcedureArr, value]);
+      setUpdatedPayload((prev) => ({ ...prev, procedure: "" }));
+    }
+  };
 
+  const removeProcedureArr = (item) =>
+    setProcedureArr((arr) => arr.filter((p) => p !== item));
+  const removeCptcodesArr = (item) =>
+    setCptcodesArr((arr) => arr.filter((c) => c !== item));
+  const removeDxcodesArr = (item) =>
+    setDxcodesArr((arr) => arr.filter((d) => d !== item));
 
   const handleSubmitNew = async () => {
+    if (ProcedureArr.length === 0) {
+      activateNotifications("At least one procedure is required", "error");
+      return;
+    }
+
     setLoading(true);
     try {
       const result = await AddProcedureAPI(
@@ -205,7 +258,7 @@ export default function CreateProcedureModal({
       );
       if (result.status === 200) {
         activateNotifications("Procedure Scheduled Successfully", "success");
-        onClose();
+        handleClose();
       }
     } catch (e) {
       activateNotifications(e.message, "error");
@@ -215,13 +268,19 @@ export default function CreateProcedureModal({
   };
 
   const handleSubmitUpdate = async () => {
+    if (ProcedureArr.length === 0) {
+      activateNotifications("At least one procedure is required", "error");
+      return;
+    }
+
     setLoading(true);
     try {
       const result = await UpdateProcedureAPI(
         {
           clinic: UpdatedPayload.clinic,
-          indicationdiagnosisprocedure: UpdatedPayload.indicationdiagnosisprocedure,
-          procedure: UpdatedPayload.procedure,
+          indicationdiagnosisprocedure:
+            UpdatedPayload.indicationdiagnosisprocedure,
+          procedure: ProcedureArr,
           appointmentdate: UpdatedPayload.appointmentdate,
           cptcodes: CptcodesArr,
           dxcodes: DxcodesArr,
@@ -230,7 +289,7 @@ export default function CreateProcedureModal({
       );
       if (result.status === 200) {
         activateNotifications("Updated Successfully", "success");
-        onClose();
+        handleClose();
       }
     } catch (e) {
       activateNotifications(e.message, "error");
@@ -239,8 +298,7 @@ export default function CreateProcedureModal({
     }
   };
 
-  
-  const ChipGrid = ({ items, removeFn }) => (
+  const ChipGrid = ({ items, removeFn, showPrice = false }) => (
     <SimpleGrid mt="12px" columns={{ base: 2, md: 4 }} spacing={2}>
       {items.map((item, i) => (
         <Flex
@@ -256,9 +314,16 @@ export default function CreateProcedureModal({
           justifyContent="space-between"
           alignItems="center"
         >
-          <Text color="#fff" fontWeight="500" textTransform="capitalize">
-            {item}
-          </Text>
+          <Box>
+            <Text color="#fff" fontWeight="500" textTransform="capitalize">
+              {item}
+            </Text>
+            {showPrice && (
+              <Text fontSize="10px" color="#fff">
+                Price: {procedurePrices[item] || "Loading..."}
+              </Text>
+            )}
+          </Box>
           <Box fontSize="20px" color="#fff" onClick={() => removeFn(item)}>
             <IoIosCloseCircle />
           </Box>
@@ -267,17 +332,23 @@ export default function CreateProcedureModal({
     </SimpleGrid>
   );
 
-
   return (
-    <Modal isOpen={isOpen} onClose={onClose} isCentered size="lg">
+    <Modal isOpen={isOpen} onClose={handleClose} isCentered size="lg">
       <ModalOverlay />
-      <ModalContent maxW={{ base: "90%", md: "60%" }} maxH="80vh" overflowY="auto">
+      <ModalContent
+        maxW={{ base: "90%", md: "60%" }}
+        maxH="80vh"
+        overflowY="auto"
+      >
         <ModalHeader>
-          {type === "new" ? "Add New Procedure" : type === "edit" ? "Edit Procedure" : "Procedure Details"}
+          {type === "new"
+            ? "Add New Procedure"
+            : type === "edit"
+            ? "Edit Procedure"
+            : "Procedure Details"}
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-         
           {type === "new" && (
             <>
               <SimpleGrid mt="18px" mb="5" columns={{ base: 1 }} spacing={5}>
@@ -319,7 +390,11 @@ export default function CreateProcedureModal({
 
                 <Select
                   onChange={handlePayload}
-                  placeholder={isLoadingProcedures ? "Loading procedures..." : "Select Procedure"}
+                  placeholder={
+                    isLoadingProcedures
+                      ? "Loading procedures..."
+                      : "Select Procedure"
+                  }
                   id="procedure"
                   value={Payload.procedure}
                   fontSize={Payload.procedure ? "16px" : "13px"}
@@ -342,8 +417,12 @@ export default function CreateProcedureModal({
                       ))}
                 </Select>
 
-                {/* Chips */}
-                <ChipGrid items={ProcedureArr} removeFn={removeProcedureArr} />
+                {/* Procedure chips with prices */}
+                <ChipGrid
+                  items={ProcedureArr}
+                  removeFn={removeProcedureArr}
+                  showPrice
+                />
 
                 {/* Appointment date */}
                 <Input
@@ -396,10 +475,13 @@ export default function CreateProcedureModal({
                 <ChipGrid items={DxcodesArr} removeFn={removeDxcodesArr} />
               </SimpleGrid>
 
-              {price > 0 && (
-                <Box mt="4">
-                  <Text fontWeight="bold">Price: {price}</Text>
-                </Box>
+              {/* Total price display */}
+              {ProcedureArr.length > 0 && (
+                <Flex justifyContent="flex-end" mt="12px">
+                  <Badge colorScheme="green" fontSize="md" px={3} py={1}>
+                    Total: {totalPrice.toFixed(2)}
+                  </Badge>
+                </Flex>
               )}
 
               <Button mt="32px" isLoading={Loading} onClick={handleSubmitNew}>
@@ -408,7 +490,6 @@ export default function CreateProcedureModal({
             </>
           )}
 
-         
           {type === "edit" && (
             <>
               <SimpleGrid mt="18px" mb="5" columns={{ base: 1 }} spacing={5}>
@@ -450,7 +531,11 @@ export default function CreateProcedureModal({
 
                 <Select
                   onChange={handleUpdatedPayload}
-                  placeholder={isLoadingProcedures ? "Loading procedures..." : "Select Procedure"}
+                  placeholder={
+                    isLoadingProcedures
+                      ? "Loading procedures..."
+                      : "Select Procedure"
+                  }
                   id="procedure"
                   value={UpdatedPayload.procedure}
                   fontSize={UpdatedPayload.procedure ? "16px" : "13px"}
@@ -473,7 +558,12 @@ export default function CreateProcedureModal({
                       ))}
                 </Select>
 
-                <ChipGrid items={ProcedureArr} removeFn={removeProcedureArr} />
+                {/* Procedure chips with prices */}
+                <ChipGrid
+                  items={ProcedureArr}
+                  removeFn={removeProcedureArr}
+                  showPrice
+                />
 
                 {/* Appointment */}
                 <Input
@@ -526,7 +616,20 @@ export default function CreateProcedureModal({
                 <ChipGrid items={DxcodesArr} removeFn={removeDxcodesArr} />
               </SimpleGrid>
 
-              <Button mt="32px" isLoading={Loading} onClick={handleSubmitUpdate}>
+              {/* Total price display */}
+              {ProcedureArr.length > 0 && (
+                <Flex justifyContent="flex-end" mt="12px">
+                  <Badge colorScheme="green" fontSize="md" px={3} py={1}>
+                    Total: {totalPrice.toFixed(2)}
+                  </Badge>
+                </Flex>
+              )}
+
+              <Button
+                mt="32px"
+                isLoading={Loading}
+                onClick={handleSubmitUpdate}
+              >
                 Update
               </Button>
             </>
@@ -536,7 +639,12 @@ export default function CreateProcedureModal({
             <>
               <SimpleGrid mt="18px" mb="5" columns={{ base: 1 }} spacing={5}>
                 {/* everything disabled */}
-                <Select isDisabled value={UpdatedPayload.clinic} size="lg" border="2px solid">
+                <Select
+                  isDisabled
+                  value={UpdatedPayload.clinic}
+                  size="lg"
+                  border="2px solid"
+                >
                   <option>{UpdatedPayload.clinic || "N/A"}</option>
                 </Select>
 
@@ -547,11 +655,16 @@ export default function CreateProcedureModal({
                   label="Indication Diagnosis Procedure"
                 />
 
-                <Select isDisabled value={UpdatedPayload.procedure} size="lg" border="2px solid">
+                <Select
+                  isDisabled
+                  value={UpdatedPayload.procedure}
+                  size="lg"
+                  border="2px solid"
+                >
                   <option>{UpdatedPayload.procedure || "N/A"}</option>
                 </Select>
 
-                <ChipGrid items={ProcedureArr} removeFn={() => {}} />
+                <ChipGrid items={ProcedureArr} removeFn={() => {}} showPrice />
 
                 <Input
                   isDisabled
@@ -561,14 +674,33 @@ export default function CreateProcedureModal({
                   label="Appointment Date"
                 />
 
-                <Select isDisabled value={Payload.cptcodes} size="lg" border="2px solid">
+                <Select
+                  isDisabled
+                  value={Payload.cptcodes}
+                  size="lg"
+                  border="2px solid"
+                >
                   <option>{Payload.cptcodes || "N/A"}</option>
                 </Select>
 
-                <Select isDisabled value={Payload.dxcodes} size="lg" border="2px solid">
+                <Select
+                  isDisabled
+                  value={Payload.dxcodes}
+                  size="lg"
+                  border="2px solid"
+                >
                   <option>{Payload.dxcodes || "N/A"}</option>
                 </Select>
               </SimpleGrid>
+
+              {/* Total price display */}
+              {ProcedureArr.length > 0 && (
+                <Flex justifyContent="flex-end" mt="12px">
+                  <Badge colorScheme="green" fontSize="md" px={3} py={1}>
+                    Total: {totalPrice.toFixed(2)}
+                  </Badge>
+                </Flex>
+              )}
             </>
           )}
         </ModalBody>

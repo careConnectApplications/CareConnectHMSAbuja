@@ -69,24 +69,36 @@ export default function AssignDoctorModal({
             "Raw appointment details:",
             countsResult.data.queryresult.appointmentdetails
           );
+
           countsResult.data.queryresult.appointmentdetails.forEach((item) => {
+            const doctorId = item.doctor.toString(); // Ensure string format
             console.log(
-              `Doctor ID: ${item.doctor}, Patient Count: ${item.patientCount}`
+              `Processing count for doctor: ${doctorId} (${typeof doctorId}) - count: ${
+                item.patientCount
+              }`
             );
-            countsMap[item.doctor] = item.patientCount;
+            countsMap[doctorId] = item.patientCount;
           });
         }
 
         // Merge patient counts into doctors data
-        const doctorsWithCounts = doctorsData.map((doctor) => ({
-          ...doctor,
-          patientCount: countsMap[doctor._id] || 0,
-        }));
+        const doctorsWithCounts = doctorsData.map((doctor) => {
+          const doctorId = doctor._id.toString(); // Ensure string format
+          const count = countsMap[doctorId] || 0;
 
-        console.log(
-          "Merged doctors data with patient counts:",
-          doctorsWithCounts
-        );
+          console.log(
+            `Doctor ID: ${doctorId} (${typeof doctorId}), Name: ${
+              doctor.firstName
+            }, Count: ${count}`
+          );
+
+          return {
+            ...doctor,
+            patientCount: count,
+          };
+        });
+
+        console.log("Final doctors with counts:", doctorsWithCounts);
         setDoctors(doctorsWithCounts);
         setPatientCounts(countsMap);
       } else {
