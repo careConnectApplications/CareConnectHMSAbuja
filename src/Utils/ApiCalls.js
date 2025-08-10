@@ -8784,20 +8784,13 @@ export const GetDoctorsByClinicApi = (clinicName) => {
 
   return axios(config)
     .then((response) => {
-      console.log("Full API Response:", response.data); // For debugging
+      console.log("Full API Response:", response.data);
 
-      // Handle both possible response structures
-      const doctorsData =
-        response.data.doctors?.userdetails ||
-        response.data.queryresult?.userdetails;
-
-      if (Array.isArray(doctorsData)) {
+      // Handle the response structure we're actually getting
+      if (response.data.status && Array.isArray(response.data.queryresult)) {
         return {
-          status: response.data.status,
-          doctors: {
-            userdetails: doctorsData,
-            totaluserdetails: response.data.queryresult?.totaluserdetails || 0,
-          },
+          status: true,
+          queryresult: response.data.queryresult,
         };
       }
       throw new Error("No doctors data found in response");
@@ -8931,6 +8924,39 @@ export const AddBedFeeApi = (id, apiPayload) => {
     method: "post",
     maxBodyLength: Infinity,
     url: `${baseUrl}/admission/addBedFee/${id}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data: data,
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response && error.response.data.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response && error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
+export const payAnnualSubscriptionApi = (apiPayload) => {
+  console.log("payAnnualSubscriptionApi", apiPayload);
+  let data = JSON.stringify(apiPayload);
+
+  let config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/billing/payannualsubscription`,
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
