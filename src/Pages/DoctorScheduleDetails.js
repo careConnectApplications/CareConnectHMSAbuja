@@ -145,55 +145,43 @@ export default function DoctorScheduleDetails() {
             _focus={{ outline: "none" }}
             _selected={{ color: "blue.blue500", fontWeight: "700" }}
           >
-            Clinical Encounter{" "}
-          </Tab>
-          <Tab
-            _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
-          >
-            Lab Test{" "}
-          </Tab>
-          <Tab
-            _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
-          >
-            Lab Report{" "}
-          </Tab>
-          <Tab
-            _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
-          >
-            Pharmacy{" "}
-          </Tab>
-          <Tab
-            _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
-          >
             Admission
           </Tab>
           <Tab
             _focus={{ outline: "none" }}
             _selected={{ color: "blue.blue500", fontWeight: "700" }}
           >
-            Vitals{" "}
+            ANC
           </Tab>
           <Tab
             _focus={{ outline: "none" }}
             _selected={{ color: "blue.blue500", fontWeight: "700" }}
           >
-            Medication{" "}
+            Clinical Encounter{" "}
           </Tab>
           <Tab
             _focus={{ outline: "none" }}
             _selected={{ color: "blue.blue500", fontWeight: "700" }}
           >
-            Radiology{" "}
+            Custom Billing
           </Tab>
           <Tab
             _focus={{ outline: "none" }}
             _selected={{ color: "blue.blue500", fontWeight: "700" }}
           >
-            Procedure{" "}
+            Delivery Note{" "}
+          </Tab>
+          <Tab
+            _focus={{ outline: "none" }}
+            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+          >
+            Dental Encounter
+          </Tab>
+          <Tab
+            _focus={{ outline: "none" }}
+            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+          >
+            Family Planning{" "}
           </Tab>
           <Tab
             _focus={{ outline: "none" }}
@@ -205,20 +193,25 @@ export default function DoctorScheduleDetails() {
             _focus={{ outline: "none" }}
             _selected={{ color: "blue.blue500", fontWeight: "700" }}
           >
-            Family Planning{" "}
-          </Tab>
-
-          <Tab
-            _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
-          >
-            ANC
+            Lab Report{" "}
           </Tab>
           <Tab
             _focus={{ outline: "none" }}
             _selected={{ color: "blue.blue500", fontWeight: "700" }}
           >
-            Partograph Entries
+            Lab Test{" "}
+          </Tab>
+          <Tab
+            _focus={{ outline: "none" }}
+            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+          >
+            Medication{" "}
+          </Tab>
+          <Tab
+            _focus={{ outline: "none" }}
+            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+          >
+            Nutrition{" "}
           </Tab>
           <Tab
             _focus={{ outline: "none" }}
@@ -230,7 +223,37 @@ export default function DoctorScheduleDetails() {
             _focus={{ outline: "none" }}
             _selected={{ color: "blue.blue500", fontWeight: "700" }}
           >
-            Delivery Note{" "}
+            Partograph Entries
+          </Tab>
+          <Tab
+            _focus={{ outline: "none" }}
+            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+          >
+            Pharmacy{" "}
+          </Tab>
+          <Tab
+            _focus={{ outline: "none" }}
+            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+          >
+            Physiotherapy
+          </Tab>
+          <Tab
+            _focus={{ outline: "none" }}
+            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+          >
+            Procedure{" "}
+          </Tab>
+          <Tab
+            _focus={{ outline: "none" }}
+            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+          >
+            Psychiatric
+          </Tab>
+          <Tab
+            _focus={{ outline: "none" }}
+            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+          >
+            Radiology{" "}
           </Tab>
           <Tab
             _focus={{ outline: "none" }}
@@ -248,31 +271,7 @@ export default function DoctorScheduleDetails() {
             _focus={{ outline: "none" }}
             _selected={{ color: "blue.blue500", fontWeight: "700" }}
           >
-            Nutrition{" "}
-          </Tab>
-          <Tab
-            _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
-          >
-            Psychiatric
-          </Tab>
-          <Tab
-            _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
-          >
-            Dental Encounter
-          </Tab>
-          <Tab
-            _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
-          >
-            Physiotherapy
-          </Tab>
-          <Tab
-            _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
-          >
-            Custom Billing
+            Vitals{" "}
           </Tab>
         </TabList>
         {/* <TabIndicator mt='-1.5px' height='2px' bg='blue.blue500' borderRadius='1px' /> */}
@@ -281,49 +280,61 @@ export default function DoctorScheduleDetails() {
             <Examine index={0} id={id} />
           </TabPanel> */}
           <TabPanel p="0">
-            <ClinicalEncounter index={1} id={id} />
-          </TabPanel>
-          <TabPanel p="0">
-            <LabAppointment id={id} />
-          </TabPanel>
-          <TabPanel p="0">
-            <SingleLabReport />
-          </TabPanel>
-          <TabPanel p="0">
-            <Prescription />
-          </TabPanel>
-          <TabPanel p="0">
             <SingleAdmission />
-          </TabPanel>
-          <TabPanel p="0">
-            <SingleVitalChart />
-          </TabPanel>
-          <TabPanel p="0">
-            <SingleMedicationChart />
-          </TabPanel>
-          <TabPanel p="0">
-            <Radiology />
-          </TabPanel>
-          <TabPanel p="0">
-            <SingleProcedure />
-          </TabPanel>
-          <TabPanel p="0">
-            <Immunization />
-          </TabPanel>
-          <TabPanel p="0">
-            <SingleFamilyPlanning />
           </TabPanel>
           <TabPanel p="0">
             <ANC3 id={id} />
           </TabPanel>
           <TabPanel p="0">
-            <SinglePathograph />
+            <ClinicalEncounter index={1} id={id} />
+          </TabPanel>
+          <TabPanel p="0">
+            <CustomBilling />
+          </TabPanel>
+          <TabPanel p="0">
+            <SingleDeliveryNote />
+          </TabPanel>
+          <TabPanel p="0">
+            <Dental />
+          </TabPanel>
+          <TabPanel p="0">
+            <SingleFamilyPlanning />
+          </TabPanel>
+          <TabPanel p="0">
+            <Immunization />
+          </TabPanel>
+          <TabPanel p="0">
+            <SingleLabReport />
+          </TabPanel>
+          <TabPanel p="0">
+            <LabAppointment id={id} />
+          </TabPanel>
+          <TabPanel p="0">
+            <SingleMedicationChart />
+          </TabPanel>
+          <TabPanel p="0">
+            <NutritionPage />
           </TabPanel>
           <TabPanel p="0">
             <PathographyChart />
           </TabPanel>
           <TabPanel p="0">
-            <SingleDeliveryNote />
+            <SinglePathograph />
+          </TabPanel>
+          <TabPanel p="0">
+            <Prescription />
+          </TabPanel>
+          <TabPanel p="0">
+            <PhysiotherapyAssessments />
+          </TabPanel>
+          <TabPanel p="0">
+            <SingleProcedure />
+          </TabPanel>
+          <TabPanel p="0">
+            <PsychiatricEvaluations />
+          </TabPanel>
+          <TabPanel p="0">
+            <Radiology />
           </TabPanel>
           <TabPanel p="0">
             <SingleReferral />
@@ -332,19 +343,7 @@ export default function DoctorScheduleDetails() {
             <ReferTheatreAdmissionPage />
           </TabPanel>
           <TabPanel p="0">
-            <NutritionPage />
-          </TabPanel>
-          <TabPanel p="0">
-            <PsychiatricEvaluations />
-          </TabPanel>
-          <TabPanel p="0">
-            <Dental />
-          </TabPanel>
-          <TabPanel p="0">
-            <PhysiotherapyAssessments />
-          </TabPanel>
-          <TabPanel p="0">
-            <CustomBilling />
+            <SingleVitalChart />
           </TabPanel>
         </TabPanels>
       </Tabs>

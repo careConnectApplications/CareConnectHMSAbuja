@@ -508,6 +508,21 @@ export default function RadiologyPage() {
               cursor="pointer"
               mt={["10px", "10px", "0px", "0px"]}
             >
+
+            <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={filterAwaitingConfirmation}>
+                <Text
+                  py="8.5px"
+                  px="12px"
+                  bg={AwaitingConfirmation ? "#fff" : "transparent"}
+                  rounded="7px"
+                  color={"#1F2937"}
+                  fontWeight={"500"}
+                  fontSize={"13px"}
+                >
+                  Awaiting Confirmation
+
+                </Text>
+              </Box>
               <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={filterInProgress}>
                 <Text
                   py="8.5px"
@@ -522,20 +537,7 @@ export default function RadiologyPage() {
 
                 </Text>
               </Box>
-              <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={filterAwaitingConfirmation}>
-                <Text
-                  py="8.5px"
-                  px="12px"
-                  bg={AwaitingConfirmation ? "#fff" : "transparent"}
-                  rounded="7px"
-                  color={"#1F2937"}
-                  fontWeight={"500"}
-                  fontSize={"13px"}
-                >
-                  Awaiting Confirmation
-
-                </Text>
-              </Box>
+              
               <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={filterProcessed}>
                 <Text
                   py="8.5px"
