@@ -354,7 +354,7 @@ const WardRound = () => {
                     type="ward-round"
                     doctor={`${item.createdBy.firstName} ${item.createdBy.lastName}`}
                     note={item.admissionNote}
-                    date={moment(item.createdDate).format("LL")}
+                    date={moment(item.createdAt).format("LLL")}
                     onEdit={() => handleEditWardRound(item)}
                     onView={() => handleViewWardRound(item)}
                   />

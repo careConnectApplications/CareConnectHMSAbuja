@@ -376,6 +376,20 @@ export default function CreatePatientModal({
         [name]: value,
         age: calculatedAge,
       }));
+    } else if (name === "title") {
+      // Auto-populate gender based on title selection
+      let autoGender = "";
+      if (value === "Mr" || value === "Mallam" || value === "Alhaji") {
+        autoGender = "male";
+      } else if (value === "Mrs" || value === "Miss" || value === "Hajiya") {
+        autoGender = "female";
+      }
+      
+      setPatientData((prev) => ({
+        ...prev,
+        [name]: value,
+        ...(autoGender && { gender: autoGender }),
+      }));
     } else {
       setPatientData((prev) => ({
         ...prev,
@@ -394,6 +408,20 @@ export default function CreatePatientModal({
         ...prev,
         [name]: value,
         age: calculatedAge,
+      }));
+    } else if (name === "title") {
+      // Auto-populate gender based on title selection
+      let autoGender = "";
+      if (value === "Mr" || value === "Mallam" || value === "Alhaji") {
+        autoGender = "male";
+      } else if (value === "Mrs" || value === "Miss" || value === "Hajiya") {
+        autoGender = "female";
+      }
+      
+      setUpdatedPayload((prev) => ({
+        ...prev,
+        [name]: value,
+        ...(autoGender && { gender: autoGender }),
       }));
     } else {
       setUpdatedPayload((prev) => ({

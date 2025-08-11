@@ -21,9 +21,11 @@ import {
   RequestLabOrderApi,
   GetAllClinicApi,
   GetPriceOfService,
+  SearchTestApi,
 } from "../Utils/ApiCalls";
 import { IoIosCloseCircle } from "react-icons/io";
 import { FaNoteSticky } from "react-icons/fa6";
+import { FiSearch } from "react-icons/fi";
 
 export default function LabRequestModal({
   isOpen,
@@ -56,6 +58,12 @@ export default function LabRequestModal({
   // New state to store lab list
   const [labs, setLabs] = useState([]);
 
+  // New state for enhanced search functionality
+  const [searchTestName, setSearchTestName] = useState("");
+  const [testSearchResults, setTestSearchResults] = useState([]);
+  const [isLoadingTests, setIsLoadingTests] = useState(false);
+  const [selectedTestInfo, setSelectedTestInfo] = useState(null);
+
   const handleClose = () => {
     // Reset all form fields when closing
     setPayload({
@@ -66,6 +74,9 @@ export default function LabRequestModal({
     });
     setTestNames([]);
     setTestPrices({});
+    setSearchTestName("");
+    setTestSearchResults([]);
+    setSelectedTestInfo(null);
     onClose();
   };
 
@@ -73,14 +84,16 @@ export default function LabRequestModal({
   const handlePayload = (e) => {
     const { id, value } = e.target;
     setPayload({ ...Payload, [id]: value });
+  };
 
-    if (id === "testNames") {
-      if (value && !TestNames.includes(value)) {
-        setTestNames([...TestNames, value]);
-        // Clear the select input after selection
-        setPayload((prev) => ({ ...prev, testNames: "" }));
-      }
+  // Handler for test selection from search results
+  const handleTestSelect = (testName) => {
+    if (testName && !TestNames.includes(testName)) {
+      setTestNames([...TestNames, testName]);
     }
+    setTestSearchResults([]); // Clear search results
+    setSearchTestName(""); // Clear search input
+    setSelectedTestInfo(null);
   };
 
   // Fetch prices when testNames changes
@@ -201,6 +214,53 @@ export default function LabRequestModal({
     getLabs();
   }, []);
 
+  // Auto-search functionality with debouncing for test names
+  useEffect(() => {
+    const searchTests = async (searchTerm) => {
+      if (!searchTerm || searchTerm.trim().length < 2) {
+        setTestSearchResults([]);
+        return;
+      }
+
+      // Don't search if a test is already selected and the search term matches
+      if (selectedTestInfo && searchTerm.includes(selectedTestInfo.name)) {
+        return;
+      }
+
+      try {
+        setIsLoadingTests(true);
+        const results = await SearchTestApi(searchTerm);
+        if (results?.queryresult) {
+          setTestSearchResults(results.queryresult);
+        } else {
+          setTestSearchResults([]);
+        }
+      } catch (e) {
+        console.error("Error searching tests:", e.message);
+        setTestSearchResults([]);
+      } finally {
+        setIsLoadingTests(false);
+      }
+    };
+
+    const timeoutId = setTimeout(() => {
+      searchTests(searchTestName);
+    }, 300); // 300ms debounce
+
+    return () => clearTimeout(timeoutId);
+  }, [searchTestName, selectedTestInfo]);
+
+  // Handle search input change and clear selection if user starts typing new search
+  const handleSearchInputChange = (e) => {
+    const value = e.target.value;
+    setSearchTestName(value);
+
+    // Clear selected test if user modifies the search significantly
+    if (selectedTestInfo && !value.includes(selectedTestInfo.name)) {
+      setSelectedTestInfo(null);
+    }
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={handleClose} isCentered size="lg">
       <ModalOverlay />
@@ -249,24 +309,95 @@ export default function LabRequestModal({
               </Select>
             </SimpleGrid>
 
-            {/* Test selection drop down */}
+            {/* Enhanced test name search */}
             <SimpleGrid mt="12px" columns={{ base: 1, md: 1 }} spacing={5}>
-              <Select
-                onChange={handlePayload}
-                placeholder="Select Test Name"
-                border="2px solid"
-                id="testNames"
-                value={Payload.testNames}
-                size="lg"
-                fontSize={Payload.testNames !== "" ? "16px" : "13px"}
-                borderColor="gray.500"
-              >
-                {Settings?.testnames?.map((item, i) => (
-                  <option key={i} value={item}>
-                    {item}
-                  </option>
-                ))}
-              </Select>
+              <Box position="relative">
+                <Input
+                  label="Search for Test Name"
+                  placeholder="Enter test name to search..."
+                  value={searchTestName}
+                  onChange={handleSearchInputChange}
+                  leftIcon={<FiSearch size={16} color="blue.500" />}
+                />
+
+                {/* Search Results Dropdown */}
+                {testSearchResults.length > 0 && !selectedTestInfo && (
+                  <Box
+                    position="absolute"
+                    top="100%"
+                    left={0}
+                    right={0}
+                    zIndex={10}
+                    bg="white"
+                    border="2px solid"
+                    borderColor="gray.500"
+                    borderRadius="md"
+                    boxShadow="lg"
+                    maxH="200px"
+                    overflowY="auto"
+                    mt={1}
+                  >
+                    {testSearchResults.map((test, index) => (
+                      <Box
+                        key={index}
+                        p={3}
+                        cursor="pointer"
+                        _hover={{ bg: "blue.50" }}
+                        onClick={() => handleTestSelect(test.servicetype)}
+                        borderBottom="1px solid"
+                        borderColor="gray.100"
+                        _last={{ borderBottom: "none" }}
+                      >
+                        <Text fontWeight="medium" textTransform="capitalize">
+                          {test.servicetype}
+                        </Text>
+                      </Box>
+                    ))}
+                  </Box>
+                )}
+
+                {/* Loading Indicator */}
+                {isLoadingTests && (
+                  <Box
+                    position="absolute"
+                    top="100%"
+                    left={0}
+                    right={0}
+                    zIndex={10}
+                    bg="white"
+                    border="2px solid"
+                    borderColor="gray.500"
+                    borderRadius="md"
+                    p={3}
+                    mt={1}
+                  >
+                    <Text color="gray.500">Searching tests...</Text>
+                  </Box>
+                )}
+
+                {/* No results found */}
+                {!isLoadingTests &&
+                  searchTestName.trim().length >= 2 &&
+                  testSearchResults.length === 0 && (
+                    <Box
+                      position="absolute"
+                      top="100%"
+                      left={0}
+                      right={0}
+                      zIndex={10}
+                      bg="white"
+                      border="2px solid"
+                      borderColor="gray.500"
+                      borderRadius="md"
+                      p={3}
+                      mt={1}
+                    >
+                      <Text color="gray.500">
+                        No tests found matching your search.
+                      </Text>
+                    </Box>
+                  )}
+              </Box>
             </SimpleGrid>
 
             {/* Display the selected test names with prices */}
@@ -275,7 +406,7 @@ export default function LabRequestModal({
                 <Text mt="12px" fontSize="sm" fontWeight="bold">
                   Selected Tests:
                 </Text>
-                <SimpleGrid mt="12px" columns={{ base: 2, md: 4 }} spacing={2}>
+                <SimpleGrid mt="12px" columns={{ base: 2, md: 2 }} spacing={2}>
                   {TestNames.map((item, i) => (
                     <Flex
                       key={i}

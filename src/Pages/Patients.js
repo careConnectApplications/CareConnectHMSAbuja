@@ -207,10 +207,9 @@ export default function Patients() {
     try {
       setIsLoading(true);
       const result = await payAnnualSubscriptionApi({ patientId: id });
-      console.log("Payment response:", result); // Add this for debugging
+      console.log("Payment response:", result);
 
       if (result.data && result.data.status === true) {
-        // Adjust based on actual API response
         setShowToast({
           show: true,
           message: "Payment Successful",

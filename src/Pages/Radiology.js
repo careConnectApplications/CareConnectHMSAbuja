@@ -50,7 +50,7 @@ export default function Radiology() {
   const [searchInput, setSearchInput] = useState("");
   
   // Updated status filter states
-  const [all, setAll] = useState(true);
+  const [awaiting, setAwaiting] = useState(true);
   const [inProgress, setInProgress] = useState(false);
   const [processed, setProcessed] = useState(false);
   
@@ -115,16 +115,20 @@ export default function Radiology() {
     setFilterData(filtered);
   };
 
-  // Filter functions using "inprogress" and "processed" statuses
-  const filterAll = () => {
-    setAll(true);
+  // Filter functions using "awaiting", "inprogress" and "processed" statuses
+  const filterAwaiting = () => {
+    setAwaiting(true);
     setInProgress(false);
     setProcessed(false);
-    setFilterData(originalData);
+    const filtered = originalData.filter((item) => {
+      const status = item.status?.toLowerCase();
+      return status !== "inprogress" && status !== "processed";
+    });
+    setFilterData(filtered);
   };
 
   const filterInProgress = () => {
-    setAll(false);
+    setAwaiting(false);
     setInProgress(true);
     setProcessed(false);
     const filtered = originalData.filter((item) => {
@@ -135,7 +139,7 @@ export default function Radiology() {
   };
 
   const filterProcessed = () => {
-    setAll(false);
+    setAwaiting(false);
     setInProgress(false);
     setProcessed(true);
     const filtered = originalData.filter((item) => {
@@ -282,17 +286,17 @@ export default function Radiology() {
             cursor="pointer"
             mt="10px"
           >
-            <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={filterAll}>
+            <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={filterAwaiting}>
               <Text
                 py="8.5px"
                 px="12px"
-                bg={all ? "#fff" : "transparent"}
+                bg={awaiting ? "#fff" : "transparent"}
                 rounded="7px"
                 color="#1F2937"
                 fontWeight="500"
                 fontSize={["11px", "13px"]}
               >
-                All
+                Awaiting
               </Text>
             </Box>
             <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={filterInProgress}>
@@ -364,7 +368,7 @@ export default function Radiology() {
                       fontWeight: "400",
                       bg: "blue.blue500",
                     }}
-                    onClick={filterAll}
+                    onClick={filterAwaiting}
                   >
                     Reset Filters
                   </MenuItem>

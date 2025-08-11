@@ -174,17 +174,51 @@ export default function CreateUserModal({
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setUserData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    
+    if (name === "title") {
+      // Auto-populate gender based on title selection
+      let autoGender = "";
+      if (value === "Mr" || value === "Mallam" || value === "Alhaji") {
+        autoGender = "male";
+      } else if (value === "Mrs" || value === "Miss" || value === "Hajiya") {
+        autoGender = "female";
+      }
+      
+      setUserData((prev) => ({
+        ...prev,
+        [name]: value,
+        ...(autoGender && { gender: autoGender }),
+      }));
+    } else {
+      setUserData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
   const handleUpdatedPayload = (e) => {
     const { name, value } = e.target;
-    setUpdatedPayload((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    
+    if (name === "title") {
+      // Auto-populate gender based on title selection
+      let autoGender = "";
+      if (value === "Mr" || value === "Mallam" || value === "Alhaji") {
+        autoGender = "male";
+      } else if (value === "Mrs" || value === "Miss" || value === "Hajiya") {
+        autoGender = "female";
+      }
+      
+      setUpdatedPayload((prev) => ({
+        ...prev,
+        [name]: value,
+        ...(autoGender && { gender: autoGender }),
+      }));
+    } else {
+      setUpdatedPayload((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async () => {
@@ -365,9 +399,9 @@ export default function CreateUserModal({
                       <option value="Miss">Miss</option>
                       <option value="Dr">Dr</option>
                       <option value="Prof">Prof</option>
-                      <option value="Prof">Mallam</option>
-                      <option value="Prof">Alhaji </option>
-                      <option value="Prof">Hajiya </option>
+                      <option value="Mallam">Mallam</option>
+                      <option value="Alhaji">Alhaji </option>
+                      <option value="Hajiya">Hajiya </option>
                     </Select>
                   </FormControl>
                   <FormControl>
@@ -713,6 +747,9 @@ export default function CreateUserModal({
                       <option value="Miss">Miss</option>
                       <option value="Dr">Dr</option>
                       <option value="Prof">Prof</option>
+                      <option value="Mallam">Mallam</option>
+                      <option value="Alhaji">Alhaji </option>
+                      <option value="Hajiya">Hajiya </option>
                     </Select>
                   </FormControl>
                   <FormControl>
