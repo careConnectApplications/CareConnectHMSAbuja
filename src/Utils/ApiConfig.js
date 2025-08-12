@@ -30,7 +30,11 @@ if (baseChecker === "ehealthcareconnect.com") {
   FacilityName = "YERWA PRIMARY HEALTHCARE CENTRE, MAIDUGURI";
 } else if (baseChecker === "mkachallaphc.ehealthcareconnect.com") {
   FacilityName = "MALA KACHALLA PRIMARY HEALTHCARE CENTRE, MAIDUGURI";
-} else if (baseChecker === "20.164.19.147") {
+}
+} else if (baseChecker === "adh.ehealthcareconnect.com") {
+  FacilityName = "ASOKORO DISTRICT HOSPITAL (ADH)";
+} 
+else if (baseChecker === "20.164.19.147") {
   FacilityName = "TEST HOSPITAL";
 } else {
   FacilityName = "GENERAL HOSPITAL, ABUJA";
