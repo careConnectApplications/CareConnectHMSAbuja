@@ -6,6 +6,7 @@ import {
   Image,
   Flex,
   SimpleGrid,
+  Td,
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import Button from "../Components/Button";
@@ -72,7 +73,7 @@ export default function PrintReportSummary() {
         fontWeight="900"
         color="#242424"
       >
-       {FacilityName}
+        {FacilityName}
       </Text>
       <Text
         textAlign="center"
@@ -87,58 +88,58 @@ export default function PrintReportSummary() {
       <Box>
         {Category === "financialaggregate" && (
           <>
-          <TableContainer mt="15px">
-            <Table variant="striped">
-              <Thead>
-                <Tr>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    S/N
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    Payment Category
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    Total Amount (&#8358;)
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    Status
-                  </Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {Data.map((item, i) => (
-                  <TableRow
-                    type="financial-aggregate"
-                    sn={i + 1}
-                    category={item.paymentcategory}
-                    total={item.totalAmount?.toLocaleString()}
-                    status={item.status}
-                  />
-                ))}
-              </Tbody>
-            </Table>
-          </TableContainer>
-          <Box
+            <TableContainer mt="15px">
+              <Table variant="striped">
+                <Thead>
+                  <Tr>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#000"
+                      fontWeight="600"
+                    >
+                      S/N
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#000"
+                      fontWeight="600"
+                    >
+                      Payment Category
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#000"
+                      fontWeight="600"
+                    >
+                      Total Amount (&#8358;)
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#000"
+                      fontWeight="600"
+                    >
+                      Status
+                    </Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {Data.map((item, i) => (
+                    <TableRow
+                      type="financial-aggregate"
+                      sn={i + 1}
+                      category={item.paymentcategory}
+                      total={item.totalAmount?.toLocaleString()}
+                      status={item.status}
+                    />
+                  ))}
+                </Tbody>
+              </Table>
+            </TableContainer>
+            <Box
               mt="20px"
               p="20px"
               borderWidth="1px"
@@ -146,89 +147,89 @@ export default function PrintReportSummary() {
               borderRadius="md"
               bg="gray.50"
             >
-             
               <Text fontWeight="700" fontSize="16px">
                 Grand Total Amount: &#8358;{" "}
-                {JSON.parse(
-                  localStorage.getItem("reportGrandTotal")
-                )?.grandtotalAmount}
+                {
+                  JSON.parse(localStorage.getItem("reportGrandTotal"))
+                    ?.grandtotalAmount
+                }
               </Text>
             </Box>
-           </>
+          </>
         )}
 
         {Category === "cashieraggregate" && (
           <>
-          <TableContainer mt="15px">
-            <Table variant="striped">
-              <Thead>
-                <Tr>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    S/N
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    Cashier Email
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    Cashier Name
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    Cashier ID
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    Total Amount (&#8358;)
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    Status
-                  </Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {Data.map((item, i) => (
-                  <TableRow
-                    type="cashier-aggregate"
-                    sn={i + 1}
-                    email={item.cashieremail}
-                    name={item.cashiername}
-                    id={item.cashierid}
-                    total={item.totalAmount?.toLocaleString()}
-                    status={item.status}
-                  />
-                ))}
-              </Tbody>
-            </Table>
-          </TableContainer>
-          <Box
+            <TableContainer mt="15px">
+              <Table variant="striped">
+                <Thead>
+                  <Tr>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#000"
+                      fontWeight="600"
+                    >
+                      S/N
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#000"
+                      fontWeight="600"
+                    >
+                      Cashier Email
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#000"
+                      fontWeight="600"
+                    >
+                      Cashier Name
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#000"
+                      fontWeight="600"
+                    >
+                      Cashier ID
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#000"
+                      fontWeight="600"
+                    >
+                      Total Amount (&#8358;)
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#000"
+                      fontWeight="600"
+                    >
+                      Status
+                    </Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {Data.map((item, i) => (
+                    <TableRow
+                      type="cashier-aggregate"
+                      sn={i + 1}
+                      email={item.cashieremail}
+                      name={item.cashiername}
+                      id={item.cashierid}
+                      total={item.totalAmount?.toLocaleString()}
+                      status={item.status}
+                    />
+                  ))}
+                </Tbody>
+              </Table>
+            </TableContainer>
+            <Box
               mt="20px"
               p="20px"
               borderWidth="1px"
@@ -236,7 +237,6 @@ export default function PrintReportSummary() {
               borderRadius="md"
               bg="gray.50"
             >
-             
               <Text fontWeight="700" fontSize="16px">
                 Grand Total Amount: &#8358;{" "}
                 {JSON.parse(
@@ -244,63 +244,63 @@ export default function PrintReportSummary() {
                 )?.grandtotalAmount.toLocaleString()}
               </Text>
             </Box>
-           </>
+          </>
         )}
 
         {Category === "appointmentaggregate" && (
           <>
-          <TableContainer mt="15px">
-            <Table variant="striped">
-              <Thead>
-                <Tr>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    S/N
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    Number of Appointment
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    Clinic
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    Status
-                  </Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {Data.map((item, i) => (
-                  <TableRow
-                    type="appointment-aggregate"
-                    sn={i + 1}
-                    appointment={item.Numberofappointment}
-                    clinic={item.clinic}
-                    status={item.status}
-                  />
-                ))}
-              </Tbody>
-            </Table>
-          </TableContainer>
-          <Box
+            <TableContainer mt="15px">
+              <Table variant="striped">
+                <Thead>
+                  <Tr>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#000"
+                      fontWeight="600"
+                    >
+                      S/N
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#000"
+                      fontWeight="600"
+                    >
+                      Number of Appointment
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#000"
+                      fontWeight="600"
+                    >
+                      Clinic
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#000"
+                      fontWeight="600"
+                    >
+                      Status
+                    </Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {Data.map((item, i) => (
+                    <TableRow
+                      type="appointment-aggregate"
+                      sn={i + 1}
+                      appointment={item.Numberofappointment}
+                      clinic={item.clinic}
+                      status={item.status}
+                    />
+                  ))}
+                </Tbody>
+              </Table>
+            </TableContainer>
+            <Box
               mt="20px"
               p="20px"
               borderWidth="1px"
@@ -308,71 +308,71 @@ export default function PrintReportSummary() {
               borderRadius="md"
               bg="gray.50"
             >
-             
               <Text fontWeight="700" fontSize="16px">
-                Grand Total Number Of Appointments: {" "}
-                {JSON.parse(
-                  localStorage.getItem("reportGrandTotal")
-                )?.GrandTotalNumberofappointment}
+                Grand Total Number Of Appointments:{" "}
+                {
+                  JSON.parse(localStorage.getItem("reportGrandTotal"))
+                    ?.GrandTotalNumberofappointment
+                }
               </Text>
             </Box>
-           </>
+          </>
         )}
 
         {Category === "admissionaggregate" && (
           <>
-          <TableContainer mt="15px">
-            <Table variant="striped">
-              <Thead>
-                <Tr>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    S/N
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    Number of Admission
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    WardName
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    Status
-                  </Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {Data.map((item, i) => (
-                  <TableRow
-                    type="appointment-aggregate"
-                    sn={i + 1}
-                    appointment={item.Numberofadmission}
-                    clinic={item.wardname}
-                    status={item.status}
-                  />
-                ))}
-              </Tbody>
-            </Table>
-          </TableContainer>
-          <Box
+            <TableContainer mt="15px">
+              <Table variant="striped">
+                <Thead>
+                  <Tr>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#000"
+                      fontWeight="600"
+                    >
+                      S/N
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#000"
+                      fontWeight="600"
+                    >
+                      Number of Admission
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#000"
+                      fontWeight="600"
+                    >
+                      WardName
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#000"
+                      fontWeight="600"
+                    >
+                      Status
+                    </Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {Data.map((item, i) => (
+                    <TableRow
+                      type="appointment-aggregate"
+                      sn={i + 1}
+                      appointment={item.Numberofadmission}
+                      clinic={item.wardname}
+                      status={item.status}
+                    />
+                  ))}
+                </Tbody>
+              </Table>
+            </TableContainer>
+            <Box
               mt="20px"
               p="20px"
               borderWidth="1px"
@@ -380,15 +380,15 @@ export default function PrintReportSummary() {
               borderRadius="md"
               bg="gray.50"
             >
-             
               <Text fontWeight="700" fontSize="16px">
-                Grand Total Number Of Admissions: {" "}
-                {JSON.parse(
-                  localStorage.getItem("reportGrandTotal")
-                )?.TotalNumberofadmission}
+                Grand Total Number Of Admissions:{" "}
+                {
+                  JSON.parse(localStorage.getItem("reportGrandTotal"))
+                    ?.TotalNumberofadmission
+                }
               </Text>
             </Box>
-            </>
+          </>
         )}
 
         {Category === "procedureaggregate" && (
@@ -514,607 +514,861 @@ export default function PrintReportSummary() {
           </TableContainer>
         )}
 
-        {Category === "hmoaggregate" && (
-          Data.hmolabsummary?.length > 0 && (
-            <>
-              <Text>HMO Lab Summary</Text>
-              <TableContainer mt="15px">
-            <Table variant="striped">
-              <Thead>
-                <Tr>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    S/N
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    Total Number
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    HMO Name
-                  </Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {Data.hmolabsummary?.map((item, i) => (
-                  <TableRow
-                    type="clinical-aggregate"
-                    sn={i + 1}
-                    appointment={item.TotalNumber}
-                    diagnosis={item.HMOName}
-                  />
-                ))}
-              </Tbody>
-            </Table>
-          </TableContainer>
-            </>
-          )
-         
+        {Category === "hmoaggregate" && Data.hmolabsummary?.length > 0 && (
+          <>
+            <Text>HMO Lab Summary</Text>
+            <TableContainer mt="15px">
+              <Table variant="striped">
+                <Thead>
+                  <Tr>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#000"
+                      fontWeight="600"
+                    >
+                      S/N
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#000"
+                      fontWeight="600"
+                    >
+                      Total Number
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#000"
+                      fontWeight="600"
+                    >
+                      HMO Name
+                    </Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {Data.hmolabsummary?.map((item, i) => (
+                    <TableRow
+                      type="clinical-aggregate"
+                      sn={i + 1}
+                      appointment={item.TotalNumber}
+                      diagnosis={item.HMOName}
+                    />
+                  ))}
+                </Tbody>
+              </Table>
+            </TableContainer>
+          </>
         )}
-        {Category === "hmoaggregate" && (
-          Data.hmopharmacysummary?.length > 0 && (
-            <>
-              <Text>HMO Pharmacy Summary</Text>
-              <TableContainer mt="15px">
-            <Table variant="striped">
-              <Thead>
-                <Tr>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    S/N
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    Total Number
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    HMO Name
-                  </Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {Data.hmopharmacysummary?.map((item, i) => (
-                  <TableRow
-                    type="clinical-aggregate"
-                    sn={i + 1}
-                    appointment={item.TotalNumber}
-                    diagnosis={item.HMOName}
-                  />
-                ))}
-              </Tbody>
-            </Table>
-          </TableContainer>
-            </>
-          )
-         
+        {Category === "hmoaggregate" && Data.hmopharmacysummary?.length > 0 && (
+          <>
+            <Text>HMO Pharmacy Summary</Text>
+            <TableContainer mt="15px">
+              <Table variant="striped">
+                <Thead>
+                  <Tr>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#000"
+                      fontWeight="600"
+                    >
+                      S/N
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#000"
+                      fontWeight="600"
+                    >
+                      Total Number
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#000"
+                      fontWeight="600"
+                    >
+                      HMO Name
+                    </Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {Data.hmopharmacysummary?.map((item, i) => (
+                    <TableRow
+                      type="clinical-aggregate"
+                      sn={i + 1}
+                      appointment={item.TotalNumber}
+                      diagnosis={item.HMOName}
+                    />
+                  ))}
+                </Tbody>
+              </Table>
+            </TableContainer>
+          </>
         )}
-        {Category === "hmoaggregate" && (
+        {Category === "hmoaggregate" &&
           Data.hmoproceduresummary?.length > 0 && (
             <>
               <Text>HMO Procedure Summary</Text>
               <TableContainer mt="15px">
-            <Table variant="striped">
-              <Thead>
-                <Tr>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    S/N
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    Total Number
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    HMO Name
-                  </Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {Data.hmoproceduresummary?.map((item, i) => (
-                  <TableRow
-                    type="clinical-aggregate"
-                    sn={i + 1}
-                    appointment={item.TotalNumber}
-                    diagnosis={item.HMOName}
-                  />
-                ))}
-              </Tbody>
-            </Table>
-          </TableContainer>
+                <Table variant="striped">
+                  <Thead>
+                    <Tr>
+                      <Th
+                        fontSize="13px"
+                        textTransform="capitalize"
+                        color="#000"
+                        fontWeight="600"
+                      >
+                        S/N
+                      </Th>
+                      <Th
+                        fontSize="13px"
+                        textTransform="capitalize"
+                        color="#000"
+                        fontWeight="600"
+                      >
+                        Total Number
+                      </Th>
+                      <Th
+                        fontSize="13px"
+                        textTransform="capitalize"
+                        color="#000"
+                        fontWeight="600"
+                      >
+                        HMO Name
+                      </Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {Data.hmoproceduresummary?.map((item, i) => (
+                      <TableRow
+                        type="clinical-aggregate"
+                        sn={i + 1}
+                        appointment={item.TotalNumber}
+                        diagnosis={item.HMOName}
+                      />
+                    ))}
+                  </Tbody>
+                </Table>
+              </TableContainer>
             </>
-          )
-         
-        )}
-        {Category === "hmoaggregate" && (
+          )}
+        {Category === "hmoaggregate" &&
           Data.hmoradiologysummary?.length > 0 && (
             <>
               <Text>HMO Radiology Summary</Text>
               <TableContainer mt="15px">
-            <Table variant="striped">
-              <Thead>
-                <Tr>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    S/N
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    Total Number
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    HMO Name
-                  </Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {Data.hmoradiologysummary?.map((item, i) => (
-                  <TableRow
-                    type="clinical-aggregate"
-                    sn={i + 1}
-                    appointment={item.TotalNumber}
-                    diagnosis={item.HMOName}
-                  />
-                ))}
-              </Tbody>
-            </Table>
-          </TableContainer>
+                <Table variant="striped">
+                  <Thead>
+                    <Tr>
+                      <Th
+                        fontSize="13px"
+                        textTransform="capitalize"
+                        color="#000"
+                        fontWeight="600"
+                      >
+                        S/N
+                      </Th>
+                      <Th
+                        fontSize="13px"
+                        textTransform="capitalize"
+                        color="#000"
+                        fontWeight="600"
+                      >
+                        Total Number
+                      </Th>
+                      <Th
+                        fontSize="13px"
+                        textTransform="capitalize"
+                        color="#000"
+                        fontWeight="600"
+                      >
+                        HMO Name
+                      </Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {Data.hmoradiologysummary?.map((item, i) => (
+                      <TableRow
+                        type="clinical-aggregate"
+                        sn={i + 1}
+                        appointment={item.TotalNumber}
+                        diagnosis={item.HMOName}
+                      />
+                    ))}
+                  </Tbody>
+                </Table>
+              </TableContainer>
             </>
-          )
-         
-        )}
-        {Category === "hmoaggregate" && (
+          )}
+        {Category === "hmoaggregate" &&
           Data.hmsappointmentsummary?.length > 0 && (
             <>
               <Text>HMO Appointment Summary</Text>
               <TableContainer mt="15px">
-            <Table variant="striped">
-              <Thead>
-                <Tr>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    S/N
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    Total Number
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    HMO Name
-                  </Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {Data.hmsappointmentsummary?.map((item, i) => (
-                  <TableRow
-                    type="clinical-aggregate"
-                    sn={i + 1}
-                    appointment={item.TotalNumber}
-                    diagnosis={item.HMOName}
-                  />
-                ))}
-              </Tbody>
-            </Table>
-          </TableContainer>
+                <Table variant="striped">
+                  <Thead>
+                    <Tr>
+                      <Th
+                        fontSize="13px"
+                        textTransform="capitalize"
+                        color="#000"
+                        fontWeight="600"
+                      >
+                        S/N
+                      </Th>
+                      <Th
+                        fontSize="13px"
+                        textTransform="capitalize"
+                        color="#000"
+                        fontWeight="600"
+                      >
+                        Total Number
+                      </Th>
+                      <Th
+                        fontSize="13px"
+                        textTransform="capitalize"
+                        color="#000"
+                        fontWeight="600"
+                      >
+                        HMO Name
+                      </Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {Data.hmsappointmentsummary?.map((item, i) => (
+                      <TableRow
+                        type="clinical-aggregate"
+                        sn={i + 1}
+                        appointment={item.TotalNumber}
+                        diagnosis={item.HMOName}
+                      />
+                    ))}
+                  </Tbody>
+                </Table>
+              </TableContainer>
             </>
-          )
-         
-        )}
+          )}
         {/* nutrition Aggregate  */}
 
-        {Category === "nutritionaggregate" && (
+        {Category === "nutritionaggregate" &&
           Data.children0to59thatreceivednutirtion?.length > 0 && (
             <>
-              <Text mt="2" fontWeight="600">Children 0 to 59 that received nutrition</Text>
+              <Text mt="2" fontWeight="600">
+                Children 0 to 59 that received nutrition
+              </Text>
               <TableContainer mt="15px">
-            <Table variant="striped">
-              <Thead>
-                <Tr>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    Count
-                  </Th>
-                    <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    age in months
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    Gender
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    Supplement
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    Type of Visit
-                  </Th>
-                
-                </Tr>
-              </Thead>
-              <Tbody>
-                {Data.children0to59thatreceivednutirtion?.map((item, i) => (
-                  <TableRow
-                    type="nutrition-summary"
-                    count={item.count}
-                    age={item.parameters?.ageinmonths}
-                    gender={item.parameters?.gender}
-                    supplement={item.parameters?.vitaminasupplement}
-                    visitType={item.parameters?.typeofvisit}
-                    
-                  />
-                ))}
-              </Tbody>
-            </Table>
-          </TableContainer>
+                <Table variant="striped">
+                  <Thead>
+                    <Tr>
+                      <Th
+                        fontSize="13px"
+                        textTransform="capitalize"
+                        color="#000"
+                        fontWeight="600"
+                      >
+                        Count
+                      </Th>
+                      <Th
+                        fontSize="13px"
+                        textTransform="capitalize"
+                        color="#000"
+                        fontWeight="600"
+                      >
+                        age in months
+                      </Th>
+                      <Th
+                        fontSize="13px"
+                        textTransform="capitalize"
+                        color="#000"
+                        fontWeight="600"
+                      >
+                        Gender
+                      </Th>
+                      <Th
+                        fontSize="13px"
+                        textTransform="capitalize"
+                        color="#000"
+                        fontWeight="600"
+                      >
+                        Supplement
+                      </Th>
+                      <Th
+                        fontSize="13px"
+                        textTransform="capitalize"
+                        color="#000"
+                        fontWeight="600"
+                      >
+                        Type of Visit
+                      </Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {Data.children0to59thatreceivednutirtion?.map((item, i) => (
+                      <TableRow
+                        type="nutrition-summary"
+                        count={item.count}
+                        age={item.parameters?.ageinmonths}
+                        gender={item.parameters?.gender}
+                        supplement={item.parameters?.vitaminasupplement}
+                        visitType={item.parameters?.typeofvisit}
+                      />
+                    ))}
+                  </Tbody>
+                </Table>
+              </TableContainer>
             </>
-          )
-         
-        )}
-        {Category === "nutritionaggregate" && (
+          )}
+        {Category === "nutritionaggregate" &&
           Data.children0to59growingwell?.length > 0 && (
             <>
-              <Text mt="2" fontWeight="600">Children 0 to 59 that are growing well</Text>
+              <Text mt="2" fontWeight="600">
+                Children 0 to 59 that are growing well
+              </Text>
               <TableContainer mt="15px">
-            <Table variant="striped">
-              <Thead>
-                <Tr>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    Count
-                  </Th>
-                    <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    age in months
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    Gender
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    Supplement
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    Type of Visit
-                  </Th>
-                
-                </Tr>
-              </Thead>
-              <Tbody>
-                {Data.children0to59growingwell?.map((item, i) => (
-                  <TableRow
-                    type="nutrition-summary"
-                    count={item.count}
-                    age={item.parameters?.ageinmonths}
-                    gender={item.parameters?.gender}
-                    supplement={item.parameters?.vitaminasupplement}
-                    visitType={item.parameters?.typeofvisit}
-                    
-                  />
-                ))}
-              </Tbody>
-            </Table>
-          </TableContainer>
+                <Table variant="striped">
+                  <Thead>
+                    <Tr>
+                      <Th
+                        fontSize="13px"
+                        textTransform="capitalize"
+                        color="#000"
+                        fontWeight="600"
+                      >
+                        Count
+                      </Th>
+                      <Th
+                        fontSize="13px"
+                        textTransform="capitalize"
+                        color="#000"
+                        fontWeight="600"
+                      >
+                        age in months
+                      </Th>
+                      <Th
+                        fontSize="13px"
+                        textTransform="capitalize"
+                        color="#000"
+                        fontWeight="600"
+                      >
+                        Gender
+                      </Th>
+                      <Th
+                        fontSize="13px"
+                        textTransform="capitalize"
+                        color="#000"
+                        fontWeight="600"
+                      >
+                        Supplement
+                      </Th>
+                      <Th
+                        fontSize="13px"
+                        textTransform="capitalize"
+                        color="#000"
+                        fontWeight="600"
+                      >
+                        Type of Visit
+                      </Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {Data.children0to59growingwell?.map((item, i) => (
+                      <TableRow
+                        type="nutrition-summary"
+                        count={item.count}
+                        age={item.parameters?.ageinmonths}
+                        gender={item.parameters?.gender}
+                        supplement={item.parameters?.vitaminasupplement}
+                        visitType={item.parameters?.typeofvisit}
+                      />
+                    ))}
+                  </Tbody>
+                </Table>
+              </TableContainer>
             </>
-          )
-         
-        )}
-        {Category === "nutritionaggregate" && (
+          )}
+        {Category === "nutritionaggregate" &&
           Data.children0to5exclusivebreadstfeeding?.length > 0 && (
             <>
-              <Text mt="2" fontWeight="600">Children 0 to 5 that received exclusive breast feeding</Text>
+              <Text mt="2" fontWeight="600">
+                Children 0 to 5 that received exclusive breast feeding
+              </Text>
               <TableContainer mt="15px">
-            <Table variant="striped">
-              <Thead>
-                <Tr>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    Count
-                  </Th>
-                    <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    age in months
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    Gender
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    Supplement
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    Type of Visit
-                  </Th>
-                
-                </Tr>
-              </Thead>
-              <Tbody>
-                {Data.children0to5exclusivebreadstfeeding?.map((item, i) => (
-                  <TableRow
-                    type="nutrition-summary"
-                    count={item.count}
-                    age={item.parameters?.ageinmonths}
-                    gender={item.parameters?.gender}
-                    supplement={item.parameters?.vitaminasupplement}
-                    visitType={item.parameters?.typeofvisit}
-                    
-                  />
-                ))}
-              </Tbody>
-            </Table>
-          </TableContainer>
+                <Table variant="striped">
+                  <Thead>
+                    <Tr>
+                      <Th
+                        fontSize="13px"
+                        textTransform="capitalize"
+                        color="#000"
+                        fontWeight="600"
+                      >
+                        Count
+                      </Th>
+                      <Th
+                        fontSize="13px"
+                        textTransform="capitalize"
+                        color="#000"
+                        fontWeight="600"
+                      >
+                        age in months
+                      </Th>
+                      <Th
+                        fontSize="13px"
+                        textTransform="capitalize"
+                        color="#000"
+                        fontWeight="600"
+                      >
+                        Gender
+                      </Th>
+                      <Th
+                        fontSize="13px"
+                        textTransform="capitalize"
+                        color="#000"
+                        fontWeight="600"
+                      >
+                        Supplement
+                      </Th>
+                      <Th
+                        fontSize="13px"
+                        textTransform="capitalize"
+                        color="#000"
+                        fontWeight="600"
+                      >
+                        Type of Visit
+                      </Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {Data.children0to5exclusivebreadstfeeding?.map(
+                      (item, i) => (
+                        <TableRow
+                          type="nutrition-summary"
+                          count={item.count}
+                          age={item.parameters?.ageinmonths}
+                          gender={item.parameters?.gender}
+                          supplement={item.parameters?.vitaminasupplement}
+                          visitType={item.parameters?.typeofvisit}
+                        />
+                      )
+                    )}
+                  </Tbody>
+                </Table>
+              </TableContainer>
             </>
-          )
-         
-        )}
-        {Category === "nutritionaggregate" && (
+          )}
+        {Category === "nutritionaggregate" &&
           Data.children0to59givenvitaminasupplement?.length > 0 && (
             <>
-              <Text mt="2" fontWeight="600">Children 0 to 59 given vitamin A supplement</Text>
+              <Text mt="2" fontWeight="600">
+                Children 0 to 59 given vitamin A supplement
+              </Text>
               <TableContainer mt="15px">
-            <Table variant="striped">
-              <Thead>
-                <Tr>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    Count
-                  </Th>
-                    <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    age in months
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    Gender
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    Supplement
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    Type of Visit
-                  </Th>
-                
-                </Tr>
-              </Thead>
-              <Tbody>
-                {Data.children0to59givenvitaminasupplement?.map((item, i) => (
-                  <TableRow
-                    type="nutrition-summary"
-                    count={item.count}
-                    age={item.parameters?.ageinmonths}
-                    gender={item.parameters?.gender}
-                    supplement={item.parameters?.vitaminasupplement}
-                    visitType={item.parameters?.typeofvisit}
-                    
-                  />
-                ))}
-              </Tbody>
-            </Table>
-          </TableContainer>
+                <Table variant="striped">
+                  <Thead>
+                    <Tr>
+                      <Th
+                        fontSize="13px"
+                        textTransform="capitalize"
+                        color="#000"
+                        fontWeight="600"
+                      >
+                        Count
+                      </Th>
+                      <Th
+                        fontSize="13px"
+                        textTransform="capitalize"
+                        color="#000"
+                        fontWeight="600"
+                      >
+                        age in months
+                      </Th>
+                      <Th
+                        fontSize="13px"
+                        textTransform="capitalize"
+                        color="#000"
+                        fontWeight="600"
+                      >
+                        Gender
+                      </Th>
+                      <Th
+                        fontSize="13px"
+                        textTransform="capitalize"
+                        color="#000"
+                        fontWeight="600"
+                      >
+                        Supplement
+                      </Th>
+                      <Th
+                        fontSize="13px"
+                        textTransform="capitalize"
+                        color="#000"
+                        fontWeight="600"
+                      >
+                        Type of Visit
+                      </Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {Data.children0to59givenvitaminasupplement?.map(
+                      (item, i) => (
+                        <TableRow
+                          type="nutrition-summary"
+                          count={item.count}
+                          age={item.parameters?.ageinmonths}
+                          gender={item.parameters?.gender}
+                          supplement={item.parameters?.vitaminasupplement}
+                          visitType={item.parameters?.typeofvisit}
+                        />
+                      )
+                    )}
+                  </Tbody>
+                </Table>
+              </TableContainer>
             </>
-          )
-         
-        )}
-        {Category === "nutritionaggregate" && (
+          )}
+        {Category === "nutritionaggregate" &&
           Data.children12to59receiveddeworming?.length > 0 && (
             <>
-              <Text mt="2" fontWeight="600">Children 12 to 59 who received deworming medication  </Text>
+              <Text mt="2" fontWeight="600">
+                Children 12 to 59 who received deworming medication{" "}
+              </Text>
               <TableContainer mt="15px">
-            <Table variant="striped">
-              <Thead>
-                <Tr>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    Count
-                  </Th>
-                    <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    age in months
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    Gender
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    Supplement
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#000"
-                    fontWeight="600"
-                  >
-                    Type of Visit
-                  </Th>
-                
-                </Tr>
-              </Thead>
-              <Tbody>
-                {Data.children12to59receiveddeworming?.map((item, i) => (
-                  <TableRow
-                    type="nutrition-summary"
-                    count={item.count}
-                    age={item.parameters?.ageinmonths}
-                    gender={item.parameters?.gender}
-                    supplement={item.parameters?.vitaminasupplement}
-                    visitType={item.parameters?.typeofvisit}
-                    
-                  />
-                ))}
-              </Tbody>
-            </Table>
-          </TableContainer>
+                <Table variant="striped">
+                  <Thead>
+                    <Tr>
+                      <Th
+                        fontSize="13px"
+                        textTransform="capitalize"
+                        color="#000"
+                        fontWeight="600"
+                      >
+                        Count
+                      </Th>
+                      <Th
+                        fontSize="13px"
+                        textTransform="capitalize"
+                        color="#000"
+                        fontWeight="600"
+                      >
+                        age in months
+                      </Th>
+                      <Th
+                        fontSize="13px"
+                        textTransform="capitalize"
+                        color="#000"
+                        fontWeight="600"
+                      >
+                        Gender
+                      </Th>
+                      <Th
+                        fontSize="13px"
+                        textTransform="capitalize"
+                        color="#000"
+                        fontWeight="600"
+                      >
+                        Supplement
+                      </Th>
+                      <Th
+                        fontSize="13px"
+                        textTransform="capitalize"
+                        color="#000"
+                        fontWeight="600"
+                      >
+                        Type of Visit
+                      </Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {Data.children12to59receiveddeworming?.map((item, i) => (
+                      <TableRow
+                        type="nutrition-summary"
+                        count={item.count}
+                        age={item.parameters?.ageinmonths}
+                        gender={item.parameters?.gender}
+                        supplement={item.parameters?.vitaminasupplement}
+                        visitType={item.parameters?.typeofvisit}
+                      />
+                    ))}
+                  </Tbody>
+                </Table>
+              </TableContainer>
             </>
-          )
-         
+          )}
+        {Category === "health facility attendance" && (
+          <>
+            {/* Outpatient Attendance Section */}
+            {Data.outpatientattendance?.length > 0 && (
+              <>
+                <Text mt="2" fontWeight="600">
+                  Outpatient Attendance
+                </Text>
+                <TableContainer mt="15px">
+                  <Table variant="striped">
+                    <Thead>
+                      <Tr>
+                        <Th>Count</Th>
+                        <Th>Gender</Th>
+                        <Th>Age Group</Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody>
+                      {Data.outpatientattendance.map((item, i) => (
+                        <Tr key={i}>
+                          <Td>{item.count}</Td>
+                          <Td>{item.gender}</Td>
+                          <Td>{item.ageGroup}</Td>
+                        </Tr>
+                      ))}
+                    </Tbody>
+                  </Table>
+                </TableContainer>
+              </>
+            )}
+
+            {/* General Attendance Section */}
+            {Data.generalattendance?.length > 0 && (
+              <>
+                <Text mt="2" fontWeight="600">
+                  General Attendance
+                </Text>
+                <TableContainer mt="15px">
+                  <Table variant="striped">
+                    <Thead>
+                      <Tr>
+                        <Th>Count</Th>
+                        <Th>Gender</Th>
+                        <Th>Age Group</Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody>
+                      {Data.generalattendance.map((item, i) => (
+                        <Tr key={i}>
+                          <Td>{item.count}</Td>
+                          <Td>{item.gender}</Td>
+                          <Td>{item.ageGroup}</Td>
+                        </Tr>
+                      ))}
+                    </Tbody>
+                  </Table>
+                </TableContainer>
+              </>
+            )}
+          </>
+        )}
+        {Category === "inpatient care" && (
+          <>
+            <Text mt="2" fontWeight="600">
+              Inpatient Care
+            </Text>
+            <TableContainer mt="15px">
+              <Table variant="striped">
+                <Thead>
+                  <Tr>
+                    <Th>Count</Th>
+                    <Th>Gender</Th>
+                    <Th>Age Group</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {Data.map((item, i) => (
+                    <Tr key={i}>
+                      <Td>{item.count}</Td>
+                      <Td>{item.gender}</Td>
+                      <Td>{item.ageGroup}</Td>
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
+            </TableContainer>
+          </>
+        )}
+        {Category === "Family Planning" && (
+          <>
+            {/* Oral Pills Section */}
+            {Data.clientsgivenoralpill?.length > 0 && (
+              <>
+                <Text mt="4" fontWeight="600">
+                  Oral Contraceptive Pills
+                </Text>
+                <TableContainer mt="2">
+                  <Table variant="striped">
+                    <Thead>
+                      <Tr>
+                        <Th>Unique Clients</Th>
+                        <Th>Cycles Dispensed</Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody>
+                      <Tr>
+                        <Td>
+                          {Data.clientsgivenoralpill[0]
+                            ?.uniqueOralPillsPatients || 0}
+                        </Td>
+                        <Td>
+                          {Data.oralpillcyclesdispensed[0]
+                            ?.totalCyclesDispensed || 0}
+                        </Td>
+                      </Tr>
+                    </Tbody>
+                  </Table>
+                </TableContainer>
+              </>
+            )}
+
+            {/* Injectables Section */}
+            {Data.injectablesgiven?.length > 0 && (
+              <>
+                <Text mt="4" fontWeight="600">
+                  Injectable Contraceptives
+                </Text>
+                <TableContainer mt="2">
+                  <Table variant="striped">
+                    <Thead>
+                      <Tr>
+                        <Th>Type</Th>
+                        <Th>Quantity Given</Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody>
+                      <Tr>
+                        <Td>
+                          {Data.injectablesgiven[0]?.injectableName || "N/A"}
+                        </Td>
+                        <Td>{Data.injectablesgiven[0]?.totalQuantity || 0}</Td>
+                      </Tr>
+                    </Tbody>
+                  </Table>
+                </TableContainer>
+              </>
+            )}
+
+            {/* Long-Acting Methods Section */}
+            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4} mt="4">
+              {/* Implants */}
+              {Data.Implantsinserted?.length > 0 && (
+                <Box>
+                  <Text fontWeight="600">Implants</Text>
+                  <TableContainer mt="2">
+                    <Table variant="striped">
+                      <Thead>
+                        <Tr>
+                          <Th>Type</Th>
+                          <Th>Insertions</Th>
+                        </Tr>
+                      </Thead>
+                      <Tbody>
+                        <Tr>
+                          <Td>
+                            {Data.Implantsinserted[0]?.implantType || "N/A"}
+                          </Td>
+                          <Td>
+                            {Data.Implantsinserted[0]?.totalInsertions || 0}
+                          </Td>
+                        </Tr>
+                      </Tbody>
+                    </Table>
+                  </TableContainer>
+                </Box>
+              )}
+
+              {/* IUDs */}
+              {Data.iudInserteds?.length > 0 && (
+                <Box>
+                  <Text fontWeight="600">Intrauterine Devices (IUDs)</Text>
+                  <TableContainer mt="2">
+                    <Table variant="striped">
+                      <Thead>
+                        <Tr>
+                          <Th>Type</Th>
+                          <Th>Insertions</Th>
+                        </Tr>
+                      </Thead>
+                      <Tbody>
+                        <Tr>
+                          <Td>{Data.iudInserteds[0]?.iudType || "N/A"}</Td>
+                          <Td>{Data.iudInserteds[0]?.totalInsertions || 0}</Td>
+                        </Tr>
+                      </Tbody>
+                    </Table>
+                  </TableContainer>
+                </Box>
+              )}
+            </SimpleGrid>
+
+            {/* Postpartum Section */}
+            {Data.postpartumIUDinserted?.length > 0 && (
+              <>
+                <Text mt="4" fontWeight="600">
+                  Postpartum Family Planning
+                </Text>
+                <TableContainer mt="2">
+                  <Table variant="striped">
+                    <Thead>
+                      <Tr>
+                        <Th>Postpartum IUDs Inserted</Th>
+                      </Tr>
+                    </Thead>
+                    <Tbody>
+                      <Tr>
+                        <Td>
+                          {Data.postpartumIUDinserted[0]
+                            ?.postPartumIUDInserted || 0}
+                        </Td>
+                      </Tr>
+                    </Tbody>
+                  </Table>
+                </TableContainer>
+              </>
+            )}
+
+            {/* Summary Totals */}
+            <Box mt="6" p="4" bg="gray.50" borderRadius="md">
+              <Text fontSize="lg" fontWeight="700" mb="2">
+                Summary Totals
+              </Text>
+              <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={3}>
+                <Box>
+                  <Text fontWeight="600">Oral Pill Clients</Text>
+                  <Text>
+                    {JSON.parse(localStorage.getItem("reportGrandTotal"))
+                      ?.oralPillClients || 0}
+                  </Text>
+                </Box>
+                <Box>
+                  <Text fontWeight="600">Injectable Contraceptives</Text>
+                  <Text>
+                    {JSON.parse(localStorage.getItem("reportGrandTotal"))
+                      ?.injectables || 0}
+                  </Text>
+                </Box>
+                <Box>
+                  <Text fontWeight="600">Implants</Text>
+                  <Text>
+                    {JSON.parse(localStorage.getItem("reportGrandTotal"))
+                      ?.implants || 0}
+                  </Text>
+                </Box>
+                <Box>
+                  <Text fontWeight="600">IUDs</Text>
+                  <Text>
+                    {JSON.parse(localStorage.getItem("reportGrandTotal"))
+                      ?.iuds || 0}
+                  </Text>
+                </Box>
+                <Box>
+                  <Text fontWeight="600">Postpartum IUDs</Text>
+                  <Text>
+                    {JSON.parse(localStorage.getItem("reportGrandTotal"))
+                      ?.postpartumIUDs || 0}
+                  </Text>
+                </Box>
+              </SimpleGrid>
+            </Box>
+          </>
         )}
       </Box>
     </Box>

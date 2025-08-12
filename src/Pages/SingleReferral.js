@@ -381,9 +381,7 @@ export default function SingleReferral() {
                                 <Th fontSize="13px" color="#534D59" fontWeight="600">
                                 Receiving Unit
                                 </Th>
-                                <Th fontSize="13px" color="#534D59" fontWeight="600">
-                                Referred By
-                                </Th>
+ 
                                 <Th fontSize="13px" color="#534D59" fontWeight="600">
                                 Referral Date
                                 </Th>
@@ -413,7 +411,7 @@ export default function SingleReferral() {
                                         mrn={`${item.patient.MRN}`}
                                         originatingUnit={item.referredclinic}
                                         receivingUnit={item.receivingclinic}
-                                        doctor={item.referredby}
+                                    
                                         priority={item.priority}                        
                                         status={item.status}
                                         consultant={item.preferredconsultant}

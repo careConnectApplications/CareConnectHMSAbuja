@@ -13,6 +13,8 @@ import {
   ModalBody,
   ModalCloseButton,
   Stack,
+  HStack,
+  Badge,
 } from "@chakra-ui/react";
 import Button from "../Components/Button";
 import Input from "../Components/Input";
@@ -61,6 +63,7 @@ export default function ScheduleProcedureModal({
   const [Patients, setPatients] = useState([]);
   const [isLoadingPatients, setIsLoadingPatients] = useState(false);
   const [searchMRN, setSearchMRN] = useState("");
+  const [selectedPatientInfo, setSelectedPatientInfo] = useState(null);
 
   // Procedure search
   const [searchProcedureQuery, setSearchProcedureQuery] = useState("");
@@ -89,10 +92,78 @@ export default function ScheduleProcedureModal({
       setDxcodesArr([]);
       setPatients([]);
       setSearchMRN("");
+      setSelectedPatientInfo(null);
       setSearchProcedureQuery("");
       setProcedureSearchResults([]);
     }
   }, [isOpen]);
+
+  // Auto-search functionality with debouncing
+  useEffect(() => {
+    const searchPatients = async (searchTerm) => {
+      if (!searchTerm || searchTerm.trim().length < 2) {
+        setPatients([]);
+        return;
+      }
+
+      // Don't search if a patient is already selected and the search term matches
+      if (selectedPatientInfo && searchTerm.includes(selectedPatientInfo.mrn)) {
+        return;
+      }
+
+      try {
+        setIsLoadingPatients(true);
+        const results = await SearchPatientApi(searchTerm);
+        if (results?.queryresult?.patientdetails) {
+          setPatients(results.queryresult.patientdetails);
+        } else {
+          setPatients([]);
+        }
+      } catch (e) {
+        console.error("Error searching patient:", e.message);
+        setPatients([]);
+      } finally {
+        setIsLoadingPatients(false);
+      }
+    };
+
+    const timeoutId = setTimeout(() => {
+      searchPatients(searchMRN);
+    }, 300); // 300ms debounce
+
+    return () => clearTimeout(timeoutId);
+  }, [searchMRN, selectedPatientInfo]);
+
+  // Handle patient selection from search results
+  const handlePatientSelect = (patient) => {
+    const formSetter = type === "edit" ? setUpdatedPayload : setPayload;
+    formSetter((prev) => ({
+      ...prev,
+      patientId: patient._id,
+    }));
+    setSelectedPatientInfo({
+      name: `${patient.firstName} ${patient.lastName}`,
+      mrn: patient.MRN,
+    });
+    setPatients([]); // Clear search results
+    setSearchMRN(`${patient.firstName} ${patient.lastName} (MRN: ${patient.MRN})`);
+  };
+
+  // Handle search input change and clear selection if user starts typing new search
+  const handleSearchInputChange = (e) => {
+    const value = e.target.value;
+    setSearchMRN(value);
+    
+    // Clear selected patient if user modifies the search significantly
+    if (selectedPatientInfo && !value.includes(selectedPatientInfo.mrn)) {
+      setSelectedPatientInfo(null);
+      const formSetter = type === "edit" ? setUpdatedPayload : setPayload;
+      formSetter((prev) => ({
+        ...prev,
+        patientId: "",
+      }));
+    }
+  };
 
   // Live-search for procedures
   useEffect(() => {
@@ -244,35 +315,85 @@ export default function ScheduleProcedureModal({
         <ModalBody>
           {/* Patient Search */}
           <Box mb={4}>
-            <Flex mb={2} gap={4}>
+            <Text mb={2} fontWeight="medium">Patient</Text>
+            <Box position="relative">
               <Input
                 label="Search for Patient"
                 placeholder="Enter MRN, first name, or last name"
                 value={searchMRN}
-                onChange={(e) => setSearchMRN(e.target.value)}
-                leftIcon={<FiSearch size={16} />}
-                flex="1"
+                onChange={handleSearchInputChange}
+                leftIcon={<FiSearch size={16} color="blue.500" />}
               />
-              <Button onClick={handleSearchPatient}>Search</Button>
-            </Flex>
-            <Select
-              onChange={formHandler}
-              id="patientId"
-              value={formState.patientId}
-              placeholder={isLoadingPatients ? "Loading patients..." : "Select Patient"}
-              size="lg"
-              fontSize={formState.patientId ? "16px" : "13px"}
-              border="2px solid"
-              borderColor="gray.500"
-              mt={2}
-              isDisabled={isLoadingPatients}
-            >
-              {Patients.map((p, i) => (
-                <option key={i} value={p._id}>
-                  {`${p.firstName} ${p.lastName} ~ ${p.MRN}`}
-                </option>
-              ))}
-            </Select>
+              
+              {/* Selected Patient Display */}
+              {selectedPatientInfo && (
+                <Box mt={2} p={3} bg="blue.50" borderRadius="md" border="1px solid" borderColor="blue.200">
+                  <HStack spacing={2}>
+                    <Badge colorScheme="blue" variant="solid">Selected</Badge>
+                    <Text fontWeight="medium">{selectedPatientInfo.name}</Text>
+                    <Text fontSize="sm" color="gray.600">MRN: {selectedPatientInfo.mrn}</Text>
+                  </HStack>
+                </Box>
+              )}
+
+              {/* Search Results Dropdown */}
+              {Patients.length > 0 && !selectedPatientInfo && (
+                <Box
+                  position="absolute"
+                  top="100%"
+                  left={0}
+                  right={0}
+                  zIndex={10}
+                  bg="white"
+                  border="1px solid"
+                  borderColor="gray.200"
+                  borderRadius="md"
+                  boxShadow="lg"
+                  maxH="200px"
+                  overflowY="auto"
+                  mt={1}
+                >
+                  {Patients.map((patient) => (
+                    <Box
+                      key={patient._id}
+                      p={3}
+                      cursor="pointer"
+                      _hover={{ bg: "blue.50" }}
+                      onClick={() => handlePatientSelect(patient)}
+                      borderBottom="1px solid"
+                      borderColor="gray.100"
+                      _last={{ borderBottom: "none" }}
+                    >
+                      <Text fontWeight="medium">
+                        {`${patient.firstName} ${patient.lastName}`}
+                      </Text>
+                      <Text fontSize="sm" color="gray.600">
+                        MRN: {patient.MRN}
+                      </Text>
+                    </Box>
+                  ))}
+                </Box>
+              )}
+
+              {/* Loading Indicator */}
+              {isLoadingPatients && (
+                <Box
+                  position="absolute"
+                  top="100%"
+                  left={0}
+                  right={0}
+                  zIndex={10}
+                  bg="white"
+                  border="1px solid"
+                  borderColor="gray.200"
+                  borderRadius="md"
+                  p={3}
+                  mt={1}
+                >
+                  <Text color="gray.500">Searching patients...</Text>
+                </Box>
+              )}
+            </Box>
           </Box>
 
           {/* Main Form */}

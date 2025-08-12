@@ -63,7 +63,7 @@ export default function CvsExaminationModal({ isOpen, onClose, type, setOldPaylo
 
     const save = () => {
 
-        setOldPayload({ ...oldPayload, ["cvs"]: Payload })
+        setOldPayload({ ...oldPayload, "cvs": Payload })
         activateNotifications("Saved Successfully", "success")
         onClose()
     }

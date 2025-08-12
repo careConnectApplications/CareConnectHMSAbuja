@@ -7,30 +7,38 @@ import {
   ModalHeader,
   ModalFooter,
   ModalBody,
-  ModalCloseButton
+  ModalCloseButton,
 } from "@chakra-ui/react";
 import Input from "./Input";
 import Button from "./Button";
 import { CreateInsuranceApi, UpdateInsuranceAPI } from "../Utils/ApiCalls";
 
-export default function CreateInsuranceModal({ isOpen, onClose, type, activateNotifications, oldPayload }) {
+export default function CreateInsuranceModal({
+  isOpen,
+  onClose,
+  type,
+  activateNotifications,
+  oldPayload,
+}) {
   const [loading, setLoading] = useState(false);
   const [payload, setPayload] = useState({
-    hmoname: ""
+    hmoname: "",
+    id: "",
+    hmopercentagecover: "",
   });
 
   useEffect(() => {
     if (type === "edit" && oldPayload) {
       setPayload(oldPayload);
     } else {
-      setPayload({ hmoname: "" });
+      setPayload({ hmoname: "", id: "", hmopercentagecover: "" });
     }
   }, [isOpen, type, oldPayload]);
 
   const handleChange = (e) => {
-    setPayload(prev => ({
+    setPayload((prev) => ({
       ...prev,
-      [e.target.id]: e.target.value
+      [e.target.id]: e.target.value,
     }));
   };
 
@@ -45,7 +53,9 @@ export default function CreateInsuranceModal({ isOpen, onClose, type, activateNo
       }
       if (response.status === 200 || response.status === 201) {
         activateNotifications(
-          type === "new" ? "Insurance Added Successfully" : "Insurance Updated Successfully",
+          type === "new"
+            ? "Insurance Added Successfully"
+            : "Insurance Updated Successfully",
           "success"
         );
         onClose();
@@ -73,6 +83,21 @@ export default function CreateInsuranceModal({ isOpen, onClose, type, activateNo
               id="hmoname"
               value={payload.hmoname}
               label="HMO Name"
+            />
+            <Input
+              val={!!payload.id}
+              onChange={handleChange}
+              id="id"
+              value={payload.id}
+              label="HMO ID"
+            />
+            <Input
+              val={!!payload.hmopercentagecover}
+              onChange={handleChange}
+              id="hmopercentagecover"
+              value={payload.hmopercentagecover}
+              label="HMO Percentage Cover"
+              type="number"
             />
           </Stack>
 

@@ -73,7 +73,7 @@ export default function NeuroExaminationModal({ isOpen, onClose, setOldPayload, 
 
     const save = () => {
 
-        setOldPayload({ ...oldPayload, ["neuro"]: Payload })
+        setOldPayload({ ...oldPayload, "neuro": Payload })
         activateNotifications("Saved Successfully", "success")
         onClose()
     }

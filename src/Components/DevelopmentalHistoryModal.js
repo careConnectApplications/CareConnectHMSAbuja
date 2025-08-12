@@ -83,7 +83,7 @@ export default function DevelopmentalHistoryModal({ isOpen, onClose, type, setOl
     const save = () => {
 
         const mergedPayload = { ...Payload, ...RadioGroups }
-        setOldPayload({ ...oldPayload, ["developmentmilestonehistorydetails"]: mergedPayload })
+        setOldPayload({ ...oldPayload, "developmentmilestonehistorydetails": mergedPayload })
         activateNotifications("Saved Successfully", "success")
         onClose()
     }

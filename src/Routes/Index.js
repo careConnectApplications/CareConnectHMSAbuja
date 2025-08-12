@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SignIn from "../Pages/AuthenticationScreens/SignIn";
 import Dashboard from "../Pages/Dashboard";
 import UserManagement from "../Pages/UserManagement";
+import EditPermission from "../Pages/EditPermission";
 import Report from "../Pages/Report";
 import SummaryReport from "../Pages/SummaryReport";
 import PrintReportSummary from "../Pages/PrintReportSummary";
@@ -14,12 +15,20 @@ import PaymentGroup from "../Pages/PaymentGroup";
 import PrintPaymentReceipt from "../Pages/PrintPaymentReceipt";
 import Settings from "../Pages/Settings";
 import ProfileSettings from "../Pages/ProfileSettings";
+import EyeClinicSchedule from "../Pages/EyeClinicSchedule";
+import AddEyePreliminaryTest from "../Pages/AddEyePreliminaryTest";
+import AddEyeExamination from "../Pages/AddEyeExamination";
+import AddLensPrescription from "../Pages/AddLensPrescription";
+import AddOperationNotes from "../Pages/AddOperationNotes";
+import EyeClinicDetails from "../Pages/EyeClinicDetails";
 import SinglePatient from "../Pages/SinglePatient";
 import ScheduleAppointment from "../Pages/ScheduleAppointment";
 import DoctorSchedule from "../Pages/DoctorSchedule";
 import ScheduleProcedure from "../Pages/ScheduleProcedure";
 import DoctorScheduleDetails from "../Pages/DoctorScheduleDetails";
 import LabProcessing from "../Pages/LabProcessing";
+import Histopathology from "../Pages/Histopathology";
+import HistopathologyReport from "../Pages/HistopathologyReport";
 import LabReport from "../Pages/LabReport";
 import PrintLabReport from "../Pages/PrintLabReport";
 import Encounter from "../Pages/Encounter";
@@ -71,6 +80,15 @@ import EditPostAnaestheticRecoveryChartForm from "../Pages/EditPostAnaestheticRe
 import TheatreVitalSignScores from "../Pages/TheatreVitalSignScores";
 import AddHistologyRequestForm from "../Pages/AddHistologyRequestForm";
 import EditHistologyRequestForm from "../Pages/EditHistologyRequestForm";
+import AddPsychiatricEvaluation from "../Pages/AddPsychiatricEvaluation";
+import EditPsychiatricEvaluation from "../Pages/EditPsychiatricEvaluation";
+import EditPhysiotherapyAssessment from "../Pages/EditPhysiotherapyAssessment";
+import AddPhysiotherapyAssessment from "../Pages/AddPhysiotherapyAssessment";
+import PsychiatricEvaluations from "../Pages/PsychiatricEvaluations";
+import Hematology from "../Pages/Hematology";
+import ChemicalPathology from "../Pages/ChemicalPathology";
+import DentalEncounterForm from "../Pages/DentalEncounterForm";
+import DentalEncounterEdit from "../Pages/DentalEncounterEdit";
 
 export default function IndexRoutes() {
   return (
@@ -78,9 +96,34 @@ export default function IndexRoutes() {
       <Routes>
         <Route path="/" element={<SignIn />} />
         <Route element={<PrivateRoutes />}>
+
           <Route
             path="/dashboard/profile-settings"
             element={<ProfileSettings />}
+          />
+          <Route
+            path="/dashboard/eye-clinic"
+            element={<EyeClinicSchedule />}
+          />
+          <Route
+            path="/dashboard/eye-clinic-details/:id"
+            element={<EyeClinicDetails />}
+          />
+          <Route
+            path="/dashboard/add-eye-preliminary-test/:id"
+            element={<AddEyePreliminaryTest />}
+          />
+          <Route
+            path="/dashboard/add-eye-examination/:id"
+            element={<AddEyeExamination />}
+          />
+          <Route
+            path="/dashboard/add-lens-prescription/:id"
+            element={<AddLensPrescription />}
+          />
+          <Route
+            path="/eye-module/operational-notes/appointment/:appointmentId/patient/:patientId"
+            element={<AddOperationNotes />}
           />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route element={<RecordsRoutes />}>
@@ -134,8 +177,24 @@ export default function IndexRoutes() {
               element={<LabProcessing />}
             />
             <Route
+              path="/dashboard/histopathology-process/histopathology"
+              element={<Histopathology />}
+            />
+            <Route
+              path="/dashboard/histopathology-process/report"
+              element={<HistopathologyReport />}
+            />
+            <Route
               path="/dashboard/lab-process/report"
               element={<LabReport />}
+            />
+            <Route
+              path="/dashboard/lab-process/hematology"
+              element={<Hematology />}
+            />
+            <Route
+              path="/dashboard/lab-process/chemical-pathology"
+              element={<ChemicalPathology />}
             />
             <Route
               path="/dashboard/lab-process/report/:id"
@@ -194,6 +253,10 @@ export default function IndexRoutes() {
               path="/dashboard/user-management"
               element={<UserManagement />}
             />
+            <Route
+              path="/dashboard/edit-permission/:id"
+              element={<EditPermission />}
+            />
           </Route>
           <Route element={<ClinicalReportRoutes />}>
             <Route
@@ -234,7 +297,6 @@ export default function IndexRoutes() {
               path="/dashboard/add-theatre-anaesthesia-form/:id"
               element={<AddAnaesthesiaForm />}
             />
-
             <Route
               path="/dashboard/edit-preAnathetics/:id"
               element={<EditPreAnathetics />}
@@ -275,7 +337,6 @@ export default function IndexRoutes() {
               path="/dashboard/edit-post-anaesthetic-recovery-chart/:id"
               element={<EditPostAnaestheticRecoveryChartForm />}
             />
-
             <Route
               path="/dashboard/vital-sign-scores/:id"
               element={<TheatreVitalSignScores />}
@@ -287,6 +348,31 @@ export default function IndexRoutes() {
             <Route
               path="/dashboard/add-histology-request-form/:id"
               element={<AddHistologyRequestForm />}
+            />
+            <Route
+              path="/dashboard/add-psychiatric-evaluation/:id"
+              element={<AddPsychiatricEvaluation />}
+            />
+            <Route
+              path="/dashboard/edit-psychiatric-evaluation/:id"
+              element={<EditPsychiatricEvaluation />}
+            />
+            
+            <Route
+              path="/dashboard/edit-physiotherapy-assessment/:id"
+              element={<EditPhysiotherapyAssessment />}
+            />
+            <Route
+              path="/dashboard/add-physiotherapy-assessment/:id"
+              element={<AddPhysiotherapyAssessment />}
+            />
+                        <Route
+              path="/dashboard/edit-dental-encounter/:id"
+              element={<DentalEncounterEdit />}
+            />
+                                    <Route
+              path="/dashboard/add-dental-encounter/:id"
+              element={<DentalEncounterForm />}
             />
           </Route>
         </Route>

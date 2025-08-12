@@ -49,6 +49,7 @@ import { GiEnergyBreath } from "react-icons/gi";
 import { GiWeight } from "react-icons/gi";
 import { TbMichelinStarFilled } from "react-icons/tb";
 import { useParams } from 'react-router-dom';
+import PatientInfoCard from '../Components/PatientInfoCard';
 
 export default function Encounter() {
     const { id } = useParams()
@@ -264,7 +265,7 @@ export default function Encounter() {
 
             <Box>
                 <Button leftIcon={<IoMdArrowRoundBack />} px="40px" w="100px" onClick={() => nav(`${pathname}`)}>Back</Button>
-
+                <PatientInfoCard />
                 <Accordion defaultIndex={[7]} mt="32px" allowToggle>
                     <AccordionItem mb="15px" >
 
@@ -714,7 +715,7 @@ export default function Encounter() {
                            
                         />
 
-         <CreateReferralModal isOpen={OpenReferralModal} onClose={()=>setOpenReferralModal(false)} type={"new"} activateNotifications={activateNotifications}  />
+         <CreateReferralModal isOpen={OpenReferralModal} onClose={()=>setOpenReferralModal(false)} type={"new"} activateNotifications={activateNotifications} oldPayload={{ id: id }} />
 
                     </AccordionItem>
 

@@ -51,7 +51,7 @@ jobs:
           sudo apt-get install -y sshpass
 
           # Deploy build to the server using SCP
-          sshpass -p "$SSH_PASSWORD" scp -o StrictHostKeyChecking=no -r ./build "$SSH_USERNAME"@"$SERVER_IP":/var/www/html/hmsfrontend
+          sshpass -p "$SSH_PASSWORD" scp -o StrictHostKeyChecking=no -r ./build "$SSH_USERNAME"@"$SERVER_IP":/var/www/html/abujahmsfrontend
 
           # Optionally restart your app after copying the build
           sshpass -p "$SSH_PASSWORD" ssh -o StrictHostKeyChecking=no "$SSH_USERNAME"@"$SERVER_IP" << 'EOF'

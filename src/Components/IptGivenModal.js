@@ -65,7 +65,7 @@ export default function IptGivenModal({ isOpen, onClose, type, setOldPayload, ac
     const save = () => {
 
         const mergedPayload = { ...Payload, ...RadioGroups }
-        setOldPayload({ ...oldPayload, ["ipt"]: mergedPayload })
+        setOldPayload({ ...oldPayload, "ipt": mergedPayload })
         activateNotifications("Saved Successfully", "success")
         onClose()
     }

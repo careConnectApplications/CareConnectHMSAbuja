@@ -122,7 +122,7 @@ export default function SummaryReport() {
       setFilteredData(filter);
       console.log("filter checking", filter);
     } else if (title === "date") {
-      // add 1 day to end date 
+      // add 1 day to end date
       let endDate = new Date(EndDate);
       endDate.setDate(endDate.getDate() + 1);
       // format date back
@@ -171,18 +171,21 @@ export default function SummaryReport() {
           })
         );
         if (QueryType === "financialaggregate") {
-          let arr = [
-            ...result.queryresult?.paid,
-           
-          ];
+          let arr = [...result.queryresult?.paid];
           localStorage.setItem("reportSummary", JSON.stringify(arr));
-          localStorage.setItem("reportGrandTotal", JSON.stringify(result.queryresult?.grandtotal[0]));
+          localStorage.setItem(
+            "reportGrandTotal",
+            JSON.stringify(result.queryresult?.grandtotal[0])
+          );
           localStorage.setItem("reportCategory", QueryType);
           nav("/dashboard/report-analytics/print-summary");
         } else if (QueryType === "cashieraggregate") {
           let arr = [...result.queryresult?.paid];
           localStorage.setItem("reportSummary", JSON.stringify(arr));
-          localStorage.setItem("reportGrandTotal", JSON.stringify(result.queryresult?.grandtotal[0]));
+          localStorage.setItem(
+            "reportGrandTotal",
+            JSON.stringify(result.queryresult?.grandtotal[0])
+          );
           localStorage.setItem("reportCategory", QueryType);
           nav("/dashboard/report-analytics/print-summary");
         } else if (QueryType === "appointmentaggregate") {
@@ -192,7 +195,10 @@ export default function SummaryReport() {
             ...result.queryresult?.scheduled,
           ];
           localStorage.setItem("reportSummary", JSON.stringify(arr));
-          localStorage.setItem("reportGrandTotal", JSON.stringify(result.queryresult?.totalnumberofappointments[0]));
+          localStorage.setItem(
+            "reportGrandTotal",
+            JSON.stringify(result.queryresult?.totalnumberofappointments[0])
+          );
           localStorage.setItem("reportCategory", QueryType);
           nav("/dashboard/report-analytics/print-summary");
         } else if (QueryType === "admissionaggregate") {
@@ -202,7 +208,10 @@ export default function SummaryReport() {
             ...result.queryresult?.transfered,
           ];
           localStorage.setItem("reportSummary", JSON.stringify(arr));
-          localStorage.setItem("reportGrandTotal", JSON.stringify(result.queryresult?.totalnumberofadmissions[0]));
+          localStorage.setItem(
+            "reportGrandTotal",
+            JSON.stringify(result.queryresult?.totalnumberofadmissions[0])
+          );
 
           localStorage.setItem("reportCategory", QueryType);
           nav("/dashboard/report-analytics/print-summary");
@@ -220,15 +229,92 @@ export default function SummaryReport() {
           localStorage.setItem("reportSummary", JSON.stringify(arr));
           localStorage.setItem("reportCategory", QueryType);
           nav("/dashboard/report-analytics/print-summary");
-        }else if (QueryType === "hmoaggregate") {
-          
-          localStorage.setItem("reportSummary", JSON.stringify(result.queryresult));
+        } else if (QueryType === "hmoaggregate") {
+          localStorage.setItem(
+            "reportSummary",
+            JSON.stringify(result.queryresult)
+          );
           localStorage.setItem("reportCategory", QueryType);
           nav("/dashboard/report-analytics/print-summary");
-        }else if (QueryType === "nutritionaggregate") {
-          
-          localStorage.setItem("reportSummary", JSON.stringify(result.queryresult));
+        } else if (QueryType === "nutritionaggregate") {
+          localStorage.setItem(
+            "reportSummary",
+            JSON.stringify(result.queryresult)
+          );
           localStorage.setItem("reportCategory", QueryType);
+          nav("/dashboard/report-analytics/print-summary");
+        } // Handle Health Facility Attendance Report
+        else if (QueryType === "health facility attendance") {
+          console.log(
+            "Processing healthfacilityattendance data:",
+            result.queryresult
+          );
+          // Calculate totals
+          const totalOutpatient =
+            result.queryresult.outpatientattendance.reduce(
+              (sum, item) => sum + item.count,
+              0
+            );
+          const totalGeneral = result.queryresult.generalattendance.reduce(
+            (sum, item) => sum + item.count,
+            0
+          );
+
+          localStorage.setItem(
+            "reportSummary",
+            JSON.stringify(result.queryresult)
+          );
+          localStorage.setItem("reportCategory", QueryType);
+          localStorage.setItem(
+            "reportGrandTotal",
+            JSON.stringify({ totalOutpatient, totalGeneral })
+          );
+          nav("/dashboard/report-analytics/print-summary");
+        }
+        // Handle Inpatient Care Report
+        else if (QueryType === "inpatient care") {
+          console.log("Processing inpatient data:", result.queryresult);
+          // Calculate total
+          const totalInpatient = result.queryresult.reduce(
+            (sum, item) => sum + item.count,
+            0
+          );
+
+          localStorage.setItem(
+            "reportSummary",
+            JSON.stringify(result.queryresult)
+          );
+          localStorage.setItem("reportCategory", QueryType);
+          localStorage.setItem(
+            "reportGrandTotal",
+            JSON.stringify({ totalInpatient })
+          );
+          nav("/dashboard/report-analytics/print-summary");
+        } else if (QueryType === "Family Planning") {
+          // Process family planning data
+          const totals = {
+            oralPillClients:
+              result.queryresult.clientsgivenoralpill?.[0]
+                ?.uniqueOralPillsPatients || 0,
+            oralPillCycles:
+              result.queryresult.oralpillcyclesdispensed?.[0]
+                ?.totalCyclesDispensed || 0,
+            injectables:
+              result.queryresult.injectablesgiven?.[0]?.totalQuantity || 0,
+            implants:
+              result.queryresult.Implantsinserted?.[0]?.totalInsertions || 0,
+            iuds: result.queryresult.iudInserteds?.[0]?.totalInsertions || 0,
+            postpartumIUDs:
+              result.queryresult.postpartumIUDinserted?.[0]
+                ?.postPartumIUDInserted || 0,
+          };
+
+          localStorage.setItem(
+            "reportSummary",
+            JSON.stringify(result.queryresult)
+          );
+          localStorage.setItem("reportCategory", QueryType);
+          localStorage.setItem("reportGrandTotal", JSON.stringify(totals));
           nav("/dashboard/report-analytics/print-summary");
         }
       }
@@ -302,7 +388,7 @@ export default function SummaryReport() {
         </Text>
       </HStack>
       <Text color="#686C75" mt="9px" fontWeight="400" fontSize="15px">
-        Access reports, and analytics across departments all in one place
+        Access reports, and analytics across departments all in one place
       </Text>
       {/* filters needed for the get full report */}
       <Box

@@ -6,7 +6,7 @@ export default function PreviewCard({ title, value }) {
         <HStack display={value !=="" && value !== null  && value !== undefined ? "flex": "none"} >
             <Text textTransform="uppercase" fontWeight="600" fontSize="14px" >{title}:</Text>
             <Spacer/>
-            <Text width={["100%","60%"]}  textTransform="capitalize" textAlign="right" fontWeight="400" fontSize="14px" >{value}</Text>
+            <Text width={["100%","60%"]}  textTransform="capitalize" textAlign="left" fontWeight="400" fontSize="14px" >{value}</Text>
         </HStack> 
 
     )

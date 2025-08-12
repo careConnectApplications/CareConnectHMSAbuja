@@ -57,7 +57,7 @@ export default function PastObstetricHistoryModal({ isOpen, onClose, setOldPaylo
 
     const save = () => {
 
-        setOldPayload({ ...oldPayload, ["pastobstetrichistory"]: Payload.obstetrichistory })
+        setOldPayload({ ...oldPayload, "pastobstetrichistory": Payload.obstetrichistory })
         activateNotifications("Saved Successfully", "success")
         onClose()
     }

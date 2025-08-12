@@ -44,7 +44,7 @@ export default function HistoryGuModal({ isOpen, onClose, setOldPayload, activat
 
     const save = () => {
 
-        setOldPayload({ ...oldPayload, ["historygu"]: Payload })
+        setOldPayload({ ...oldPayload, "historygu": Payload })
         activateNotifications("Saved Successfully", "success")
         onClose()
     }

@@ -40,6 +40,7 @@ import {
   getAllStates,
   getLGAsForState,
   GetOnlyClinicApi,
+  GetAllInsuranceApi,
 } from "../Utils/ApiCalls";
 
 import ShowToast from "./ToastNotification";
@@ -55,6 +56,7 @@ export default function CreatePatientModal({
   const [selectedState, setSelectedState] = useState(""); // The selected state
   const [selectedLga, setSelectedLga] = useState(""); // The selected LGA
   const [ClinicData, setClinicData] = useState([]);
+  const [insuranceOptions, setInsuranceOptions] = useState([]);
 
   // Fetch states on component mount
   useEffect(() => {
@@ -115,6 +117,20 @@ export default function CreatePatientModal({
   useEffect(() => {
     getAllClinic();
   }, []);
+  useEffect(() => {
+    const fetchInsuranceData = async () => {
+      try {
+        const result = await GetAllInsuranceApi();
+        setInsuranceOptions(result.queryresult.hmomanagementdetails);
+      } catch (error) {
+        console.error("Failed to fetch insurance data:", error);
+      }
+    };
+
+    if (isOpen) {
+      fetchInsuranceData();
+    }
+  }, [isOpen]);
 
   const [patientData, setPatientData] = useState({
     title: "",
@@ -156,6 +172,13 @@ export default function CreatePatientModal({
     servicenumber: "",
     policephonenumber: "",
     facilitypateintreferedfrom: "",
+    alternatePhoneNumber: "",
+    bloodGroup: "",
+    genotype: "",
+    bp: "",
+    heartRate: "",
+    temperature: "",
+    specialNeeds: "",
   });
 
   const [UpdatedPayload, setUpdatedPayload] = useState({
@@ -194,6 +217,13 @@ export default function CreatePatientModal({
     servicenumber: "",
     policephonenumber: "",
     facilitypateintreferedfrom: "",
+    alternatePhoneNumber: "",
+    bloodGroup: "",
+    genotype: "",
+    bp: "",
+    heartRate: "",
+    temperature: "",
+    specialNeeds: "",
   });
 
   const [Settings, setSettings] = useState({});
@@ -249,6 +279,13 @@ export default function CreatePatientModal({
         servicenumber: "",
         policephonenumber: "",
         facilitypateintreferedfrom: "",
+        alternatePhoneNumber: "",
+        bloodGroup: "",
+        genotype: "",
+        bp: "",
+        heartRate: "",
+        temperature: "",
+        specialNeeds: "",
       });
       setMessage(""); // Reset message on close
       setMessageStatus(""); // Reset message status on close
@@ -291,8 +328,31 @@ export default function CreatePatientModal({
       policephonenumber: filteredpatient[0]?.policephonenumer,
       facilitypateintreferedfrom:
         filteredpatient[0]?.facilitypateintreferedfrom || "",
+      alternatePhoneNumber: filteredpatient[0]?.alternatePhoneNumber,
+      bloodGroup: filteredpatient[0]?.bloodGroup,
+      genotype: filteredpatient[0]?.genotype,
+      bp: filteredpatient[0]?.bp,
+      heartRate: filteredpatient[0]?.heartRate,
+      temperature: filteredpatient[0]?.temperature,
+      specialNeeds: filteredpatient[0]?.specialNeeds,
     });
   }, [isOpen]);
+
+  // Helper function to calculate age from date of birth
+  const calculateAge = (dateOfBirth) => {
+    if (!dateOfBirth) return "";
+    
+    const today = new Date();
+    const birthDate = new Date(dateOfBirth);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    
+    return age.toString();
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -308,6 +368,28 @@ export default function CreatePatientModal({
         ...prev,
         [name]: cleanedValue,
       }));
+    } else if (name === "dateOfBirth") {
+      // Auto-populate age when date of birth changes
+      const calculatedAge = calculateAge(value);
+      setPatientData((prev) => ({
+        ...prev,
+        [name]: value,
+        age: calculatedAge,
+      }));
+    } else if (name === "title") {
+      // Auto-populate gender based on title selection
+      let autoGender = "";
+      if (value === "Mr" || value === "Mallam" || value === "Alhaji") {
+        autoGender = "male";
+      } else if (value === "Mrs" || value === "Miss" || value === "Hajiya") {
+        autoGender = "female";
+      }
+      
+      setPatientData((prev) => ({
+        ...prev,
+        [name]: value,
+        ...(autoGender && { gender: autoGender }),
+      }));
     } else {
       setPatientData((prev) => ({
         ...prev,
@@ -318,10 +400,35 @@ export default function CreatePatientModal({
 
   const handleUpdatedPayload = (e) => {
     const { name, value } = e.target;
-    setUpdatedPayload((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    
+    if (name === "dateOfBirth") {
+      // Auto-populate age when date of birth changes in edit mode
+      const calculatedAge = calculateAge(value);
+      setUpdatedPayload((prev) => ({
+        ...prev,
+        [name]: value,
+        age: calculatedAge,
+      }));
+    } else if (name === "title") {
+      // Auto-populate gender based on title selection
+      let autoGender = "";
+      if (value === "Mr" || value === "Mallam" || value === "Alhaji") {
+        autoGender = "male";
+      } else if (value === "Mrs" || value === "Miss" || value === "Hajiya") {
+        autoGender = "female";
+      }
+      
+      setUpdatedPayload((prev) => ({
+        ...prev,
+        [name]: value,
+        ...(autoGender && { gender: autoGender }),
+      }));
+    } else {
+      setUpdatedPayload((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async () => {
@@ -553,6 +660,7 @@ export default function CreatePatientModal({
                     id="age"
                     label="Age"
                     value={patientData.age}
+                    val={patientData.age !=="" ? true: false}
                     onChange={handleInputChange}
                     name="age"
                     type="number"
@@ -639,6 +747,17 @@ export default function CreatePatientModal({
                     placeholder="Enter Address"
                     leftIcon={<FaMapMarkerAlt />}
                   />
+                  <Input
+                    id="alternatePhoneNumber"
+                    label="Alternate Phone Number"
+                    value={patientData.alternatePhoneNumber}
+                    onChange={handleInputChange}
+                    name="alternatePhoneNumber"
+                    placeholder="Enter alternate phone number"
+                    type="text"
+                    maxLength={11}
+                    leftIcon={<FaPhoneAlt />}
+                  />
                 </SimpleGrid>
 
                 <Divider my={4} />
@@ -720,7 +839,7 @@ export default function CreatePatientModal({
                 </Text>
                 <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4}>
                   <Input
-                    type="datetime-local"
+                    type="date"
                     name="appointmentdate"
                     label="Appointment Date"
                     value={patientData.appointmentdate}
@@ -748,7 +867,6 @@ export default function CreatePatientModal({
                       ))}
                     </Select>
                   </FormControl>
-
                 </SimpleGrid>
 
                 <Divider my={4} />
@@ -864,6 +982,94 @@ export default function CreatePatientModal({
                 </SimpleGrid>
 
                 <Divider my={4} />
+                {/* Clinical Information Section */}
+                <Text
+                  fontSize="md"
+                  fontWeight="bold"
+                  mb={2}
+                  color="blue.blue500"
+                >
+                  Clinical Information
+                </Text>
+                <SimpleGrid columns={{ base: 1, md: 4 }} spacing={4}>
+                  <FormControl>
+                    <Select
+                      h="45px"
+                      borderWidth="2px"
+                      borderColor="#6B7280"
+                      name="bloodGroup"
+                      value={patientData.bloodGroup}
+                      onChange={handleInputChange}
+                      placeholder="Select Blood Group"
+                    >
+                      <option value="A+">A+</option>
+                      <option value="A-">A-</option>
+                      <option value="B+">B+</option>
+                      <option value="B-">B-</option>
+                      <option value="AB+">AB+</option>
+                      <option value="AB-">AB-</option>
+                      <option value="O+">O+</option>
+                      <option value="O-">O-</option>
+                    </Select>
+                  </FormControl>
+                  <FormControl>
+                    <Select
+                      h="45px"
+                      borderWidth="2px"
+                      borderColor="#6B7280"
+                      name="genotype"
+                      value={patientData.genotype}
+                      onChange={handleInputChange}
+                      placeholder="Select Genotype"
+                    >
+                      <option value="AA">AA</option>
+                      <option value="AS">AS</option>
+                      <option value="AC">AC</option>
+                      <option value="SS">SS</option>
+                      <option value="SC">SC</option>
+                    </Select>
+                  </FormControl>
+                  <Input
+                    id="bp"
+                    label="Blood Pressure"
+                    value={patientData.bp}
+                    onChange={handleInputChange}
+                    name="bp"
+                    placeholder="e.g. 120/80"
+                    leftIcon={<FaHeart />}
+                  />
+                  <Input
+                    id="heartRate"
+                    label="Heart Rate"
+                    value={patientData.heartRate}
+                    onChange={handleInputChange}
+                    name="heartRate"
+                    type="number"
+                    placeholder="e.g. 72"
+                    leftIcon={<FaHeart />}
+                  />
+                  <Input
+                    id="temperature"
+                    label="Temperature"
+                    value={patientData.temperature}
+                    onChange={handleInputChange}
+                    name="temperature"
+                    type="number"
+                    placeholder="e.g. 98.6"
+                    leftIcon={<FaMedkit />}
+                  />
+                  <Input
+                    id="specialNeeds"
+                    label="Special Needs"
+                    value={patientData.specialNeeds}
+                    onChange={handleInputChange}
+                    name="specialNeeds"
+                    placeholder="e.g. Allergic to penicillin"
+                    leftIcon={<FaMedkit />}
+                  />
+                </SimpleGrid>
+
+                <Divider my={4} />
                 {/* Medical Informatio */}
                 <Text
                   fontSize="md"
@@ -887,15 +1093,31 @@ export default function CreatePatientModal({
                     </Select>
                   </FormControl>
 
-                  <Input
-                    id="hnoName"
-                    label="HMO Name"
-                    value={patientData.HMOName}
-                    onChange={handleInputChange}
-                    name="HMOName"
-                    placeholder="HMO Name"
-                    leftIcon={<FaMedkit />}
-                  />
+                  <FormControl>
+                    <Select
+                      h="45px"
+                      borderWidth="2px"
+                      borderColor="#6B7280"
+                      name="HMOName"
+                      value={
+                        type === "new"
+                          ? patientData.HMOName
+                          : UpdatedPayload.HMOName
+                      }
+                      onChange={
+                        type === "new"
+                          ? handleInputChange
+                          : handleUpdatedPayload
+                      }
+                      placeholder="Select HMO"
+                    >
+                      {insuranceOptions.map((insurance) => (
+                        <option key={insurance._id} value={insurance.hmoname}>
+                          {insurance.hmoname}
+                        </option>
+                      ))}
+                    </Select>
+                  </FormControl>
 
                   <Input
                     id="hnoPlan"
@@ -915,7 +1137,7 @@ export default function CreatePatientModal({
                     name="HMOId"
                     leftIcon={<FaMedkit />}
                   />
-                                    <Input
+                  <Input
                     id="facilitypateintreferedfrom"
                     name="facilitypateintreferedfrom"
                     label="Facility Referred From"
@@ -1172,6 +1394,17 @@ export default function CreatePatientModal({
                     placeholder="Enter Address"
                     leftIcon={<FaMapMarkerAlt />}
                   />
+                  <Input
+                    id="alternatePhoneNumber"
+                    label="Alternate Phone Number"
+                    value={UpdatedPayload.alternatePhoneNumber}
+                    onChange={handleUpdatedPayload}
+                    name="alternatePhoneNumber"
+                    placeholder="Enter alternate phone number"
+                    type="text"
+                    maxLength={11}
+                    leftIcon={<FaPhoneAlt />}
+                  />
                 </SimpleGrid>
 
                 <Divider my={4} />
@@ -1416,6 +1649,94 @@ export default function CreatePatientModal({
                 </SimpleGrid>
 
                 <Divider my={4} />
+                {/* Clinical Information Section */}
+                <Text
+                  fontSize="md"
+                  fontWeight="bold"
+                  mb={2}
+                  color="blue.blue500"
+                >
+                  Clinical Information
+                </Text>
+                <SimpleGrid columns={{ base: 1, md: 4 }} spacing={4}>
+                  <FormControl>
+                    <Select
+                      h="45px"
+                      borderWidth="2px"
+                      borderColor="#6B7280"
+                      name="bloodGroup"
+                      value={UpdatedPayload.bloodGroup}
+                      onChange={handleUpdatedPayload}
+                      placeholder="Select Blood Group"
+                    >
+                      <option value="A+">A+</option>
+                      <option value="A-">A-</option>
+                      <option value="B+">B+</option>
+                      <option value="B-">B-</option>
+                      <option value="AB+">AB+</option>
+                      <option value="AB-">AB-</option>
+                      <option value="O+">O+</option>
+                      <option value="O-">O-</option>
+                    </Select>
+                  </FormControl>
+                  <FormControl>
+                    <Select
+                      h="45px"
+                      borderWidth="2px"
+                      borderColor="#6B7280"
+                      name="genotype"
+                      value={UpdatedPayload.genotype}
+                      onChange={handleUpdatedPayload}
+                      placeholder="Select Genotype"
+                    >
+                      <option value="AA">AA</option>
+                      <option value="AS">AS</option>
+                      <option value="AC">AC</option>
+                      <option value="SS">SS</option>
+                      <option value="SC">SC</option>
+                    </Select>
+                  </FormControl>
+                  <Input
+                    id="bp"
+                    label="Blood Pressure"
+                    value={UpdatedPayload.bp}
+                    onChange={handleUpdatedPayload}
+                    name="bp"
+                    placeholder="e.g. 120/80"
+                    leftIcon={<FaHeart />}
+                  />
+                  <Input
+                    id="heartRate"
+                    label="Heart Rate"
+                    value={UpdatedPayload.heartRate}
+                    onChange={handleUpdatedPayload}
+                    name="heartRate"
+                    type="number"
+                    placeholder="e.g. 72"
+                    leftIcon={<FaHeart />}
+                  />
+                  <Input
+                    id="temperature"
+                    label="Temperature"
+                    value={UpdatedPayload.temperature}
+                    onChange={handleUpdatedPayload}
+                    name="temperature"
+                    type="number"
+                    placeholder="e.g. 98.6"
+                    leftIcon={<FaMedkit />}
+                  />
+                  <Input
+                    id="specialNeeds"
+                    label="Special Needs"
+                    value={UpdatedPayload.specialNeeds}
+                    onChange={handleUpdatedPayload}
+                    name="specialNeeds"
+                    placeholder="e.g. Allergic to penicillin"
+                    leftIcon={<FaMedkit />}
+                  />
+                </SimpleGrid>
+
+                <Divider my={4} />
                 {/* Medical Informatio */}
                 <Text
                   fontSize="md"
@@ -1442,15 +1763,31 @@ export default function CreatePatientModal({
                     </Select>
                   </FormControl>
 
-                  <Input
-                    id="hnoName"
-                    label="HMO Name"
-                    value={UpdatedPayload.HMOName}
-                    onChange={handleUpdatedPayload}
-                    name="HMOName"
-                    placeholder="HMO Name"
-                    leftIcon={<FaMedkit />}
-                  />
+                  <FormControl>
+                    <Select
+                      h="45px"
+                      borderWidth="2px"
+                      borderColor="#6B7280"
+                      name="HMOName"
+                      value={
+                        type === "new"
+                          ? patientData.HMOName
+                          : UpdatedPayload.HMOName
+                      }
+                      onChange={
+                        type === "new"
+                          ? handleInputChange
+                          : handleUpdatedPayload
+                      }
+                      placeholder="Select HMO"
+                    >
+                      {insuranceOptions.map((insurance) => (
+                        <option key={insurance._id} value={insurance.hmoname}>
+                          {insurance.hmoname}
+                        </option>
+                      ))}
+                    </Select>
+                  </FormControl>
 
                   <Input
                     id="hnoPlan"

@@ -40,7 +40,7 @@ export default function HistoryRespModal({ isOpen, onClose, setOldPayload, activ
 
     const save = () => {
 
-        setOldPayload({ ...oldPayload, ["historyresp"]: Payload })
+        setOldPayload({ ...oldPayload, "historyresp": Payload })
         activateNotifications("Saved Successfully", "success")
         onClose()
     }

@@ -2,6 +2,7 @@ import { isActive, isOutPatient,isOutPatientParent,isRecordStaff,isInPatient,
   isScheduleAppointmentStaff,isScheduleProcedureStaff,isLabStaff,isRadiologyStaff,
   isPharmacyStaff,isInventoryStaff,isBillingStaff,isUserManagerStaff,isTheatreStaff,isClinicalReport,isBillingStaffHOD } from "../Authentication/Index";
 import { MdOutlineAnalytics } from "react-icons/md";
+import { IoBody } from "react-icons/io5";
 import { FaUserInjured, FaUsers } from "react-icons/fa";
 import { BiSolidReport } from "react-icons/bi";
 import { FaUserNurse } from "react-icons/fa";
@@ -13,7 +14,9 @@ import { ImLab } from "react-icons/im";
 import { MdInventory2 } from "react-icons/md";
 import { MdLocalPharmacy } from "react-icons/md";
 import { FaRadiation } from "react-icons/fa";
+import { FaEye } from "react-icons/fa";
 import { MdLocalHospital } from 'react-icons/md';
+
 export const NavList = (location) => {
   const checkActiveLab = () => {
     let result = "";
@@ -30,48 +33,7 @@ export const NavList = (location) => {
     }
   };
 
-  const checkReport = () => {
-    let result = "";
-
-    if (
-      isActive(location, "/dashboard/report-analytics/report") ||
-      isActive(location, "/dashboard/report-analytics/summary")
-    ) {
-      result = true;
-      return result;
-    } else {
-      result = false;
-      return result;
-    }
-  };
-  const checkActivePatient = () => {
-    let result = "";
-
-    if (
-      isActive(location, "/dashboard/patient") ||
-      isActive(location, "/dashboard/doctor-schedule")
-    ) {
-      result = true;
-      return result;
-    } else {
-      result = false;
-      return result;
-    }
-  };
-  const checkActiveInPatient = () => {
-    let result = "";
-
-    if (
-      isActive(location, "/dashboard/in-patient") ||
-      isActive(location, "/dashboard/nurse-care")
-    ) {
-      result = true;
-      return result;
-    } else {
-      result = false;
-      return result;
-    }
-  };
+  
 
   let List = [
     {
@@ -169,7 +131,52 @@ export const NavList = (location) => {
           active: isActive(location, "/dashboard/lab-process/report"),
           display: isLabStaff(),
         },
+                {
+          name: "hematology",
+          icon: <MdOutlineAnalytics />,
+          link: "/dashboard/lab-process/hematology",
+          active: isActive(location, "/dashboard/lab-process/hematology"),
+          display: isLabStaff(),
+        },
+                        {
+          name: "chemical pathology",
+          icon: <MdOutlineAnalytics />,
+          link: "/dashboard/lab-process/chemical-pathology",
+          active: isActive(location, "/dashboard/lab-process/chemical-pathology"),
+          display: isLabStaff(),
+        },
       ],
+    },
+    {
+      name: "histopathology",
+      icon: <IoBody />,
+      link: "#",
+      active: isActive(location, "#"),
+      display: isLabStaff(),
+      children: [
+        {
+          name: "histopathology",
+          icon: <MdOutlineAnalytics />,
+          link: "/dashboard/histopathology-process/histopathology",
+          active: isActive(location, "/dashboard/histopathology-process/histopathology"),
+          display: isLabStaff(),
+        },
+
+        {
+          name: "report",
+          icon: <MdOutlineAnalytics />,
+          link: "/dashboard/histopathology-process/report",
+          active: isActive(location, "/dashboard/histopathology-process/report"),
+          display: isLabStaff(),
+        },
+      ],
+    },
+    {
+      name: "eye Clinic",
+      icon: <FaEye />,
+      link: "/dashboard/eye-clinic",
+      active: isActive(location, "/dashboard/eye-clinic"),
+      display: true,
     },
     {
       name: "radiology",

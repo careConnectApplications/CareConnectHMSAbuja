@@ -174,17 +174,51 @@ export default function CreateUserModal({
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setUserData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    
+    if (name === "title") {
+      // Auto-populate gender based on title selection
+      let autoGender = "";
+      if (value === "Mr" || value === "Mallam" || value === "Alhaji") {
+        autoGender = "male";
+      } else if (value === "Mrs" || value === "Miss" || value === "Hajiya") {
+        autoGender = "female";
+      }
+      
+      setUserData((prev) => ({
+        ...prev,
+        [name]: value,
+        ...(autoGender && { gender: autoGender }),
+      }));
+    } else {
+      setUserData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
   const handleUpdatedPayload = (e) => {
     const { name, value } = e.target;
-    setUpdatedPayload((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    
+    if (name === "title") {
+      // Auto-populate gender based on title selection
+      let autoGender = "";
+      if (value === "Mr" || value === "Mallam" || value === "Alhaji") {
+        autoGender = "male";
+      } else if (value === "Mrs" || value === "Miss" || value === "Hajiya") {
+        autoGender = "female";
+      }
+      
+      setUpdatedPayload((prev) => ({
+        ...prev,
+        [name]: value,
+        ...(autoGender && { gender: autoGender }),
+      }));
+    } else {
+      setUpdatedPayload((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async () => {
@@ -350,21 +384,7 @@ export default function CreateUserModal({
                     placeholder="Enter Date of Birth"
                     leftIcon={<FaBirthdayCake />}
                   />
-                  <FormControl>
-                    <FormLabel>Gender</FormLabel>
-                    <Select
-                      name="gender"
-                      value={userData.gender}
-                      onChange={handleInputChange}
-                      placeholder="Select Gender"
-                      border="2px solid"
-                      borderColor="gray.500"
-                    >
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
-                    </Select>
-                  </FormControl>
-                  <FormControl>
+                   <FormControl>
                     <FormLabel>Title</FormLabel>
                     <Select
                       name="title"
@@ -379,11 +399,26 @@ export default function CreateUserModal({
                       <option value="Miss">Miss</option>
                       <option value="Dr">Dr</option>
                       <option value="Prof">Prof</option>
-                      <option value="Prof">Mallam</option>
-                      <option value="Prof">Alhaji </option>
-                      <option value="Prof">Hajiya </option>
+                      <option value="Mallam">Mallam</option>
+                      <option value="Alhaji">Alhaji </option>
+                      <option value="Hajiya">Hajiya </option>
                     </Select>
                   </FormControl>
+                  <FormControl>
+                    <FormLabel>Gender</FormLabel>
+                    <Select
+                      name="gender"
+                      value={userData.gender}
+                      onChange={handleInputChange}
+                      placeholder="Select Gender"
+                      border="2px solid"
+                      borderColor="gray.500"
+                    >
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                    </Select>
+                  </FormControl>
+                 
                 </SimpleGrid>
                 <Divider my={4} />
                 {/* Job Information Section */}
@@ -610,7 +645,7 @@ export default function CreateUserModal({
                   color="blue.blue500"
                   mb={2}
                 >
-                  Specialization
+                  Specialization (NB: You can have more than one specialization by add them and separating them with a comma)
                 </Text>
                 <Input
                   id="specializationDetails"
@@ -622,7 +657,7 @@ export default function CreateUserModal({
                   leftIcon={<FaBriefcase />}
                 />
 
-                <Button mt="32px" isLoading={loading} disable={userData.email !=="" && userData.firstName && userData.email !=="" && userData.staffId !=="" && userData.role !==""
+                <Button mt="32px" isLoading={loading} disable={userData.email !=="" && userData.firstName && userData.email !==""  && userData.role !==""
                 && userData.gender !=="" ? false: true
                  } onClick={handleSubmit}>
                   Create User
@@ -697,21 +732,7 @@ export default function CreateUserModal({
                     placeholder="Enter Date of Birth"
                     leftIcon={<FaBirthdayCake />}
                   />
-                  <FormControl>
-                    <FormLabel>Gender</FormLabel>
-                    <Select
-                      name="gender"
-                      value={UpdatedPayload.gender}
-                      onChange={handleUpdatedPayload}
-                      placeholder="Select Gender"
-                      border="2px solid"
-                      borderColor="gray.500"
-                    >
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
-                    </Select>
-                  </FormControl>
-                  <FormControl>
+                   <FormControl>
                     <FormLabel>Title</FormLabel>
                     <Select
                       name="title"
@@ -726,8 +747,26 @@ export default function CreateUserModal({
                       <option value="Miss">Miss</option>
                       <option value="Dr">Dr</option>
                       <option value="Prof">Prof</option>
+                      <option value="Mallam">Mallam</option>
+                      <option value="Alhaji">Alhaji </option>
+                      <option value="Hajiya">Hajiya </option>
                     </Select>
                   </FormControl>
+                  <FormControl>
+                    <FormLabel>Gender</FormLabel>
+                    <Select
+                      name="gender"
+                      value={UpdatedPayload.gender}
+                      onChange={handleUpdatedPayload}
+                      placeholder="Select Gender"
+                      border="2px solid"
+                      borderColor="gray.500"
+                    >
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                    </Select>
+                  </FormControl>
+                 
                 </SimpleGrid>
                 <Divider my={4} />
                 {/* Job Information Section */}

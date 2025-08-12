@@ -22,6 +22,7 @@ import LabResultManagement from "./LabResultManagement";
 import AuditManagement from "./AuditManagement";
 import PricingModelSettings from "./PricingModelSettings";
 import OutreachMedicationSettings from "./OutreachMedicationSettings";
+import BedManagement from "./BedManagement";
 
 export default function Settings() {
   return (
@@ -106,6 +107,12 @@ export default function Settings() {
           >
             Outreach Medication
           </Tab>
+          <Tab
+            _focus={{ outline: "none" }}
+            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+          >
+            Bed Management
+          </Tab>
         </TabList>
         <TabPanels>
           <TabPanel p="0">
@@ -140,6 +147,9 @@ export default function Settings() {
           </TabPanel>
           <TabPanel p="0">
             <OutreachMedicationSettings />
+          </TabPanel>
+          <TabPanel p="0">
+            <BedManagement />
           </TabPanel>
         </TabPanels>
       </Tabs>

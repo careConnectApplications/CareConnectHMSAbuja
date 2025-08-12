@@ -27,7 +27,6 @@ export default function SignIn() {
   const [Loading, setLoading] = useState(false);
   const [onlineUser, setOnlineUser] = useState(null);
   const [showUpdatePasswordModal, setShowUpdatePasswordModal] = useState(false);
-  const [requirePasswordChange, setRequirePasswordChange] = useState(false);
   // Make token reactive.
   const [token, setToken] = useState('');
   const nav = useNavigate();
@@ -45,15 +44,17 @@ export default function SignIn() {
       if (result.status === 200) {
         setLoading(false);
         const token = result.data.queryresult.token;
+        const expiredAt = result.data.queryresult.options.expires;
+        localStorage.setItem("expiredAt", expiredAt);
         localStorage.setItem("token", token);
         setToken(token);
         const decodedUser = jwtDecode(token).user;
         setOnlineUser(decodedUser);
+        console.log("Decoded User:", decodedUser)
         localStorage.setItem("onlineUser", JSON.stringify(decodedUser));
 
         // Check if a password update is required.
         if (result.data.requirepasswordchange) {
-          setRequirePasswordChange(true);
           localStorage.setItem("requirePasswordChange", "true");
           setShowUpdatePasswordModal(true);
           setShowToast({
@@ -110,6 +111,19 @@ export default function SignIn() {
       }, 3000);
     }
   }, [token, nav]);
+
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      Proceed();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyPress);
+    return () => {
+      window.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [Payload]);
 
   return (
     <AuthLayout>
@@ -179,7 +193,6 @@ export default function SignIn() {
           onSuccess={() => {
             // When password update succeeds, clear the flag and redirect.
             localStorage.setItem("requirePasswordChange", "false");
-            setRequirePasswordChange(false);
             setShowUpdatePasswordModal(false);
             nav("/dashboard");
           }}

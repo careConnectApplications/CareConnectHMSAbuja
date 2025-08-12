@@ -54,7 +54,7 @@ export default function CurrentHistoryModal({ isOpen, onClose, type, setOldPaylo
     const save = () => {
 
         const mergedPayload = { ...Payload, ...RadioGroups }
-        setOldPayload({ ...oldPayload, ["currenthistory"]: mergedPayload })
+        setOldPayload({ ...oldPayload, "currenthistory": mergedPayload })
         activateNotifications("Saved Successfully", "success")
         onClose()
     }

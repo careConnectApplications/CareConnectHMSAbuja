@@ -202,7 +202,6 @@ export default function WardManagement() {
                 <Th fontSize="13px" color="#534D59" fontWeight="600">Bed Specialization</Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">Ward Name</Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">Total Bed</Th>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">Occupied Bed</Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">Vacant Bed</Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">Price</Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">Status</Th>
@@ -219,7 +218,6 @@ export default function WardManagement() {
                   bedSpec={item.bedspecialization}
                   wardName={item.wardname}
                   totalBed={item.totalbed}
-                  occupiedBed={item.occupiedbed}
                   vacantBed={item.vacantbed}
                   price={item.price}
                   status={item.status}

@@ -22,7 +22,11 @@ import {
   MenuItem,
 } from "@chakra-ui/react";
 import CreatePatientModal from "../Components/CreatePatientModal";
-import { GetAllPatientsApi, GetAllFilteredPatientsApi } from "../Utils/ApiCalls";
+import {
+  GetAllPatientsApi,
+  GetAllFilteredPatientsApi,
+  payAnnualSubscriptionApi,
+} from "../Utils/ApiCalls";
 import moment from "moment";
 import { HiOutlineDocumentArrowUp } from "react-icons/hi2";
 import { BiSearch } from "react-icons/bi";
@@ -58,16 +62,21 @@ export default function Patients() {
   const [Value, setValue] = useState("");
 
   const getFilteredPatient = async (key, value) => {
-    setKey(key)
-    setValue(value)
+    setKey(key);
+    setValue(value);
 
     try {
       setIsLoading(true);
-      const result = await GetAllFilteredPatientsApi(key, value, CurrentPage, PostPerPage);
+      const result = await GetAllFilteredPatientsApi(
+        key,
+        value,
+        CurrentPage,
+        PostPerPage
+      );
       console.log("all fitlered patient", result);
       if (result.status === true) {
         setFilteredData(result.queryresult.patientdetails);
-        setTotalData(result.queryresult.totalpatientdetails)
+        setTotalData(result.queryresult.totalpatientdetails);
       }
     } catch (e) {
       console.error(e.message);
@@ -80,22 +89,17 @@ export default function Patients() {
     console.log("filter checking", title);
 
     if (title === "mrn") {
-      getFilteredPatient("MRN", SearchInput)
+      getFilteredPatient("MRN", SearchInput);
     } else if (title === "email") {
-      getFilteredPatient("email", SearchInput)
-
+      getFilteredPatient("email", SearchInput);
     } else if (title === "FirstName") {
-
-      getFilteredPatient("firstName", SearchInput)
-
+      getFilteredPatient("firstName", SearchInput);
     } else if (title === "LastName") {
-
-      getFilteredPatient("lastName", SearchInput)
-
+      getFilteredPatient("lastName", SearchInput);
     } else if (title === "phoneNumber") {
-      getFilteredPatient("phoneNumber", SearchInput)
+      getFilteredPatient("phoneNumber", SearchInput);
     } else if (title === "hmoId") {
-      getFilteredPatient("HMOId", SearchInput)
+      getFilteredPatient("HMOId", SearchInput);
     } else if (title === "date") {
       // add 1 day to end date
       let endDate = new Date(EndDate);
@@ -170,7 +174,7 @@ export default function Patients() {
       if (result.status === true) {
         setData(result.queryresult.patientdetails);
         setFilterData(result.queryresult.patientdetails);
-        setTotalData(result.queryresult.totalpatientdetails)
+        setTotalData(result.queryresult.totalpatientdetails);
       }
     } catch (e) {
       console.error(e.message);
@@ -193,11 +197,42 @@ export default function Patients() {
     onOpen();
   };
 
-
-
   const CreatePatient = () => {
     setModalState("new");
     onOpen();
+  };
+
+  const payAnnualSubscription = async (id) => {
+    console.log("Paying annual subscription for patient ID:", id);
+    try {
+      setIsLoading(true);
+      const result = await payAnnualSubscriptionApi({ patientId: id });
+      console.log("Payment response:", result);
+
+      if (result.data && result.data.status === true) {
+        setShowToast({
+          show: true,
+          message: "Payment Successful",
+          status: "success",
+        });
+        setTrigger(!Trigger);
+      } else {
+        setShowToast({
+          show: true,
+          message: result.data?.msg || "Payment Failed",
+          status: "error",
+        });
+      }
+    } catch (e) {
+      console.error("Payment error:", e.message);
+      setShowToast({
+        show: true,
+        message: e.message || "Payment Failed",
+        status: "error",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const testing = () => {
@@ -206,9 +241,8 @@ export default function Patients() {
 
   useEffect(() => {
     if (FilteredData?.length > 0 || FilteredData !== null) {
-      getFilteredPatient(Key, Value)
+      getFilteredPatient(Key, Value);
     } else {
-
       getAllPatient();
     }
   }, [isOpen, Trigger, CurrentPage]);
@@ -274,7 +308,11 @@ export default function Patients() {
                 </Box>
               </Text>
             </Box>
-            <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={filterActive}>
+            <Box
+              borderRight="1px solid #EDEFF2"
+              pr="5px"
+              onClick={filterActive}
+            >
               <Text
                 py="8.5px"
                 px="12px"
@@ -317,10 +355,10 @@ export default function Patients() {
                 <Input
                   label="Search"
                   onChange={(e) => {
-                    setSearchInput(e.target.value)
-                    setCurrentPage(1)
-                  }
-                  } value={SearchInput}
+                    setSearchInput(e.target.value);
+                    setCurrentPage(1);
+                  }}
+                  value={SearchInput}
                   bColor="#E4E4E4"
                   leftIcon={<BiSearch />}
                 />
@@ -490,7 +528,7 @@ export default function Patients() {
                       setStartDate("");
                       setEndDate("");
                       getAllPatient();
-                      setCurrentPage(1)
+                      setCurrentPage(1);
                     }}
                     textTransform="capitalize"
                     fontWeight={"500"}
@@ -568,6 +606,9 @@ export default function Patients() {
                     HMO ID
                   </Th>
                   <Th fontSize="12px" fontWeight="600" color="#534D59">
+                    Subscription Paid Until
+                  </Th>
+                  <Th fontSize="12px" fontWeight="600" color="#534D59">
                     Status
                   </Th>
                   <Th fontSize="12px" fontWeight="600" color="#534D59">
@@ -595,10 +636,17 @@ export default function Patients() {
                       status={item.status}
                       hmoStatus={item.isHMOCover}
                       hmoId={item.HMOId}
+                      subscription={item.subscriptionPaidUntil}
                       date={moment(item.createdAt).format("lll")}
                       onEdit={() => onEdit(item._id)}
                       onView={() => navigateToPatientDetails(item._id)}
-                      OnClick={testing}
+                      onClick={() => {
+                        console.log(
+                          "Clicked payAnnualSubscription for:",
+                          item._id
+                        );
+                        payAnnualSubscription(item._id);
+                      }}
                     />
                   ))
                 ) : SearchInput !== "" && FilteredData?.length > 0 ? (
@@ -620,7 +668,13 @@ export default function Patients() {
                       date={moment(item.createdAt).format("lll")}
                       onEdit={() => onEdit(item._id)}
                       onView={() => navigateToPatientDetails(item._id)}
-                      OnClick={testing}
+                      onClick={() => {
+                        console.log(
+                          "Clicked payAnnualSubscription for:",
+                          item._id
+                        );
+                        payAnnualSubscription(item._id);
+                      }}
                     />
                   ))
                 ) : (

@@ -51,13 +51,13 @@ export default function CreateServiceTypeModal({ isOpen, onClose, type, activate
 
     const addTypes = () => {
 
-        setPayload({ ...Payload, ["serviceType"]: "" })
+        setPayload({ ...Payload, "serviceType": "" })
         setTypes([...Types, Payload.serviceType])
 
     }
     const addUpdatedTypes = () => {
 
-        setUpdatedPayload({ ...UpdatedPayload, ["serviceType"]: "" })
+        setUpdatedPayload({ ...UpdatedPayload, "serviceType": "" })
         setUpdatedTypes([...UpdatedTypes, UpdatedPayload.serviceType])
 
     }

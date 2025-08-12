@@ -17,6 +17,9 @@ import {
   Checkbox,
   Box,
   Flex,
+  VStack,
+  HStack,
+  Badge,
 } from "@chakra-ui/react";
 import { FaIdBadge, FaPhone, FaUser } from "react-icons/fa";
 import { FiSearch } from "react-icons/fi";
@@ -61,8 +64,9 @@ export default function CreateAppointmentModal({
   const [toast, setToast] = useState(null);
   const [ClinicData, setClinicData] = useState([]);
 
-  // New state for MRN search input; the patients state is updated only after search.
+  // New state for MRN search input and selected patient info
   const [searchMRN, setSearchMRN] = useState("");
+  const [selectedPatientInfo, setSelectedPatientInfo] = useState(null);
 
   const showToast = (toastData) => {
     setToast(toastData);
@@ -113,34 +117,75 @@ export default function CreateAppointmentModal({
     if (!isOpen) {
       setSearchMRN("");
       setPatients([]);
+      setSelectedPatientInfo(null);
     }
   }, [isOpen]);
 
   const handleInputChange = ({ target: { name, value } }) =>
     setFormData((prev) => ({ ...prev, [name]: value }));
 
-  // Handler for patient selection from dropdown
-  const handlePatientChange = (event) => {
+  // Handler for patient selection from search results
+  const handlePatientSelect = (patient) => {
     setFormData((prev) => ({
       ...prev,
-      patient: event.target.value,
+      patient: patient._id,
     }));
+    setSelectedPatientInfo({
+      name: `${patient.firstName} ${patient.lastName}`,
+      mrn: patient.MRN,
+    });
+    setPatients([]); // Clear search results
+    setSearchMRN(`${patient.firstName} ${patient.lastName} (MRN: ${patient.MRN})`);
   };
 
-  // Handler for searching a patient using MRN
-  const handleSearchPatient = async () => {
-    try {
-      setIsLoadingPatients(true);
-      const results = await SearchPatientApi(searchMRN);
-      if (results?.queryresult?.patientdetails) {
-        setPatients(results.queryresult.patientdetails);
-      } else {
+  // Auto-search functionality with debouncing
+  useEffect(() => {
+    const searchPatients = async (searchTerm) => {
+      if (!searchTerm || searchTerm.trim().length < 2) {
         setPatients([]);
+        return;
       }
-    } catch (e) {
-      console.error("Error searching patient:", e.message);
-    } finally {
-      setIsLoadingPatients(false);
+
+      // Don't search if a patient is already selected and the search term matches
+      if (selectedPatientInfo && searchTerm.includes(selectedPatientInfo.mrn)) {
+        return;
+      }
+
+      try {
+        setIsLoadingPatients(true);
+        const results = await SearchPatientApi(searchTerm);
+        if (results?.queryresult?.patientdetails) {
+          setPatients(results.queryresult.patientdetails);
+        } else {
+          setPatients([]);
+        }
+      } catch (e) {
+        console.error("Error searching patient:", e.message);
+        setPatients([]);
+      } finally {
+        setIsLoadingPatients(false);
+      }
+    };
+
+    const timeoutId = setTimeout(() => {
+      searchPatients(searchMRN);
+    }, 300); // 300ms debounce
+
+    return () => clearTimeout(timeoutId);
+  }, [searchMRN, selectedPatientInfo]);
+
+  // Handle search input change and clear selection if user starts typing new search
+  const handleSearchInputChange = (e) => {
+    const value = e.target.value;
+    setSearchMRN(value);
+    
+    // Clear selected patient if user modifies the search significantly
+    if (selectedPatientInfo && !value.includes(selectedPatientInfo.mrn)) {
+      setSelectedPatientInfo(null);
+      setFormData((prev) => ({
+        ...prev,
+        patient: "",
+      }));
     }
   };
 
@@ -262,38 +307,84 @@ export default function CreateAppointmentModal({
             {/* Patient Search Section */}
             <FormControl mb={4}>
               <FormLabel>Patient</FormLabel>
-              <Flex mb={2} gap={4}>
+              <Box position="relative">
                 <Input
                   label="Search for Patient"
                   placeholder="Enter MRN, first name, or last name"
                   value={searchMRN}
-                  onChange={(e) => setSearchMRN(e.target.value)}
+                  onChange={handleSearchInputChange}
                   leftIcon={<FiSearch size={16} color="blue.500" />}
-                  flex="1"
                 />
-                <Button
-                  onClick={handleSearchPatient}
-                  w={["100%", "100%", "165px", "205px"]}
-                >
-                  Search
-                </Button>
-              </Flex>
-              <Select
-                name="patient"
-                value={formData.patient}
-                onChange={handlePatientChange}
-                placeholder={
-                  isLoadingPatients ? "Loading patients..." : "Select Patient"
-                }
-                isDisabled={isLoadingPatients}
-                mt={4}
-              >
-                {patients.map((patient) => (
-                  <option key={patient._id} value={patient._id}>
-                    {`${patient.firstName} ${patient.lastName} (MRN: ${patient.MRN})`}
-                  </option>
-                ))}
-              </Select>
+                
+                {/* Selected Patient Display */}
+                {selectedPatientInfo && (
+                  <Box mt={2} p={3} bg="blue.50" borderRadius="md" border="1px solid" borderColor="blue.200">
+                    <HStack spacing={2}>
+                      <Badge colorScheme="blue" variant="solid">Selected</Badge>
+                      <Text fontWeight="medium">{selectedPatientInfo.name}</Text>
+                      <Text fontSize="sm" color="gray.600">MRN: {selectedPatientInfo.mrn}</Text>
+                    </HStack>
+                  </Box>
+                )}
+
+                {/* Search Results Dropdown */}
+                {patients.length > 0 && !selectedPatientInfo && (
+                  <Box
+                    position="absolute"
+                    top="100%"
+                    left={0}
+                    right={0}
+                    zIndex={10}
+                    bg="white"
+                    border="1px solid"
+                    borderColor="gray.200"
+                    borderRadius="md"
+                    boxShadow="lg"
+                    maxH="200px"
+                    overflowY="auto"
+                    mt={1}
+                  >
+                    {patients.map((patient) => (
+                      <Box
+                        key={patient._id}
+                        p={3}
+                        cursor="pointer"
+                        _hover={{ bg: "blue.50" }}
+                        onClick={() => handlePatientSelect(patient)}
+                        borderBottom="1px solid"
+                        borderColor="gray.100"
+                        _last={{ borderBottom: "none" }}
+                      >
+                        <Text fontWeight="medium">
+                          {`${patient.firstName} ${patient.lastName}`}
+                        </Text>
+                        <Text fontSize="sm" color="gray.600">
+                          MRN: {patient.MRN}
+                        </Text>
+                      </Box>
+                    ))}
+                  </Box>
+                )}
+
+                {/* Loading Indicator */}
+                {isLoadingPatients && (
+                  <Box
+                    position="absolute"
+                    top="100%"
+                    left={0}
+                    right={0}
+                    zIndex={10}
+                    bg="white"
+                    border="1px solid"
+                    borderColor="gray.200"
+                    borderRadius="md"
+                    p={3}
+                    mt={1}
+                  >
+                    <Text color="gray.500">Searching patients...</Text>
+                  </Box>
+                )}
+              </Box>
             </FormControl>
 
             {/* Main Form Fields */}
@@ -301,7 +392,7 @@ export default function CreateAppointmentModal({
               <FormControl>
                 <FormLabel>Date</FormLabel>
                 <Input
-                  type="datetime-local"
+                  type="date"
                   name="appointmentdate"
                   value={formData.appointmentdate}
                   onChange={handleInputChange}

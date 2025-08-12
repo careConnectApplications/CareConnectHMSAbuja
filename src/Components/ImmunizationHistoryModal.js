@@ -82,7 +82,7 @@ export default function ImmunizationHistoryModal({ isOpen, onClose, type, setOld
     const save = () => {
 
         const mergedPayload = { ...Payload, ...CheckedItems }
-        setOldPayload({ ...oldPayload, ["immunizationhistory"]: mergedPayload })
+        setOldPayload({ ...oldPayload, "immunizationhistory": mergedPayload })
         activateNotifications("Saved Successfully", "success")
         onClose()
     }
