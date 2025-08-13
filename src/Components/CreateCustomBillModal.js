@@ -27,6 +27,7 @@ export default function CreateCustomBillModal({ isOpen, onClose }) {
   const [formData, setFormData] = useState({
     serviceCategory: "",
     serviceType: "",
+    amount: "",
     phoneNumber: patientDetails?.phoneNumber || "",
     MRN: patientDetails?.MRN || "",
   });
@@ -104,31 +105,28 @@ export default function CreateCustomBillModal({ isOpen, onClose }) {
             ))}
           </Select>
 
-          {formData.serviceCategory !== "" && (
-            <Select
-              mt={4}
-              name="serviceType"
-              value={formData.serviceType}
-              onChange={handleInputChange}
-              placeholder="Select Service Type"
-              border="2px solid"
-              size="lg"
-              fontSize={formData.serviceType !== "" ? "16px" : "13px"}
-              borderColor="gray.500"
-            >
-              {settings?.servicecategory
-                ?.filter((item) => item.category === formData.serviceCategory)[0]
-                ?.type?.map((item, i) => (
-                  <option key={i} value={item}>
-                    {item}
-                  </option>
-                ))}
-            </Select>
-          )}
+         
 
           <Input
             mt={4}
             val={formData.serviceType !== "" ? true : false}
+            onChange={handleInputChange}
+            name="serviceType"
+            value={formData.serviceType}
+            label="Service Type"
+          />
+
+          <Input
+            mt={4}
+            val={formData.amount !== "" ? true : false}
+            onChange={handleInputChange}
+            name="amount"
+            value={formData.amount}
+            label="Amount"
+          />
+          <Input
+            mt={4}
+            val={formData.phoneNumber !== "" ? true : false}
             onChange={handleInputChange}
             name="phoneNumber"
             value={formData.phoneNumber}
