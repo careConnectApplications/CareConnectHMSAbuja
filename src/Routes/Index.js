@@ -89,6 +89,7 @@ import Hematology from "../Pages/Hematology";
 import ChemicalPathology from "../Pages/ChemicalPathology";
 import DentalEncounterForm from "../Pages/DentalEncounterForm";
 import DentalEncounterEdit from "../Pages/DentalEncounterEdit";
+import AddEyeConsultation from "../Pages/AddEyeConsultation";
 
 export default function IndexRoutes() {
   return (
@@ -120,6 +121,10 @@ export default function IndexRoutes() {
           <Route
             path="/dashboard/add-lens-prescription/:id"
             element={<AddLensPrescription />}
+          />
+          <Route
+            path="/dashboard/add-eye-consultation/:id"
+            element={<AddEyeConsultation />}
           />
           <Route
             path="/eye-module/operational-notes/appointment/:appointmentId/patient/:patientId"

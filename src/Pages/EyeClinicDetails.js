@@ -27,6 +27,7 @@ import LabAppointment from "./LabAppointment";
 import { useNavigate, useParams } from "react-router-dom";
 import LensPrescription from "./LensPrescription";
 import OperationNotes from "./OperationNotes";
+import EyeConsultation from "./EyeConsultation";
 
 export default function EyeClinicDetails() {
   const { id } = useParams();
@@ -90,6 +91,12 @@ export default function EyeClinicDetails() {
           >
             Lens prescription{" "}
           </Tab>
+          <Tab
+            _focus={{ outline: "none" }}
+            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+          >
+            Eye Consultation{" "}
+          </Tab>
          
         </TabList>
         {/* <TabIndicator mt='-1.5px' height='2px' bg='blue.blue500' borderRadius='1px' /> */}
@@ -109,6 +116,10 @@ export default function EyeClinicDetails() {
 
           <TabPanel p="0">
             <LensPrescription />
+          </TabPanel>
+
+          <TabPanel p="0">
+            <EyeConsultation />
           </TabPanel>
         
         </TabPanels>
