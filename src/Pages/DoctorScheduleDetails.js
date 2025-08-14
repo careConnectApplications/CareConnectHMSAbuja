@@ -51,6 +51,8 @@ import PsychiatricEvaluations from "./PsychiatricEvaluations";
 import Dental from "./Dental";
 import PhysiotherapyAssessments from "./PhysiotherapyAssessments";
 import CustomBilling from "./CustomBilling";
+import SingleHistopathology from "./SingleHistopathology";
+import SingleHistopathologyReport from "./SingleHistopathologyReport";
 
 export default function DoctorScheduleDetails() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -187,6 +189,18 @@ export default function DoctorScheduleDetails() {
             _focus={{ outline: "none" }}
             _selected={{ color: "blue.blue500", fontWeight: "700" }}
           >
+            Histopathology{" "}
+          </Tab>
+          <Tab
+            _focus={{ outline: "none" }}
+            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+          >
+            Histopathology Result{" "}
+          </Tab>
+          <Tab
+            _focus={{ outline: "none" }}
+            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+          >
             Immunization{" "}
           </Tab>
           <Tab
@@ -301,6 +315,12 @@ export default function DoctorScheduleDetails() {
             <SingleFamilyPlanning />
           </TabPanel>
           <TabPanel p="0">
+            <SingleHistopathology />
+          </TabPanel>
+          <TabPanel p="0">
+            <SingleHistopathologyReport />
+          </TabPanel>
+          <TabPanel p="0">
             <Immunization />
           </TabPanel>
           <TabPanel p="0">
@@ -343,6 +363,7 @@ export default function DoctorScheduleDetails() {
             <ReferTheatreAdmissionPage />
           </TabPanel>
           <TabPanel p="0">
+.
             <SingleVitalChart />
           </TabPanel>
         </TabPanels>

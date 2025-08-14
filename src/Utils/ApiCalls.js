@@ -438,14 +438,14 @@ export const CreateHistologyApi = (payload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.msg) {
-        throw new Error(error.response.data.msg);
+      if (error.response.data.message) {
+        throw new Error(error.response.data.message);
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.msg);
+        throw new Error(error.message);
       } else {
-        throw new Error(error.msg);
+        throw new Error(error.message);
       }
     });
 };
@@ -572,6 +572,66 @@ export const GetAllHistopathologyReportApi = () => {
         throw new Error(error.msg);
       } else {
         throw new Error(error.msg);
+      }
+    });
+};
+
+export const GetAllSingleHistopathologyHistoryApi = (id) => {
+  // Configure the GET request
+  let config = {
+    method: "get",
+    url: `${baseUrl}/histopathology/${id}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response.data; // Return the data part of the response
+    })
+    .catch((error) => {
+      console.log("Error fetching histopathology history:", error.response);
+      if (error.response && error.response.data.message) {
+        throw new Error(error.response.data.message);
+      } else if (error.response && error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.message);
+      } else {
+        throw new Error(error.message);
+      }
+    });
+};
+
+export const GetAllPatientHistopathologyReportApi = (id) => {
+  // Configure the GET request
+  let config = {
+    method: "get",
+    url: `${baseUrl}/histopathology/listhistopathologyreportbypatient/${id}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response.data; // Return the data part of the response
+    })
+    .catch((error) => {
+      console.log("Error fetching patient histopathology reports:", error.response);
+      if (error.response && error.response.data.message) {
+        throw new Error(error.response.data.message);
+      } else if (error.response && error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.message);
+      } else {
+        throw new Error(error.message);
       }
     });
 };
