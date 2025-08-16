@@ -580,7 +580,7 @@ export const GetAllSingleHistopathologyHistoryApi = (id) => {
   // Configure the GET request
   let config = {
     method: "get",
-    url: `${baseUrl}/histopathology/${id}`,
+    url: `${baseUrl}/histopathology/patient/${id}`,
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
