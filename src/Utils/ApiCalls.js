@@ -2218,6 +2218,36 @@ export const GetAllPaymentDetailApi = (id) => {
       }
     });
 };
+
+export const GetAllDetailApi = (id,category) => {
+  // Configure the GET request
+  let config = {
+    method: "get",
+    url: `${baseUrl}/insuranceauthorizationandclaims/readallbyreferenceid?referencenumber=${id}&&referencecategory=${category}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response.data; // Return the data part of the response
+    })
+    .catch((error) => {
+      console.log("Error fetching users:", error.response);
+      if (error.response && error.response.data.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response && error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
 export const GetAllPriceApi = () => {
   // Configure the GET request
   let config = {

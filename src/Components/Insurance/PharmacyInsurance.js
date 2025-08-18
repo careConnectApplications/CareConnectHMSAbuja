@@ -20,7 +20,7 @@ import {
   MenuList,
   MenuItem,
 } from "@chakra-ui/react";
-import PaymentGroupModal from "../PaymentGroupModal";
+import PharmacyInsuranceAuthModal from "../PharmacyInsuranceAuthModal";
 import { GetAwaitingAuthorizationPharmacy } from "../../Utils/ApiCalls";
 import moment from "moment";
 import { BiSearch } from "react-icons/bi";
@@ -103,6 +103,7 @@ export default function PharmacyInsurance() {
     setIsLoading(true);
     try {
       const result = await GetAwaitingAuthorizationPharmacy();
+
       if (result.status === true) {
         setIsLoading(false);
         setData(result.queryresult?.pharmacydetails || []);
@@ -420,12 +421,12 @@ export default function PharmacyInsurance() {
             paginate={paginate}
           />
         </Box>
-        <PaymentGroupModal
+        <PharmacyInsuranceAuthModal
           isOpen={isOpen}
           onClose={onClose}
-          type={ModalState}
+          type={"pharmacy"}
           filteredUser={FilterUser}
-          oldPayload={OldPayload}
+          oldPayload={{id: OldPayload.orderid}}
           activateNotifications={activateNotifications}
         />
       </Box>
