@@ -91,6 +91,10 @@ import ChemicalPathology from "../Pages/ChemicalPathology";
 import DentalEncounterForm from "../Pages/DentalEncounterForm";
 import DentalEncounterEdit from "../Pages/DentalEncounterEdit";
 import AddEyeConsultation from "../Pages/AddEyeConsultation";
+import PrintReport from "../Pages/PrintReport"
+import Insurance from "../Pages/Insurance";
+import Claims from "../Pages/Claims";
+
 
 export default function IndexRoutes() {
   return (
@@ -98,6 +102,7 @@ export default function IndexRoutes() {
       <Routes>
         <Route path="/" element={<SignIn />} />
         <Route element={<PrivateRoutes />}>
+        <Route path="/print-report" element={<PrintReport />} />
 
           <Route
             path="/dashboard/profile-settings"
@@ -380,11 +385,13 @@ export default function IndexRoutes() {
               path="/dashboard/edit-dental-encounter/:id"
               element={<DentalEncounterEdit />}
             />
-                                    <Route
+          <Route
               path="/dashboard/add-dental-encounter/:id"
               element={<DentalEncounterForm />}
             />
           </Route>
+          <Route path="/dashboard/insurance" element={<Insurance />} />
+          <Route path="/dashboard/claims" element={<Claims />} />
         </Route>
       </Routes>
     </BrowserRouter>

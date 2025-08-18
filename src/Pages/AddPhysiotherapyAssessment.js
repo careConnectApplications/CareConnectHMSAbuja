@@ -34,6 +34,7 @@ import CreateReferralModal from "../Components/CreateReferralModal";
 import AdmissionModal from "../Components/AdmissionModal";
 import CreatePrescriptionModal from "../Components/CreatePrescriptionModal";
 import Input from "../Components/Input";
+import PatientInfoCard from "../Components/PatientInfoCard";
 
 export default function AddPhysiotherapyAssessment() {
   const { id } = useParams();
@@ -584,6 +585,7 @@ export default function AddPhysiotherapyAssessment() {
         >
           Back
         </Button>
+        <PatientInfoCard />
 
         <Accordion defaultIndex={[]} mt="32px" allowToggle>
           <AccordionItem mb="15px">

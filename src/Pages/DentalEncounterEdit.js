@@ -665,7 +665,6 @@ export default function DentalEncounterEdit() {
               </SimpleGrid>
             </AccordionPanel>
           </AccordionItem>
-
           {/* Quadrant Notes */}
           <AccordionItem mb="15px">
             <AccordionButton
@@ -683,18 +682,53 @@ export default function DentalEncounterEdit() {
               <AccordionIcon />
             </AccordionButton>
             <AccordionPanel pb={4} bg="#fff" rounded="0px 0px 8px 8px">
-              <SimpleGrid columns={{ base: 1, md: 2 }} spacing={3}>
-                {renderArrayInput("firstQuadrantNote", "First Quadrant Notes")}
-                {renderArrayInput(
-                  "secondQuadrantNote",
-                  "Second Quadrant Notes"
-                )}
-                {renderArrayInput("thirdQuadrantNote", "Third Quadrant Notes")}
-                {renderArrayInput(
-                  "fourthQuadrantNote",
-                  "Fourth Quadrant Notes"
-                )}
-              </SimpleGrid>
+              <Box
+                display="grid"
+                gridTemplateColumns="1fr 1fr"
+                gridTemplateRows="1fr 1fr"
+                gap={0}
+                border="2px solid #6B7280"
+                borderRadius="md"
+                overflow="hidden"
+                maxWidth="800px"
+                margin="0 auto"
+              >
+                {/* Quadrant 1 (Upper Right) */}
+                <Box
+                  p={4}
+                  borderRight="1px solid #6B7280"
+                  borderBottom="1px solid #6B7280"
+                >
+                  <Text fontWeight="bold" mb={2} textAlign="center">
+                    Quadrant 1 (Upper Right)
+                  </Text>
+                  {renderArrayInput("firstQuadrantNote", "")}
+                </Box>
+
+                {/* Quadrant 2 (Upper Left) */}
+                <Box p={4} borderBottom="1px solid #6B7280">
+                  <Text fontWeight="bold" mb={2} textAlign="center">
+                    Quadrant 2 (Upper Left)
+                  </Text>
+                  {renderArrayInput("secondQuadrantNote", "")}
+                </Box>
+
+                {/* Quadrant 3 (Lower Left) */}
+                <Box p={4} borderRight="1px solid #6B7280">
+                  <Text fontWeight="bold" mb={2} textAlign="center">
+                    Quadrant 3 (Lower Left)
+                  </Text>
+                  {renderArrayInput("thirdQuadrantNote", "")}
+                </Box>
+
+                {/* Quadrant 4 (Lower Right) */}
+                <Box p={4}>
+                  <Text fontWeight="bold" mb={2} textAlign="center">
+                    Quadrant 4 (Lower Right)
+                  </Text>
+                  {renderArrayInput("fourthQuadrantNote", "")}
+                </Box>
+              </Box>
             </AccordionPanel>
           </AccordionItem>
 

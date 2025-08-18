@@ -131,20 +131,20 @@ export const NavList = (location) => {
           active: isActive(location, "/dashboard/lab-process/report"),
           display: isLabStaff(),
         },
-                {
-          name: "hematology",
-          icon: <MdOutlineAnalytics />,
-          link: "/dashboard/lab-process/hematology",
-          active: isActive(location, "/dashboard/lab-process/hematology"),
-          display: isLabStaff(),
-        },
-                        {
-          name: "chemical pathology",
-          icon: <MdOutlineAnalytics />,
-          link: "/dashboard/lab-process/chemical-pathology",
-          active: isActive(location, "/dashboard/lab-process/chemical-pathology"),
-          display: isLabStaff(),
-        },
+        // {
+        //   name: "hematology",
+        //   icon: <MdOutlineAnalytics />,
+        //   link: "/dashboard/lab-process/hematology",
+        //   active: isActive(location, "/dashboard/lab-process/hematology"),
+        //   display: isLabStaff(),
+        // },
+        //                 {
+        //   name: "chemical pathology",
+        //   icon: <MdOutlineAnalytics />,
+        //   link: "/dashboard/lab-process/chemical-pathology",
+        //   active: isActive(location, "/dashboard/lab-process/chemical-pathology"),
+        //   display: isLabStaff(),
+        // },
       ],
     },
     {
@@ -241,6 +241,29 @@ export const NavList = (location) => {
           display: isBillingStaffHOD(),
         },
 
+      ],
+    },
+    {
+      name: "Insurance",
+      icon: <MdLocalHospital />,
+      link: "#",
+      active: isActive(location, "#"),
+      display: true,
+      children: [
+        {
+          name: "Insurance",
+          icon: <MdLocalHospital />,
+          link: "/dashboard/insurance",
+          active: isActive(location, "/dashboard/insurance"),
+          display: true,
+        },
+        {
+          name: "Claims",
+          icon: <MdLocalHospital />,
+          link: "/dashboard/claims",
+          active: isActive(location, "/dashboard/claims"),
+          display: true,
+        },
       ],
     },
     {

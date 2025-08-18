@@ -1,6 +1,153 @@
 import axios from "axios";
 import { baseUrl, nigeriaStateApiUrl, token } from "./ApiConfig";
 
+
+
+export const GetAwaitingAuthorizationRadiology = () => {
+  const config = {
+    method: "get",
+    url: `${baseUrl}/insuranceauthorizationandclaims/readawaitingauthorizationradiologyoptimized`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response.data.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
+
+export const GetAwaitingAuthorizationProcedure = () => {
+  const config = {
+    method: "get",
+    url: `${baseUrl}/insuranceauthorizationandclaims/readawaitingauthorizationprocedureoptimized`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response.data.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
+
+export const GetAwaitingAuthorizationPharmacy = () => {
+  const config = {
+    method: "get",
+    url: `${baseUrl}/insuranceauthorizationandclaims/readawaitingauthorizationpharmacytransaction`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response.data.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
+
+export const GetAwaitingAuthorizationLab = () => {
+  const config = {
+    method: "get",
+    url: `${baseUrl}/insuranceauthorizationandclaims/readawaitingauthorizationlabtransaction`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response.data.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
+
+export const GetAwaitingAuthorizationHistopathology = () => {
+  const config = {
+    method: "get",
+    url: `${baseUrl}/insuranceauthorizationandclaims/readallhistopathologyawaitingauthorization`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response.data.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
+
 export const ProviderLoginApi = (Payload) => {
   // console.log("CreateAccountPayload", Payload);
 
@@ -20,6 +167,99 @@ export const ProviderLoginApi = (Payload) => {
     .then((response) => {
       //console.log(JSON.stringify(response.data));
       return response;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response.data.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
+
+export const CreateHmoCategoryCoverApi = (payload) => {
+  const data = JSON.stringify(payload);
+  const config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/settings/createhmocategorycover`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data,
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response?.data?.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response?.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.message);
+      } else {
+        throw new Error(error.message);
+      }
+    });
+};
+
+export const UpdateHmoCategoryCoverApi = (payload, id) => {
+  const data = JSON.stringify(payload);
+  const config = {
+    method: "put",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/settings/updatehmocategorycover/${id}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data,
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response?.data?.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response?.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.message);
+      } else {
+        throw new Error(error.message);
+      }
+    });
+};
+
+export const GetAllHmoCategoryCoverApi = () => {
+  const config = {
+    method: "get",
+    url: `${baseUrl}/settings/getallhmocategorycover`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response.data;
     })
     .catch((error) => {
       console.log("error", error.response);

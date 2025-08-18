@@ -1,10 +1,27 @@
-import { HStack, Text, Select, Box, SimpleGrid, Flex, Modal, ModalOverlay, ModalContent, ModalHeader, ModalFooter, ModalBody, ModalCloseButton } from '@chakra-ui/react';
-import React, { useState, useEffect } from 'react';
+import {
+  HStack,
+  Text,
+  Select,
+  Box,
+  SimpleGrid,
+  Flex,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+} from "@chakra-ui/react";
+import React, { useState, useEffect } from "react";
 import Input from "./Input";
 import TextArea from "./TextArea";
 import Button from "./Button";
 import ProcessLabCard from "./ProcessLabCard";
-import { ProcessLabApi, GetTestComponentByTestNameApi } from "../Utils/ApiCalls";
+import {
+  ProcessLabApi,
+  GetTestComponentByTestNameApi,
+} from "../Utils/ApiCalls";
 import { MdMiscellaneousServices } from "react-icons/md";
 import { FaMoneyBill } from "react-icons/fa";
 import { IoIosCloseCircle } from "react-icons/io";
@@ -12,7 +29,13 @@ import { TbUrgent } from "react-icons/tb";
 import { FaUserDoctor, FaHourglassStart } from "react-icons/fa6";
 import { SlPlus } from "react-icons/sl";
 
-export default function CreateTestOrderModal({ isOpen, onClose, type, activateNotifications, oldPayload }) {
+export default function CreateTestOrderModal({
+  isOpen,
+  onClose,
+  type,
+  activateNotifications,
+  oldPayload,
+}) {
   const [Loading, setLoading] = useState(false);
   // State to store the subcomponent options from the API
   const [subComponentOptions, setSubComponentOptions] = useState([]);
@@ -22,26 +45,27 @@ export default function CreateTestOrderModal({ isOpen, onClose, type, activateNo
         subcomponent: "",
         result: "",
         nranges: "",
-        unit: ""
-      }
-    ]
-  }); 
+        unit: "",
+      },
+    ],
+  });
 
   // Fetch the subcomponents for the test name passed in oldPayload when the modal opens
   useEffect(() => {
     if (oldPayload && oldPayload.testname) {
       GetTestComponentByTestNameApi(oldPayload.testname)
-        .then(response => {
+        .then((response) => {
           // Check if we have testcomponentdetails and extract the subcomponents array
           if (
             response?.queryresult?.testcomponentdetails &&
             response.queryresult.testcomponentdetails.length > 0
           ) {
-            const options = response.queryresult.testcomponentdetails[0].subcomponients;
+            const options =
+              response.queryresult.testcomponentdetails[0].subcomponients;
             setSubComponentOptions(options);
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.error("Error fetching test components:", error);
         });
     }
@@ -60,9 +84,9 @@ export default function CreateTestOrderModal({ isOpen, onClose, type, activateNo
               subcomponent: "",
               result: "",
               nranges: "",
-              unit: ""
-            }
-          ]
+              unit: "",
+            },
+          ],
         });
         setSubComponentOptions([]);
         activateNotifications("Lab Processed Successfully", "success");
@@ -76,7 +100,11 @@ export default function CreateTestOrderModal({ isOpen, onClose, type, activateNo
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered size="lg">
       <ModalOverlay />
-      <ModalContent maxW={{ base: "90%", md: "50%" }} maxH="80vh" overflowY="auto">
+      <ModalContent
+        maxW={{ base: "90%", md: "50%" }}
+        maxH="80vh"
+        overflowY="auto"
+      >
         <ModalHeader>Process Lab for {oldPayload.testname}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
@@ -93,9 +121,9 @@ export default function CreateTestOrderModal({ isOpen, onClose, type, activateNo
                       subcomponent: "",
                       result: "",
                       nranges: "",
-                      unit: ""
-                    }
-                  ]
+                      unit: "",
+                    },
+                  ],
                 })
               }
             >
