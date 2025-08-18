@@ -20,6 +20,7 @@ import ShowToast from "../Components/ToastNotification";
 import { useNavigate, useParams } from "react-router-dom";
 import { IoMdArrowRoundBack, IoIosCloseCircle } from "react-icons/io";
 import { UpdatePsychiatricEvaluationApi, SettingsApi } from "../Utils/ApiCalls";
+import PatientInfoCard from "../Components/PatientInfoCard";
 import PsychiatricEvaluations from "./PsychiatricEvaluations";
 
 export default function EditPsychiatricEvaluation() {
@@ -395,7 +396,7 @@ export default function EditPsychiatricEvaluation() {
         >
           Back
         </Button>
-
+        <PatientInfoCard />
         <Accordion defaultIndex={[]} mt="32px" allowToggle>
           <AccordionItem mb="15px">
             <AccordionButton

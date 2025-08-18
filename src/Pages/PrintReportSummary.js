@@ -559,6 +559,22 @@ export default function PrintReportSummary() {
                 </Tbody>
               </Table>
             </TableContainer>
+            <Box
+              mt="20px"
+              p="20px"
+              borderWidth="1px"
+              borderColor="gray.200"
+              borderRadius="md"
+              bg="gray.50"
+            >
+              <Text fontWeight="700" fontSize="16px">
+                Grand Total:{" "}
+                {Data.hmolabsummary.reduce(
+                  (acc, item) => acc + item.TotalNumber,
+                  0
+                )}
+              </Text>
+            </Box>
           </>
         )}
         {Category === "hmoaggregate" && Data.hmopharmacysummary?.length > 0 && (
@@ -606,6 +622,22 @@ export default function PrintReportSummary() {
                 </Tbody>
               </Table>
             </TableContainer>
+            <Box
+              mt="20px"
+              p="20px"
+              borderWidth="1px"
+              borderColor="gray.200"
+              borderRadius="md"
+              bg="gray.50"
+            >
+              <Text fontWeight="700" fontSize="16px">
+                Grand Total:{" "}
+                {Data.hmopharmacysummary.reduce(
+                  (acc, item) => acc + item.TotalNumber,
+                  0
+                )}
+              </Text>
+            </Box>
           </>
         )}
         {Category === "hmoaggregate" &&
@@ -654,6 +686,22 @@ export default function PrintReportSummary() {
                   </Tbody>
                 </Table>
               </TableContainer>
+              <Box
+                mt="20px"
+                p="20px"
+                borderWidth="1px"
+                borderColor="gray.200"
+                borderRadius="md"
+                bg="gray.50"
+              >
+                <Text fontWeight="700" fontSize="16px">
+                  Grand Total:{" "}
+                  {Data.hmoproceduresummary.reduce(
+                    (acc, item) => acc + item.TotalNumber,
+                    0
+                  )}
+                </Text>
+              </Box>
             </>
           )}
         {Category === "hmoaggregate" &&
@@ -702,6 +750,22 @@ export default function PrintReportSummary() {
                   </Tbody>
                 </Table>
               </TableContainer>
+              <Box
+                mt="20px"
+                p="20px"
+                borderWidth="1px"
+                borderColor="gray.200"
+                borderRadius="md"
+                bg="gray.50"
+              >
+                <Text fontWeight="700" fontSize="16px">
+                  Grand Total:{" "}
+                  {Data.hmoradiologysummary.reduce(
+                    (acc, item) => acc + item.TotalNumber,
+                    0
+                  )}
+                </Text>
+              </Box>
             </>
           )}
         {Category === "hmoaggregate" &&
@@ -750,6 +814,22 @@ export default function PrintReportSummary() {
                   </Tbody>
                 </Table>
               </TableContainer>
+              <Box
+                mt="20px"
+                p="20px"
+                borderWidth="1px"
+                borderColor="gray.200"
+                borderRadius="md"
+                bg="gray.50"
+              >
+                <Text fontWeight="700" fontSize="16px">
+                  Grand Total:{" "}
+                  {Data.hmsappointmentsummary.reduce(
+                    (acc, item) => acc + item.TotalNumber,
+                    0
+                  )}
+                </Text>
+              </Box>
             </>
           )}
         {/* nutrition Aggregate  */}

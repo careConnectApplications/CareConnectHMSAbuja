@@ -23,6 +23,7 @@ import AuditManagement from "./AuditManagement";
 import PricingModelSettings from "./PricingModelSettings";
 import OutreachMedicationSettings from "./OutreachMedicationSettings";
 import BedManagement from "./BedManagement";
+import InsuranceCoverManagement from "./InsuranceCoverManagement";
 
 export default function Settings() {
   return (
@@ -113,6 +114,12 @@ export default function Settings() {
           >
             Bed Management
           </Tab>
+          <Tab
+            _focus={{ outline: "none" }}
+            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+          >
+            Insurance Cover Management
+          </Tab>
         </TabList>
         <TabPanels>
           <TabPanel p="0">
@@ -150,6 +157,9 @@ export default function Settings() {
           </TabPanel>
           <TabPanel p="0">
             <BedManagement />
+          </TabPanel>
+          <TabPanel p="0">
+            <InsuranceCoverManagement />
           </TabPanel>
         </TabPanels>
       </Tabs>

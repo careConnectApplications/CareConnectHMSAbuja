@@ -11,6 +11,13 @@ import {
   Flex,
   Text,
   Box,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableContainer,
   Tag,
   TagLabel,
   TagCloseButton,
@@ -22,6 +29,8 @@ import Button from "./Button";
 import TextArea from "./TextArea";
 import { ProcessPeripheralBloodFilmReportApi } from "../Utils/ApiCalls";
 import ShowToast from "./ToastNotification";
+import { MdLocalPrintshop } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 export default function PeripheralBloodFilmReportModal({
   isOpen,
@@ -49,6 +58,9 @@ export default function PeripheralBloodFilmReportModal({
     impression: [],
     suggestion: [],
   });
+  const [testResults, setTestResults] = useState([]);
+  const [patientName, setPatientName] = useState("");
+  const navigate = useNavigate();
 
   const showToast = (status, message) => {
     setToast({ status, message });
@@ -61,7 +73,7 @@ export default function PeripheralBloodFilmReportModal({
   useEffect(() => {
     if (!isOpen) return;
 
-    if ((type === "edit" || type === "view") && oldPayload) {
+    if (oldPayload) {
       setItems({
         summary: Array.isArray(oldPayload.summary) ? oldPayload.summary : [],
         redbloodcell: Array.isArray(oldPayload.redbloodcell)
@@ -78,6 +90,14 @@ export default function PeripheralBloodFilmReportModal({
           ? oldPayload.suggestion
           : [],
       });
+
+      const results = Array.isArray(oldPayload.testresult)
+        ? oldPayload.testresult
+        : oldPayload.testresult
+        ? [oldPayload.testresult]
+        : [];
+      setTestResults(results);
+      setPatientName(oldPayload.patientName || "");
     }
   }, [isOpen, type, oldPayload]);
 
@@ -99,6 +119,8 @@ export default function PeripheralBloodFilmReportModal({
       impression: [],
       suggestion: [],
     });
+    setTestResults([]);
+    setPatientName("");
   }, [isOpen]);
 
   const handleInputChange = (field, value) => {
@@ -212,14 +234,43 @@ export default function PeripheralBloodFilmReportModal({
         >
           <ModalHeader>
             {type === "new"
-              ? "Process Peripheral Blood Film Report"
+              ? `Process Peripheral Blood Film Report for ${patientName}`
               : type === "edit"
-              ? "Edit Peripheral Blood Film Report"
-              : "View Peripheral Blood Film Report"}
+              ? `Edit Peripheral Blood Film Report for ${patientName}`
+              : `View Peripheral Blood Film Report for ${patientName}`}
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Stack spacing={6}>
+              {testResults.length > 0 && (
+                <Box>
+                  <Text fontWeight="bold" mb={4}>
+                    Test Results
+                  </Text>
+                  <TableContainer>
+                    <Table variant="simple">
+                      <Thead>
+                        <Tr>
+                          <Th>Component</Th>
+                          <Th>Result</Th>
+                          <Th>Reference Range</Th>
+                          <Th>Unit</Th>
+                        </Tr>
+                      </Thead>
+                      <Tbody>
+                        {testResults.map((result, index) => (
+                          <Tr key={index}>
+                            <Td>{result.subcomponent || "Main Result"}</Td>
+                            <Td>{result.result || "N/A"}</Td>
+                            <Td>{result.nranges || "N/A"}</Td>
+                            <Td>{result.unit || "N/A"}</Td>
+                          </Tr>
+                        ))}
+                      </Tbody>
+                    </Table>
+                  </TableContainer>
+                </Box>
+              )}
               {renderField("summary", "Summary")}
               {renderField("redbloodcell", "Red Blood Cell")}
               {renderField("whitebloodcell", "White Blood Cell")}
@@ -229,6 +280,20 @@ export default function PeripheralBloodFilmReportModal({
             </Stack>
           </ModalBody>
           <ModalFooter>
+            {type === "view" && (
+              <Button
+                leftIcon={<MdLocalPrintshop />}
+                onClick={() => {
+                  localStorage.setItem(
+                    "printData",
+                    JSON.stringify(oldPayload)
+                  );
+                  navigate("/print-report");
+                }}
+              >
+                Print
+              </Button>
+            )}
             {(type === "new" || type === "edit") && (
               <Button isLoading={loading} onClick={handleSubmit}>
                 {type === "new" ? "Submit" : "Update"}
