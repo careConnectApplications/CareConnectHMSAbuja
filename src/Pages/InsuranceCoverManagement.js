@@ -4,50 +4,51 @@ import { Table, Thead, Tbody, Tr, Th, TableContainer } from "@chakra-ui/react";
 import moment from "moment";
 import TableRowY from "../Components/TableRowY";
 import Button from "../Components/Button";
-import CreateInsuranceModal from "../Components/CreateInsuranceModal";
+import CreateInsuranceCoverModal from "../Components/CreateInsuranceCoverModal";
 import ShowToast from "../Components/ToastNotification";
 import { SlPlus } from "react-icons/sl";
+import {
+  GetAllHmoCategoryCoverApi,
+  UpdatePriceStatusApi,
+} from "../Utils/ApiCalls";
 import Pagination from "../Components/Pagination";
-import { GetAllInsuranceApi } from "../Utils/ApiCalls";
 import { configuration } from "../Utils/Helpers";
 
-export default function InsuranceManagement() {
+export default function InsuranceCoverManagement() {
+  const [all, setAll] = useState(true);
+  const [active, setActive] = useState(false);
+  const [inActive, setInActive] = useState(false);
   const [data, setData] = useState([]);
-  const [filterData, setFilterData] = useState([]);
   const [modalState, setModalState] = useState("");
   const [oldPayload, setOldPayload] = useState({});
+  const [filterData, setFilterData] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [trigger, setTrigger] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const postsPerPage = configuration.sizePerPage; // Use posts per page from configuration
+  const postsPerPage = configuration.sizePerPage;
   const [showToast, setShowToast] = useState({
     show: false,
     message: "",
     status: "",
   });
 
-  // Pagination calculations
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const paginatedData = filterData.slice(indexOfFirstPost, indexOfLastPost);
 
-  // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  // Fetch all insurance records
-  const getAllInsurance = async () => {
+  const fetchHmoCategoryCovers = async () => {
     try {
-      const result = await GetAllInsuranceApi();
-      console.log("getAllInsurance", result);
-      // Assuming the API returns data under queryresult.hmomanagementdetails
-      setData(result.queryresult.hmomanagementdetails);
-      setFilterData(result.queryresult.hmomanagementdetails);
-    } catch (e) {
-      activateNotifications(e.message, "error");
+      const response = await GetAllHmoCategoryCoverApi();
+      const categoryCovers = response.queryresult.hmocategorycoverdetails;
+      setData(categoryCovers);
+      setFilterData(categoryCovers);
+    } catch (error) {
+      activateNotifications(error.message, "error");
     }
   };
 
-  // Notification function
   const activateNotifications = (message, status) => {
     setShowToast({
       show: true,
@@ -59,36 +60,60 @@ export default function InsuranceManagement() {
     }, 3000);
   };
 
-  // Filtering functions (if insurance records include a status field)
   const filterAll = () => {
+    setAll(true);
+    setActive(false);
+    setInActive(false);
     setFilterData(data);
   };
 
   const filterActive = () => {
-    const filtered = data.filter((item) => item.status === "active");
-    setFilterData(filtered);
+    setAll(false);
+    setActive(true);
+    setInActive(false);
+    const filteredData = data.filter((item) => item.status === "active");
+    setFilterData(filteredData);
   };
 
   const filterInactive = () => {
-    const filtered = data.filter((item) => item.status === "inactive");
-    setFilterData(filtered);
+    setAll(false);
+    setActive(false);
+    setInActive(true);
+    const filteredData = data.filter((item) => item.status === "inactive");
+    setFilterData(filteredData);
   };
 
-  // Open modal to create a new insurance entry
-  const createInsurance = () => {
+  const onChangeStatus = async (id) => {
+    try {
+      const result = await UpdatePriceStatusApi(id);
+      if (result.status === 200) {
+        setTrigger(!trigger);
+        setShowToast({
+          show: true,
+          message: "Status Updated Successfully",
+          status: "success",
+        });
+        setTimeout(
+          () => setShowToast({ show: false, message: "", status: "" }),
+          3000
+        );
+      }
+    } catch (err) {}
+  };
+
+  const createInsuranceCover = () => {
     setModalState("new");
     onOpen();
   };
 
-  // Open modal to edit an insurance entry
-  const editInsurance = (item) => {
+  const editInsuranceCover = (item) => {
     setModalState("edit");
-    setOldPayload(item);
     onOpen();
+    setOldPayload(item);
   };
 
   useEffect(() => {
-    getAllInsurance();
+    fetchHmoCategoryCovers();
   }, [isOpen, trigger]);
 
   return (
@@ -104,7 +129,6 @@ export default function InsuranceManagement() {
         <ShowToast message={showToast.message} status={showToast.status} />
       )}
 
-      {/* Filter Section */}
       <Flex justifyContent="space-between" flexWrap="wrap">
         <Flex
           alignItems="center"
@@ -119,14 +143,14 @@ export default function InsuranceManagement() {
             <Text
               py="8.5px"
               px="12px"
-              bg="#fff"
+              bg={all ? "#fff" : "transparent"}
               rounded="7px"
               color="#1F2937"
               fontWeight="500"
               fontSize="13px"
             >
               All{" "}
-              <Box as="span" color="#667085" fontWeight="400" fontSize="13px">
+              <Box color="#667085" as="span" fontWeight="400" fontSize="13px">
                 ({data?.length})
               </Box>
             </Text>
@@ -135,7 +159,7 @@ export default function InsuranceManagement() {
             <Text
               py="8.5px"
               px="12px"
-              bg="transparent"
+              bg={active ? "#fff" : "transparent"}
               rounded="7px"
               color="#1F2937"
               fontWeight="500"
@@ -152,7 +176,7 @@ export default function InsuranceManagement() {
             <Text
               py="8.5px"
               px="12px"
-              bg="transparent"
+              bg={inActive ? "#fff" : "transparent"}
               rounded="7px"
               color="#1F2937"
               fontWeight="500"
@@ -163,19 +187,21 @@ export default function InsuranceManagement() {
           </Box>
         </Flex>
       </Flex>
-
-      {/* Buttons Section */}
-      <Flex justifyContent="space-between" flexWrap="wrap" mt="10px">
+      <Flex
+        justifyContent="space-between"
+        flexWrap="wrap"
+        mt={["10px", "10px", "10px", "10px"]}
+        w={["100%", "100%", "50%", "37%"]}
+      >
         <Button
           rightIcon={<SlPlus />}
           w={["100%", "100%", "165px", "205px"]}
-          onClick={createInsurance}
+          onClick={createInsuranceCover}
         >
-          Add Insurance
+          Add Insurance Cover
         </Button>
       </Flex>
 
-      {/* Table Section */}
       <Box
         bg="#fff"
         border="1px solid #EFEFEF"
@@ -193,16 +219,16 @@ export default function InsuranceManagement() {
                   S/N
                 </Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">
-                  HMO Name
-                </Th>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">
-                  ID
-                </Th>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">
                   Created Date
                 </Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">
-                  Updated Date
+                  HMO
+                </Th>
+                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  Category
+                </Th>
+                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  Percentage Cover
                 </Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">
                   Actions
@@ -213,21 +239,20 @@ export default function InsuranceManagement() {
               {paginatedData.map((item, i) => (
                 <TableRowY
                   key={i}
-                  type="insurance-management"
+                  type="insurance-cover-management"
                   sn={i + 1}
-                  hmoname={item.hmoname}
-                  id={item.id}
-                  createdAt={moment(item.createdAt).format("lll")}
-                  updatedAt={moment(item.updatedAt).format("lll")}
-                  onEdit={() => editInsurance(item)}
+                  date={moment(item.createdAt).format("lll")}
+                  hmo={item.hmoId.hmoname} 
+                  category={item.category}
+                  percentageCover={item.hmopercentagecover}
+                  onEdit={() => editInsuranceCover(item)}
                 />
-              ))}
+              ))}{" "}
             </Tbody>
           </Table>
         </TableContainer>
       </Box>
 
-      {/* Pagination */}
       <Pagination
         postPerPage={postsPerPage}
         currentPage={currentPage}
@@ -235,8 +260,7 @@ export default function InsuranceManagement() {
         paginate={paginate}
       />
 
-      {/* Modal for creating/updating insurance */}
-      <CreateInsuranceModal
+      <CreateInsuranceCoverModal
         isOpen={isOpen}
         oldPayload={oldPayload}
         onClose={onClose}

@@ -35,6 +35,99 @@ export const ProviderLoginApi = (Payload) => {
     });
 };
 
+export const CreateHmoCategoryCoverApi = (payload) => {
+  const data = JSON.stringify(payload);
+  const config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/settings/createhmocategorycover`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data,
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response?.data?.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response?.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.message);
+      } else {
+        throw new Error(error.message);
+      }
+    });
+};
+
+export const UpdateHmoCategoryCoverApi = (payload, id) => {
+  const data = JSON.stringify(payload);
+  const config = {
+    method: "put",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/settings/updatehmocategorycover/${id}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data,
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response?.data?.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response?.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.message);
+      } else {
+        throw new Error(error.message);
+      }
+    });
+};
+
+export const GetAllHmoCategoryCoverApi = () => {
+  const config = {
+    method: "get",
+    url: `${baseUrl}/settings/getallhmocategorycover`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response.data.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
+
 export const GetPriceOfService = (payload, patientId) => {
   const data = JSON.stringify(payload);
   const config = {
