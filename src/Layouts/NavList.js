@@ -244,6 +244,29 @@ export const NavList = (location) => {
       ],
     },
     {
+      name: "Insurance",
+      icon: <MdLocalHospital />,
+      link: "#",
+      active: isActive(location, "#"),
+      display: true,
+      children: [
+        {
+          name: "Insurance",
+          icon: <MdLocalHospital />,
+          link: "/dashboard/insurance",
+          active: isActive(location, "/dashboard/insurance"),
+          display: true,
+        },
+        {
+          name: "Claims",
+          icon: <MdLocalHospital />,
+          link: "/dashboard/claims",
+          active: isActive(location, "/dashboard/claims"),
+          display: true,
+        },
+      ],
+    },
+    {
       name: "user management",
       icon: <FaUsers />,
       link: "/dashboard/user-management",

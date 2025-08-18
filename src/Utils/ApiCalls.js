@@ -1,6 +1,153 @@
 import axios from "axios";
 import { baseUrl, nigeriaStateApiUrl, token } from "./ApiConfig";
 
+
+
+export const GetAwaitingAuthorizationRadiology = () => {
+  const config = {
+    method: "get",
+    url: `${baseUrl}/insuranceauthorizationandclaims/readawaitingauthorizationradiologyoptimized`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response.data.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
+
+export const GetAwaitingAuthorizationProcedure = () => {
+  const config = {
+    method: "get",
+    url: `${baseUrl}/insuranceauthorizationandclaims/readawaitingauthorizationprocedureoptimized`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response.data.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
+
+export const GetAwaitingAuthorizationPharmacy = () => {
+  const config = {
+    method: "get",
+    url: `${baseUrl}/insuranceauthorizationandclaims/readawaitingauthorizationpharmacytransaction`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response.data.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
+
+export const GetAwaitingAuthorizationLab = () => {
+  const config = {
+    method: "get",
+    url: `${baseUrl}/insuranceauthorizationandclaims/readawaitingauthorizationlabtransaction`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response.data.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
+
+export const GetAwaitingAuthorizationHistopathology = () => {
+  const config = {
+    method: "get",
+    url: `${baseUrl}/insuranceauthorizationandclaims/readallhistopathologyawaitingauthorization`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response.data.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
+
 export const ProviderLoginApi = (Payload) => {
   // console.log("CreateAccountPayload", Payload);
 

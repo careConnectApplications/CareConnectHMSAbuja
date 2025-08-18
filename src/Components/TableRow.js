@@ -166,6 +166,7 @@ export default function TableRow({
   onViewHematologyReport,
   report,
   onDischarge,
+  hmo
 }) {
   const router = useNavigate();
 
@@ -627,6 +628,80 @@ export default function TableRow({
         </>
       )}
 
+      {(type === "radiology-insurance" ||
+        type === "procedure-insurance" ||
+        type === "pharmacy-insurance" ||
+        type === "lab-insurance" ||
+        type === "histopathology-insurance") && (
+        <>
+          <Td>
+            <HStack cursor={"pointer"}>
+              <Avatar
+                name={name}
+                size="sm"
+                src="https://bit.ly/tioluwani-kolawole"
+              />
+              <Box>
+                <Text color={"#101828"} fontWeight={"500"} fontSize={"13px"}>
+                  {name}
+                </Text>
+              </Box>
+            </HStack>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {mrn}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {phone}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {hmo}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {total?.toLocaleString()}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {date}
+            </Text>
+          </Td>
+          <Td>
+            <Menu isLazy>
+              <MenuButton as={Box}>
+                <Flex justifyContent="center" color="#000000" fontSize="16px">
+                  <BsThreeDots />
+                </Flex>
+              </MenuButton>
+              <MenuList>
+                <MenuItem
+                  onClick={onClick}
+                  textTransform="capitalize"
+                  fontWeight={"500"}
+                  color="#2F2F2F"
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                >
+                  <HStack fontSize="14px">
+                    <Text>Authorize</Text>
+                  </HStack>
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          </Td>
+        </>
+      )}
+
       {type === "billing-history" && (
         <>
           <Td>
@@ -677,7 +752,7 @@ export default function TableRow({
                 }
               ></Box>
               <Text fontWeight="400" fontSize={"13px"}>
-                {status}
+                {status} 
               </Text>
             </HStack>
           </Td>

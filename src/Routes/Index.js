@@ -91,6 +91,8 @@ import ChemicalPathology from "../Pages/ChemicalPathology";
 import DentalEncounterForm from "../Pages/DentalEncounterForm";
 import DentalEncounterEdit from "../Pages/DentalEncounterEdit";
 import AddEyeConsultation from "../Pages/AddEyeConsultation";
+import Insurance from "../Pages/Insurance";
+import Claims from "../Pages/Claims";
 
 export default function IndexRoutes() {
   return (
@@ -380,11 +382,13 @@ export default function IndexRoutes() {
               path="/dashboard/edit-dental-encounter/:id"
               element={<DentalEncounterEdit />}
             />
-                                    <Route
+          <Route
               path="/dashboard/add-dental-encounter/:id"
               element={<DentalEncounterForm />}
             />
           </Route>
+          <Route path="/dashboard/insurance" element={<Insurance />} />
+          <Route path="/dashboard/claims" element={<Claims />} />
         </Route>
       </Routes>
     </BrowserRouter>
