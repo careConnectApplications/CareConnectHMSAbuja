@@ -7,6 +7,7 @@ import {
   Image,
   VStack,
   Input as ChakraInput,
+  Textarea,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import MainLayout from "../Layouts/Index";
@@ -35,6 +36,7 @@ export default function AddOperationNotes() {
     OCT: null,
     FundusPhotograph: null, 
     FFA: null,
+    observationalNotes: "",
   });
 
   const [imagePreviews, setImagePreviews] = useState({
@@ -101,6 +103,11 @@ export default function AddOperationNotes() {
     }));
   };
 
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setPayload((prev) => ({ ...prev, [name]: value }));
+  };
+
   const handleSubmit = async () => {
     // Check if at least one image is uploaded
     const hasImages = payload.CVF || payload.OCT || payload.FundusPhotograph || payload.FFA;
@@ -133,6 +140,7 @@ export default function AddOperationNotes() {
       if (payload.FFA) {
         formData.append('FFA', payload.FFA);
       }
+      formData.append("observationalNotes", payload.observationalNotes);
 
       const result = await AddOperationNoteApi(formData,payload.appointmentId,payload.patientId);   
 
@@ -263,6 +271,20 @@ export default function AddOperationNotes() {
             <Text fontSize="md" color="gray.600" mb={8}>
               Please upload the relevant medical images for this operation note.
             </Text>
+          </Box>
+
+          <Box>
+            <Text fontSize="1xl" fontWeight="bold" mb={2} color="blue.blue500">
+              Observational Notes
+            </Text>
+            <Textarea
+              name="observationalNotes"
+              placeholder="Enter observational notes"
+              value={payload.observationalNotes}
+              onChange={handleInputChange}
+              size="lg"
+              rows={5}
+            />
           </Box>
 
           <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>

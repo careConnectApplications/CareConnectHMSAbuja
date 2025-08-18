@@ -21,6 +21,7 @@ import AddEyeExamination from "../Pages/AddEyeExamination";
 import AddLensPrescription from "../Pages/AddLensPrescription";
 import AddOperationNotes from "../Pages/AddOperationNotes";
 import EyeClinicDetails from "../Pages/EyeClinicDetails";
+import EyeClinicSummary from "../Pages/EyeClinicSummary";
 import SinglePatient from "../Pages/SinglePatient";
 import ScheduleAppointment from "../Pages/ScheduleAppointment";
 import DoctorSchedule from "../Pages/DoctorSchedule";
@@ -90,7 +91,10 @@ import ChemicalPathology from "../Pages/ChemicalPathology";
 import DentalEncounterForm from "../Pages/DentalEncounterForm";
 import DentalEncounterEdit from "../Pages/DentalEncounterEdit";
 import AddEyeConsultation from "../Pages/AddEyeConsultation";
-import PrintReport from "../Pages/PrintReport";
+import PrintReport from "../Pages/PrintReport"
+import Insurance from "../Pages/Insurance";
+import Claims from "../Pages/Claims";
+
 
 export default function IndexRoutes() {
   return (
@@ -111,6 +115,10 @@ export default function IndexRoutes() {
           <Route
             path="/dashboard/eye-clinic-details/:id"
             element={<EyeClinicDetails />}
+          />
+          <Route
+            path="/dashboard/eye-clinic-summary/:id"
+            element={<EyeClinicSummary />}
           />
           <Route
             path="/dashboard/add-eye-preliminary-test/:id"
@@ -377,11 +385,13 @@ export default function IndexRoutes() {
               path="/dashboard/edit-dental-encounter/:id"
               element={<DentalEncounterEdit />}
             />
-                                    <Route
+          <Route
               path="/dashboard/add-dental-encounter/:id"
               element={<DentalEncounterForm />}
             />
           </Route>
+          <Route path="/dashboard/insurance" element={<Insurance />} />
+          <Route path="/dashboard/claims" element={<Claims />} />
         </Route>
       </Routes>
     </BrowserRouter>

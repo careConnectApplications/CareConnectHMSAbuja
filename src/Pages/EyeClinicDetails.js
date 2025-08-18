@@ -1,4 +1,4 @@
-import { HStack, Text } from "@chakra-ui/react";
+import { HStack, Text, Button } from "@chakra-ui/react";
 import {
   Tabs,
   TabList,
@@ -63,6 +63,13 @@ export default function EyeClinicDetails() {
       <Text color="#686C75" mt="9px" fontWeight="400" fontSize="15px">
         Give review, notes, findings and diagnosis about patient
       </Text>
+
+      <Button
+        mt="12px"
+        onClick={() => nav(`/dashboard/eye-clinic-summary/${id}`)}
+      >
+        View Summary
+      </Button>
 
       <Tabs mt="12px">
         <TabList color="#101828" pb="10px" flexWrap={"wrap"}>

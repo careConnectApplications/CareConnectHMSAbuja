@@ -8,8 +8,10 @@ import Input from "../Components/Input";
 import ShowToast from "../Components/ToastNotification";
 import { IoFilter } from "react-icons/io5";
 import { BiSearch } from "react-icons/bi";
-import { GetAllPatientHistopathologyReportApi } from "../Utils/ApiCalls";
+import { GetAllSingleHistopathologyHistoryApi, GetSingleHistopathologyApi } from "../Utils/ApiCalls";
 import Pagination from "../Components/Pagination";
+import ViewHistopathologyResultModal from "../Components/ViewHistopathologyResultModal";
+
 import { configuration } from '../Utils/Helpers'
 import Preloader from "../Components/Preloader";
 
@@ -19,6 +21,8 @@ export default function SingleHistopathologyReport() {
     const [FilterData, setFilterData] = useState([]);
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [Trigger, setTrigger] = useState(false);
+    const [OldPayload, setOldPayload] = useState({});
+
 
     // Pagination settings to follow
     const [CurrentPage, setCurrentPage] = useState(1);
@@ -50,18 +54,57 @@ export default function SingleHistopathologyReport() {
         status: "",
     });
 
+    const activateNotifications = (message, status) => {
+        setShowToast({
+            show: true,
+            message: message,
+            status: status,
+        });
+
+        setTimeout(() => {
+            setShowToast({
+                show: false,
+            });
+        }, 7000);
+    };
+
     const getAllHistopathologyReport = async () => {
         setIsLoading(true)
         try {
-            const result = await GetAllPatientHistopathologyReportApi(id);
+            const result = await GetAllSingleHistopathologyHistoryApi(id);
+
+            console.log("getAllHistopathologyHistory", result);
+
+            setFilterData(result.data.filter((item) => item.testPaymentStatus === "processed"))
+            setData(result.data.filter((item) => item.testPaymentStatus === "processed"))
+            setIsLoading(false);
+
+        } catch (e) {
+            setIsLoading(false);
+            activateNotifications(e.message, "error");
+        }
+    };
+
+    const {
+        isOpen: isViewOpen,
+        onOpen: onViewOpen,
+        onClose: onViewClose,
+    } = useDisclosure();
+    const [ResultData, setResultData] = useState({});
+
+
+    const getSinglehistopathology = async (name, id) => {
+        setIsLoading(true);
+        try {
+            const result = await GetSingleHistopathologyApi(name, id);
+            console.log("getSinglehistopathology", result);
             if (result.status === true) {
-                setIsLoading(false)
-                setData(result.queryresult);
-                setFilterData(result.queryresult);
+                setIsLoading(false);
+                setResultData(result.data[0]);
+                onViewOpen();
             }
         } catch (e) {
             console.error(e.message);
-            setIsLoading(false)
         }
     };
 
@@ -86,7 +129,7 @@ export default function SingleHistopathologyReport() {
             px={["18px", "18px"]}
             rounded="10px"
         >
-         {
+            {
                 IsLoading && (
                     <Preloader />
                 )
@@ -154,7 +197,7 @@ export default function SingleHistopathologyReport() {
                                 </HStack>
                             </MenuButton>
                             <MenuList >
-                               
+
                                 <MenuItem onClick={() => {
                                     setFilteredData(null)
                                     setSearchInput("")
@@ -193,46 +236,34 @@ export default function SingleHistopathologyReport() {
                     <Table variant="striped">
                         <Thead bg="#fff">
                             <Tr>
-                                <Th
-                                    fontSize="13px"
-                                    textTransform="capitalize"
-                                    color="#534D59"
-                                    fontWeight="600"
-                                >
+                                <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
                                     Patient name
                                 </Th>
-                                <Th
-                                    fontSize="13px"
-                                    textTransform="capitalize"
-                                    color="#534D59"
-                                    fontWeight="600"
-                                >
-                                    appointment ID
+                                <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                                    Test Name
                                 </Th>
-                                <Th
-                                    fontSize="13px"
-                                    textTransform="capitalize"
-                                    color="#534D59"
-                                    fontWeight="600"
-                                >
-                                    Appointment Date
+                                <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                                    biopsy Type
                                 </Th>
-                                <Th
-                                    fontSize="13px"
-                                    textTransform="capitalize"
-                                    color="#534D59"
-                                    fontWeight="600"
-                                >
-                                    Phone number
+                                <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                                    lmp
                                 </Th>
-
-
-                                <Th
-                                    fontSize="13px"
-                                    textTransform="capitalize"
-                                    color="#534D59"
-                                    fontWeight="600"
-                                >
+                                <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                                    phone Number
+                                </Th>
+                                <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                                    previous Biopsy
+                                </Th>
+                                <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                                    whole Organ
+                                </Th>
+                                <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                                    Lab Status
+                                </Th>
+                                <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                                    Payment Status
+                                </Th>
+                                <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
                                     Actions
                                 </Th>
                             </Tr>
@@ -243,14 +274,18 @@ export default function SingleHistopathologyReport() {
                                 PaginatedData.map((item, i) => (
                                     <TableRow
                                         key={i}
-                                        type="histopathology-report"
-                                        name={`${item.firstName} ${item.lastName}`}
-                                        mrn={item.MRN}
-                                        appointmentId={item.appointmentid}
-                                        phone={item.phoneNumber}
-                                        date={moment(item.appointmentdate).format("lll")}
-                                        labStatus={item.status}
-                                        onClick={() => ViewHistopathologyResult(item._id)}
+                                        type="histopatholgy-report"
+                                        name={`${item.patient?.firstName} ${item.patient?.lastName}`}
+                                        testName={item.testName}
+                                        biopsyType={item.diagnosisForm?.biopsyType}
+                                        mrn={item.patient?.mrn}
+                                        phone={item.diagnosisForm?.phoneNumber}
+                                        previousBiopsy={item.diagnosisForm?.previousBiopsy ? "Yes" : "No"}
+                                        lmp={moment(item.diagnosisForm?.lmp).format("lll")}
+                                        wholeOrgan={item.diagnosisForm?.wholeOrgan}
+                                        labStatus={item.testPaymentStatus}
+                                        status={item.paymentInfo?.status}
+                                        onClick={() => getSinglehistopathology(item.testName, item.histopathologyId)}
 
 
                                     />
@@ -264,6 +299,14 @@ export default function SingleHistopathologyReport() {
             </Box>
 
             <Pagination postPerPage={PostPerPage} currentPage={CurrentPage} totalPosts={Data.length} paginate={paginate} />
+
+         
+
+            <ViewHistopathologyResultModal
+                isOpen={isViewOpen}
+                onClose={onViewClose}
+                Resultdata={ResultData}
+            />
 
 
         </Box>

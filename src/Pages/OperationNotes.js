@@ -621,6 +621,22 @@ export default function OperationNotes({ hide = false, index }) {
 
             {item.operationalTest &&
               renderOperationNoteImages(item.operationalTest)}
+
+            {item.observationalNotes && (
+              <Box mt={4}>
+                <Text
+                  fontSize="15px"
+                  fontWeight={"700"}
+                  textTransform="capitalize"
+                  color="blue.blue500"
+                >
+                  Observational Notes
+                </Text>
+                <Text mt={2} fontSize="14px" color="gray.700">
+                  {item.observationalNotes}
+                </Text>
+              </Box>
+            )}
           </Box>
         ))}
       </Box>
