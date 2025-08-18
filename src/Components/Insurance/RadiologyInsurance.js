@@ -20,7 +20,7 @@ import {
   MenuList,
   MenuItem,
 } from "@chakra-ui/react";
-import PaymentGroupModal from "../PaymentGroupModal";
+import RadiologyInsuranceAuthorizationModal from "../RadiologyInsuranceAuthorizationModal";
 import { GetAwaitingAuthorizationRadiology } from "../../Utils/ApiCalls";
 import moment from "moment";
 import { BiSearch } from "react-icons/bi";
@@ -98,6 +98,11 @@ export default function RadiologyInsurance() {
     message: "",
     status: "",
   });
+
+
+
+
+
 
   const getAwaitingRadiology = async () => {
     setIsLoading(true);
@@ -420,12 +425,12 @@ export default function RadiologyInsurance() {
             paginate={paginate}
           />
         </Box>
-        <PaymentGroupModal
+        <RadiologyInsuranceAuthorizationModal
           isOpen={isOpen}
           onClose={onClose}
-          type={ModalState}
+          type={"radiology"}
           filteredUser={FilterUser}
-          oldPayload={OldPayload}
+          oldPayload={{id: OldPayload.testid}}
           activateNotifications={activateNotifications}
         />
       </Box>

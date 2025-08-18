@@ -634,7 +634,7 @@ export default function Histopathology() {
       />
       <CreateHistopathologyModal
         isOpen={OpenOrderModal}
-        oldPayload={OldPayload}
+        oldPayload={null}
         onClose={() => setOpenOrderModal(false)}
         activateNotifications={activateNotifications}
         onSuccess={() => setTrigger((prev) => !prev)}

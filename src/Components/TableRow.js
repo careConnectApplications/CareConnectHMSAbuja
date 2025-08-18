@@ -503,6 +503,150 @@ export default function TableRow({
           </Td>
         </>
       )}
+      {type === "insurance-table-Unauthorized" && (
+        <>
+          <Td>
+            <HStack cursor={"pointer"}>
+              <Avatar
+                name={name}
+                size="sm"
+                src="https://bit.ly/tioluwani-kolawole"
+              />
+              <Box>
+                <Text color={"#101828"} fontWeight={"500"} fontSize={"13px"}>
+                  {name}
+                </Text>
+                <Text
+                  color={"#667085"}
+                  textTransform={"lowercase"}
+                  fontWeight={"400"}
+                  fontSize={"11px"}
+                >
+                  {email}
+                </Text>
+              </Box>
+            </HStack>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {mrn}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {phone}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {age}
+            </Text>
+          </Td>
+          <Td>
+            <HStack
+              color={
+                status === "paid"
+                  ? "#027A48"
+                  : status === "pending payment"
+                  ? "#FFA30C"
+                  : "#FD4739"
+              }
+            >
+              <Box
+                rounded="100%"
+                w="8px"
+                h="8px"
+                bg={
+                  status === "paid"
+                    ? "#027A48"
+                    : status === "pending payment"
+                    ? "#FFA30C"
+                    : "#FD4739"
+                }
+              ></Box>
+              <Text fontWeight="400" fontSize={"13px"}>
+                {status}
+              </Text>
+            </HStack>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {testId}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {testName}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {amount?.toLocaleString()}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {quantity?.toLocaleString()}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {total?.toLocaleString()}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {date}
+            </Text>
+          </Td>
+          <Td>
+            <Menu isLazy>
+              <MenuButton as={Box}>
+                <Flex justifyContent="center" color="#000000" fontSize="16px">
+                  <BsThreeDots />
+                </Flex>
+              </MenuButton>
+              <MenuList>
+               
+                  <MenuItem
+                    onClick={onClick}
+                    textTransform="capitalize"
+                    fontWeight={"500"}
+                    color="#2F2F2F"
+                    _hover={{
+                      color: "#fff",
+                      fontWeight: "400",
+                      bg: "blue.blue500",
+                    }}
+                  >
+                    <HStack fontSize="14px">
+                      <Text>Authorize</Text>
+                    </HStack>
+                  </MenuItem>
+             
+
+                {status === "paid" && (
+                  <MenuItem
+                    onClick={onPrint}
+                    textTransform="capitalize"
+                    fontWeight={"500"}
+                    color="#2F2F2F"
+                    _hover={{
+                      color: "#fff",
+                      fontWeight: "400",
+                      bg: "blue.blue500",
+                    }}
+                  >
+                    <HStack fontSize="14px">
+                      <Text>Print Receipt</Text>
+                    </HStack>
+                  </MenuItem>
+                )}
+              </MenuList>
+            </Menu>
+          </Td>
+        </>
+      )}
       {type === "payment-group" && (
         <>
           <Td>
@@ -696,7 +840,7 @@ export default function TableRow({
                   }}
                 >
                   <HStack fontSize="14px">
-                    <Text>Authorize</Text>
+                    <Text>View More</Text>
                   </HStack>
                 </MenuItem>
               </MenuList>

@@ -20,7 +20,7 @@ import {
   MenuList,
   MenuItem,
 } from "@chakra-ui/react";
-import PaymentGroupModal from "../PaymentGroupModal";
+import HistopathologyInsuranceAuthModal from "../HistopathologyInsuranceAuthModal";
 import { GetAwaitingAuthorizationHistopathology } from "../../Utils/ApiCalls";
 import moment from "moment";
 import { BiSearch } from "react-icons/bi";
@@ -103,10 +103,12 @@ export default function HistopathologyInsurance() {
     setIsLoading(true);
     try {
       const result = await GetAwaitingAuthorizationHistopathology();
+      console.log("getAwaitingHistopathology", result); 
+
       if (result.status === true) {
         setIsLoading(false);
-        setData(result.queryresult?.histopathologydetails || []);
-        setFilterData(result.queryresult?.histopathologydetails || []);
+        setData(result.queryresult?.docs || []);
+        setFilterData(result.queryresult?.docs || []);
       } else {
         setIsLoading(false);
       }
@@ -383,11 +385,11 @@ export default function HistopathologyInsurance() {
                       <TableRow
                         key={i}
                         type="histopathology-insurance"
-                        name={`${item.firstName} ${item.lastName}`}
-                        phone={item.phoneNumber}
-                        mrn={item.MRN}
-                        hmo={item.HMOName}
-                        total={item.totalamount}
+                        name={`${item.patient?.firstName} ${item.patient?.lastName}`}
+                        phone={item.patient?.phoneNumber}
+                        mrn={item.patient?.MRN}
+                        hmo={item.patient?.HMOName||"N/A"}
+                        total={item.amount}
                         status={item.status}
                         date={moment(item.createdAt).format("lll")}
                         onClick={() => onChangeStatus(item)}
@@ -398,12 +400,12 @@ export default function HistopathologyInsurance() {
                   ? FilteredData?.map((item, i) => (
                       <TableRow
                         key={i}
-                        type="histopathology-insurance"
-                        name={`${item.firstName} ${item.lastName}`}
-                        phone={item.phoneNumber}
-                        mrn={item.MRN}
-                        hmo={item.HMOName}
-                        total={item.totalamount}
+                         type="histopathology-insurance"
+                        name={`${item.patient?.firstName} ${item.patient?.lastName}`}
+                        phone={item.patient?.phoneNumber}
+                        mrn={item.patient?.MRN}
+                        hmo={item.patient?.HMOName||"N/A"}
+                        total={item.amount}
                         status={item.status}
                         date={moment(item.createdAt).format("lll")}
                         onClick={() => onChangeStatus(item)}
@@ -420,10 +422,10 @@ export default function HistopathologyInsurance() {
             paginate={paginate}
           />
         </Box>
-        <PaymentGroupModal
+        <HistopathologyInsuranceAuthModal
           isOpen={isOpen}
           onClose={onClose}
-          type={ModalState}
+          type={"histopathology"}
           filteredUser={FilterUser}
           oldPayload={OldPayload}
           activateNotifications={activateNotifications}
