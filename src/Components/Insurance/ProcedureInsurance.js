@@ -20,7 +20,7 @@ import {
   MenuList,
   MenuItem,
 } from "@chakra-ui/react";
-import PaymentGroupModal from "../PaymentGroupModal";
+import ProcedureInsuranceAuthModal from "../ProcedureInsuranceAuthModal";
 import { GetAwaitingAuthorizationProcedure } from "../../Utils/ApiCalls";
 import moment from "moment";
 import { BiSearch } from "react-icons/bi";
@@ -103,10 +103,12 @@ export default function ProcedureInsurance() {
     setIsLoading(true);
     try {
       const result = await GetAwaitingAuthorizationProcedure();
+
+      console.log("getAwaitingProcedure", result);
       if (result.status === true) {
         setIsLoading(false);
-        setData(result.queryresult?.proceduredetails || []);
-        setFilterData(result.queryresult?.proceduredetails || []);
+        setData(result.queryresult?.prodecuredetails || []);
+        setFilterData(result.queryresult?.prodecuredetails || []);
       } else {
         setIsLoading(false);
       }
@@ -420,12 +422,12 @@ export default function ProcedureInsurance() {
             paginate={paginate}
           />
         </Box>
-        <PaymentGroupModal
+        <ProcedureInsuranceAuthModal
           isOpen={isOpen}
           onClose={onClose}
-          type={ModalState}
+          type={"procedure"}
           filteredUser={FilterUser}
-          oldPayload={OldPayload}
+          oldPayload={{id: OldPayload.procedureid}}
           activateNotifications={activateNotifications}
         />
       </Box>

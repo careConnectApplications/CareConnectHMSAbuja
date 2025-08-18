@@ -40,6 +40,8 @@ export default function CreateHistopathologyModal({
   oldPayload,
   onSuccess,
 }) {
+
+  console.log("oldPayload", oldPayload)
   const [loading, setLoading] = useState(false);
   const [Settings, setSettings] = useState([]);
   const [searchResults, setSearchResults] = useState([]);

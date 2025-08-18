@@ -20,7 +20,7 @@ import {
   MenuList,
   MenuItem,
 } from "@chakra-ui/react";
-import PaymentGroupModal from "../PaymentGroupModal";
+import LabInsuranceAuthModal from "../LabInsuranceAuthModal";
 import { GetAwaitingAuthorizationLab } from "../../Utils/ApiCalls";
 import moment from "moment";
 import { BiSearch } from "react-icons/bi";
@@ -103,6 +103,7 @@ export default function LabInsurance() {
     setIsLoading(true);
     try {
       const result = await GetAwaitingAuthorizationLab();
+
       if (result.status === true) {
         setIsLoading(false);
         setData(result.queryresult?.labdetails || []);
@@ -420,12 +421,12 @@ export default function LabInsurance() {
             paginate={paginate}
           />
         </Box>
-        <PaymentGroupModal
+        <LabInsuranceAuthModal
           isOpen={isOpen}
           onClose={onClose}
-          type={ModalState}
+          type={"lab"}
           filteredUser={FilterUser}
-          oldPayload={OldPayload}
+          oldPayload={{id: OldPayload.testid}}
           activateNotifications={activateNotifications}
         />
       </Box>
