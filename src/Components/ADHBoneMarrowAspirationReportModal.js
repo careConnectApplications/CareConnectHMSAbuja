@@ -65,6 +65,7 @@ export default function ADHBoneMarrowAspirationReportModal({
   });
   const [testResults, setTestResults] = useState([]);
   const [patientName, setPatientName] = useState("");
+  const [patientId, setPatientId] = useState("");
   const navigate = useNavigate();
 
   const showToast = (status, message) => {
@@ -136,6 +137,7 @@ export default function ADHBoneMarrowAspirationReportModal({
         : [];
       setTestResults(results);
       setPatientName(oldPayload.patientName || "");
+      setPatientId(oldPayload.patientId || "");
     } else if (type === "new" && oldPayload) {
       const results = Array.isArray(oldPayload.testresult)
         ? oldPayload.testresult
@@ -144,6 +146,7 @@ export default function ADHBoneMarrowAspirationReportModal({
         : [];
       setTestResults(results);
       setPatientName(oldPayload.patientName || "");
+      setPatientId(oldPayload.patientId || "");
     }
   }, [isOpen, type, oldPayload]);
 
@@ -172,6 +175,7 @@ export default function ADHBoneMarrowAspirationReportModal({
     });
     setTestResults([]);
     setPatientName("");
+    setPatientId("");
   }, [isOpen]);
 
   const handleInputChange = (field, value) => {
@@ -196,6 +200,22 @@ export default function ADHBoneMarrowAspirationReportModal({
       ...prev,
       [field]: prev[field].filter((i) => i !== item),
     }));
+  };
+
+  const handlePrint = () => {
+    const printData = {
+      ...items,
+      boneconsistency: payload.boneconsistency,
+      aspiration: payload.aspiration,
+      erythroidratio: payload.erythroidratio,
+      abnormalcells: payload.abnormalcells,
+      ironstore: payload.ironstore,
+      testresult: testResults,
+      patientName: patientName,
+      patientId: patientId,
+    };
+    localStorage.setItem("printData", JSON.stringify(printData));
+    navigate("/print-report");
   };
 
   const handleSubmit = async () => {
@@ -365,11 +385,21 @@ export default function ADHBoneMarrowAspirationReportModal({
             </Stack>
           </ModalBody>
           <ModalFooter>
-            {(type === "new" || type === "edit") && (
-              <Button isLoading={loading} onClick={handleSubmit}>
-                {type === "new" ? "Submit" : "Update"}
-              </Button>
-            )}
+            <Flex justifyContent="space-between" width="100%">
+              {/* Show Print button only in view mode */}
+              {type === "view" && (
+                <Button leftIcon={<MdLocalPrintshop />} onClick={handlePrint}>
+                  Print
+                </Button>
+              )}
+
+              {/* Show Submit/Update button in new and edit modes */}
+              {(type === "new" || type === "edit") && (
+                <Button isLoading={loading} onClick={handleSubmit}>
+                  {type === "new" ? "Submit" : "Update"}
+                </Button>
+              )}
+            </Flex>
           </ModalFooter>
         </ModalContent>
       </Modal>
