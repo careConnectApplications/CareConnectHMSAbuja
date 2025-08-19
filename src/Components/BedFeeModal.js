@@ -23,6 +23,7 @@ const BedFeeModal = ({
   isOpen,
   onClose,
   admissionId,
+  patientId,
   activateNotifications,
   trigger,
   setTrigger,

@@ -36,6 +36,7 @@ export default function TableRow({
   physicalAssault,
   dose,
   onBedFee,
+  bedFee,
   wholeOrgan,
   previousBiopsy,
   lmp,
@@ -2276,6 +2277,11 @@ export default function TableRow({
           </Td>
           <Td>
             <Text fontWeight="400" fontSize="12px">
+              {bedFee}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
               {date}
             </Text>
           </Td>
@@ -2336,16 +2342,18 @@ export default function TableRow({
                 >
                   Discharge
                 </MenuItem>
-                <MenuItem
-                  _hover={{
-                    color: "#fff",
-                    fontWeight: "400",
-                    bg: "blue.blue500",
-                  }}
-                  onClick={onBedFee}
-                >
-                  Bed Fee
-                </MenuItem>
+                {!bedFee && (
+                  <MenuItem
+                    _hover={{
+                      color: "#fff",
+                      fontWeight: "400",
+                      bg: "blue.blue500",
+                    }}
+                    onClick={onBedFee}
+                  >
+                    Bed Fee
+                  </MenuItem>
+                )}
               </MenuList>
             </Menu>
           </Td>

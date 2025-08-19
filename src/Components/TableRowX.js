@@ -200,6 +200,7 @@ export default function TableRowX({
                     fontWeight: "400",
                     bg: "blue.blue500",
                   }}
+                  isDisabled={!onClick}
                 >
                   <HStack fontSize="12px">
                     <Text>Pay Annual Subscription</Text>

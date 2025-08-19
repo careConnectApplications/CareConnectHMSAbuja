@@ -9308,15 +9308,11 @@ export const AddBedFeeApi = (id, apiPayload) => {
     })
     .catch((error) => {
       console.error("error:", error.response);
-      if (error.response?.data?.msg) {
-        throw new Error(error.response.data.msg);
-      } else if (error.response?.data) {
-        throw new Error(error.response.data);
-      } else if (error.request) {
-        throw new Error(error.message);
-      } else {
-        throw new Error(error.message);
-      }
+      const errorMessage =
+        error.response?.data?.message ||
+        error.response?.data?.msg ||
+        "An unexpected error occurred";
+      throw new Error(errorMessage);
     });
 };
 
