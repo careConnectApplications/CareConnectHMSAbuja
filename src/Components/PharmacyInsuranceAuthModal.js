@@ -46,6 +46,7 @@ export default function PharmacyInsuranceAuthModal({ isOpen, onClose, setOldPayl
     const [Trigger, setTrigger] = useState(false);
     const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
     const [selectedClaimId, setSelectedClaimId] = useState(null);
+    const [State, setState] = useState("");
     
 
 
@@ -114,11 +115,13 @@ export default function PharmacyInsuranceAuthModal({ isOpen, onClose, setOldPayl
       const onChangeStatus = (id) => {
         setSelectedClaimId(id);
         setIsAuthModalOpen(true);
+        setState("single")
     };
 
       const handleAuthorizeAll = () => {
         setSelectedClaimId(oldPayload.id);
         setIsAuthModalOpen(true);
+        setState("group")
     };
 
 
@@ -310,6 +313,7 @@ export default function PharmacyInsuranceAuthModal({ isOpen, onClose, setOldPayl
                 onClose={() => setIsAuthModalOpen(false)}
                 activateNotifications={activateNotifications}
                 type={type}
+                state={State}
                 claimId={selectedClaimId}
             />
         </Modal>

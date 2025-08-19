@@ -41,7 +41,7 @@ export default function RadiologyInsuranceAuthorizationModal({ isOpen, onClose, 
     const [Loading, setLoading] = useState(false);
     const [Clinics, setClinics] = useState([]);
     const [Data, setData] = useState([]);
-    const [TotalAmount, setTotalAmount] = useState([]);
+    const [State, setState] = useState("");
     const [Settings, setSettings] = useState("");
     const [Trigger, setTrigger] = useState(false);
     const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -112,11 +112,13 @@ export default function RadiologyInsuranceAuthorizationModal({ isOpen, onClose, 
       const onChangeStatus = (id) => {
         setSelectedClaimId(id);
         setIsAuthModalOpen(true);
+        setState("single")
     };
 
       const handleAuthorizeAll = () => {
         setSelectedClaimId(oldPayload.id);
         setIsAuthModalOpen(true);
+        setState("group")
     };
 
 
@@ -307,6 +309,7 @@ export default function RadiologyInsuranceAuthorizationModal({ isOpen, onClose, 
                 onClose={() => setIsAuthModalOpen(false)}
                 activateNotifications={activateNotifications}
                 type={type}
+                state={State}
                 claimId={selectedClaimId}
             />
         </Modal>
