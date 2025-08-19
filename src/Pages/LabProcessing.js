@@ -606,7 +606,11 @@ export default function LabProcessing() {
         px={["10px", "15px"]}
         rounded="10px"
       >
-        <Flex justifyContent="space-between" flexWrap="wrap" alignItems="center">
+        <Flex
+          justifyContent="space-between"
+          flexWrap="wrap"
+          alignItems="center"
+        >
           <HStack spacing="4" flexWrap="wrap">
             <Flex
               alignItems="center"
@@ -729,166 +733,166 @@ export default function LabProcessing() {
             {ByDate === false ? (
               <Input
                 label="Search"
-                  onChange={(e) => {
-                    setSearchInput(e.target.value);
+                onChange={(e) => {
+                  setSearchInput(e.target.value);
+                  setCurrentPage(1);
+                }}
+                value={SearchInput}
+                bColor="#E4E4E4"
+                leftIcon={<BiSearch />}
+              />
+            ) : (
+              <HStack flexWrap={["wrap", "nowrap"]}>
+                <Input
+                  label="Start Date"
+                  type="date"
+                  onChange={(e) => setStartDate(e.target.value)}
+                  value={StartDate}
+                  bColor="#E4E4E4"
+                  leftIcon={<FaCalendarAlt />}
+                />
+                <Input
+                  label="End Date"
+                  type="date"
+                  onChange={(e) => setEndDate(e.target.value)}
+                  value={EndDate}
+                  bColor="#E4E4E4"
+                  leftIcon={<FaCalendarAlt />}
+                />
+                <Flex
+                  onClick={() => filterBy("date")}
+                  cursor="pointer"
+                  px="5px"
+                  py="3px"
+                  rounded="5px"
+                  bg="blue.blue500"
+                  color="#fff"
+                  justifyContent="center"
+                  alignItems="center"
+                >
+                  <BiSearch />
+                </Flex>
+              </HStack>
+            )}
+            <Menu isLazy>
+              <MenuButton as={Box}>
+                <HStack
+                  border="1px solid #EA5937"
+                  rounded="7px"
+                  cursor="pointer"
+                  py="11.64px"
+                  px="16.98px"
+                  bg="#f8ddd1"
+                  color="blue.blue500"
+                  fontWeight="500"
+                  fontSize="14px"
+                >
+                  <Text>Filter</Text>
+                  <IoFilter />
+                </HStack>
+              </MenuButton>
+              <MenuList>
+                <MenuItem
+                  onClick={() => filterBy("firstName")}
+                  textTransform="capitalize"
+                  fontWeight="500"
+                  color="#2F2F2F"
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                >
+                  <HStack fontSize="14px">
+                    <Text>by First Name</Text>
+                  </HStack>
+                </MenuItem>
+                <MenuItem
+                  onClick={() => filterBy("lastName")}
+                  textTransform="capitalize"
+                  fontWeight="500"
+                  color="#2F2F2F"
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                >
+                  <HStack fontSize="14px">
+                    <Text>by Last Name</Text>
+                  </HStack>
+                </MenuItem>
+                <MenuItem
+                  onClick={() => filterBy("mrn")}
+                  textTransform="capitalize"
+                  fontWeight="500"
+                  color="#2F2F2F"
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                >
+                  <HStack fontSize="14px">
+                    <Text>by MRN</Text>
+                  </HStack>
+                </MenuItem>
+                <MenuItem
+                  onClick={() => filterBy("testName")}
+                  textTransform="capitalize"
+                  fontWeight="500"
+                  color="#2F2F2F"
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                >
+                  <HStack fontSize="14px">
+                    <Text>by Test Name</Text>
+                  </HStack>
+                </MenuItem>
+                <MenuItem
+                  onClick={() => setByDate(true)}
+                  textTransform="capitalize"
+                  fontWeight="500"
+                  color="#2F2F2F"
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                >
+                  <HStack fontSize="14px">
+                    <Text>by date</Text>
+                  </HStack>
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    setFilteredData(null);
+                    setSearchInput("");
+                    setByDate(false);
+                    setStartDate("");
+                    setEndDate("");
+                    filterScheduled();
                     setCurrentPage(1);
                   }}
-                  value={SearchInput}
-                  bColor="#E4E4E4"
-                  leftIcon={<BiSearch />}
-                />
-              ) : (
-                <HStack flexWrap={["wrap", "nowrap"]}>
-                  <Input
-                    label="Start Date"
-                    type="date"
-                    onChange={(e) => setStartDate(e.target.value)}
-                    value={StartDate}
-                    bColor="#E4E4E4"
-                    leftIcon={<FaCalendarAlt />}
-                  />
-                  <Input
-                    label="End Date"
-                    type="date"
-                    onChange={(e) => setEndDate(e.target.value)}
-                    value={EndDate}
-                    bColor="#E4E4E4"
-                    leftIcon={<FaCalendarAlt />}
-                  />
-                  <Flex
-                    onClick={() => filterBy("date")}
-                    cursor="pointer"
-                    px="5px"
-                    py="3px"
-                    rounded="5px"
-                    bg="blue.blue500"
-                    color="#fff"
-                    justifyContent="center"
-                    alignItems="center"
-                  >
-                    <BiSearch />
-                  </Flex>
-                </HStack>
-              )}
-              <Menu isLazy>
-                <MenuButton as={Box}>
-                  <HStack
-                    border="1px solid #EA5937"
-                    rounded="7px"
-                    cursor="pointer"
-                    py="11.64px"
-                    px="16.98px"
-                    bg="#f8ddd1"
-                    color="blue.blue500"
-                    fontWeight="500"
-                    fontSize="14px"
-                  >
-                    <Text>Filter</Text>
-                    <IoFilter />
+                  textTransform="capitalize"
+                  fontWeight="500"
+                  color="#2F2F2F"
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                >
+                  <HStack fontSize="14px">
+                    <Text>clear filter</Text>
                   </HStack>
-                </MenuButton>
-                <MenuList>
-                  <MenuItem
-                    onClick={() => filterBy("firstName")}
-                    textTransform="capitalize"
-                    fontWeight="500"
-                    color="#2F2F2F"
-                    _hover={{
-                      color: "#fff",
-                      fontWeight: "400",
-                      bg: "blue.blue500",
-                    }}
-                  >
-                    <HStack fontSize="14px">
-                      <Text>by First Name</Text>
-                    </HStack>
-                  </MenuItem>
-                  <MenuItem
-                    onClick={() => filterBy("lastName")}
-                    textTransform="capitalize"
-                    fontWeight="500"
-                    color="#2F2F2F"
-                    _hover={{
-                      color: "#fff",
-                      fontWeight: "400",
-                      bg: "blue.blue500",
-                    }}
-                  >
-                    <HStack fontSize="14px">
-                      <Text>by Last Name</Text>
-                    </HStack>
-                  </MenuItem>
-                  <MenuItem
-                    onClick={() => filterBy("mrn")}
-                    textTransform="capitalize"
-                    fontWeight="500"
-                    color="#2F2F2F"
-                    _hover={{
-                      color: "#fff",
-                      fontWeight: "400",
-                      bg: "blue.blue500",
-                    }}
-                  >
-                    <HStack fontSize="14px">
-                      <Text>by MRN</Text>
-                    </HStack>
-                  </MenuItem>
-                  <MenuItem
-                    onClick={() => filterBy("testName")}
-                    textTransform="capitalize"
-                    fontWeight="500"
-                    color="#2F2F2F"
-                    _hover={{
-                      color: "#fff",
-                      fontWeight: "400",
-                      bg: "blue.blue500",
-                    }}
-                  >
-                    <HStack fontSize="14px">
-                      <Text>by Test Name</Text>
-                    </HStack>
-                  </MenuItem>
-                  <MenuItem
-                    onClick={() => setByDate(true)}
-                    textTransform="capitalize"
-                    fontWeight="500"
-                    color="#2F2F2F"
-                    _hover={{
-                      color: "#fff",
-                      fontWeight: "400",
-                      bg: "blue.blue500",
-                    }}
-                  >
-                    <HStack fontSize="14px">
-                      <Text>by date</Text>
-                    </HStack>
-                  </MenuItem>
-                  <MenuItem
-                    onClick={() => {
-                      setFilteredData(null);
-                      setSearchInput("");
-                      setByDate(false);
-                      setStartDate("");
-                      setEndDate("");
-                      filterScheduled();
-                      setCurrentPage(1);
-                    }}
-                    textTransform="capitalize"
-                    fontWeight="500"
-                    color="#2F2F2F"
-                    _hover={{
-                      color: "#fff",
-                      fontWeight: "400",
-                      bg: "blue.blue500",
-                    }}
-                  >
-                    <HStack fontSize="14px">
-                      <Text>clear filter</Text>
-                    </HStack>
-                  </MenuItem>
-                </MenuList>
-              </Menu>
-            </HStack>
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          </HStack>
         </Flex>
       </Box>
 
@@ -1017,14 +1021,10 @@ export default function LabProcessing() {
                             item
                           );
                           confirmLab(item);
-                        } else {
+                        } else if (!Hematology && !Chemical) {
                           ProcessLab(item);
                         }
                       }}
-                      onSortToHematology={() => sortToHematology(item._id)}
-                      onSortToChemicalPathology={() =>
-                        sortToChemicalPathology(item._id)
-                      }
                     />
                   );
                 })
@@ -1080,14 +1080,10 @@ export default function LabProcessing() {
                             item
                           );
                           confirmLab(item);
-                        } else {
+                        } else if (!Hematology && !Chemical) {
                           ProcessLab(item);
                         }
                       }}
-                      onSortToHematology={() => sortToHematology(item._id)}
-                      onSortToChemicalPathology={() =>
-                        sortToChemicalPathology(item._id)
-                      }
                     />
                   );
                 })
