@@ -1496,47 +1496,19 @@ export default function TableRow({
                     Confirm
                   </MenuItem>
                 ) : labStatus === "scheduled" ? (
-                  <>
-                    <MenuItem
-                      onClick={() => onSortToHematology?.(_id)}
-                      textTransform="capitalize"
-                      fontWeight={"500"}
-                      color="#2F2F2F"
-                      _hover={{
-                        color: "#fff",
-                        fontWeight: "400",
-                        bg: "blue.blue500",
-                      }}
-                    >
-                      Send to Hematology
-                    </MenuItem>
-                    <MenuItem
-                      onClick={() => onSortToChemicalPathology?.(_id)}
-                      textTransform="capitalize"
-                      fontWeight={"500"}
-                      color="#2F2F2F"
-                      _hover={{
-                        color: "#fff",
-                        fontWeight: "400",
-                        bg: "blue.blue500",
-                      }}
-                    >
-                      Send to Chemical Pathology
-                    </MenuItem>
-                    <MenuItem
-                      onClick={onClick}
-                      textTransform="capitalize"
-                      fontWeight={"500"}
-                      color="#2F2F2F"
-                      _hover={{
-                        color: "#fff",
-                        fontWeight: "400",
-                        bg: "blue.blue500",
-                      }}
-                    >
-                      Process
-                    </MenuItem>
-                  </>
+                  <MenuItem
+                    onClick={onClick}
+                    textTransform="capitalize"
+                    fontWeight={"500"}
+                    color="#2F2F2F"
+                    _hover={{
+                      color: "#fff",
+                      fontWeight: "400",
+                      bg: "blue.blue500",
+                    }}
+                  >
+                    Process
+                  </MenuItem>
                 ) : labStatus === "processed" ? (
                   <>
                     {isChemical && (
@@ -1585,21 +1557,6 @@ export default function TableRow({
                           Process Peripheral Blood Film Report
                         </MenuItem>
                       </>
-                    )}
-                    {!isChemical && !isHematology && (
-                      <MenuItem
-                        onClick={onClick}
-                        textTransform="capitalize"
-                        fontWeight={"500"}
-                        color="#2F2F2F"
-                        _hover={{
-                          color: "#fff",
-                          fontWeight: "400",
-                          bg: "blue.blue500",
-                        }}
-                      >
-                        Process
-                      </MenuItem>
                     )}
                   </>
                 ) : (
@@ -3834,25 +3791,6 @@ export default function TableRow({
                   <BsThreeDots />
                 </MenuButton>
                 <MenuList>
-                  {(labStatus === "processed" ||
-                    labStatus === "chemicalpathologyprocessed" ||
-                    labStatus === "hemathologyprocessed" ||
-                    labStatus === "hemathologychemicalpathologyprocessed") && (
-                    <MenuItem
-                      onClick={onClick}
-                      textTransform="capitalize"
-                      fontWeight={"500"}
-                      color="#2F2F2F"
-                      _hover={{
-                        color: "#fff",
-                        fontWeight: "400",
-                        bg: "blue.blue500",
-                      }}
-                    >
-                      Process
-                    </MenuItem>
-                  )}
-
                   {isChemical && (
                     <MenuItem
                       onClick={() => onView("chemical", report)}
