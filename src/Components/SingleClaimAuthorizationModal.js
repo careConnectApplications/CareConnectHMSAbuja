@@ -12,9 +12,9 @@ import {
 } from '@chakra-ui/react';
 import Input from './Input';
 import Button from './Button';
-import { AuthorizeClaimsApi } from '../Utils/ApiCalls';
+import { AuthorizeClaimsApi, GroupAuthorizeClaimsApi } from '../Utils/ApiCalls';
 
-export default function SingleClaimAuthorizationModal({ isOpen, onClose, activateNotifications, type, claimId }) {
+export default function SingleClaimAuthorizationModal({ isOpen, onClose, activateNotifications, type, claimId,state }) {
     const [loading, setLoading] = useState(false);
     const [payload, setPayload] = useState({
         authorizationCode: '',
@@ -28,7 +28,7 @@ export default function SingleClaimAuthorizationModal({ isOpen, onClose, activat
     const handleAuthorizeClaim = async () => {
         setLoading(true);
         try {
-            const result = await AuthorizeClaimsApi(payload, type, claimId);
+            const result = state === "single" ? await AuthorizeClaimsApi(payload, type, claimId): await GroupAuthorizeClaimsApi(payload, type, claimId);
             if (result.status === 200) {
                 setLoading(false);
                 setPayload({

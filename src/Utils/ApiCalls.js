@@ -163,6 +163,37 @@ export const AuthorizeClaimsApi = (payload, type, id) => {
       }
     });
 };
+export const GroupAuthorizeClaimsApi = (payload, type, id) => {
+  const data = JSON.stringify(payload);
+  const config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/insuranceauthorizationandclaims/groupauthorizeclaims/${type}/${id}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data,
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response?.data?.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response?.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.message);
+      } else {
+        throw new Error(error.message);
+      }
+    });
+};
 
 export const GetAwaitingAuthorizationProcedure = () => {
   const config = {
