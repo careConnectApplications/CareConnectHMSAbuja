@@ -27,10 +27,11 @@ import ReferralDiagnosisCard from "./ReferralDiagnosisCard";
 import { FaNoteSticky } from "react-icons/fa6";
 import { FaCalendarAlt } from "react-icons/fa";
 import { IoColorFilter } from "react-icons/io5";
-import { SettingsApi, AddDeliveryNoteAPI, confirmPaymentAPI, confirmAllPaymentAPI, GetAllDetailApi } from "../Utils/ApiCalls";
+import { SettingsApi, confirmPaymentAPI, confirmAllPaymentAPI, GetAllDetailApi } from "../Utils/ApiCalls";
 import { FaArrowsToDot } from "react-icons/fa6";
 import { AiFillDatabase } from "react-icons/ai";
 import moment from "moment";
+import SingleClaimAuthorizationModal from './SingleClaimAuthorizationModal';
 
 export default function RadiologyInsuranceAuthorizationModal({ isOpen, onClose, setOldPayload, activateNotifications, type, oldPayload }) {
 
@@ -42,7 +43,9 @@ export default function RadiologyInsuranceAuthorizationModal({ isOpen, onClose, 
     const [Data, setData] = useState([]);
     const [TotalAmount, setTotalAmount] = useState([]);
     const [Settings, setSettings] = useState("");
-      const [Trigger, setTrigger] = useState(false);
+    const [Trigger, setTrigger] = useState(false);
+    const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+    const [selectedClaimId, setSelectedClaimId] = useState(null);
     
 
 
@@ -67,27 +70,6 @@ export default function RadiologyInsuranceAuthorizationModal({ isOpen, onClose, 
     const handleUpdatedPayload = (e) => {
         setUpdatedPayload({ ...UpdatedPayload, [e.target.id]: e.target.value })
 
-    }
-
-    const handleSubmitNew = async () => {
-        setLoading(true)
-        try {
-            const result = await AddDeliveryNoteAPI(Payload, id);
-        
-            if (result.status === 200) {
-                setLoading(false)
-                setPayload({ 
-                     note:""
-                })
-                activateNotifications("Delivery Note Added Successfully", "success")
-                onClose()
-
-            }
-
-        } catch (e) {
-            setLoading(false)
-            activateNotifications(e.message, "error")
-        }
     }
 
 
@@ -127,53 +109,22 @@ export default function RadiologyInsuranceAuthorizationModal({ isOpen, onClose, 
        
       }
 
-      const onChangeStatus = async (id) => {
-          // alert(id)
-          try {
-            const result = await confirmPaymentAPI(id);
-            if (result.status === 200) {
-            
-                activateNotifications("Payment confirmed Successfully", "success")
-               
-                setTrigger(!Trigger)
-            }
-          } catch (err) {
-            activateNotifications(err.message, "error")
+      const onChangeStatus = (id) => {
+        setSelectedClaimId(id);
+        setIsAuthModalOpen(true);
+    };
 
-          }
-        };
-
-      const ConfirmAllPayment = async () => {
-          // alert(id)
-          setLoading(true)
-          try {
-            const result = await confirmAllPaymentAPI(oldPayload.paymentreference);
-            if (result.status === 200) {
-                setLoading(false)
-            
-                activateNotifications("All Payment confirmed Successfully", "success")
-               
-                setTrigger(!Trigger)
-            }
-          } catch (err) {
-            activateNotifications(err.message, "error")
-            setLoading(false)
-
-          }
-        };
+      const handleAuthorizeAll = () => {
+        setSelectedClaimId(oldPayload.id);
+        setIsAuthModalOpen(true);
+    };
 
 
     useEffect(() => {
         getAllDetails()
       
-        getSettings()
-
-        setUpdatedPayload({
-            note: oldPayload?.note,
-          
-        })
-
-    }, [isOpen, Payload, Trigger]);
+    
+    }, [isOpen, Payload, Trigger,isAuthModalOpen]);
 
     return (
 
@@ -338,7 +289,7 @@ export default function RadiologyInsuranceAuthorizationModal({ isOpen, onClose, 
                             border="1px solid #EA5937"
                             color="blue.blue500"
                             w={["100%", "100%", "144px", "144px"]}
-                            onClick={ConfirmAllPayment}
+                            onClick={handleAuthorizeAll}
                             
                         >
                             Authorize All
@@ -351,6 +302,13 @@ export default function RadiologyInsuranceAuthorizationModal({ isOpen, onClose, 
 
                 </ModalFooter>
             </ModalContent>
+            <SingleClaimAuthorizationModal
+                isOpen={isAuthModalOpen}
+                onClose={() => setIsAuthModalOpen(false)}
+                activateNotifications={activateNotifications}
+                type={type}
+                claimId={selectedClaimId}
+            />
         </Modal>
     )
 }
