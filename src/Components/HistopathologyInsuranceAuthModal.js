@@ -169,6 +169,22 @@ export default function HistopathologyInsuranceAuthModal({ isOpen, onClose, setO
                           >
                             age
                           </Th>
+                          <Th
+                            fontSize="13px"
+                            textTransform="capitalize"
+                            color="#534D59"
+                            fontWeight="600"
+                          >
+                            hmo percentage cover
+                          </Th>
+                          <Th
+                            fontSize="13px"
+                            textTransform="capitalize"
+                            color="#534D59"
+                            fontWeight="600"
+                          >
+                            actual cost
+                          </Th>
         
                           <Th
                             fontSize="13px"
@@ -250,6 +266,8 @@ export default function HistopathologyInsuranceAuthModal({ isOpen, onClose, setO
                                 name={`${oldPayload.patient?.firstName} ${oldPayload.patient?.lastName}`}
                                 email={oldPayload.patient?.email}
                                 age={oldPayload.patient?.age}
+                                hmopercentagecover={item.hmopercentagecover}
+                                actualcost={item.actualcost}
                                 phone={oldPayload.patient?.phoneNumber}
                                 mrn={oldPayload.patient?.MRN}
                                 amount={item.amount}
