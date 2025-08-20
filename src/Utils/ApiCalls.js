@@ -133,6 +133,9 @@ export const GetAllClaimsApi = (page, limit) => {
 };
 
 export const AuthorizeClaimsApi = (payload, type, id) => {
+
+    console.log("AuthorizeClaimsApi", id, "type", type);
+
   const data = JSON.stringify(payload);
   const config = {
     method: "post",
@@ -164,6 +167,9 @@ export const AuthorizeClaimsApi = (payload, type, id) => {
     });
 };
 export const GroupAuthorizeClaimsApi = (payload, type, id) => {
+
+  console.log("GroupAuthorizeClaimsApi", id, "type", type);
+
   const data = JSON.stringify(payload);
   const config = {
     method: "post",

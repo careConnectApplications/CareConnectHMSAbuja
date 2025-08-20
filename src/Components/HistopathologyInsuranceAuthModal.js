@@ -103,8 +103,8 @@ export default function HistopathologyInsuranceAuthModal({ isOpen, onClose, setO
        
       }
 
-      const onChangeStatus = (id) => {
-        setSelectedClaimId(id);
+      const onChangeStatus = () => {
+        setSelectedClaimId(oldPayload._id);
         setIsAuthModalOpen(true);
         setState("single")
     };
@@ -112,7 +112,7 @@ export default function HistopathologyInsuranceAuthModal({ isOpen, onClose, setO
       const handleAuthorizeAll = () => {
         setSelectedClaimId(oldPayload._id);
         setIsAuthModalOpen(true);
-        setState("group")
+        setState("single")
     };
 
 
@@ -259,7 +259,7 @@ export default function HistopathologyInsuranceAuthModal({ isOpen, onClose, setO
                                 testId={item._id}
                                 testName={item.name}
                                 date={moment(item.createdAt).format("lll")}
-                                onClick={() => onChangeStatus(item._id)}
+                                onClick={onChangeStatus}
                                 onPrint={() => PrintReceipt(item)}
                               />
                             ))

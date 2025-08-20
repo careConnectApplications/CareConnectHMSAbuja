@@ -47,20 +47,28 @@ export default function NavBar({ showSearch = true,showNav = true }) {
     const token = localStorage.getItem("token")
     const expiredAt = localStorage.getItem("expiredAt")
 
+    
     const Logout = () => {
-
+        
         localStorage.clear("token")
         localStorage.clear("onlineUser")
-
+        
         nav("/")
-
-
+        
+        
     }
+    
+    
+    
+    const date = new Date(expiredAt);
 
-     
-
-
+    console.log("expiredAt", date)
+    console.log("expiration",date.getTime() <= Date.now())
+    console.log("new date", expiredAt * 1000 )
+    console.log("dateNow", Date.now())
     if (expiredAt * 1000 <= Date.now()) {
+        
+
         Logout()
         alert("Session has expired")
     }
