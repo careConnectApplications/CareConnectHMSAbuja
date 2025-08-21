@@ -1,6 +1,322 @@
 import axios from "axios";
 import { baseUrl, nigeriaStateApiUrl, token } from "./ApiConfig";
 
+
+
+export const GetAwaitingAuthorizationRadiology = () => {
+  const config = {
+    method: "get",
+    url: `${baseUrl}/insuranceauthorizationandclaims/readawaitingauthorizationradiologyoptimized`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response.data.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
+
+export const UpdateInsuranceClaimStatusApi = (id, payload) => {
+  const data = JSON.stringify(payload);
+  const config = {
+    method: "put",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/insuranceauthorizationandclaims/updateinsuranceclaimstatus/${id}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data,
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response?.data?.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response?.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.message);
+      } else {
+        throw new Error(error.message);
+      }
+    });
+};
+
+export const GetAllFilteredClaimsApi = (page, limit, status, key, value) => {
+  let url = `${baseUrl}/insuranceauthorizationandclaims/fetchinsuranceclaims?page=${page}&limit=${limit}`;
+
+  if (status) {
+    url += `&status=${status}`;
+  }
+
+  if (key && value) {
+    url += `&${key}=${value}`;
+  }
+
+  const config = {
+    method: "get",
+    url,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.log("Error fetching claims:", error.response);
+      if (error.response && error.response.data.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response && error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
+
+export const GetAllClaimsApi = (page, limit) => {
+  const config = {
+    method: "get",
+    url: `${baseUrl}/insuranceauthorizationandclaims/fetchinsuranceclaims?page=${page}&limit=${limit}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.log("Error fetching claims:", error.response);
+      if (error.response && error.response.data.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response && error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
+
+export const AuthorizeClaimsApi = (payload, type, id) => {
+
+    console.log("AuthorizeClaimsApi", id, "type", type);
+
+  const data = JSON.stringify(payload);
+  const config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/insuranceauthorizationandclaims/authorizeclaims/${type}/${id}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data,
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response?.data?.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response?.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.message);
+      } else {
+        throw new Error(error.message);
+      }
+    });
+};
+export const GroupAuthorizeClaimsApi = (payload, type, id) => {
+
+  console.log("GroupAuthorizeClaimsApi", id, "type", type);
+
+  const data = JSON.stringify(payload);
+  const config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/insuranceauthorizationandclaims/groupauthorizeclaims/${type}/${id}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data,
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response?.data?.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response?.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.message);
+      } else {
+        throw new Error(error.message);
+      }
+    });
+};
+
+export const GetAwaitingAuthorizationProcedure = () => {
+  const config = {
+    method: "get",
+    url: `${baseUrl}/insuranceauthorizationandclaims/readawaitingauthorizationprocedureoptimized`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response.data.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
+
+export const GetAwaitingAuthorizationPharmacy = () => {
+  const config = {
+    method: "get",
+    url: `${baseUrl}/insuranceauthorizationandclaims/readawaitingauthorizationpharmacytransaction`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response.data.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
+
+export const GetAwaitingAuthorizationLab = () => {
+  const config = {
+    method: "get",
+    url: `${baseUrl}/insuranceauthorizationandclaims/readawaitingauthorizationlabtransaction`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response.data.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
+
+export const GetAwaitingAuthorizationHistopathology = () => {
+  const config = {
+    method: "get",
+    url: `${baseUrl}/insuranceauthorizationandclaims/readallhistopathologyawaitingauthorization`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response.data.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
+
 export const ProviderLoginApi = (Payload) => {
   // console.log("CreateAccountPayload", Payload);
 
@@ -20,6 +336,99 @@ export const ProviderLoginApi = (Payload) => {
     .then((response) => {
       //console.log(JSON.stringify(response.data));
       return response;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response.data.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
+
+export const CreateHmoCategoryCoverApi = (payload) => {
+  const data = JSON.stringify(payload);
+  const config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/settings/createhmocategorycover`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data,
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response?.data?.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response?.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.message);
+      } else {
+        throw new Error(error.message);
+      }
+    });
+};
+
+export const UpdateHmoCategoryCoverApi = (payload, id) => {
+  const data = JSON.stringify(payload);
+  const config = {
+    method: "put",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/settings/updatehmocategorycover/${id}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data,
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response?.data?.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response?.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.message);
+      } else {
+        throw new Error(error.message);
+      }
+    });
+};
+
+export const GetAllHmoCategoryCoverApi = () => {
+  const config = {
+    method: "get",
+    url: `${baseUrl}/settings/getallhmocategorycover`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response.data;
     })
     .catch((error) => {
       console.log("error", error.response);
@@ -323,6 +732,38 @@ export const AddLensPrescriptionApi = (payload) => {
     });
 };
 
+export const AddEyeConsultationApi = (payload) => {
+  let data = JSON.stringify(payload);
+  let config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/eye-module/eye-consultation`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data: data,
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response.data.message) {
+        throw new Error(error.response.data.message);
+      } else if (error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.message);
+      } else {
+        throw new Error(error.message);
+      }
+    });
+};
+
 export const AddOperationNoteApi = (formData, appointmentId, patientId) => {
   let config = {
     method: "post",
@@ -406,14 +847,14 @@ export const CreateHistologyApi = (payload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.msg) {
-        throw new Error(error.response.data.msg);
+      if (error.response.data.message) {
+        throw new Error(error.response.data.message);
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.msg);
+        throw new Error(error.message);
       } else {
-        throw new Error(error.msg);
+        throw new Error(error.message);
       }
     });
 };
@@ -540,6 +981,66 @@ export const GetAllHistopathologyReportApi = () => {
         throw new Error(error.msg);
       } else {
         throw new Error(error.msg);
+      }
+    });
+};
+
+export const GetAllSingleHistopathologyHistoryApi = (id) => {
+  // Configure the GET request
+  let config = {
+    method: "get",
+    url: `${baseUrl}/histopathology/patient/${id}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response.data; // Return the data part of the response
+    })
+    .catch((error) => {
+      console.log("Error fetching histopathology history:", error.response);
+      if (error.response && error.response.data.message) {
+        throw new Error(error.response.data.message);
+      } else if (error.response && error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.message);
+      } else {
+        throw new Error(error.message);
+      }
+    });
+};
+
+export const GetAllPatientHistopathologyReportApi = (id) => {
+  // Configure the GET request
+  let config = {
+    method: "get",
+    url: `${baseUrl}/histopathology/listhistopathologyreportbypatient/${id}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response.data; // Return the data part of the response
+    })
+    .catch((error) => {
+      console.log("Error fetching patient histopathology reports:", error.response);
+      if (error.response && error.response.data.message) {
+        throw new Error(error.response.data.message);
+      } else if (error.response && error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.message);
+      } else {
+        throw new Error(error.message);
       }
     });
 };
@@ -1955,6 +2456,36 @@ export const GetAllPaymentDetailApi = (id) => {
   let config = {
     method: "get",
     url: `${baseUrl}/billing/readpaymentbyreferencenumber/${id}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response.data; // Return the data part of the response
+    })
+    .catch((error) => {
+      console.log("Error fetching users:", error.response);
+      if (error.response && error.response.data.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response && error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
+
+export const GetAllDetailApi = (id,category) => {
+  // Configure the GET request
+  let config = {
+    method: "get",
+    url: `${baseUrl}/insuranceauthorizationandclaims/readallbyreferenceid?referencenumber=${id}&&referencecategory=${category}`,
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
@@ -8976,15 +9507,11 @@ export const AddBedFeeApi = (id, apiPayload) => {
     })
     .catch((error) => {
       console.error("error:", error.response);
-      if (error.response?.data?.msg) {
-        throw new Error(error.response.data.msg);
-      } else if (error.response?.data) {
-        throw new Error(error.response.data);
-      } else if (error.request) {
-        throw new Error(error.message);
-      } else {
-        throw new Error(error.message);
-      }
+      const errorMessage =
+        error.response?.data?.message ||
+        error.response?.data?.msg ||
+        "An unexpected error occurred";
+      throw new Error(errorMessage);
     });
 };
 

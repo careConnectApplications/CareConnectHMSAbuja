@@ -18,6 +18,7 @@ import React, { useState, useEffect } from "react";
 import Input from "./Input";
 import TextArea from "./TextArea";
 import Button from "./Button";
+import SignaturePad from "./SignaturePad";
 import { ProcessHistopathologyApi } from "../Utils/ApiCalls";
 import { SlPlus } from "react-icons/sl";
 import { MdOutlineDateRange } from "react-icons/md";
@@ -30,6 +31,7 @@ export default function CreateHistopathologyResult({
   oldPayload,
 }) {
   const [loading, setLoading] = useState(false);
+  const [Signature, setSignature] = useState("");
   const [payload, setPayload] = useState({
 
     firstDayLMP: "",
@@ -89,6 +91,7 @@ export default function CreateHistopathologyResult({
       serviceName: oldPayload.serviceName,
       testTypeId: oldPayload?.testName,
       parity: payload.parity || 0,
+      imageBase64: Signature,
     };
 
     console.log("Final Payload:", finalPayload);
@@ -105,6 +108,7 @@ export default function CreateHistopathologyResult({
     } catch (e) {
       console.error("Error submitting histopathology result:", e);
       setLoading(false);
+      onClose();
       activateNotifications(e.message, "error");
     }
   };
@@ -280,8 +284,11 @@ export default function CreateHistopathologyResult({
               mt={4}
             />
             </SimpleGrid>
+
+            
            
           </Box>
+              <SignaturePad setSignature={setSignature}/>
 
           <Button mt="32px" onClick={handleSubmit} isLoading={loading} w="full">
             Submit Histopathology Result

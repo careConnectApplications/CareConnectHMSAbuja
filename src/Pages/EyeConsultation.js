@@ -18,15 +18,12 @@ import Preloader from "../Components/Preloader";
 import { SlPlus } from "react-icons/sl";
 import { useNavigate, useLocation } from "react-router-dom";
 import { FaClock } from "react-icons/fa";
-import { MdEdit } from "react-icons/md";
 import { BsCalendar2DateFill } from "react-icons/bs";
 import { AiOutlineDownload } from "react-icons/ai";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { FacilityName } from "../Utils/ApiConfig";
 import { GetPreviousEyeRecordsApi } from "../Utils/ApiCalls";
-import { baseUrl } from "../Utils/ApiConfig";
-
 
 // Utility function to format field names
 const formatFieldName = (fieldName) => {
@@ -44,21 +41,17 @@ const formatDateValue = (value) => {
   return value;
 };
 
-// Render function for operation note images
-const renderOperationNoteImages = (operationNote) => {
- 
-
-  const hasImages = operationNote.length > 0;
-
-  if (!hasImages) return null;
+// Render function for eye consultation fields
+const renderEyeConsultationFields = (consultation) => {
+  if (!consultation) return null;
 
   return (
     <>
-      {/* CVF Image */}
-
-      {
-        operationNote.map((note,index) =>(
-           <Box>
+      {/* Chief Complaints & History */}
+      {(consultation.comps || consultation.historyOfPresentingComplaint || 
+        consultation.pastMedicalHistory || consultation.opticalHistory || 
+        consultation.familySocialHx) && (
+        <Box>
           <Text
             fontSize="15px"
             mt="12px"
@@ -66,30 +59,133 @@ const renderOperationNoteImages = (operationNote) => {
             textTransform="capitalize"
             color="blue.blue500"
           >
-           {note.resultType}
+            Chief Complaints & History
           </Text>
-          <Box mt="12px" mb="5">
-            <img 
-              src={`${baseUrl}/${note.fileUrl}`} 
-              alt="CVF" 
-              style={{ 
-                maxWidth: "100%", 
-                height: "auto", 
-                border: "1px solid #E2E8F0", 
-                borderRadius: "8px" 
-              }} 
-            />
-          </Box>
+          <SimpleGrid
+            mt="12px"
+            mb="5"
+            columns={{ base: 1, md: 2, lg: 2 }}
+            spacing={5}
+          >
+            {consultation.comps && (
+              <PreviewCard title="Chief Complaints" value={consultation.comps} />
+            )}
+            {consultation.historyOfPresentingComplaint && (
+              <PreviewCard title="History of Presenting Complaint" value={consultation.historyOfPresentingComplaint} />
+            )}
+            {consultation.pastMedicalHistory && (
+              <PreviewCard title="Past Medical History" value={consultation.pastMedicalHistory} />
+            )}
+            {consultation.opticalHistory && (
+              <PreviewCard title="Optical History" value={consultation.opticalHistory} />
+            )}
+            {consultation.familySocialHx && (
+              <PreviewCard title="Family & Social History" value={consultation.familySocialHx} />
+            )}
+          </SimpleGrid>
         </Box>
-        ))
-      }
+      )}
 
-     
+      {/* Visual Assessment */}
+      {(consultation.va || consultation.IOP || consultation.Refraction) && (
+        <Box>
+          <Text
+            fontSize="15px"
+            mt="12px"
+            fontWeight={"700"}
+            textTransform="capitalize"
+            color="blue.blue500"
+          >
+            Visual Assessment
+          </Text>
+          <SimpleGrid
+            mt="12px"
+            mb="5"
+            columns={{ base: 1, md: 2, lg: 2 }}
+            spacing={5}
+          >
+            {consultation.va && (
+              <PreviewCard title="Visual Acuity (VA)" value={consultation.va} />
+            )}
+            {consultation.IOP && (
+              <PreviewCard title="Intraocular Pressure (IOP)" value={consultation.IOP} />
+            )}
+            {consultation.Refraction && (
+              <PreviewCard title="Refraction" value={consultation.Refraction} />
+            )}
+          </SimpleGrid>
+        </Box>
+      )}
+
+      {/* Clinical Examination */}
+      {(consultation.externalExamination || consultation.opthalmoscopy || consultation.slitLamp) && (
+        <Box>
+          <Text
+            fontSize="15px"
+            mt="12px"
+            fontWeight={"700"}
+            textTransform="capitalize"
+            color="blue.blue500"
+          >
+            Clinical Examination
+          </Text>
+          <SimpleGrid
+            mt="12px"
+            mb="5"
+            columns={{ base: 1, md: 2, lg: 2 }}
+            spacing={5}
+          >
+            {consultation.externalExamination && (
+              <PreviewCard title="External Examination" value={consultation.externalExamination} />
+            )}
+            {consultation.opthalmoscopy && (
+              <PreviewCard title="Ophthalmoscopy" value={consultation.opthalmoscopy} />
+            )}
+            {consultation.slitLamp && (
+              <PreviewCard title="Slit Lamp Examination" value={consultation.slitLamp} />
+            )}
+          </SimpleGrid>
+        </Box>
+      )}
+
+      {/* Diagnosis & Treatment */}
+      {(consultation.diagnosis || consultation.treatmentPlan || consultation.nextAppointmentDate) && (
+        <Box>
+          <Text
+            fontSize="15px"
+            mt="12px"
+            fontWeight={"700"}
+            textTransform="capitalize"
+            color="blue.blue500"
+          >
+            Diagnosis & Treatment Plan
+          </Text>
+          <SimpleGrid
+            mt="12px"
+            mb="5"
+            columns={{ base: 1, md: 2, lg: 2 }}
+            spacing={5}
+          >
+            {consultation.diagnosis && (
+              <PreviewCard title="Diagnosis" value={consultation.diagnosis} />
+            )}
+            {consultation.treatmentPlan && (
+              <PreviewCard title="Treatment Plan" value={consultation.treatmentPlan} />
+            )}
+            {consultation.nextAppointmentDate && (
+              <PreviewCard
+                title="Next Appointment Date"
+                value={formatDateValue(consultation.nextAppointmentDate)}
+              />
+            )}
+          </SimpleGrid>
+        </Box>
+      )}
     </>
   );
 };
 
-export default function OperationNotes({ hide = false, index }) {
+export default function EyeConsultation({ hide = false, index }) {
   const [IsLoading, setIsLoading] = useState(true);
   const [All, setAll] = useState(true);
   const [InProgress, setInProgress] = useState(false);
@@ -147,14 +243,12 @@ export default function OperationNotes({ hide = false, index }) {
       const result = await GetPreviousEyeRecordsApi(PatientId);
 
       console.log("GetSingleRecord", result);
-      
-    
+
       if (result.status === "success") {
         setIsLoading(false);
-        // Filter for operation note records only (when API is ready)
-        setData(result.data || []);
+        // Filter for consultation records only (when API is ready)
+        setData(result.data?.filter(item => item.eyeConsultation) || []);
       }
-
     } catch (e) {
       activateNotifications(e.message, "error");
     }
@@ -202,16 +296,9 @@ export default function OperationNotes({ hide = false, index }) {
   const nav = useNavigate();
   const { pathname } = useLocation();
 
-  const AddOperationNote = () => {
-    nav(`/eye-module/operational-notes/appointment/${id}/patient/${PatientId}`);
+  const AddEyeConsultation = () => {
+    nav(`/dashboard/add-eye-consultation/${id}`);
     localStorage.setItem("pathname", pathname);
-    localStorage.setItem("state", "new");
-  };
-
-  const EditOperationNote = () => {
-    nav(`/eye-module/operational-notes/appointment/${id}/patient/${PatientId}`);
-    localStorage.setItem("pathname", pathname);
-     localStorage.setItem("state", "edit");
   };
 
   // PDF Export Function
@@ -248,7 +335,7 @@ export default function OperationNotes({ hide = false, index }) {
       tempDiv.innerHTML = `
         <div style="text-align: center; margin-bottom: 30px; border-bottom: 2px solid #2B6CB0; padding-bottom: 20px;">
           <h1 style="color: #2B6CB0; margin: 0; font-size: 24px; margin-bottom: 10px;">${FacilityName}</h1>
-          <h2 style="color: #2B6CB0; margin: 0; font-size: 20px; margin-bottom: 15px;">Operation Notes Report</h2>
+          <h2 style="color: #2B6CB0; margin: 0; font-size: 20px; margin-bottom: 15px;">Eye Consultation Report</h2>
           <table style="width: 100%; margin-top: 15px; border-collapse: collapse;">
             <tr>
               <td style="width: 50%; vertical-align: top; padding-right: 20px;">
@@ -337,7 +424,7 @@ export default function OperationNotes({ hide = false, index }) {
       document.body.removeChild(tempDiv);
       
       // Save PDF
-      const fileName = `Operation_Notes_${patientName.replace(/\s+/g, '_')}_${currentDate}.pdf`;
+      const fileName = `Eye_Consultation_${patientName.replace(/\s+/g, '_')}_${currentDate}.pdf`;
       pdf.save(fileName);
       
       activateNotifications("PDF exported successfully!", "success");
@@ -548,10 +635,10 @@ export default function OperationNotes({ hide = false, index }) {
         >
           <Button
             w={["100%", "100%", "220px", "220px"]}
-            onClick={AddOperationNote}
+            onClick={AddEyeConsultation}
             rightIcon={<SlPlus />}
           >
-            Add Operation Note
+            Add Eye Consultation
           </Button>
           
           {Data.length > 0 && (
@@ -583,7 +670,7 @@ export default function OperationNotes({ hide = false, index }) {
         overflowX="auto"
       >
         <Text mb="20px" fontWeight="700" fontSize="16px" color="blue.blue500">
-          Previous Operation Notes
+          Previous Eye Consultations
         </Text>
 
         {Data.map((item, i) => (
@@ -614,29 +701,10 @@ export default function OperationNotes({ hide = false, index }) {
                   {moment(item.createdAt).format("LT")}{" "}
                 </Text>
               </HStack>
-               <Box color="blue.blue500" fontSize="24px" fontWeight="500" cursor="pointer" onClick={EditOperationNote}>
-                 <MdEdit />
-                </Box>
             </HStack>
 
-            {item.operationalTest &&
-              renderOperationNoteImages(item.operationalTest)}
-
-            {item.observationalNotes && (
-              <Box mt={4}>
-                <Text
-                  fontSize="15px"
-                  fontWeight={"700"}
-                  textTransform="capitalize"
-                  color="blue.blue500"
-                >
-                  Observational Notes
-                </Text>
-                <Text mt={2} fontSize="14px" color="gray.700">
-                  {item.observationalNotes}
-                </Text>
-              </Box>
-            )}
+            {item.eyeConsultation &&
+              renderEyeConsultationFields(item.eyeConsultation)}
           </Box>
         ))}
       </Box>

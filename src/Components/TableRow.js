@@ -21,7 +21,7 @@ export default function TableRow({
   labName,
   code,
   physicianName,
-  collectedDate,
+  collectedDate,hmopercentagecover,actualcost,
   facility,
   reportedDate,
   visitType,
@@ -36,6 +36,7 @@ export default function TableRow({
   physicalAssault,
   dose,
   onBedFee,
+  bedFee,
   wholeOrgan,
   previousBiopsy,
   lmp,
@@ -120,6 +121,8 @@ export default function TableRow({
   serviceType,
   serviceCategory,
   amount,
+  amountClaimed,
+  amountApproved,
   reason,
   appointment,
   appointmentType,
@@ -166,6 +169,10 @@ export default function TableRow({
   onViewHematologyReport,
   report,
   onDischarge,
+  isChemical,
+  isHematology,
+  hmo
+
 }) {
   const router = useNavigate();
 
@@ -499,6 +506,160 @@ export default function TableRow({
           </Td>
         </>
       )}
+      {type === "insurance-table-Unauthorized" && (
+        <>
+          <Td>
+            <HStack cursor={"pointer"}>
+              <Avatar
+                name={name}
+                size="sm"
+                src="https://bit.ly/tioluwani-kolawole"
+              />
+              <Box>
+                <Text color={"#101828"} fontWeight={"500"} fontSize={"13px"}>
+                  {name}
+                </Text>
+                <Text
+                  color={"#667085"}
+                  textTransform={"lowercase"}
+                  fontWeight={"400"}
+                  fontSize={"11px"}
+                >
+                  {email}
+                </Text>
+              </Box>
+            </HStack>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {mrn}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {phone}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {age}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {hmopercentagecover}  
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {actualcost}
+            </Text>
+          </Td>
+          <Td>
+            <HStack
+              color={
+                status === "paid"
+                  ? "#027A48"
+                  : status === "pending payment"
+                  ? "#FFA30C"
+                  : "#FD4739"
+              }
+            >
+              <Box
+                rounded="100%"
+                w="8px"
+                h="8px"
+                bg={
+                  status === "paid"
+                    ? "#027A48"
+                    : status === "pending payment"
+                    ? "#FFA30C"
+                    : "#FD4739"
+                }
+              ></Box>
+              <Text fontWeight="400" fontSize={"13px"}>
+                {status}
+              </Text>
+            </HStack>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {testId}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {testName}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {amount?.toLocaleString()}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {quantity?.toLocaleString()}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {total?.toLocaleString()}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {date}
+            </Text>
+          </Td>
+          <Td>
+            <Menu isLazy>
+              <MenuButton as={Box}>
+                <Flex justifyContent="center" color="#000000" fontSize="16px">
+                  <BsThreeDots />
+                </Flex>
+              </MenuButton>
+              <MenuList>
+               
+                  <MenuItem
+                    onClick={onClick}
+                    textTransform="capitalize"
+                    fontWeight={"500"}
+                    color="#2F2F2F"
+                    _hover={{
+                      color: "#fff",
+                      fontWeight: "400",
+                      bg: "blue.blue500",
+                    }}
+                  >
+                    <HStack fontSize="14px">
+                      <Text>Authorize</Text>
+                    </HStack>
+                  </MenuItem>
+             
+
+                {status === "paid" && (
+                  <MenuItem
+                    onClick={onPrint}
+                    textTransform="capitalize"
+                    fontWeight={"500"}
+                    color="#2F2F2F"
+                    _hover={{
+                      color: "#fff",
+                      fontWeight: "400",
+                      bg: "blue.blue500",
+                    }}
+                  >
+                    <HStack fontSize="14px">
+                      <Text>Print Receipt</Text>
+                    </HStack>
+                  </MenuItem>
+                )}
+              </MenuList>
+            </Menu>
+          </Td>
+        </>
+      )}
       {type === "payment-group" && (
         <>
           <Td>
@@ -627,6 +788,80 @@ export default function TableRow({
         </>
       )}
 
+      {(type === "radiology-insurance" ||
+        type === "procedure-insurance" ||
+        type === "pharmacy-insurance" ||
+        type === "lab-insurance" ||
+        type === "histopathology-insurance") && (
+        <>
+          <Td>
+            <HStack cursor={"pointer"}>
+              <Avatar
+                name={name}
+                size="sm"
+                src="https://bit.ly/tioluwani-kolawole"
+              />
+              <Box>
+                <Text color={"#101828"} fontWeight={"500"} fontSize={"13px"}>
+                  {name}
+                </Text>
+              </Box>
+            </HStack>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {mrn}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {phone}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {hmo}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {total?.toLocaleString()}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {date}
+            </Text>
+          </Td>
+          <Td>
+            <Menu isLazy>
+              <MenuButton as={Box}>
+                <Flex justifyContent="center" color="#000000" fontSize="16px">
+                  <BsThreeDots />
+                </Flex>
+              </MenuButton>
+              <MenuList>
+                <MenuItem
+                  onClick={onClick}
+                  textTransform="capitalize"
+                  fontWeight={"500"}
+                  color="#2F2F2F"
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                >
+                  <HStack fontSize="14px">
+                    <Text>View More</Text>
+                  </HStack>
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          </Td>
+        </>
+      )}
+
       {type === "billing-history" && (
         <>
           <Td>
@@ -677,7 +912,7 @@ export default function TableRow({
                 }
               ></Box>
               <Text fontWeight="400" fontSize={"13px"}>
-                {status}
+                {status} 
               </Text>
             </HStack>
           </Td>
@@ -1417,46 +1652,68 @@ export default function TableRow({
                     Confirm
                   </MenuItem>
                 ) : labStatus === "scheduled" ? (
+                  <MenuItem
+                    onClick={onClick}
+                    textTransform="capitalize"
+                    fontWeight={"500"}
+                    color="#2F2F2F"
+                    _hover={{
+                      color: "#fff",
+                      fontWeight: "400",
+                      bg: "blue.blue500",
+                    }}
+                  >
+                    Process
+                  </MenuItem>
+                ) : labStatus === "processed" ? (
                   <>
-                    <MenuItem
-                      onClick={() => onSortToHematology?.(_id)}
-                      textTransform="capitalize"
-                      fontWeight={"500"}
-                      color="#2F2F2F"
-                      _hover={{
-                        color: "#fff",
-                        fontWeight: "400",
-                        bg: "blue.blue500",
-                      }}
-                    >
-                      Send to Hematology
-                    </MenuItem>
-                    <MenuItem
-                      onClick={() => onSortToChemicalPathology?.(_id)}
-                      textTransform="capitalize"
-                      fontWeight={"500"}
-                      color="#2F2F2F"
-                      _hover={{
-                        color: "#fff",
-                        fontWeight: "400",
-                        bg: "blue.blue500",
-                      }}
-                    >
-                      Send to Chemical Pathology
-                    </MenuItem>
-                    <MenuItem
-                      onClick={onClick}
-                      textTransform="capitalize"
-                      fontWeight={"500"}
-                      color="#2F2F2F"
-                      _hover={{
-                        color: "#fff",
-                        fontWeight: "400",
-                        bg: "blue.blue500",
-                      }}
-                    >
-                      Process
-                    </MenuItem>
+                    {isChemical && (
+                      <MenuItem
+                        onClick={() => onProcessChemicalPathology?.(_id, report)}
+                        textTransform="capitalize"
+                        fontWeight="500"
+                        color="#2F2F2F"
+                        _hover={{
+                          color: "#fff",
+                          fontWeight: "400",
+                          bg: "blue.blue500",
+                        }}
+                      >
+                        Process Chemical Pathology Report
+                      </MenuItem>
+                    )}
+                    {isHematology && (
+                      <>
+                        <MenuItem
+                          onClick={() =>
+                            onProcessPeripheralBlood?.(_id, "marrow")
+                          }
+                          textTransform="capitalize"
+                          fontWeight="500"
+                          color="#2F2F2F"
+                          _hover={{
+                            color: "#fff",
+                            fontWeight: "400",
+                            bg: "blue.blue500",
+                          }}
+                        >
+                          Process ADH Bone Marrow Aspiration Report
+                        </MenuItem>
+                        <MenuItem
+                          onClick={() => onProcessHematology?.(_id, report)}
+                          textTransform="capitalize"
+                          fontWeight="500"
+                          color="#2F2F2F"
+                          _hover={{
+                            color: "#fff",
+                            fontWeight: "400",
+                            bg: "blue.blue500",
+                          }}
+                        >
+                          Process Peripheral Blood Film Report
+                        </MenuItem>
+                      </>
+                    )}
                   </>
                 ) : (
                   <MenuItem
@@ -2133,6 +2390,11 @@ export default function TableRow({
           </Td>
           <Td>
             <Text fontWeight="400" fontSize="12px">
+              {bedFee}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
               {date}
             </Text>
           </Td>
@@ -2193,16 +2455,18 @@ export default function TableRow({
                 >
                   Discharge
                 </MenuItem>
-                <MenuItem
-                  _hover={{
-                    color: "#fff",
-                    fontWeight: "400",
-                    bg: "blue.blue500",
-                  }}
-                  onClick={onBedFee}
-                >
-                  Bed Fee
-                </MenuItem>
+                {!bedFee && (
+                  <MenuItem
+                    _hover={{
+                      color: "#fff",
+                      fontWeight: "400",
+                      bg: "blue.blue500",
+                    }}
+                    onClick={onBedFee}
+                  >
+                    Bed Fee
+                  </MenuItem>
+                )}
               </MenuList>
             </Menu>
           </Td>
@@ -3477,6 +3741,128 @@ export default function TableRow({
           </Td>
         </>
       )}
+      {type === "processed-lab" && (
+        <>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {testid}
+            </Text>
+          </Td>
+          <Td>
+            <HStack>
+              <Avatar size="sm" name={name} />
+              <Box>
+                <Text color="#101828" fontWeight="500" fontSize="13px">
+                  {name}
+                </Text>
+                <Text color="#667085" fontWeight="400" fontSize="11px">
+                  MRN ~ {mrn}
+                </Text>
+              </Box>
+            </HStack>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {department}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {testName}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {date}
+            </Text>
+          </Td>
+          <Td>
+            <HStack
+              color={
+                labStatus === "complete"
+                  ? "#027A48"
+                  : labStatus === "hemathologyscheduled" ||
+                    labStatus === "chemicalpathologyscheduled"
+                  ? "#FFA30C"
+                  : labStatus === "hemathologyprocessed" ||
+                    labStatus === "chemicalpathologyprocessed" ||
+                    labStatus === "hemathologychemicalpathologyprocessed"
+                  ? "#027A48"
+                  : "#FF0000"
+              }
+            >
+              <Box
+                rounded="100%"
+                w="8px"
+                h="8px"
+                bg={
+                  labStatus === "complete"
+                    ? "#027A48"
+                    : labStatus === "hemathologyscheduled" ||
+                      labStatus === "chemicalpathologyscheduled"
+                    ? "#FFA30C"
+                    : labStatus === "hemathologyprocessed" ||
+                      labStatus === "chemicalpathologyprocessed" ||
+                      labStatus === "hemathologychemicalpathologyprocessed"
+                    ? "#027A48"
+                    : "#FF0000"
+                }
+              />
+              <Text fontWeight="400" fontSize="13px">
+                {labStatus}
+              </Text>
+            </HStack>
+          </Td>
+          <Td>
+            <Menu>
+              <MenuButton as={Box}>
+                <BsThreeDots />
+              </MenuButton>
+              <MenuList>
+                <MenuItem
+                  onClick={() => onProcessChemicalPathology?.(_id, report)}
+                  textTransform="capitalize"
+                  fontWeight="500"
+                  color="#2F2F2F"
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                >
+                  Process Chemical Pathology Report
+                </MenuItem>
+                <MenuItem
+                      onClick={() => onProcessPeripheralBlood?.(_id, "marrow")}
+                  textTransform="capitalize"
+                  fontWeight="500"
+                  color="#2F2F2F"
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                >
+                  Process ADH Bone Marrow Aspiration Report
+                </MenuItem>
+                <MenuItem
+                  onClick={() => onProcessHematology?.(_id, report)}
+                  textTransform="capitalize"
+                  fontWeight="500"
+                  color="#2F2F2F"
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                >
+                  Process Peripheral Blood Film Report
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          </Td>
+        </>
+      )}
       {type === "pathology" && (
         <>
           <Td>
@@ -3554,33 +3940,18 @@ export default function TableRow({
               labStatus === "chemicalpathologyprocessed" ||
               labStatus === "hemathologyscheduled" ||
               labStatus === "hemathologyprocessed" ||
+              labStatus === "processed" ||
               labStatus === "hemathologychemicalpathologyprocessed") && (
               <Menu>
                 <MenuButton as={Box}>
                   <BsThreeDots />
                 </MenuButton>
                 <MenuList>
-                  {labStatus === "chemicalpathologyscheduled" && (
+                  {isChemical && (
                     <MenuItem
-                      onClick={() => onProcessChemicalPathology?.(_id)}
+                      onClick={() => onView("chemical", report)}
                       textTransform="capitalize"
-                      fontWeight="500"
-                      color="#2F2F2F"
-                      _hover={{
-                        color: "#fff",
-                        fontWeight: "400",
-                        bg: "blue.blue500",
-                      }}
-                    >
-                      Process Chemical Pathology Report
-                    </MenuItem>
-                  )}
-                  {(labStatus === "chemicalpathologyprocessed" ||
-                    labStatus === "hemathologychemicalpathologyprocessed") && (
-                    <MenuItem
-                      onClick={() => onViewChemicalReport(_id, report)}
-                      textTransform="capitalize"
-                      fontWeight="500"
+                      fontWeight={"500"}
                       color="#2F2F2F"
                       _hover={{
                         color: "#fff",
@@ -3591,44 +3962,12 @@ export default function TableRow({
                       View Chemical Pathology Report
                     </MenuItem>
                   )}
-                  {labStatus === "hemathologyscheduled" && (
-                    <>
-                      <MenuItem
-                        onClick={() =>
-                          onProcessPeripheralBlood?.(_id, "marrow")
-                        }
-                        textTransform="capitalize"
-                        fontWeight="500"
-                        color="#2F2F2F"
-                        _hover={{
-                          color: "#fff",
-                          fontWeight: "400",
-                          bg: "blue.blue500",
-                        }}
-                      >
-                        Process ADH Bone Marrow Aspiration Report
-                      </MenuItem>
-                      <MenuItem
-                        onClick={() => onProcessHematology?.(_id)}
-                        textTransform="capitalize"
-                        fontWeight="500"
-                        color="#2F2F2F"
-                        _hover={{
-                          color: "#fff",
-                          fontWeight: "400",
-                          bg: "blue.blue500",
-                        }}
-                      >
-                        Process Peripheral Blood Film Report
-                      </MenuItem>
-                    </>
-                  )}
-                  {labStatus === "hemathologyprocessed" && (
+                  {isHematology && (
                     <>
                       <MenuItem
                         onClick={() => onView("boneMarrow", report)}
                         textTransform="capitalize"
-                        fontWeight="500"
+                        fontWeight={"500"}
                         color="#2F2F2F"
                         _hover={{
                           color: "#fff",
@@ -3641,7 +3980,7 @@ export default function TableRow({
                       <MenuItem
                         onClick={() => onView("peripheral", report)}
                         textTransform="capitalize"
-                        fontWeight="500"
+                        fontWeight={"500"}
                         color="#2F2F2F"
                         _hover={{
                           color: "#fff",
@@ -3650,42 +3989,101 @@ export default function TableRow({
                         }}
                       >
                         View Peripheral Blood Film Report
-                      </MenuItem>
-                    </>
-                  )}
-                  {labStatus === "hemathologychemicalpathologyprocessed" && (
-                    <>
-                      <MenuItem
-                        onClick={() => onView("peripheral", report)}
-                        textTransform="capitalize"
-                        fontWeight="500"
-                        color="#2F2F2F"
-                        _hover={{
-                          color: "#fff",
-                          fontWeight: "400",
-                          bg: "blue.blue500",
-                        }}
-                      >
-                        View Peripheral Blood Film Report
-                      </MenuItem>
-                      <MenuItem
-                        onClick={() => onView("chemical", report)}
-                        textTransform="capitalize"
-                        fontWeight="500"
-                        color="#2F2F2F"
-                        _hover={{
-                          color: "#fff",
-                          fontWeight: "400",
-                          bg: "blue.blue500",
-                        }}
-                      >
-                        View Chemical Pathology Report
                       </MenuItem>
                     </>
                   )}
                 </MenuList>
               </Menu>
             )}
+          </Td>
+        </>
+      )}
+
+      {type === "claim" && (
+        <>
+          <Td>
+            <HStack>
+              <Avatar size="sm" name={name} />
+              <Box>
+                <Text color="#101828" fontWeight="500" fontSize="13px">
+                  {name}
+                </Text>
+                <Text color="#667085" fontWeight="400" fontSize="11px">
+                  MRN ~ {mrn}
+                </Text>
+              </Box>
+            </HStack>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {hmo}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {serviceCategory}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {amountClaimed}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {amountApproved}
+            </Text>
+          </Td>
+          <Td>
+            <HStack
+              color={
+                status === "Paid"
+                  ? "#027A48"
+                  : status === "Submitted"
+                  ? "#FFA30C"
+                  : "#FD4739"
+              }
+            >
+              <Box
+                rounded="100%"
+                w="8px"
+                h="8px"
+                bg={
+                  status === "Paid"
+                    ? "#027A48"
+                    : status === "Submitted"
+                    ? "#FFA30C"
+                    : "#FD4739"
+                }
+              ></Box>
+              <Text fontWeight="400" fontSize={"13px"}>
+                {status}
+              </Text>
+            </HStack>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {date}
+            </Text>
+          </Td>
+          <Td>
+            <Menu>
+              <MenuButton as={Box}>
+                <BsThreeDots />
+              </MenuButton>
+              <MenuList>
+                <MenuItem
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                  onClick={onClick}
+                >
+                 Update Claim Status
+                </MenuItem>
+              </MenuList>
+            </Menu>
           </Td>
         </>
       )}

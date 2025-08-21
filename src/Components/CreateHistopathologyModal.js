@@ -37,8 +37,11 @@ export default function CreateHistopathologyModal({
   isOpen,
   onClose,
   activateNotifications,
+  oldPayload,
   onSuccess,
 }) {
+
+  console.log("oldPayload", oldPayload)
   const [loading, setLoading] = useState(false);
   const [Settings, setSettings] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
@@ -47,16 +50,19 @@ export default function CreateHistopathologyModal({
   const [doctors, setDoctors] = useState([]);
 
   const initialPayload = {
-    patientId: "",
+    patientId: oldPayload?._id || "",
     examTypes: [],
     doctorId: "",
     lmp: "",
     biopsyType: "",
     wholeOrgan: "",
+    imageBase64: "",
     previousBiopsy: false,
     
     
   };
+
+  console.log("Initial Payload:", initialPayload);
 
   const [payload, setPayload] = useState(initialPayload);
   const [searchMRN, setSearchMRN] = useState("");
@@ -222,7 +228,7 @@ export default function CreateHistopathologyModal({
       }));
     }
   };
-
+  
   useEffect(() => {
     if (!isOpen) {
       setPayload(initialPayload);
@@ -247,16 +253,21 @@ export default function CreateHistopathologyModal({
           <ModalCloseButton />
           <ModalBody>
             {/* Patient Search Section */}
+             {
+                !oldPayload && (
             <Box mb={4}>
               <Text mb={2} fontWeight="medium">Patient</Text>
               <Box position="relative">
-                <Input
+             
+
+                   <Input
                   label="Search for Patient"
                   placeholder="Enter MRN, first name, or last name"
                   value={searchMRN}
                   onChange={handleSearchInputChange}
                   leftIcon={<FiSearch size={16} color="blue.500" />}
                 />
+            
                 
                 {/* Selected Patient Display */}
                 {selectedPatientInfo && (
@@ -328,6 +339,9 @@ export default function CreateHistopathologyModal({
                 )}
               </Box>
             </Box>
+                )
+              }
+               
 
             <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={4} mt={4}>
               <Box>

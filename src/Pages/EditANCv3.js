@@ -3,43 +3,45 @@ import React, { useEffect, useState } from 'react'
 import MainLayout from "../Layouts/Index";
 import Seo from "../Utils/Seo";
 import Button from "../Components/Button";
+import DatePickerComponent from '../Components/DatePicker';
+import { format } from 'date-fns';
 import Input from "../Components/Input";
 import TextArea from "../Components/TextArea";
 import ShowToast from "../Components/ToastNotification";
-import ANC from "./ANC";
-import PastObstetricHistoryModal from "../Components/PastObstetricHistoryModal";
+import ANC3 from "./ANC3";
+import PreviousPregnancyModal from "../Components/PreviousPregnancyModal";
 import GeneralMedicalHistoryModalv2 from "../Components/GeneralMedicalHistoryModalv2";
 import PreviewANC from "../Components/PreviewANC";
 import { useNavigate } from 'react-router-dom';
 import { IoMdArrowRoundBack } from "react-icons/io";
-import {
-    Accordion,
-    AccordionItem,
-    AccordionButton,
-    AccordionPanel,
-    AccordionIcon, RadioGroup, Radio
-} from '@chakra-ui/react'
+import { RadioGroup, Radio } from '@chakra-ui/react'
 import { SettingsApi, EditAncV3API } from "../Utils/ApiCalls";
 import { FaNoteSticky } from "react-icons/fa6";
 import { IoIosCloseCircle } from "react-icons/io";
 import { MdDateRange } from "react-icons/md";
 import { useParams } from 'react-router-dom';
+import PatientInfoCard from '../Components/PatientInfoCard';
+import AdmissionModal from "../Components/AdmissionModal";
+import RadiologyOrderRequestModal from "../Components/RadiologyOrderRequestModal";
+import CreateProcedureModal from "../Components/CreateProcedureModal";
+import CreateReferralModal from "../Components/CreateReferralModal";
+import LabRequestModal from "../Components/LabRequestModal";
+import CreatePrescriptionModal from "../Components/CreatePrescriptionModal";
 
 export default function EditANCv3() {
     const { id } = useParams()
     const [Settings, setSettings] = useState({});
+    const [OpenLabModal, setOpenLabModal] = useState(false);
+    const [OpenPrescriptionModal, setOpenPrescriptionModal] = useState(false);
+    const [OpenRadiologyModal, setOpenRadiologyModal] = useState(false);
+    const [OpenProcedureModal, setOpenProcedureModal] = useState(false);
+    const [OpenReferralModal, setOpenReferralModal] = useState(false);
+    const [OpenAdmissionModal, setOpenAdmissionModal] = useState(false);
     const [OpenObstetricHistoryModal, setOpenObstetricHistoryModal] = useState(false);
     const [OpenGeneralMedicalHistoryModal, setOpenGeneralMedicalHistoryModal] = useState(false);
     const [OpenPreview, setOpenPreview] = useState(false);
-    const [Complaints, setComplaints] = useState([]);
-    const [HistoryComplaints, setHistoryComplaints] = useState([]);
-    const [HistoryIndexPreg, setHistoryIndexPreg] = useState([]);
-    const [GyneHistory, setGyneHistory] = useState([]);
-    const [PastSurgicalHistory, setPastSurgicalHistory] = useState([]);
-    const [DrugHistory, setDrugHistory] = useState([]);
-    const [FamilySocialHistory, setFamilySocialHistory] = useState([]);
-    const [SystematicReview, setSystematicReview] = useState([]);
-    const [Summary, setSummary] = useState([]);
+    const [PostMedicalHistory, setPostMedicalHistory] = useState([]);
+    const [HistoryPresentPregnancy, setHistoryPresentPregnancy] = useState([]);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [ModalState, setModalState] = useState("");
     const [Disabled, setDisabled] = useState(true);
@@ -48,25 +50,39 @@ export default function EditANCv3() {
 
     const [Payload, setPayload] = useState({
         lmp: "",
-        cycle: "",
         edd: "",
-        gravidity: "",
         ega: "",
-        lcb: "",
-        bookingstatus: "",
+        gravida: "",
+        cycle: "",
+        breasts: "",
+        height: "",
+        weight: "",
+        cvs: "",
+        rs: "",
+        pelvis: "",
+        abdomen: "",
+        retroviral: "",
+        bp: "",
+        urine: "",
+        hb: "",
+        bloodGroup: "",
+        groupRh: "",
+        genotype: "",
+        VDRL: "",
+        others: "",
+        comments: "",
+        bleeding: "",
+        discharge: "",
+        swellingAnkles: "",
+        urinarySymptoms: "",
+        bookingDate: "",
+        indication: "",
+        specialPoint: "",
+        para: "",
+        consultant: "",
     })
 
     const OldPayload = JSON.parse(localStorage.getItem("ANCv3"))
-
-    const [RadioGroups, setRadioGroups] = useState({
-        pregnacylosses: ""
-    });
-
-    const handleRadioChange = (value, radioGroup) => {
-        setRadioGroups((prevRadioGroup) => ({
-            ...prevRadioGroup, [radioGroup]: value
-        }))
-    }
 
     const handleSuccess = (message, status) => {
         setShowToast({ show: true, message, status });
@@ -76,44 +92,31 @@ export default function EditANCv3() {
     };
 
     const handlePayload = (e) => {
-        setPayload({ ...Payload, [e.target.id]: e.target.value })
+        const { id, value } = e.target;
+        setPayload({ ...Payload, [id]: value });
     }
 
-    const addPresentingComplaints = () => {
-        setComplaints([...Complaints, Payload.presentingcomplaints])
-        setPayload({ ...Payload, presentingcomplaints: "" })
+    const handleDateChange = (date, id) => {
+        if (!date) {
+            if (id === 'lmp') {
+                setPayload({ ...Payload, lmp: '', edd: '' });
+            } else {
+                setPayload({ ...Payload, [id]: '' });
+            }
+            return;
+        }
+
+        const formattedDate = format(date, 'dd/MM/yyyy');
+        setPayload({ ...Payload, [id]: formattedDate });
+    };
+
+    const addPostMedicalHistory = () => {
+        setPostMedicalHistory([...PostMedicalHistory, Payload.postmedicalorsurgicalhistory])
+        setPayload({ ...Payload, postmedicalorsurgicalhistory: "" })
     }
-    const addHistoryPresentingComplaints = () => {
-        setHistoryComplaints([...HistoryComplaints, Payload.historyofpresentingcomplaints])
-        setPayload({ ...Payload, historyofpresentingcomplaints: "" })
-    }
-    const addHistoryIndexPregnancy = () => {
-        setHistoryIndexPreg([...HistoryIndexPreg, Payload.historyofindexpregnancy])
-        setPayload({ ...Payload, historyofindexpregnancy: "" })
-    }
-    const addGyneHistory = () => {
-        setGyneHistory([...GyneHistory, Payload.gynaehistory])
-        setPayload({ ...Payload, gynaehistory: "" })
-    }
-    const addPastSurgicalHistory = () => {
-        setPastSurgicalHistory([...PastSurgicalHistory, Payload.passsurgicalhistory])
-        setPayload({ ...Payload, passsurgicalhistory: "" })
-    }
-    const addDrugHistory = () => {
-        setDrugHistory([...DrugHistory, Payload.drughistory])
-        setPayload({ ...Payload, drughistory: "" })
-    }
-    const addFamilySocialHistory = () => {
-        setFamilySocialHistory([...FamilySocialHistory, Payload.familyandsocialhistory])
-        setPayload({ ...Payload, familyandsocialhistory: "" })
-    }
-    const addSystematicReview = () => {
-        setSystematicReview([...SystematicReview, Payload.systematicreview])
-        setPayload({ ...Payload, systematicreview: "" })
-    }
-    const addSummary = () => {
-        setSummary([...Summary, Payload.summary])
-        setPayload({ ...Payload, summary: "" })
+    const addHistoryPresentPregnancy = () => {
+        setHistoryPresentPregnancy([...HistoryPresentPregnancy, Payload.historyofpresentpregnancy])
+        setPayload({ ...Payload, historyofpresentpregnancy: "" })
     }
 
     const getSettings = async () => {
@@ -126,41 +129,13 @@ export default function EditANCv3() {
         }
     };
 
-    const removeComplaint = (item) => {
-        const updatedComplaints = Complaints.filter(id => id !== item);
-        setComplaints(updatedComplaints);
+    const removePostMedicalHistory = (item) => {
+        const updatedPostMedicalHistory = PostMedicalHistory.filter(id => id !== item);
+        setPostMedicalHistory(updatedPostMedicalHistory);
     }
-    const removeHistoryComplaint = (item) => {
-        const updatedItems = HistoryComplaints.filter(id => id !== item);
-        setHistoryComplaints(updatedItems);
-    }
-    const removeHistoryIndexPreg = (item) => {
-        const updatedItems = HistoryIndexPreg.filter(id => id !== item);
-        setHistoryIndexPreg(updatedItems);
-    }
-    const removeGyneHistory = (item) => {
-        const updatedItems = GyneHistory.filter(id => id !== item);
-        setGyneHistory(updatedItems);
-    }
-    const removePastSurgicalHistory = (item) => {
-        const updatedItems = PastSurgicalHistory.filter(id => id !== item);
-        setPastSurgicalHistory(updatedItems);
-    }
-    const removeDrugHistory = (item) => {
-        const updatedItems = DrugHistory.filter(id => id !== item);
-        setDrugHistory(updatedItems);
-    }
-    const removeFamilySocialHistory = (item) => {
-        const updatedItems = FamilySocialHistory.filter(id => id !== item);
-        setFamilySocialHistory(updatedItems);
-    }
-    const removeSystematicReview = (item) => {
-        const updatedItems = SystematicReview.filter(id => id !== item);
-        setSystematicReview(updatedItems);
-    }
-    const removeSummary = (item) => {
-        const updatedItems = Summary.filter(id => id !== item);
-        setSummary(updatedItems);
+    const removeHistoryPresentPregnancy = (item) => {
+        const updatedItems = HistoryPresentPregnancy.filter(id => id !== item);
+        setHistoryPresentPregnancy(updatedItems);
     }
 
     const [showToast, setShowToast] = useState({
@@ -190,15 +165,8 @@ export default function EditANCv3() {
         try {
             const result = await EditAncV3API({
                 ...Payload,
-                presentingcomplaints: Complaints,
-                historyofpresentingcomplaints: HistoryComplaints,
-                historyofindexpregnancy: HistoryIndexPreg,
-                gynaehistory: GyneHistory,
-                passsurgicalhistory: PastSurgicalHistory,
-                drughistory: DrugHistory,
-                familyandsocialhistory: FamilySocialHistory,
-                systematicreview: SystematicReview,
-                summary: Summary,
+                postmedicalorsurgicalhistory: PostMedicalHistory,
+                historyofpresentpregnancy: HistoryPresentPregnancy,
             }, OldPayload?._id);
 
             if (result.status === 200) {
@@ -217,28 +185,91 @@ export default function EditANCv3() {
     }
 
     useEffect(() => {
+        // Map old payload structure to new structure
         setPayload({
-            lmp: OldPayload?.lmp || "",
-            cycle: OldPayload?.cycle || "",
-            edd: OldPayload?.edd || "",
-            gravidity: OldPayload?.gravidity || "",
-            ega: OldPayload?.ega || "",
-            lcb: OldPayload?.lcb || "",
-            bookingstatus: OldPayload?.bookingstatus || "",
+            abdomen: OldPayload?.generalexamination?.abdomen || "",
+            VDRL: OldPayload?.generalexamination?.VDRL || "",
+            bp: OldPayload?.generalexamination?.bp || "",
+            cycle: OldPayload?.generalexamination?.cycle || "",
+            groupRh: OldPayload?.generalexamination?.groupRh || "",
+            genotype: OldPayload?.generalexamination?.genotype || "",
+            bloodGroup: OldPayload?.generalexamination?.bloodGroup || "",
+            hb: OldPayload?.generalexamination?.hb || "",
+            others: OldPayload?.generalexamination?.others || "",
+            retroviral: OldPayload?.generalexamination?.retroviral || "",
+            urine: OldPayload?.generalexamination?.urine || "",
+            breasts: OldPayload?.generalexamination?.breasts || "",
+            height: OldPayload?.generalexamination?.height || "",
+            weight: OldPayload?.generalexamination?.weight || "",
+            rs: OldPayload?.generalexamination?.rs || "",
+            pelvis: OldPayload?.generalexamination?.pelvis || "",
+            comments: OldPayload?.generalexamination?.comments || "",
+            cvs: OldPayload?.generalexamination?.cvs || "",
+
+            lmp: OldPayload?.bookingInformation?.lmp || OldPayload?.lmp || "",
+            edd: OldPayload?.bookingInformation?.edd || OldPayload?.edd || "",
+            ega: OldPayload?.bookingInformation?.ega || OldPayload?.ega || "",
+            gravida: OldPayload?.bookingInformation?.gravida || OldPayload?.gravidity || OldPayload?.gravida || "",
+            bleeding: OldPayload?.presentPregnancy?.bleeding || OldPayload?.bleeding || "",
+            discharge: OldPayload?.presentPregnancy?.discharge || OldPayload?.discharge || "",
+            swellingAnkles: OldPayload?.presentPregnancy?.swellingAnkles || OldPayload?.swellingAnkles || "",
+            urinarySymptoms: OldPayload?.presentPregnancy?.urinarySymptoms || OldPayload?.urinarySymptoms || "",
+            bookingDate: OldPayload?.bookingInformation?.bookingDate || OldPayload?.bookingDate || "",
+            indication: OldPayload?.bookingInformation?.indication || OldPayload?.indication || "",
+            specialPoint: OldPayload?.bookingInformation?.specialPoint || OldPayload?.specialPoint || "",
+            para: OldPayload?.para || "",
+            consultant: OldPayload?.bookingInformation?.consultant || OldPayload?.consultant || "",
         })
 
-        setComplaints(OldPayload?.presentingcomplaints || [])
-        setHistoryComplaints(OldPayload?.historyofpresentingcomplaints || [])
-        setHistoryIndexPreg(OldPayload?.historyofindexpregnancy || [])
-        setGyneHistory(OldPayload?.gynaehistory || [])
-        setPastSurgicalHistory(OldPayload?.passsurgicalhistory || [])
-        setDrugHistory(OldPayload?.drughistory || [])
-        setFamilySocialHistory(OldPayload?.familyandsocialhistory || [])
-        setSystematicReview(OldPayload?.systematicreview || [])
-        setSummary(OldPayload?.summary || [])
+        // Map old array data to new structure
+        setPostMedicalHistory(OldPayload?.postmedicalorsurgicalhistory || OldPayload?.passsurgicalhistory || [])
+        setHistoryPresentPregnancy(OldPayload?.historyofpresentpregnancy || OldPayload?.historyofpresentingcomplaints || [])
 
         getSettings();
     }, []);
+
+    useEffect(() => {
+        if (Object.values(Payload).some(value => value !== null && value !== "")) {
+            setDisabled(false)
+        } else {
+            setDisabled(true)
+        }
+    }, [Payload]);
+
+    useEffect(() => {
+        if (Payload.lmp) {
+            const [day, month, year] = Payload.lmp.split('/');
+            if (!day || !month || !year) return;
+            const lmpDate = new Date(`${year}-${month}-${day}`);
+            if (isNaN(lmpDate)) return;
+
+            lmpDate.setMonth(lmpDate.getMonth() + 9);
+            lmpDate.setDate(lmpDate.getDate() + 7);
+            const eddDate = format(lmpDate, 'dd/MM/yyyy');
+            setPayload(prev => ({ ...prev, edd: eddDate }));
+        } else {
+            setPayload(prev => ({ ...prev, edd: '' }));
+        }
+    }, [Payload.lmp]);
+
+    useEffect(() => {
+        if (Payload.lmp) {
+            const [day, month, year] = Payload.lmp.split('/');
+            if (!day || !month || !year) return;
+            const lmpDate = new Date(`${year}-${month}-${day}`);
+            if (isNaN(lmpDate)) return;
+
+            const today = new Date();
+
+            const monthDiff = today.getMonth() - lmpDate.getMonth() + (12 * (today.getFullYear() - lmpDate.getFullYear()));
+
+            const egaInMonths = monthDiff < 0 ? 0 : monthDiff;
+
+            setPayload(prev => ({ ...prev, ega: `${egaInMonths} month(s)` }));
+        } else {
+            setPayload(prev => ({ ...prev, ega: '' }));
+        }
+    }, [Payload.lmp]);
 
     const nav = useNavigate()
 
@@ -253,391 +284,242 @@ export default function EditANCv3() {
             <Box>
                 <Button leftIcon={<IoMdArrowRoundBack />} px="40px" w="100px" onClick={() => nav(`${pathname}`)}>Back</Button>
 
-                <Accordion defaultIndex={[2]} mt="32px" allowToggle>
-                    <AccordionItem mb="15px" >
-                        <AccordionButton _hover={{ border: "1px solid #EA5937", color: "#000" }} _focus={{ outline: "none" }} border="1px solid #fff" _expanded={{ rounded: "8px 8px 0px 0px", border: 0 }} bg="#fff" color="#000" rounded="8px">
-                            <Box as='span' flex='1' textAlign='left'>
-                                Previous ANC
-                            </Box>
-                            <AccordionIcon />
-                        </AccordionButton>
+                <PatientInfoCard />
 
-                        <AccordionPanel pb={4} bg="#fff" rounded="0px 0px 8px 8px" >
-                            <ANC hide={true} />
-                        </AccordionPanel>
-                    </AccordionItem>
-                    <AccordionItem mb="15px">
-                        <AccordionButton _hover={{ border: "1px solid #EA5937", color: "#000" }} _focus={{ outline: "none" }} border="1px solid #fff" _expanded={{ rounded: "8px 8px 0px 0px", border: 0 }} bg="#fff" color="#000" rounded="8px">
-                            <Box as='span' flex='1' textAlign='left'>
-                                Reproductive Profile
-                            </Box>
-                            <AccordionIcon />
-                        </AccordionButton>
+                <Stack spacing={5} mt="32px">
+                    {/* Previous ANC Section */}
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
+                        <Text fontSize="xl" fontWeight="bold" mb={4}>Previous ANC</Text>
+                        <ANC3 hide={true} />
+                    </Box>
 
-                        <AccordionPanel pb={4} bg="#fff" rounded="0px 0px 8px 8px">
-                            <Stack spacing={4}>
-                                <Select fontSize={Payload.bookingstatus !== "" ? "16px" : "13px"}
-                                    h="45px"
-                                    borderWidth="2px"
-                                    borderColor="#6B7280"
-                                    id="bookingstatus"
-                                    value={Payload.bookingstatus}
-                                    onChange={handlePayload}
-                                    placeholder="Select Booking Status"
-                                >
-                                    {
-                                        Settings?.bookingstatus?.map((item, i) => (
-                                            <option value={`${item}`} key={i}>{item}</option>
-                                        ))
-                                    }
-                                </Select>
+                    {/* General Examination Section */}
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
+                        <Text fontSize="xl" fontWeight="bold" mb={4}>General Examination</Text>
+                        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
+                            <Input leftIcon={<FaNoteSticky />} label="Cycle" value={Payload.cycle} val={Payload.cycle !=="" ? true: false} onChange={handlePayload} id="cycle" />
+                            <Input leftIcon={<FaNoteSticky />} label="Breasts" value={Payload.breasts} val={Payload.breasts !== "" ? true: false} onChange={handlePayload} id="breasts" />
+                            <Input leftIcon={<FaNoteSticky />} label="Height" value={Payload.height} val={Payload.height !== "" ? true: false} onChange={handlePayload} id="height" />
+                            <Input leftIcon={<FaNoteSticky />} label="weight" value={Payload.weight} val={Payload.weight !== "" ? true: false} onChange={handlePayload} id="weight" />
+                            <Input leftIcon={<FaNoteSticky />} label="CVS" value={Payload.cvs} val={Payload.cvs !== "" ? true: false} onChange={handlePayload} id="cvs" />
+                            <Input leftIcon={<FaNoteSticky />} label="RS" value={Payload.rs} val={Payload.rs !== "" ? true: false} onChange={handlePayload} id="rs" />
+                            <Input leftIcon={<FaNoteSticky />} label="Pelvis" value={Payload.pelvis} val={Payload.pelvis !== "" ? true: false} onChange={handlePayload} id="pelvis" />
+                            <Input leftIcon={<FaNoteSticky />} label="Abdomen" value={Payload.abdomen} val={Payload.abdomen !== "" ? true: false} onChange={handlePayload} id="abdomen" />
+                            <Input leftIcon={<FaNoteSticky />} label="Retroviral" value={Payload.retroviral} val={Payload.retroviral !== "" ? true: false} onChange={handlePayload} id="retroviral" />
+                            <Input leftIcon={<FaNoteSticky />} label="bp" value={Payload.bp} val={Payload.bp !== "" ? true: false} onChange={handlePayload} id="bp" />
+                            <Input leftIcon={<FaNoteSticky />} label="urine" value={Payload.urine} val={Payload.urine !== "" ? true: false} onChange={handlePayload} id="urine" />
+                            <Input leftIcon={<FaNoteSticky />} label="hb" value={Payload.hb} val={Payload.hb !== "" ? true: false} onChange={handlePayload} id="hb" />
+                            <Select placeholder="Select Blood Group" value={Payload.bloodGroup} onChange={handlePayload} id="bloodGroup">
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                            </Select>
+                            <Select placeholder="Select Group RH" value={Payload.groupRh} onChange={handlePayload} id="groupRh">
+                                <option value="A+">A+ (A positive)</option>
+                                <option value="A-">A− (A negative)</option>
+                                <option value="B+">B+ (B positive)</option>
+                                <option value="B-">B− (B negative)</option>
+                                <option value="AB+">AB+ (AB positive)</option>
+                                <option value="AB-">AB− (AB negative)</option>
+                                <option value="O+">O+ (O positive)</option>
+                                <option value="O-">O− (O negative)</option>
+                            </Select>
+                            <Select placeholder="Select genotype" value={Payload.genotype} onChange={handlePayload} id="genotype">
+                                <option value="AA">AA</option>
+                                <option value="AS">AS</option>
+                                <option value="AC">AC</option>
+                                <option value="SS">SS</option>
+                                <option value="SC">SC</option>
+                            </Select>
+                            <Input leftIcon={<FaNoteSticky />} label="VDRL" value={Payload.VDRL} val={Payload.VDRL !== "" ? true: false} onChange={handlePayload} id="VDRL" />
+                            <Input leftIcon={<FaNoteSticky />} label="others" value={Payload.others} val={Payload.others !== "" ? true: false} onChange={handlePayload} id="others" />
+                            <Input leftIcon={<FaNoteSticky />} label="comments" value={Payload.comments} val={Payload.comments !== "" ? true: false} onChange={handlePayload} id="comments" />
+                        </SimpleGrid>
+                    </Box>
 
-                                <Input leftIcon={<FaNoteSticky />} label="Gravidity" value={Payload.gravidity} val={Payload.gravidity !== "" ? true : false} onChange={handlePayload} id="gravidity" />
+                    {/* Present Pregnancy Section */}
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
+                        <Text fontSize="xl" fontWeight="bold" mb={4}>Present Pregnancy</Text>
+                        <Stack spacing={4}>
+                            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={2}>
+                                <Input leftIcon={<FaNoteSticky />} label="bleeding" value={Payload.bleeding} val={Payload.bleeding !== "" ? true: false} onChange={handlePayload} id="bleeding" />
+                                <Input leftIcon={<FaNoteSticky />} type="text" label="discharge" value={Payload.discharge} val={Payload.discharge !== "" ? true: false} onChange={handlePayload} id="discharge" />
+                                <Input leftIcon={<FaNoteSticky />} type="text" label="swelling Ankles" value={Payload.swellingAnkles} val={Payload.swellingAnkles !== "" ? true: false} onChange={handlePayload} id="swellingAnkles" />
+                                <Input leftIcon={<FaNoteSticky />} type="text" label="urinary Symptoms" value={Payload.urinarySymptoms} val={Payload.urinarySymptoms !== "" ? true: false} onChange={handlePayload} id="urinarySymptoms" />
+                            </SimpleGrid>
+                        </Stack>
+                    </Box>
+                    {/* Booking Information  Section */}
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
+                        <Text fontSize="xl" fontWeight="bold" mb={4}>Booking Information </Text>
+                        <Stack spacing={4}>
+                            <SimpleGrid columns={{ base: 1, md: 3 }} spacing={2}>
+                                <DatePickerComponent
+                                    id="bookingDate"
+                                    label="Booking Date"
+                                    selected={Payload.bookingDate ? new Date(Payload.bookingDate.split('/').reverse().join('-')) : null}
+                                    onChange={(date) => handleDateChange(date, 'bookingDate')}
+                                />
+                                <DatePickerComponent
+                                    id="lmp"
+                                    label="LMP"
+                                    selected={Payload.lmp ? new Date(Payload.lmp.split('/').reverse().join('-')) : null}
+                                    onChange={(date) => handleDateChange(date, 'lmp')}
+                                />
+                                <DatePickerComponent
+                                    id="edd"
+                                    label="EDD"
+                                    selected={Payload.edd ? new Date(Payload.edd.split('/').reverse().join('-')) : null}
+                                    onChange={(date) => handleDateChange(date, 'edd')}
+                                    readOnly={true}
+                                />
 
-                                <SimpleGrid mt="12px" columns={{ base: 1, md: 2 }} spacing={2}>
-                                    <Input leftIcon={<MdDateRange />} type="date" label="LMP" value={Payload.lmp} val={Payload.lmp !== "" ? true : false} onChange={handlePayload} id="lmp" />
-                                    <Input leftIcon={<MdDateRange />} type="date" label="EDD" value={Payload.edd} val={Payload.edd !== "" ? true : false} onChange={handlePayload} id="edd" />
-                                </SimpleGrid>
+                            </SimpleGrid>
+                            <Input leftIcon={<FaNoteSticky />} type="text" label="Expected Gestational Age" value={Payload.ega} val={Payload.ega !== "" ? true : false} onChange={handlePayload} id="ega" readOnly={true} />
+                            <Input leftIcon={<FaNoteSticky />} label="gravida" value={Payload.gravida} val={Payload.gravida !== "" ? true: false} onChange={handlePayload} id="gravida" />
+                            <Input leftIcon={<FaNoteSticky />} label="indication" value={Payload.indication} val={Payload.indication !== "" ? true: false} onChange={handlePayload} id="indication" />
+                            <Input leftIcon={<FaNoteSticky />} label="specialPoint" value={Payload.specialPoint} val={Payload.specialPoint !== "" ? true: false} onChange={handlePayload} id="specialPoint" />
+                            <Input leftIcon={<FaNoteSticky />} label="consultant" value={Payload.consultant} val={Payload.consultant !== "" ? true: false} onChange={handlePayload} id="consultant" />
+                        </Stack>
+                    </Box>
 
-                                <Input leftIcon={<FaNoteSticky />} label="EGA" value={Payload.ega} val={Payload.ega !== "" ? true : false} onChange={handlePayload} id="ega" />
-                                <Input leftIcon={<FaNoteSticky />} label="LCB" value={Payload.lcb} val={Payload.lcb !== "" ? true : false} onChange={handlePayload} id="lcb" />
-                            </Stack>
-                        </AccordionPanel>
-                    </AccordionItem>
-                    <AccordionItem mb="15px">
-                        <AccordionButton _hover={{ border: "1px solid #EA5937", color: "#000" }} _focus={{ outline: "none" }} border="1px solid #fff" _expanded={{ rounded: "8px 8px 0px 0px", border: 0 }} bg="#fff" color="#000" rounded="8px">
-                            <Box as='span' flex='1' textAlign='left'>
-                                Presenting Complaints
-                            </Box>
-                            <AccordionIcon />
-                        </AccordionButton>
-
-                        <AccordionPanel pb={4} bg="#fff" rounded="0px 0px 8px 8px">
-                            <Stack spacing={4} pt="10">
-                                <TextArea label="Presenting Complaints" value={Payload.presentingcomplaints} onChange={handlePayload} id="presentingcomplaints" />
-                            </Stack>
-                            <Flex justifyContent={"flex-end"} mt="2">
-                                <Button
-                                    onClick={addPresentingComplaints}
-                                    w={["100%", "100%", "184px", "184px"]}
-                                >
+                    {/* Post Medical History Section */}
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
+                        <Text fontSize="xl" fontWeight="bold" mb={4}>Post Medical History</Text>
+                        <Stack spacing={4} mt="10">
+                            <TextArea label="Post Medical History" value={Payload.postmedicalorsurgicalhistory} onChange={handlePayload} id="postmedicalorsurgicalhistory" />
+                            <Flex justifyContent={"flex-end"}>
+                                <Button onClick={addPostMedicalHistory} w={{ base: "100%", md: "184px" }}>
                                     Add
                                 </Button>
                             </Flex>
-
-                            <SimpleGrid mt="12px" columns={{ base: 2, md: 2 }} spacing={2}>
-                                {
-                                    Complaints?.map((item, i) => (
-                                        <Flex key={i} cursor="pointer" px="10px" py="10px" rounded={"20px"} fontSize="12px" _hover={{ bg: "blue.blue400" }} bg="blue.blue500" w="100%" justifyContent="space-between" alignItems="center" >
-                                            <Text color="#fff" fontWeight="500" textTransform="capitalize" >{item}</Text>
-                                            <Box fontSize="20px" color="#fff" onClick={() => removeComplaint(item)}><IoIosCloseCircle /></Box>
-                                        </Flex>
-                                    ))
-                                }
+                            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={2}>
+                                {PostMedicalHistory?.map((item, i) => (
+                                    <Flex key={i} cursor="pointer" px="10px" py="10px" rounded={"20px"} fontSize="12px" _hover={{ bg: "blue.blue400" }} bg="blue.blue500" w="100%" justifyContent="space-between" alignItems="center" >
+                                        <Text color="#fff" fontWeight="500" textTransform="capitalize" >{item}</Text>
+                                        <Box fontSize="20px" color="#fff" onClick={() => removePostMedicalHistory(item)}><IoIosCloseCircle /></Box>
+                                    </Flex>
+                                ))}
                             </SimpleGrid>
-                        </AccordionPanel>
-                    </AccordionItem>
-                    <AccordionItem mb="15px">
-                        <AccordionButton _hover={{ border: "1px solid #EA5937", color: "#000" }} _focus={{ outline: "none" }} border="1px solid #fff" _expanded={{ rounded: "8px 8px 0px 0px", border: 0 }} bg="#fff" color="#000" rounded="8px">
-                            <Box as='span' flex='1' textAlign='left'>
-                                History Of Presenting Complaints
-                            </Box>
-                            <AccordionIcon />
-                        </AccordionButton>
+                        </Stack>
+                    </Box>
 
-                        <AccordionPanel pb={4} bg="#fff" rounded="0px 0px 8px 8px">
-                            <Stack spacing={4} pt="10">
-                                <TextArea label="History Of Presenting Complaints" value={Payload.historyofpresentingcomplaints} onChange={handlePayload} id="historyofpresentingcomplaints" />
-                            </Stack>
-                            <Flex justifyContent={"flex-end"} mt="2">
-                                <Button
-                                    onClick={addHistoryPresentingComplaints}
-                                    w={["100%", "100%", "184px", "184px"]}
-                                >
+                    {/* History Of Present Pregnancy Section */}
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
+                        <Text fontSize="xl" fontWeight="bold" mb={4}>History Of Present Pregnancy</Text>
+                        <Stack spacing={4} mt="10">
+                            <TextArea label="History Of Present Pregnancy" value={Payload.historyofpresentpregnancy} onChange={handlePayload} id="historyofpresentpregnancy" />
+                            <Flex justifyContent={"flex-end"}>
+                                <Button onClick={addHistoryPresentPregnancy} w={{ base: "100%", md: "184px" }}>
                                     Add
                                 </Button>
                             </Flex>
-
-                            <SimpleGrid mt="12px" columns={{ base: 2, md: 2 }} spacing={2}>
-                                {
-                                    HistoryComplaints?.map((item, i) => (
-                                        <Flex key={i} cursor="pointer" px="10px" py="10px" rounded={"20px"} fontSize="12px" _hover={{ bg: "blue.blue400" }} bg="blue.blue500" w="100%" justifyContent="space-between" alignItems="center" >
-                                            <Text color="#fff" fontWeight="500" textTransform="capitalize" >{item}</Text>
-                                            <Box fontSize="20px" color="#fff" onClick={() => removeHistoryComplaint(item)}><IoIosCloseCircle /></Box>
-                                        </Flex>
-                                    ))
-                                }
+                            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={2}>
+                                {HistoryPresentPregnancy?.map((item, i) => (
+                                    <Flex key={i} cursor="pointer" px="10px" py="10px" rounded={"20px"} fontSize="12px" _hover={{ bg: "blue.blue400" }} bg="blue.blue500" w="100%" justifyContent="space-between" alignItems="center" >
+                                        <Text color="#fff" fontWeight="500" textTransform="capitalize" >{item}</Text>
+                                        <Box fontSize="20px" color="#fff" onClick={() => removeHistoryPresentPregnancy(item)}><IoIosCloseCircle /></Box>
+                                    </Flex>
+                                ))}
                             </SimpleGrid>
-                        </AccordionPanel>
-                    </AccordionItem>
-                    <AccordionItem mb="15px">
-                        <AccordionButton _hover={{ border: "1px solid #EA5937", color: "#000" }} _focus={{ outline: "none" }} border="1px solid #fff" _expanded={{ rounded: "8px 8px 0px 0px", border: 0 }} bg="#fff" color="#000" rounded="8px">
-                            <Box as='span' flex='1' textAlign='left'>
-                                History Of Index Pregnancy
+                        </Stack>
+                    </Box>
+
+                    {/* Previous Pregnancy Section */}
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
+                        <Text fontSize="xl" fontWeight="bold" mb={4}>Previous Pregnancy</Text>
+                        <Tooltip label='Previous Pregnancy'>
+                            <Box onClick={() => setOpenObstetricHistoryModal(true)} cursor="pointer" px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500" textAlign="center">
+                                Previous Pregnancy
                             </Box>
-                            <AccordionIcon />
-                        </AccordionButton>
+                        </Tooltip>
+                    </Box>
 
-                        <AccordionPanel pb={4} bg="#fff" rounded="0px 0px 8px 8px">
-                            <Stack spacing={4} pt="10">
-                                <TextArea label="History Of Index Pregnancy" value={Payload.historyofindexpregnancy} onChange={handlePayload} id="historyofindexpregnancy" />
-                            </Stack>
-                            <Flex justifyContent={"flex-end"} mt="2">
-                                <Button
-                                    onClick={addHistoryIndexPregnancy}
-                                    w={["100%", "100%", "184px", "184px"]}
-                                >
-                                    Add
-                                </Button>
-                            </Flex>
+                    {/* Plan Section */}
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
+                        <Text fontSize="xl" fontWeight="bold" mb={4}>Plan</Text>
+                        <Flex justifyContent="space-between" flexWrap="wrap" mt="15px" w={["100%", "100%", "100%", "100%"]} >
+                            <Tooltip label='Lab Order'>
+                                <Box onClick={() => setOpenLabModal(true)} cursor="pointer" px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500">Lab </Box>
 
-                            <SimpleGrid my="15px" columns={{ base: 2, md: 2 }} spacing={2}>
-                                {
-                                    HistoryIndexPreg?.map((item, i) => (
-                                        <Flex key={i} cursor="pointer" px="10px" py="10px" rounded={"20px"} fontSize="12px" _hover={{ bg: "blue.blue400" }} bg="blue.blue500" w="100%" justifyContent="space-between" alignItems="center" >
-                                            <Text color="#fff" fontWeight="500" textTransform="capitalize" >{item}</Text>
-                                            <Box fontSize="20px" color="#fff" onClick={() => removeHistoryIndexPreg(item)}><IoIosCloseCircle /></Box>
-                                        </Flex>
-                                    ))
-                                }
-                            </SimpleGrid>
-
-                            <Tooltip label='Past Obstetric' >
-                                <Box onClick={() => setOpenObstetricHistoryModal(true)} cursor="pointer" px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500">Past Obstetric History </Box>
                             </Tooltip>
-                        </AccordionPanel>
-                    </AccordionItem>
-                    <AccordionItem mb="15px">
-                        <AccordionButton _hover={{ border: "1px solid #EA5937", color: "#000" }} _focus={{ outline: "none" }} border="1px solid #fff" _expanded={{ rounded: "8px 8px 0px 0px", border: 0 }} bg="#fff" color="#000" rounded="8px">
-                            <Box as='span' flex='1' textAlign='left'>
-                                Gynae History
-                            </Box>
-                            <AccordionIcon />
-                        </AccordionButton>
-
-                        <AccordionPanel pb={4} bg="#fff" rounded="0px 0px 8px 8px">
-                            <Stack spacing={4} pt="10">
-                                <TextArea label="Gynae History" value={Payload.gynaehistory} onChange={handlePayload} id="gynaehistory" />
-                            </Stack>
-                            <Flex justifyContent={"flex-end"} mt="2">
-                                <Button
-                                    onClick={addGyneHistory}
-                                    w={["100%", "100%", "184px", "184px"]}
-                                >
-                                    Add
-                                </Button>
-                            </Flex>
-
-                            <SimpleGrid my="15px" columns={{ base: 2, md: 2 }} spacing={2}>
-                                {
-                                    GyneHistory?.map((item, i) => (
-                                        <Flex key={i} cursor="pointer" px="10px" py="10px" rounded={"20px"} fontSize="12px" _hover={{ bg: "blue.blue400" }} bg="blue.blue500" w="100%" justifyContent="space-between" alignItems="center" >
-                                            <Text color="#fff" fontWeight="500" textTransform="capitalize" >{item}</Text>
-                                            <Box fontSize="20px" color="#fff" onClick={() => removeGyneHistory(item)}><IoIosCloseCircle /></Box>
-                                        </Flex>
-                                    ))
-                                }
-                            </SimpleGrid>
-
-                            <Tooltip label='Past Medical'>
-                                <Box onClick={() => setOpenGeneralMedicalHistoryModal(true)} cursor="pointer" px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500">Past Medical History </Box>
+                            <Tooltip label='Radiology Order'>
+                                <Box onClick={() => setOpenRadiologyModal(true)} cursor="pointer" px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500">Radiology </Box>
                             </Tooltip>
-                        </AccordionPanel>
-                    </AccordionItem>
-                    <AccordionItem mb="15px">
-                        <AccordionButton _hover={{ border: "1px solid #EA5937", color: "#000" }} _focus={{ outline: "none" }} border="1px solid #fff" _expanded={{ rounded: "8px 8px 0px 0px", border: 0 }} bg="#fff" color="#000" rounded="8px">
-                            <Box as='span' flex='1' textAlign='left'>
-                                Past Surgical History
-                            </Box>
-                            <AccordionIcon />
-                        </AccordionButton>
+                            <Tooltip label='Prescribe Drug'>
+                                <Box cursor="pointer" onClick={() => setOpenPrescriptionModal(true)} px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500">Prescription </Box>
+                            </Tooltip>
+                            <Tooltip label='Admit Patient'>
+                                <Box onClick={() => setOpenAdmissionModal(true)} cursor="pointer" px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500">Admission </Box>
+                            </Tooltip>
+                            <Tooltip label='Procedure'>
+                                <Box onClick={() => setOpenProcedureModal(true)} cursor="pointer" px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500">Procedure </Box>
+                            </Tooltip>
+                            <Tooltip label='Refer Patient To Another Doctor'>
+                                <Box onClick={() => setOpenReferralModal(true)} cursor="pointer" px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500">Referral </Box>
+                            </Tooltip>
+                        </Flex>
+                    </Box>
+                </Stack>
 
-                        <AccordionPanel pb={4} bg="#fff" rounded="0px 0px 8px 8px">
-                            <Stack spacing={4} pt="10">
-                                <TextArea label="Past Surgical History" value={Payload.passsurgicalhistory} onChange={handlePayload} id="passsurgicalhistory" />
-                            </Stack>
-                            <Flex justifyContent={"flex-end"} mt="2">
-                                <Button
-                                    onClick={addPastSurgicalHistory}
-                                    w={["100%", "100%", "184px", "184px"]}
-                                >
-                                    Add
-                                </Button>
-                            </Flex>
+                <PreviousPregnancyModal isOpen={OpenObstetricHistoryModal} onClose={() => setOpenObstetricHistoryModal(false)} setOldPayload={setPayload} oldPayload={Payload} type={ModalState} activateNotifications={activateNotifications} />
+                <AdmissionModal isOpen={OpenAdmissionModal} oldPayload={{ _id: id, appointmentid: id }} onClose={() => setOpenAdmissionModal(false)} type={ModalState} activateNotifications={activateNotifications} />
 
-                            <SimpleGrid mt="12px" columns={{ base: 2, md: 2 }} spacing={2}>
-                                {
-                                    PastSurgicalHistory?.map((item, i) => (
-                                        <Flex key={i} cursor="pointer" px="10px" py="10px" rounded={"20px"} fontSize="12px" _hover={{ bg: "blue.blue400" }} bg="blue.blue500" w="100%" justifyContent="space-between" alignItems="center" >
-                                            <Text color="#fff" fontWeight="500" textTransform="capitalize" >{item}</Text>
-                                            <Box fontSize="20px" color="#fff" onClick={() => removePastSurgicalHistory(item)}><IoIosCloseCircle /></Box>
-                                        </Flex>
-                                    ))
-                                }
-                            </SimpleGrid>
-                        </AccordionPanel>
-                    </AccordionItem>
-                    <AccordionItem mb="15px">
-                        <AccordionButton _hover={{ border: "1px solid #EA5937", color: "#000" }} _focus={{ outline: "none" }} border="1px solid #fff" _expanded={{ rounded: "8px 8px 0px 0px", border: 0 }} bg="#fff" color="#000" rounded="8px">
-                            <Box as='span' flex='1' textAlign='left'>
-                                Drug History
-                            </Box>
-                            <AccordionIcon />
-                        </AccordionButton>
+                <RadiologyOrderRequestModal
+                    isOpen={OpenRadiologyModal}
+                    onClose={() => setOpenRadiologyModal(false)}
+                    admissionId={null}
+                    type={"create"}
+                    initialData={null}
+                    oldPayload={{ id: id }}
+                    onSuccess={handleSuccess}
+                />
 
-                        <AccordionPanel pb={4} bg="#fff" rounded="0px 0px 8px 8px">
-                            <Stack spacing={4} pt="10">
-                                <TextArea label="Drug History" value={Payload.drughistory} onChange={handlePayload} id="drughistory" />
-                            </Stack>
-                            <Flex justifyContent={"flex-end"} mt="2">
-                                <Button
-                                    onClick={addDrugHistory}
-                                    w={["100%", "100%", "184px", "184px"]}
-                                >
-                                    Add
-                                </Button>
-                            </Flex>
+                <CreateProcedureModal
+                    isOpen={OpenProcedureModal}
+                    onClose={() => setOpenProcedureModal(false)}
+                    type={"new"}
+                    activateNotifications={activateNotifications}
+                    oldPayload={{ id: id }}
 
-                            <SimpleGrid mt="12px" columns={{ base: 2, md: 2 }} spacing={2}>
-                                {
-                                    DrugHistory?.map((item, i) => (
-                                        <Flex key={i} cursor="pointer" px="10px" py="10px" rounded={"20px"} fontSize="12px" _hover={{ bg: "blue.blue400" }} bg="blue.blue500" w="100%" justifyContent="space-between" alignItems="center" >
-                                            <Text color="#fff" fontWeight="500" textTransform="capitalize" >{item}</Text>
-                                            <Box fontSize="20px" color="#fff" onClick={() => removeDrugHistory(item)}><IoIosCloseCircle /></Box>
-                                        </Flex>
-                                    ))
-                                }
-                            </SimpleGrid>
-                        </AccordionPanel>
-                    </AccordionItem>
-                    <AccordionItem mb="15px">
-                        <AccordionButton _hover={{ border: "1px solid #EA5937", color: "#000" }} _focus={{ outline: "none" }} border="1px solid #fff" _expanded={{ rounded: "8px 8px 0px 0px", border: 0 }} bg="#fff" color="#000" rounded="8px">
-                            <Box as='span' flex='1' textAlign='left'>
-                                Family And Social History
-                            </Box>
-                            <AccordionIcon />
-                        </AccordionButton>
+                />
 
-                        <AccordionPanel pb={4} bg="#fff" rounded="0px 0px 8px 8px">
-                            <Stack spacing={4} pt="10">
-                                <TextArea label="Family and Social History" value={Payload.familyandsocialhistory} onChange={handlePayload} id="familyandsocialhistory" />
-                            </Stack>
-                            <Flex justifyContent={"flex-end"} mt="2">
-                                <Button
-                                    onClick={addFamilySocialHistory}
-                                    w={["100%", "100%", "184px", "184px"]}
-                                >
-                                    Add
-                                </Button>
-                            </Flex>
+                <CreateReferralModal isOpen={OpenReferralModal} onClose={() => setOpenReferralModal(false)} type={"new"} activateNotifications={activateNotifications} />
+                <LabRequestModal isOpen={OpenLabModal} oldPayload={{ _id: id, appointmentid: id }} onClose={() => setOpenLabModal(false)} type={ModalState} activateNotifications={activateNotifications} />
+                <CreatePrescriptionModal
+                    isOpen={OpenPrescriptionModal}
+                    onClose={() => setOpenPrescriptionModal(false)}
+                    onSuccess={activateNotifications}
+                    oldPayload={{ id: id }}
+                />
 
-                            <SimpleGrid mt="12px" columns={{ base: 2, md: 2 }} spacing={2}>
-                                {
-                                    FamilySocialHistory?.map((item, i) => (
-                                        <Flex key={i} cursor="pointer" px="10px" py="10px" rounded={"20px"} fontSize="12px" _hover={{ bg: "blue.blue400" }} bg="blue.blue500" w="100%" justifyContent="space-between" alignItems="center" >
-                                            <Text color="#fff" fontWeight="500" textTransform="capitalize" >{item}</Text>
-                                            <Box fontSize="20px" color="#fff" onClick={() => removeFamilySocialHistory(item)}><IoIosCloseCircle /></Box>
-                                        </Flex>
-                                    ))
-                                }
-                            </SimpleGrid>
-                        </AccordionPanel>
-                    </AccordionItem>
-                    <AccordionItem mb="15px">
-                        <AccordionButton _hover={{ border: "1px solid #EA5937", color: "#000" }} _focus={{ outline: "none" }} border="1px solid #fff" _expanded={{ rounded: "8px 8px 0px 0px", border: 0 }} bg="#fff" color="#000" rounded="8px">
-                            <Box as='span' flex='1' textAlign='left'>
-                                Systematic Review
-                            </Box>
-                            <AccordionIcon />
-                        </AccordionButton>
-
-                        <AccordionPanel pb={4} bg="#fff" rounded="0px 0px 8px 8px">
-                            <Stack spacing={4} pt="10">
-                                <TextArea label="Systematic Review" value={Payload.systematicreview} onChange={handlePayload} id="systematicreview" />
-                            </Stack>
-                            <Flex justifyContent={"flex-end"} mt="2">
-                                <Button
-                                    onClick={addSystematicReview}
-                                    w={["100%", "100%", "184px", "184px"]}
-                                >
-                                    Add
-                                </Button>
-                            </Flex>
-
-                            <SimpleGrid mt="12px" columns={{ base: 2, md: 2 }} spacing={2}>
-                                {
-                                    SystematicReview?.map((item, i) => (
-                                        <Flex key={i} cursor="pointer" px="10px" py="10px" rounded={"20px"} fontSize="12px" _hover={{ bg: "blue.blue400" }} bg="blue.blue500" w="100%" justifyContent="space-between" alignItems="center" >
-                                            <Text color="#fff" fontWeight="500" textTransform="capitalize" >{item}</Text>
-                                            <Box fontSize="20px" color="#fff" onClick={() => removeSystematicReview(item)}><IoIosCloseCircle /></Box>
-                                        </Flex>
-                                    ))
-                                }
-                            </SimpleGrid>
-                        </AccordionPanel>
-                    </AccordionItem>
-                    <AccordionItem mb="15px">
-                        <AccordionButton _hover={{ border: "1px solid #EA5937", color: "#000" }} _focus={{ outline: "none" }} border="1px solid #fff" _expanded={{ rounded: "8px 8px 0px 0px", border: 0 }} bg="#fff" color="#000" rounded="8px">
-                            <Box as='span' flex='1' textAlign='left'>
-                                Summary
-                            </Box>
-                            <AccordionIcon />
-                        </AccordionButton>
-
-                        <AccordionPanel pb={4} bg="#fff" rounded="0px 0px 8px 8px">
-                            <Stack spacing={4} pt="10">
-                                <TextArea label="Summary" value={Payload.summary} onChange={handlePayload} id="summary" />
-                            </Stack>
-                            <Flex justifyContent={"flex-end"} mt="2">
-                                <Button
-                                    onClick={addSummary}
-                                    w={["100%", "100%", "184px", "184px"]}
-                                >
-                                    Add
-                                </Button>
-                            </Flex>
-
-                            <SimpleGrid mt="12px" columns={{ base: 2, md: 2 }} spacing={2}>
-                                {
-                                    Summary?.map((item, i) => (
-                                        <Flex key={i} cursor="pointer" px="10px" py="10px" rounded={"20px"} fontSize="12px" _hover={{ bg: "blue.blue400" }} bg="blue.blue500" w="100%" justifyContent="space-between" alignItems="center" >
-                                            <Text color="#fff" fontWeight="500" textTransform="capitalize" >{item}</Text>
-                                            <Box fontSize="20px" color="#fff" onClick={() => removeSummary(item)}><IoIosCloseCircle /></Box>
-                                        </Flex>
-                                    ))
-                                }
-                            </SimpleGrid>
-
-                            <PastObstetricHistoryModal isOpen={OpenObstetricHistoryModal} onClose={() => setOpenObstetricHistoryModal(false)} setOldPayload={setPayload} oldPayload={Payload} type={ModalState} activateNotifications={activateNotifications} />
-                            <GeneralMedicalHistoryModalv2 isOpen={OpenGeneralMedicalHistoryModal} onClose={() => setOpenGeneralMedicalHistoryModal(false)} setOldPayload={setPayload} oldPayload={Payload} type={ModalState} activateNotifications={activateNotifications} />
-                        </AccordionPanel>
-                    </AccordionItem>
-                </Accordion>
-
-                <Flex justifyContent="center">
+                <Flex justifyContent="center" mt={8}>
                     <Flex
                         justifyContent="space-between"
                         flexWrap="wrap"
-                        mt={["10px", "10px", "10px", "10px"]}
-                        w={["100%", "100%", "60%", "60%"]}
+                        w={{ base: "100%", md: "60%" }}
                     >
                         <Button
-                            mt={["10px", "10px", "0px", "0px"]}
-                            background="#f8ddd1 "
+                            mt={{ base: "10px", md: "0px" }}
+                            background="#f8ddd1"
                             border="1px solid #EA5937"
                             color="blue.blue500"
-                            w={["100%", "100%", "144px", "144px"]}
-                            onClick={() => {
-                                setOpenPreview(true)
-                            }}
+                            w={{ base: "100%", md: "144px" }}
+                            onClick={() => setOpenPreview(true)}
                         >
                             Preview
                         </Button>
 
                         <Button
+                            disabled={Disabled}
                             onClick={handleCompleted}
                             isLoading={LoadingCompleted}
-                            w={["100%", "100%", "184px", "184px"]}
+                            w={{ base: "100%", md: "184px" }}
                         >
                             Update
                         </Button>

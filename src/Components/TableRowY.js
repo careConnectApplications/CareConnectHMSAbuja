@@ -25,14 +25,15 @@ export default function TableRowY({
   clinic,
   status,
   mrn,
+  percentageCover,
   email,
   onEdit,
   onUpdateStock,
   name,
   category,
-  coverage,
   onAssignDoctor,
   quantity,
+  hmo,
   createdDate,
   updatedDate,
   expirationDate,
@@ -233,6 +234,7 @@ export default function TableRowY({
   chiefComplaint,
   gingivalAssessment,
   oralCancerScreening,
+  cover,
 }) {
   const isServed = servedstatus?.toLowerCase() === "served";
   const isUnserved = servedstatus?.toLowerCase() === "unserved";
@@ -280,7 +282,7 @@ export default function TableRowY({
               {clinic}
             </Text>
           </Td>
-                    <Td>
+          <Td>
             <Text fontWeight="400" fontSize="12px">
               {assignedDoctor}
             </Text>
@@ -461,7 +463,7 @@ export default function TableRowY({
               {doctor}
             </Text>
           </Td>
-         
+
           <Td>
             <Menu>
               <MenuButton as={Box}>
@@ -2145,11 +2147,6 @@ export default function TableRowY({
               {id}
             </Text>
           </Td>
-                    <Td>
-            <Text fontWeight="400" fontSize="12px">
-              {coverage}
-            </Text>
-          </Td>
           <Td>
             <Text fontWeight="400" fontSize="12px">
               {createdAt}
@@ -3255,6 +3252,99 @@ export default function TableRowY({
                     Delete
                   </MenuItem>
                 )}
+              </MenuList>
+            </Menu>
+          </Td>
+        </>
+      )}
+      {type === "insurance-cover" && (
+        <>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {cover.hmoId.hmoname}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {cover.category}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {cover.hmopercentagecover}%
+            </Text>
+          </Td>
+          <Td>
+            <Menu>
+              <MenuButton as={Box}>
+                <BsThreeDots />
+              </MenuButton>
+              <MenuList>
+                <MenuItem
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.500",
+                  }}
+                  onClick={onEdit}
+                >
+                  Edit
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          </Td>
+        </>
+      )}
+      {type === "insurance-cover-management" && (
+        <>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {sn}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {date}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {hmo}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {category}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {percentageCover}
+            </Text>
+          </Td>
+          <Td>
+            <Menu isLazy>
+              <MenuButton as={Box}>
+                <Flex justifyContent="center" color="#000000" fontSize="16px">
+                  <BsThreeDots />
+                </Flex>
+              </MenuButton>
+              <MenuList>
+                <MenuItem
+                  onClick={onEdit}
+                  textTransform="capitalize"
+                  fontWeight={"500"}
+                  color="#2F2F2F"
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                >
+                  <HStack fontSize="14px">
+                    <Text>Edit</Text>
+                  </HStack>
+                </MenuItem>
               </MenuList>
             </Menu>
           </Td>

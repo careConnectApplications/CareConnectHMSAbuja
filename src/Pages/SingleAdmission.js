@@ -72,7 +72,7 @@ export default function SingleAdmission() {
 
   const { pathname } = useLocation();
   const nav = useNavigate();
-  const id = localStorage.getItem("patientId");
+  const id = localStorage.getItem("appointmentId");
 
   const handleDischarge = async (id) => {
     setIsDischarging(true);
@@ -355,6 +355,9 @@ export default function SingleAdmission() {
                   Bed
                 </Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  Bed Fee
+                </Th>
+                <Th fontSize="13px" color="#534D59" fontWeight="600">
                   Referred Date
                 </Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">
@@ -378,6 +381,7 @@ export default function SingleAdmission() {
                   status={item.status}
                   wardName={item.referedward?.wardname}
                   BedName={item.bed?.bednumber}
+                  bedFee={item.bedfee}
                   onDischarge={() => handleDischarge(item._id)}
                   onTransfer={() => handleTransfer(item)}
                   onBedFee={() => handleBedFee(item._id)}

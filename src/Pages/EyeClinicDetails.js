@@ -1,4 +1,4 @@
-import { HStack, Text } from "@chakra-ui/react";
+import { HStack, Text, Button } from "@chakra-ui/react";
 import {
   Tabs,
   TabList,
@@ -27,6 +27,7 @@ import LabAppointment from "./LabAppointment";
 import { useNavigate, useParams } from "react-router-dom";
 import LensPrescription from "./LensPrescription";
 import OperationNotes from "./OperationNotes";
+import EyeConsultation from "./EyeConsultation";
 
 export default function EyeClinicDetails() {
   const { id } = useParams();
@@ -63,6 +64,13 @@ export default function EyeClinicDetails() {
         Give review, notes, findings and diagnosis about patient
       </Text>
 
+      <Button
+        mt="12px"
+        onClick={() => nav(`/dashboard/eye-clinic-summary/${id}`)}
+      >
+        View Summary
+      </Button>
+
       <Tabs mt="12px">
         <TabList color="#101828" pb="10px" flexWrap={"wrap"}>
          
@@ -90,6 +98,12 @@ export default function EyeClinicDetails() {
           >
             Lens prescription{" "}
           </Tab>
+          <Tab
+            _focus={{ outline: "none" }}
+            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+          >
+            Eye Consultation{" "}
+          </Tab>
          
         </TabList>
         {/* <TabIndicator mt='-1.5px' height='2px' bg='blue.blue500' borderRadius='1px' /> */}
@@ -109,6 +123,10 @@ export default function EyeClinicDetails() {
 
           <TabPanel p="0">
             <LensPrescription />
+          </TabPanel>
+
+          <TabPanel p="0">
+            <EyeConsultation />
           </TabPanel>
         
         </TabPanels>

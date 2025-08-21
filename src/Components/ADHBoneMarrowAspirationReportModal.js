@@ -10,6 +10,13 @@ import {
   Flex,
   Text,
   Box,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableContainer,
   Tag,
   TagLabel,
   TagCloseButton,
@@ -22,6 +29,8 @@ import Button from "./Button";
 import TextArea from "./TextArea";
 import { ProcessADHBoneMarrowAspirationReportApi } from "../Utils/ApiCalls";
 import ShowToast from "./ToastNotification";
+import { MdLocalPrintshop } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 export default function ADHBoneMarrowAspirationReportModal({
   isOpen,
@@ -54,6 +63,10 @@ export default function ADHBoneMarrowAspirationReportModal({
     plasmacells: [],
     conclusion: [],
   });
+  const [testResults, setTestResults] = useState([]);
+  const [patientName, setPatientName] = useState("");
+  const [patientId, setPatientId] = useState("");
+  const navigate = useNavigate();
 
   const showToast = (status, message) => {
     setToast({ status, message });
@@ -115,6 +128,25 @@ export default function ADHBoneMarrowAspirationReportModal({
         ironstore: oldPayload.ironstore || "",
         conclusion: "",
       });
+
+      // Set test result
+      const results = Array.isArray(oldPayload.testresult)
+        ? oldPayload.testresult
+        : oldPayload.testresult
+        ? [oldPayload.testresult]
+        : [];
+      setTestResults(results);
+      setPatientName(oldPayload.patientName || "");
+      setPatientId(oldPayload.patientId || "");
+    } else if (type === "new" && oldPayload) {
+      const results = Array.isArray(oldPayload.testresult)
+        ? oldPayload.testresult
+        : oldPayload.testresult
+        ? [oldPayload.testresult]
+        : [];
+      setTestResults(results);
+      setPatientName(oldPayload.patientName || "");
+      setPatientId(oldPayload.patientId || "");
     }
   }, [isOpen, type, oldPayload]);
 
@@ -141,6 +173,9 @@ export default function ADHBoneMarrowAspirationReportModal({
       plasmacells: [],
       conclusion: [],
     });
+    setTestResults([]);
+    setPatientName("");
+    setPatientId("");
   }, [isOpen]);
 
   const handleInputChange = (field, value) => {
@@ -165,6 +200,22 @@ export default function ADHBoneMarrowAspirationReportModal({
       ...prev,
       [field]: prev[field].filter((i) => i !== item),
     }));
+  };
+
+  const handlePrint = () => {
+    const printData = {
+      ...items,
+      boneconsistency: payload.boneconsistency,
+      aspiration: payload.aspiration,
+      erythroidratio: payload.erythroidratio,
+      abnormalcells: payload.abnormalcells,
+      ironstore: payload.ironstore,
+      testresult: testResults,
+      patientName: patientName,
+      patientId: patientId,
+    };
+    localStorage.setItem("printData", JSON.stringify(printData));
+    navigate("/print-report");
   };
 
   const handleSubmit = async () => {
@@ -283,14 +334,43 @@ export default function ADHBoneMarrowAspirationReportModal({
         >
           <ModalHeader>
             {type === "new"
-              ? "Process ADH Bone Marrow Aspiration Report"
+              ? `Process ADH Bone Marrow Aspiration Report for ${patientName}`
               : type === "edit"
-              ? "Edit ADH Bone Marrow Aspiration Report"
-              : "View ADH Bone Marrow Aspiration Report"}
+              ? `Edit ADH Bone Marrow Aspiration Report for ${patientName}`
+              : `View ADH Bone Marrow Aspiration Report for ${patientName}`}
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Stack spacing={6}>
+              {testResults.length > 0 && (
+                <Box>
+                  <Text fontWeight="bold" mb={4}>
+                    Test Results
+                  </Text>
+                  <TableContainer>
+                    <Table variant="simple">
+                      <Thead>
+                        <Tr>
+                          <Th>Component</Th>
+                          <Th>Result</Th>
+                          <Th>Reference Range</Th>
+                          <Th>Unit</Th>
+                        </Tr>
+                      </Thead>
+                      <Tbody>
+                        {testResults.map((result, index) => (
+                          <Tr key={index}>
+                            <Td>{result.subcomponent || "Main Result"}</Td>
+                            <Td>{result.result || "N/A"}</Td>
+                            <Td>{result.nranges || "N/A"}</Td>
+                            <Td>{result.unit || "N/A"}</Td>
+                          </Tr>
+                        ))}
+                      </Tbody>
+                    </Table>
+                  </TableContainer>
+                </Box>
+              )}
               {renderTagField("clinicalnotes", "Clinical Notes")}
               {renderInputField("boneconsistency", "Bone Consistency")}
               {renderInputField("aspiration", "Aspiration")}
@@ -305,11 +385,21 @@ export default function ADHBoneMarrowAspirationReportModal({
             </Stack>
           </ModalBody>
           <ModalFooter>
-            {(type === "new" || type === "edit") && (
-              <Button isLoading={loading} onClick={handleSubmit}>
-                {type === "new" ? "Submit" : "Update"}
-              </Button>
-            )}
+            <Flex justifyContent="space-between" width="100%">
+              {/* Show Print button only in view mode */}
+              {type === "view" && (
+                <Button leftIcon={<MdLocalPrintshop />} onClick={handlePrint}>
+                  Print
+                </Button>
+              )}
+
+              {/* Show Submit/Update button in new and edit modes */}
+              {(type === "new" || type === "edit") && (
+                <Button isLoading={loading} onClick={handleSubmit}>
+                  {type === "new" ? "Submit" : "Update"}
+                </Button>
+              )}
+            </Flex>
           </ModalFooter>
         </ModalContent>
       </Modal>

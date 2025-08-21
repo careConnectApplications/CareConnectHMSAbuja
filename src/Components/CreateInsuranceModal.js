@@ -24,14 +24,13 @@ export default function CreateInsuranceModal({
   const [payload, setPayload] = useState({
     hmoname: "",
     id: "",
-    hmopercentagecover: "",
   });
 
   useEffect(() => {
     if (type === "edit" && oldPayload) {
       setPayload(oldPayload);
     } else {
-      setPayload({ hmoname: "", id: "", hmopercentagecover: "" });
+      setPayload({ hmoname: "", id: "" });
     }
   }, [isOpen, type, oldPayload]);
 
@@ -90,14 +89,6 @@ export default function CreateInsuranceModal({
               id="id"
               value={payload.id}
               label="HMO ID"
-            />
-            <Input
-              val={!!payload.hmopercentagecover}
-              onChange={handleChange}
-              id="hmopercentagecover"
-              value={payload.hmopercentagecover}
-              label="HMO Percentage Cover"
-              type="number"
             />
           </Stack>
 

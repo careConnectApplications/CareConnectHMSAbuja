@@ -15,6 +15,7 @@ import {
   Tbody,
   Tr,
   Th,
+  Td,
   TableContainer,
   Menu,
   MenuButton,
@@ -246,6 +247,12 @@ export default function Patients() {
       getAllPatient();
     }
   }, [isOpen, Trigger, CurrentPage]);
+
+  useEffect(() => {
+    if (SearchInput === "") {
+      setFilteredData(null);
+    }
+  }, [SearchInput]);
 
   const navigateToPatientDetails = (id) => {
     router(`/dashboard/patient/${id}`);
@@ -636,17 +643,21 @@ export default function Patients() {
                       status={item.status}
                       hmoStatus={item.isHMOCover}
                       hmoId={item.HMOId}
-                      subscription={item.subscriptionPaidUntil}
+                      subscription={
+                        item.subscriptionPaidUntil
+                          ? moment(item.subscriptionPaidUntil).format(
+                              "DD-MM-YYYY"
+                            )
+                          : ""
+                      }
                       date={moment(item.createdAt).format("lll")}
                       onEdit={() => onEdit(item._id)}
                       onView={() => navigateToPatientDetails(item._id)}
-                      onClick={() => {
-                        console.log(
-                          "Clicked payAnnualSubscription for:",
-                          item._id
-                        );
-                        payAnnualSubscription(item._id);
-                      }}
+                      onClick={
+                        item.status?.toLowerCase() !== "active"
+                          ? () => payAnnualSubscription(item._id)
+                          : undefined
+                      }
                     />
                   ))
                 ) : SearchInput !== "" && FilteredData?.length > 0 ? (
@@ -665,22 +676,31 @@ export default function Patients() {
                       status={item.status}
                       hmoStatus={item.isHMOCover}
                       hmoId={item.HMOId}
+                      subscription={
+                        item.subscriptionPaidUntil
+                          ? moment(item.subscriptionPaidUntil).format(
+                              "DD-MM-YYYY"
+                            )
+                          : ""
+                      }
                       date={moment(item.createdAt).format("lll")}
                       onEdit={() => onEdit(item._id)}
                       onView={() => navigateToPatientDetails(item._id)}
-                      onClick={() => {
-                        console.log(
-                          "Clicked payAnnualSubscription for:",
-                          item._id
-                        );
-                        payAnnualSubscription(item._id);
-                      }}
+                      onClick={
+                        item.status?.toLowerCase() !== "active"
+                          ? () => payAnnualSubscription(item._id)
+                          : undefined
+                      }
                     />
                   ))
                 ) : (
-                  <Text textAlign={"center"} mt="32px" color="black">
-                    *--No record found--*
-                  </Text>
+                  <Tr>
+                    <Td colSpan={13} textAlign="center">
+                      <Text mt="32px" color="black">
+                        *--No record found--*
+                      </Text>
+                    </Td>
+                  </Tr>
                 )}
               </Tbody>
             </Table>

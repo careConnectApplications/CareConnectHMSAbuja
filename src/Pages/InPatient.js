@@ -573,8 +573,11 @@ export default function InPatient() {
                   <Th fontSize="13px" color="#534D59" fontWeight="600">
                     Ward
                   </Th>
-                                    <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  <Th fontSize="13px" color="#534D59" fontWeight="600">
                     Bed
+                  </Th>
+                  <Th fontSize="13px" color="#534D59" fontWeight="600">
+                    Bed Fee
                   </Th>
                   <Th fontSize="13px" color="#534D59" fontWeight="600">
                     Referred Date
@@ -599,6 +602,7 @@ export default function InPatient() {
                       clinic={item.admittospecialization}
                       wardName={item.referedward?.wardname}
                       BedName={item.bed?.bednumber}
+                      bedFee={item.bedfee}
                       mrn={`${item.patient?.MRN} `}
                       status={item.status}
                       onView={() =>
@@ -629,6 +633,7 @@ export default function InPatient() {
                       clinic={item.admittospecialization}
                       wardName={item.referedward?.wardname}
                       BedName={item.bed?.bednumber}
+                      bedFee={item.bedfee}
                       mrn={`${item.patient?.MRN} `}
                       status={item.status}
                       onView={() =>
