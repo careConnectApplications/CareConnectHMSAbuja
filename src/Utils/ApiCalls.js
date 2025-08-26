@@ -984,6 +984,38 @@ export const GetAllHistopathologyReportApi = () => {
       }
     });
 };
+export const GetMedicalReportAPI = (payload,queryType) => {
+  // Configure the GET request
+
+  let data = JSON.stringify(payload);
+  let config = {
+    method: "POST",
+    url: `${baseUrl}/reports/reports/${queryType}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data: data,
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response; // Return the data part of the response
+    })
+    .catch((error) => {
+      console.log("Error fetching users:", error.response);
+      if (error.response && error.response.data.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response && error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
 
 export const GetAllSingleHistopathologyHistoryApi = (id) => {
   // Configure the GET request
