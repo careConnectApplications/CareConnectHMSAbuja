@@ -103,8 +103,8 @@ export default function HistopathologyInsuranceAuthModal({ isOpen, onClose, setO
        
       }
 
-      const onChangeStatus = (id) => {
-        setSelectedClaimId(id);
+      const onChangeStatus = () => {
+        setSelectedClaimId(oldPayload._id);
         setIsAuthModalOpen(true);
         setState("single")
     };
@@ -112,7 +112,7 @@ export default function HistopathologyInsuranceAuthModal({ isOpen, onClose, setO
       const handleAuthorizeAll = () => {
         setSelectedClaimId(oldPayload._id);
         setIsAuthModalOpen(true);
-        setState("group")
+        setState("single")
     };
 
 
@@ -168,6 +168,22 @@ export default function HistopathologyInsuranceAuthModal({ isOpen, onClose, setO
                             fontWeight="600"
                           >
                             age
+                          </Th>
+                          <Th
+                            fontSize="13px"
+                            textTransform="capitalize"
+                            color="#534D59"
+                            fontWeight="600"
+                          >
+                            hmo percentage cover
+                          </Th>
+                          <Th
+                            fontSize="13px"
+                            textTransform="capitalize"
+                            color="#534D59"
+                            fontWeight="600"
+                          >
+                            actual cost
                           </Th>
         
                           <Th
@@ -250,6 +266,8 @@ export default function HistopathologyInsuranceAuthModal({ isOpen, onClose, setO
                                 name={`${oldPayload.patient?.firstName} ${oldPayload.patient?.lastName}`}
                                 email={oldPayload.patient?.email}
                                 age={oldPayload.patient?.age}
+                                hmopercentagecover={item.hmopercentagecover}
+                                actualcost={item.actualcost}
                                 phone={oldPayload.patient?.phoneNumber}
                                 mrn={oldPayload.patient?.MRN}
                                 amount={item.amount}
@@ -259,7 +277,7 @@ export default function HistopathologyInsuranceAuthModal({ isOpen, onClose, setO
                                 testId={item._id}
                                 testName={item.name}
                                 date={moment(item.createdAt).format("lll")}
-                                onClick={() => onChangeStatus(item._id)}
+                                onClick={onChangeStatus}
                                 onPrint={() => PrintReceipt(item)}
                               />
                             ))

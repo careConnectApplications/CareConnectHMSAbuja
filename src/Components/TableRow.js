@@ -21,7 +21,7 @@ export default function TableRow({
   labName,
   code,
   physicianName,
-  collectedDate,
+  collectedDate,hmopercentagecover,actualcost,
   facility,
   reportedDate,
   visitType,
@@ -543,6 +543,16 @@ export default function TableRow({
           <Td>
             <Text fontWeight="400" fontSize={"13px"}>
               {age}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {hmopercentagecover}  
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {actualcost}
             </Text>
           </Td>
           <Td>

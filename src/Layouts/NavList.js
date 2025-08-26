@@ -293,6 +293,41 @@ export const NavList = (location) => {
           active: isActive(location, "/dashboard/report-analytics/summary"),
           display: isClinicalReport(),
         },
+
+        {
+          name: "Medical Report",
+          link: "/dashboard/report-analytics/medical-report",
+          active: isActive(location, "/dashboard/report-analytics/medical-report"),
+          display: isClinicalReport(),
+        },
+
+        {
+          name: "Operational Analysis",
+          link: "/dashboard/report-analytics/operational-analysis",
+          active: isActive(location, "/dashboard/report-analytics/operational-analysis"),
+          display: isClinicalReport(),
+        },
+
+        {
+          name: "Revenue Analysis",
+          link: "/dashboard/report-analytics/revenue-analysis",
+          active: isActive(location, "/dashboard/report-analytics/revenue-analysis"),
+          display: isClinicalReport(),
+        },
+
+        {
+          name: "Maternity Report",
+          link: "/dashboard/report-analytics/maternity-report",
+          active: isActive(location, "/dashboard/report-analytics/maternity-report"),
+          display: isClinicalReport(),
+        },
+
+        {
+          name: "Coding & Indexing",
+          link: "/dashboard/report-analytics/coding-indexing",
+          active: isActive(location, "/dashboard/report-analytics/coding-indexing"),
+          display: isClinicalReport(),
+        },
       
       ],
     },

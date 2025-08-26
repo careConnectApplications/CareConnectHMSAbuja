@@ -175,6 +175,22 @@ export default function RadiologyInsuranceAuthorizationModal({ isOpen, onClose, 
                           >
                             age
                           </Th>
+                          <Th
+                            fontSize="13px"
+                            textTransform="capitalize"
+                            color="#534D59"
+                            fontWeight="600"
+                          >
+                            hmo percentage cover
+                          </Th>
+                          <Th
+                            fontSize="13px"
+                            textTransform="capitalize"
+                            color="#534D59"
+                            fontWeight="600"
+                          >
+                            actual cost
+                          </Th>
         
                           <Th
                             fontSize="13px"
@@ -256,6 +272,8 @@ export default function RadiologyInsuranceAuthorizationModal({ isOpen, onClose, 
                                 name={`${item.patient?.firstName} ${item.patient?.lastName}`}
                                 email={item.patient?.email}
                                 age={item.patient?.age}
+                                hmopercentagecover={item.hmopercentagecover}
+                                actualcost={item.actualcost}
                                 phone={item.patient?.phoneNumber}
                                 mrn={item.patient?.MRN}
                                 amount={item.amount}

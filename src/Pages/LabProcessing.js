@@ -567,13 +567,8 @@ export default function LabProcessing() {
   }, [
     isOpen,
     Trigger,
-    CurrentPage,
-    Scheduled,
-    Processed,
-    AwaitingConfirmation,
-    Rejected,
-    Hematology,
-    Chemical,
+    CurrentPage
+   
   ]);
 
   return (
@@ -720,6 +715,16 @@ export default function LabProcessing() {
                 </Text>
               </Box>
             </Flex>
+          
+          </HStack>
+
+       
+        </Flex>
+
+        <Flex 
+         justifyContent="space-between"
+          flexWrap="wrap"
+          alignItems="center" mt="10px">
             <Button
               rightIcon={<SlPlus />}
               w={["100%", "100%", "144px", "144px"]}
@@ -727,9 +732,8 @@ export default function LabProcessing() {
             >
               Request Order
             </Button>
-          </HStack>
 
-          <HStack flexWrap={["wrap", "nowrap"]}>
+               <HStack flexWrap={["wrap", "nowrap"]}>
             {ByDate === false ? (
               <Input
                 label="Search"

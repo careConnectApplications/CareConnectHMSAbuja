@@ -133,6 +133,9 @@ export const GetAllClaimsApi = (page, limit) => {
 };
 
 export const AuthorizeClaimsApi = (payload, type, id) => {
+
+    console.log("AuthorizeClaimsApi", id, "type", type);
+
   const data = JSON.stringify(payload);
   const config = {
     method: "post",
@@ -164,6 +167,9 @@ export const AuthorizeClaimsApi = (payload, type, id) => {
     });
 };
 export const GroupAuthorizeClaimsApi = (payload, type, id) => {
+
+  console.log("GroupAuthorizeClaimsApi", id, "type", type);
+
   const data = JSON.stringify(payload);
   const config = {
     method: "post",
@@ -964,6 +970,38 @@ export const GetAllHistopathologyReportApi = () => {
     .request(config)
     .then((response) => {
       return response.data; // Return the data part of the response
+    })
+    .catch((error) => {
+      console.log("Error fetching users:", error.response);
+      if (error.response && error.response.data.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response && error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
+export const GetMedicalReportAPI = (payload,queryType) => {
+  // Configure the GET request
+
+  let data = JSON.stringify(payload);
+  let config = {
+    method: "POST",
+    url: `${baseUrl}/reports/reports/${queryType}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data: data,
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response; // Return the data part of the response
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
