@@ -1,15 +1,18 @@
-import { Box, Flex, Stack } from '@chakra-ui/react'
+import { Box, Flex } from '@chakra-ui/react'
 import NavBar from './NavBar'
 import SideBar from './SideBar'
 import Footer from './Footer'
 import React, { useState } from 'react'
+import { useColors } from '../Utils/colors'
 
-export default function MainLayout({ children, bgColor = "#F4F7FC", color = "black",  showSearch=true, showNav=true, borderRight="1px solid #ddd",  active = false }) {
+export default function MainLayout({ children, showSearch=true, showNav=true,  active = false }) {
 
     const [Wide, setWide] = useState(true);
+    const { cardBgColor, borderColor } = useColors();
+    const borderRight = `1px solid ${borderColor}`;
   return (
 
-    <Box bgColor={bgColor} minH="100vh"  >
+    <Box bgColor={cardBgColor} minH="100vh"  >
       
 
       <Flex pos={"relative"} direction={["column-reverse", "column-reverse", "column-reverse", "column-reverse", "row"]} justifyContent="space-between" alignItems={"flex-start"}>

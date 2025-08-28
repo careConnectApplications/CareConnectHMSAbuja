@@ -316,6 +316,54 @@ export default function SummaryReport() {
           localStorage.setItem("reportCategory", QueryType);
           localStorage.setItem("reportGrandTotal", JSON.stringify(totals));
           nav("/dashboard/report-analytics/print-summary");
+        } else if (QueryType === "inpatients records") {
+          localStorage.setItem(
+            "reportSummary",
+            JSON.stringify(result.queryresult)
+          );
+          localStorage.setItem("reportCategory", QueryType);
+          nav("/dashboard/report-analytics/print-summary");
+        } else if (QueryType === "outpatients records") {
+          localStorage.setItem(
+            "reportSummary",
+            JSON.stringify(result.queryresult)
+          );
+          localStorage.setItem("reportCategory", QueryType);
+          nav("/dashboard/report-analytics/print-summary");
+        } else if (QueryType === "accident and emergency records") {
+          localStorage.setItem(
+            "reportSummary",
+            JSON.stringify(result.queryresult)
+          );
+          localStorage.setItem("reportCategory", QueryType);
+          nav("/dashboard/report-analytics/print-summary");
+        } else if (QueryType === "national health insurance services") {
+          const grandTotal = {
+            male: 0,
+            female: 0,
+            total: 0,
+          };
+
+          result.queryresult[0].totalPatientsByInsurance.forEach((item) => {
+            item.data.forEach((genderData) => {
+              if (genderData._id.toLowerCase() === "male") {
+                grandTotal.male += genderData.count;
+              } else if (genderData._id.toLowerCase() === "female") {
+                grandTotal.female += genderData.count;
+              }
+            });
+          });
+
+          grandTotal.total = grandTotal.male + grandTotal.female;
+
+          localStorage.setItem(
+            "reportSummary",
+            JSON.stringify(result.queryresult[0].totalPatientsByInsurance)
+          );
+          localStorage.setItem("reportGrandTotal", JSON.stringify(grandTotal));
+
+          localStorage.setItem("reportCategory", QueryType);
+          nav("/dashboard/report-analytics/print-summary");
         }
       }
     } catch (e) {

@@ -1,13 +1,14 @@
 import { Box, HStack, Image, Stack, Text, Flex } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import logo from "../Assets/carelogo.png"
+import { useColors } from '../Utils/colors'
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { NavList } from './NavList';
 import NavItem from "./NavLink";
 import { HiOutlineMenu } from "react-icons/hi";
 import { FaArrowRight } from "react-icons/fa";
 import { FaArrowRightArrowLeft } from "react-icons/fa6";
-export default function SideBar({ borderRight = "1px solid #EDEFF2", h = "100%", showNav = true, active = false, setWide, Wide }) {
+export default function SideBar({ h = "100%", showNav = true, active = false, setWide, Wide, borderRight }) {
     const location = useLocation();
 
 
@@ -23,11 +24,12 @@ export default function SideBar({ borderRight = "1px solid #EDEFF2", h = "100%",
 
 
     const [isOpen, setIsOpen] = useState('');
-
+    
+    const { bgColor,NavListBg } = useColors();
 
 
     return (
-        <Box pb="32px" h={h} overflowY={"auto"} bgColor={"white"} borderRight={borderRight} cursor="pointer" >
+        <Box pb="32px" h={h} overflowY={"auto"} bgColor={bgColor} borderRight={borderRight} cursor="pointer" >
             {
                 Wide === true &&  (
 
@@ -38,7 +40,7 @@ export default function SideBar({ borderRight = "1px solid #EDEFF2", h = "100%",
                         <Image src={logo} width={"55%"} onClick={() => navigate("/")} />
 
 
-                        <Box display={["none", "none","none","none","block"]} color="blue.blue500" onClick={() => setWide(!Wide)}>
+                        <Box display={["none", "none","none","none","block"]} color={NavListBg} onClick={() => setWide(!Wide)}>
                             <FaArrowRightArrowLeft />
                         </Box>
 

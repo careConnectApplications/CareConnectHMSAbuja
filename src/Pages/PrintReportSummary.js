@@ -46,6 +46,10 @@ export default function PrintReportSummary() {
 
   useEffect(() => {}, []);
 
+  const formatCategory = (category) => {
+    return category.replace(/([A-Z])/g, ' $1').trim();
+  };
+
   return (
     <Box px="6%" mt="32px">
       {Hide === false && (
@@ -1447,6 +1451,160 @@ export default function PrintReportSummary() {
                   </Text>
                 </Box>
               </SimpleGrid>
+            </Box>
+          </>
+        )}
+
+        {Category === "inpatients records" && (
+          <TableContainer mt="15px">
+            <Table variant="striped">
+              <Thead>
+                <Tr>
+                  <Th>Category</Th>
+                  <Th isNumeric>Male</Th>
+                  <Th isNumeric>Female</Th>
+                  <Th isNumeric>Total</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {Object.entries(Data).map(([key, value], i) => (
+                  <TableRow
+                    key={i}
+                    type="generic-gender-total-aggregate"
+                    category={formatCategory(key)}
+                    male={value.male}
+                    female={value.female}
+                    total={value.total}
+                  />
+                ))}
+              </Tbody>
+            </Table>
+          </TableContainer>
+        )}
+
+        {Category === "outpatients records" && (
+          <TableContainer mt="15px">
+            <Table variant="striped">
+              <Thead>
+                <Tr>
+                  <Th>Category</Th>
+                  <Th isNumeric>Male</Th>
+                  <Th isNumeric>Female</Th>
+                  <Th isNumeric>Total</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {Object.entries(Data).map(([key, value], i) => (
+                  <TableRow
+                    key={i}
+                    type="generic-gender-total-aggregate"
+                    category={key}
+                    male={value.male}
+                    female={value.female}
+                    total={value.total}
+                  />
+                ))}
+              </Tbody>
+            </Table>
+          </TableContainer>
+        )}
+
+        {Category === "accident and emergency records" && (
+          <TableContainer mt="15px">
+            <Table variant="striped">
+              <Thead>
+                <Tr>
+                  <Th>Category</Th>
+                  <Th isNumeric>Male</Th>
+                  <Th isNumeric>Female</Th>
+                  <Th isNumeric>Total</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {Object.entries(Data).map(([key, value], i) => (
+                  <TableRow
+                    key={i}
+                    type="generic-gender-total-aggregate"
+                    category={key}
+                    male={value.male}
+                    female={value.female}
+                    total={value.total}
+                  />
+                ))}
+              </Tbody>
+            </Table>
+          </TableContainer>
+        )}
+
+        {Category === "national health insurance services" && (
+          <>
+            <TableContainer mt="15px">
+              <Table variant="striped">
+                <Thead>
+                  <Tr>
+                    <Th>S/N</Th>
+                    <Th>Insurance Name</Th>
+                    <Th isNumeric>Male</Th>
+                    <Th isNumeric>Female</Th>
+                    <Th isNumeric>Total</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {Data.map((item, i) => {
+                    let maleCount = 0;
+                    let femaleCount = 0;
+                    item.data.forEach((d) => {
+                      if (d._id.toLowerCase() === "male") {
+                        maleCount += d.count;
+                      } else if (d._id.toLowerCase() === "female") {
+                        femaleCount += d.count;
+                      }
+                    });
+                    const total = maleCount + femaleCount;
+                    return (
+                      <TableRow
+                        key={i}
+                        type="nhis-aggregate"
+                        sn={i + 1}
+                        name={item._id}
+                        male={maleCount}
+                        female={femaleCount}
+                        total={total}
+                      />
+                    );
+                  })}
+                </Tbody>
+              </Table>
+            </TableContainer>
+            <Box
+              mt="20px"
+              p="20px"
+              borderWidth="1px"
+              borderColor="gray.200"
+              borderRadius="md"
+              bg="gray.50"
+            >
+              <Text fontWeight="700" fontSize="16px">
+                Grand Total Male:{" "}
+                {
+                  JSON.parse(localStorage.getItem("reportGrandTotal"))
+                    ?.male
+                }
+              </Text>
+              <Text fontWeight="700" fontSize="16px">
+                Grand Total Female:{" "}
+                {
+                  JSON.parse(localStorage.getItem("reportGrandTotal"))
+                    ?.female
+                }
+              </Text>
+              <Text fontWeight="700" fontSize="16px">
+                Grand Total:{" "}
+                {
+                  JSON.parse(localStorage.getItem("reportGrandTotal"))
+                    ?.total
+                }
+              </Text>
             </Box>
           </>
         )}
