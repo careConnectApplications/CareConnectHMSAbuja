@@ -10,6 +10,8 @@ import {
 import React, { useEffect, useState } from "react";
 import { FaChevronRight } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useColors } from '../Utils/colors'
+
 
 export default function NavItem(props) {
   const {
@@ -25,6 +27,8 @@ export default function NavItem(props) {
   } = props;
   const [hover, setHover] = useState(active);
   const [OpenNav, setOpenNav] = useState(false);
+
+  const { NavListColor,NavListBg } = useColors();
 
 
   const nav = useNavigate();
@@ -50,15 +54,15 @@ export default function NavItem(props) {
       color={
         isOpen === children || hover || activeScreen || OpenNav
           ? "#fff"
-          : "#333"
+          : NavListColor
       }
       bg={
         isOpen === children || hover || activeScreen || OpenNav
-          ? "blue.blue500"
+          ? NavListBg
           : "transparent"
       }
       _hover={{
-        bg: "blue.blue500",
+        bg: NavListBg,
         color: "#fff",
       }}
       role=""
@@ -86,7 +90,7 @@ export default function NavItem(props) {
             color={
               isOpen === children || hover || activeScreen || OpenNav
                 ? "#fff"
-                : "#333"
+                : NavListColor
             }
             mr="5px"
           >
@@ -122,8 +126,8 @@ export default function NavItem(props) {
                     nav(item.link);
                   }}
                   pl="28px"
-                  _hover={{ color: "blue.blue500", bg: "#fff" }}  
-                  color={item.active ? "blue.blue500" : "#fff"}
+                  _hover={{ color: NavListBg, bg: "#fff" }}  
+                  color={item.active ? NavListBg : "#fff"}
                   bg={item.active ? "white" : "transparent"}
                   hasCurve={false}
                 >

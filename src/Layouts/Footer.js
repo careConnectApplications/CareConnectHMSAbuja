@@ -1,7 +1,9 @@
 import { HStack, Text } from '@chakra-ui/react'
 import React from 'react'
+import { useColors } from '../Utils/colors'
 
 export default function Footer() {
+  const { lightTextColor } = useColors();
   return (
     <HStack
     flex={1}
@@ -14,7 +16,7 @@ export default function Footer() {
     flexWrap="wrap"
     cursor={"pointer"}
   >
-    <Text color="#8A8D8E" fontSize="16px" fontWeight="500">
+    <Text color={lightTextColor} fontSize="16px" fontWeight="500">
     2025, Care Connect, All Right Reserved
     </Text>
 

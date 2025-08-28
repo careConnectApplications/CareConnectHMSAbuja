@@ -171,7 +171,9 @@ export default function TableRow({
   onDischarge,
   isChemical,
   isHematology,
-  hmo
+  hmo,
+  male,
+  female
 
 }) {
   const router = useNavigate();
@@ -4084,6 +4086,59 @@ export default function TableRow({
                 </MenuItem>
               </MenuList>
             </Menu>
+          </Td>
+        </>
+      )}
+      {type === "generic-gender-total-aggregate" && (
+        <>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {category}
+            </Text>
+          </Td>
+          <Td isNumeric>
+            <Text fontWeight="400" fontSize="12px">
+              {male}
+            </Text>
+          </Td>
+          <Td isNumeric>
+            <Text fontWeight="400" fontSize="12px">
+              {female}
+            </Text>
+          </Td>
+          <Td isNumeric>
+            <Text fontWeight="400" fontSize="12px">
+              {total}
+            </Text>
+          </Td>
+        </>
+      )}
+      {type === "nhis-aggregate" && (
+        <>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {sn}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {name}
+            </Text>
+          </Td>
+          <Td isNumeric>
+            <Text fontWeight="400" fontSize="12px">
+              {male}
+            </Text>
+          </Td>
+          <Td isNumeric>
+            <Text fontWeight="400" fontSize="12px">
+              {female}
+            </Text>
+          </Td>
+          <Td isNumeric>
+            <Text fontWeight="400" fontSize="12px">
+              {total}
+            </Text>
           </Td>
         </>
       )}
