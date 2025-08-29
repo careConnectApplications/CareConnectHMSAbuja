@@ -16,6 +16,9 @@ import InPatientReport from "./MedicalReportPages/InPatientReport";
 import OutPatientReport from "./MedicalReportPages/OutPatientReport";
 import LabInvestigationReport from "./MedicalReportPages/LabInvestigationReport";
 import RadiologyReport from "./MedicalReportPages/RadiologyReport";
+import ProcedureReport from "./MedicalReportPages/ProcedureReport";
+import ImmunizationReport from "./MedicalReportPages/ImmunizationReport";
+import PharmacyReport from "./MedicalReportPages/PharmacyReport";
 
 export default function MedicalReport() {
     return (
@@ -69,6 +72,24 @@ export default function MedicalReport() {
                     >
                         Radiology Report
                     </Tab>
+                    <Tab
+                        _focus={{ outline: "none" }}
+                        _selected={{ color: "blue.blue500", fontWeight: "700" }}
+                    >
+                        Procedure Report
+                    </Tab>
+                    <Tab
+                        _focus={{ outline: "none" }}
+                        _selected={{ color: "blue.blue500", fontWeight: "700" }}
+                    >
+                        Immunization Report
+                    </Tab>
+                    <Tab
+                        _focus={{ outline: "none" }}
+                        _selected={{ color: "blue.blue500", fontWeight: "700" }}
+                    >
+                        Pharmacy Report
+                    </Tab>
                 </TabList>
                 <TabPanels>
                     <TabPanel p="0">
@@ -88,6 +109,15 @@ export default function MedicalReport() {
                     </TabPanel>
                     <TabPanel p="0">
                         <RadiologyReport />
+                    </TabPanel>
+                    <TabPanel p="0">
+                        <ProcedureReport />
+                    </TabPanel>
+                    <TabPanel p="0">
+                        <ImmunizationReport />
+                    </TabPanel>
+                    <TabPanel p="0">
+                        <PharmacyReport />
                     </TabPanel>
                 </TabPanels>
             </Tabs>
