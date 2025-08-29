@@ -12,6 +12,8 @@ import {
 import { Tr, Td } from "@chakra-ui/react";
 import { BsThreeDots } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
+import { useColors } from "../Utils/colors";
+
 
 export default function TableRowX({
   type,
@@ -33,10 +35,19 @@ export default function TableRowX({
   onClick,
   gender,
   hmoStatus,
+  subscriptionExpired
 }) {
-  const router = useNavigate();
+
+  const router = useNavigate(); 
+  const {
+     
+     tableColor,
+    tableColorBold,
+    } = useColors();
+
+
   return (
-    <Tr textTransform="capitalize" cursor="pointer">
+    <Tr textTransform="capitalize" cursor="pointer" color={tableColor}>
       {type === "patient-management" && (
         <>
           <Td>
@@ -47,11 +58,11 @@ export default function TableRowX({
                 src="https://bit.ly/tioluwani-kolawole"
               />
               <Box>
-                <Text color={"#101828"} fontWeight={"500"} fontSize={"13px"}>
+                <Text color={tableColorBold} fontWeight={"500"} fontSize={"13px"}>
                   {name}
                 </Text>
                 <Text
-                  color={"#667085"}
+                  color={tableColor}
                   textTransform={"lowercase"}
                   fontWeight={"400"}
                   fontSize={"11px"}
@@ -71,11 +82,7 @@ export default function TableRowX({
               {patientType}
             </Text>
           </Td>
-          <Td>
-            <Text fontWeight="400" fontSize={"12px"}>
-              {code}
-            </Text>
-          </Td>
+         
           <Td>
             <Text fontWeight="400" fontSize={"12px"}>
               {phone}
@@ -100,6 +107,33 @@ export default function TableRowX({
             <Text fontWeight="400" fontSize={"12px"}>
               {hmoId}
             </Text>
+          </Td>
+           <Td>
+            <HStack
+              color={
+                subscriptionExpired === "Valid"
+                  ? "#027A48"
+                  : subscriptionExpired === "Invalid"
+                  ? "#FD4739"
+                  : "#FD4739"
+              }
+            >
+              <Box
+                rounded="100%"
+                w="8px"
+                h="8px"
+                bg={
+                  subscriptionExpired === "Valid"
+                    ? "#027A48"
+                    : subscriptionExpired === "Invalid"
+                    ? "#FD4739"
+                    : "#FD4739"
+                }
+              ></Box>
+              <Text fontWeight="400" fontSize={"12px"}>
+                {subscriptionExpired}
+              </Text>
+            </HStack>
           </Td>
           <Td>
             <Text fontWeight="400" fontSize={"12px"}>

@@ -13,13 +13,15 @@ import {
 import { act } from 'react-dom/test-utils';
 import { AiOutlineMail } from 'react-icons/ai';
   import { FaEye, FaEyeSlash } from 'react-icons/fa';
+  import { useColors } from "../Utils/colors";
+  
   
   export default function Input({
     id = '',
     val = false,
     label = ``,
-    bColor = "#6B7280",
-    hoverBColor = "#7A27AB",
+    bColor,
+    hoverBColor,
     isRequired = false,
     type= "email",
     readOnly = false,
@@ -32,11 +34,11 @@ import { AiOutlineMail } from 'react-icons/ai';
     py,
     rightIcon = null,
     w = "100%",
-    borderColor = "blue.blue500",
-    labelBg="#fff",
+    borderColor,
+    labelBg= null,
     leftIcon,
-    color = "#00000",
-    iconColor =  bColor,
+    color,
+    iconColor,
     mb="0",
     ...rest
   }) {
@@ -44,6 +46,12 @@ import { AiOutlineMail } from 'react-icons/ai';
     // const [value, setValue] = useState(val);
   
     const [inputType, setInputType] = useState(type);
+      const {
+        bgColor,
+        textColor, 
+        borderColor: border,
+        primaryColor,
+      } = useColors();
    
     return (
       <FormControl
@@ -60,8 +68,8 @@ import { AiOutlineMail } from 'react-icons/ai';
           zIndex="1"
           fontSize={active ? 'xs' : '12px'}
           fontWeight="400"
-          color={color}
-          bg={ active ? labelBg :labelBg}
+          color={textColor}
+          bg={ active ? !labelBg && bgColor :!labelBg && bgColor}
           px="4px"
           textTransform="capitalize"
         >
@@ -73,7 +81,7 @@ import { AiOutlineMail } from 'react-icons/ai';
           <InputGroup>
           <InputLeftElement
           pointerEvents='none'
-          children={<Box pos={"relative"} color={active ? borderColor: iconColor} top="4.5px" fontSize={"20px"}>{leftIcon}</Box>}
+          children={<Box pos={"relative"} color={active ? primaryColor: iconColor} top="4.5px" fontSize={"20px"}>{leftIcon}</Box>}
         />
             <InputBox
               // borderColor={Colors.red}
@@ -81,20 +89,20 @@ import { AiOutlineMail } from 'react-icons/ai';
               {...rest}
               placeholder={active || !label ? placeholder : ''}
               type={inputType}
-              focusBorderColor={'blue.blue400'}
-              _focus={{ borderColor: borderColor }}
+              focusBorderColor={primaryColor}
+              _focus={{ borderColor: primaryColor }}
               size={size}
               py={py}
-              color={color}
+              color={textColor}
               _autofill={{bgColor: "transparent !important"}} 
-              _placeholder={{color: color}}
+              _placeholder={{color: textColor}}
               fontWeight={'400'}
               fontSize="16px"
               fontFamily={"body"}
-              _hover={{borderColor: hoverBColor}}
-              borderColor = {bColor}
+              _hover={{borderColor: primaryColor}}
+              borderColor = {bColor ? bColor : border}
               rounded="8px" 
-              borderWidth="2px"
+              borderWidth="1px"
               bg="transparent"
               w={w}
               onFocus={() => setActive(true)}
@@ -110,7 +118,7 @@ import { AiOutlineMail } from 'react-icons/ai';
           {type === 'password' && (
             <InputRightElement
 
-              children={ <Box pos={"relative"} color={active ? borderColor: iconColor} top="3.3px"> {inputType  === "password" ? <FaEyeSlash/>:  <FaEye/>} </Box> }
+              children={ <Box pos={"relative"} color={active ? primaryColor: iconColor} top="3.3px"> {inputType  === "password" ? <FaEyeSlash/>:  <FaEye/>} </Box> }
               cursor={'pointer'}
               onClick={() => {
                 if (inputType === 'password') {
@@ -130,4 +138,3 @@ import { AiOutlineMail } from 'react-icons/ai';
       </FormControl>
     );
   }
-  

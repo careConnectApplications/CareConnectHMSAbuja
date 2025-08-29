@@ -8,6 +8,7 @@ import {
   Tbody,
   Tr,
   Th,
+  Td,
   TableContainer,
   Menu,
   MenuButton,
@@ -21,6 +22,7 @@ import Preloader from "../Components/Preloader";
 import ShowToast from "../Components/ToastNotification";
 import { CgSearch } from "react-icons/cg";
 import { FaPlus } from "react-icons/fa";
+import { useColors } from "../Utils/colors";
 import CreateUserModal from "../Components/CreateUserModal";
 import BulkUploadModal from "../Components/BulkUploadModal";
 import { GetAllUsersApi, UpdateUserStatusApi,RequestPasswordResetApi  } from "../Utils/ApiCalls";
@@ -35,6 +37,26 @@ import { SlPlus } from "react-icons/sl";
 import Pagination from "../Components/Pagination";
 import { configuration } from "../Utils/Helpers";
 export default function UserManagement() {
+  const {
+    bgColor,
+    textColor,
+    borderColor,
+    titleTextColor,
+    subTitleTextColor,
+    chartFillColor,
+    chartFillXColor,
+    cardBgColor,
+    primaryColor,
+    secondaryColor,
+    dangerColor,
+    successColor,
+    warningColor,
+    infoColor,
+    NavbarText,
+    lightTextColor,
+    NavListColor,
+    NavListBg,
+  } = useColors();
   const [IsLoading, setIsLoading] = useState(true);
   const [Trigger, setTrigger] = useState(false);
   const [Data, setData] = useState([]);
@@ -229,21 +251,21 @@ export default function UserManagement() {
         <ShowToast message={showToast.message} status={showToast.status} />
       )}
       <HStack>
-        <Text color="#1F2937" fontWeight="600" fontSize="19px">
+        <Text color={titleTextColor} fontWeight="600" fontSize="18px">
           Users
         </Text>
-        <Text color="#667085" fontWeight="400" fontSize="18px">
+        <Text color={subTitleTextColor} fontWeight="400" fontSize="16px">
           ({Data?.length})
         </Text>
       </HStack>
-      <Text color="#686C75" mt="9px" fontWeight="400" fontSize="15px">
+      <Text color={subTitleTextColor} mt="9px" fontWeight="400" fontSize="12px">
         View and manage all user profiles in one place. Quickly access statuses,
         assign role, and update details as needed.
       </Text>
 
       <Box
-        bg="#fff"
-        border="1px solid #EFEFEF"
+        bg={bgColor}
+        border={`1px solid ${borderColor}`}
         mt="12px"
         py="17px"
         px={["18px", "18px"]}
@@ -254,40 +276,40 @@ export default function UserManagement() {
           <Flex
             alignItems="center"
             flexWrap="wrap"
-            bg="#E4F3FF"
+            bg={chartFillColor}
             rounded="7px"
             py="3.5px"
             px="5px"
             cursor="pointer"
             mt={["10px", "10px", "0px", "0px"]}
           >
-            <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={() => handleFilterChange("status", "all")}>
+            <Box borderRight={`1px solid ${borderColor}`} pr="5px" onClick={() => handleFilterChange("status", "all")}>
               <Text
                 py="8.5px"
                 px="12px"
-                bg={filters.status === "all" ? "#fff" : "transparent"}
+                bg={filters.status === "all" ? bgColor : "transparent"}
                 rounded="7px"
-                color={"#1F2937"}
+                color={titleTextColor}
                 fontWeight={"500"}
                 fontSize={"13px"}
               >
                 All{" "}
-                <Box color="#667085" as="span" fontWeight="400" fontSize="13px">
+                <Box color={subTitleTextColor} as="span" fontWeight="400" fontSize="13px">
                   ({Data?.length})
                 </Box>
               </Text>
             </Box>
             <Box
-              borderRight="1px solid #EDEFF2"
+              borderRight={`1px solid ${borderColor}`}
               pr="5px"
               onClick={() => handleFilterChange("status", "active")}
             >
               <Text
                 py="8.5px"
                 px="12px"
-                bg={filters.status === "active" ? "#fff" : "transparent"}
+                bg={filters.status === "active" ? bgColor : "transparent"}
                 rounded="7px"
-                color={"#1F2937"}
+                color={titleTextColor}
                 fontWeight={"500"}
                 fontSize={"13px"}
               >
@@ -295,16 +317,16 @@ export default function UserManagement() {
               </Text>
             </Box>
             <Box
-              borderRight="1px solid #EDEFF2"
+              borderRight={`1px solid ${borderColor}`}
               pr="5px"
               onClick={() => handleFilterChange("status", "inactive")}
             >
               <Text
                 py="8.5px"
                 px="12px"
-                bg={filters.status === "inactive" ? "#fff" : "transparent"}
+                bg={filters.status === "inactive" ? bgColor : "transparent"}
                 rounded="7px"
-                color={"#1F2937"}
+                color={titleTextColor}
                 fontWeight={"500"}
                 fontSize={"13px"}
               >
@@ -325,7 +347,7 @@ export default function UserManagement() {
                 label="Search"
                 onChange={(e) => handleFilterChange("searchTerm", e.target.value)}
                 value={filters.searchTerm}
-                bColor="#E4E4E4"
+                bColor={borderColor}
                 leftIcon={<BiSearch />}
               />
             ) : (
@@ -335,7 +357,7 @@ export default function UserManagement() {
                   type="date"
                   onChange={(e) => handleFilterChange("startDate", e.target.value)}
                   value={filters.startDate}
-                  bColor="#E4E4E4"
+                  bColor={borderColor}
                   leftIcon={<FaCalendarAlt />}
                 />
                 <Input
@@ -343,7 +365,7 @@ export default function UserManagement() {
                   type="date"
                   onChange={(e) => handleFilterChange("endDate", e.target.value)}
                   value={filters.endDate}
-                  bColor="#E4E4E4"
+                  bColor={borderColor}
                   leftIcon={<FaCalendarAlt />}
                 />
               </HStack>
@@ -353,13 +375,13 @@ export default function UserManagement() {
               <Menu isLazy>
                 <MenuButton as={Box}>
                   <HStack
-                    border="1px solid #EA5937"
+                    border={`1px solid ${NavListBg}`}
                     rounded="7px"
                     cursor="pointer"
                     py="11.64px"
                     px="16.98px"
-                    bg="#f8ddd1"
-                    color="blue.blue500"
+                    bg={NavListBg}
+                    color={secondaryColor}
                     fontWeight="500"
                     fontSize="14px"
                   >
@@ -367,7 +389,7 @@ export default function UserManagement() {
                     <IoFilter />
                   </HStack>
                 </MenuButton>
-                <MenuList>
+                <MenuList bg={bgColor} border={`1px solid ${borderColor}`}>
                   <MenuItem
                     onClick={() => {
                       handleFilterChange("searchField", "name");
@@ -375,11 +397,11 @@ export default function UserManagement() {
                     }}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -393,11 +415,11 @@ export default function UserManagement() {
                     }}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -411,11 +433,11 @@ export default function UserManagement() {
                     }}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -429,11 +451,11 @@ export default function UserManagement() {
                     }}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -444,11 +466,11 @@ export default function UserManagement() {
                     onClick={() => setByDate(true)}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -468,11 +490,11 @@ export default function UserManagement() {
                     }}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -502,9 +524,6 @@ export default function UserManagement() {
           <Button
             mt={["10px", "10px", "0px", "0px"]}
             rightIcon={<HiOutlineDocumentArrowUp />}
-            background="#f8ddd1 "
-            border="1px solid #EA5937"
-            color="blue.blue500"
             w={["100%", "100%", "144px", "144px"]}
             onClick={BulkUpload}
           >
@@ -515,8 +534,8 @@ export default function UserManagement() {
         {/* filter section end here */}
 
         <Box
-          bg="#fff"
-          border="1px solid #EFEFEF"
+          bg={bgColor}
+          border={`1px solid ${borderColor}`}
           mt="12px"
           py="15px"
           px="15px"
@@ -525,60 +544,60 @@ export default function UserManagement() {
         >
           <TableContainer>
             <Table variant="striped">
-              <Thead bg="#fff">
+              <Thead>
                 <Tr>
                   <Th
-                    fontSize="13px"
+                    fontSize="12px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     name
                   </Th>
                   <Th
-                    fontSize="13px"
+                    fontSize="12px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     role
                   </Th>
                   <Th
-                    fontSize="13px"
+                    fontSize="12px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     clinic
                   </Th>
                   <Th
-                    fontSize="13px"
+                    fontSize="12px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     phone
                   </Th>
                   <Th
-                    fontSize="13px"
+                    fontSize="12px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     date created
                   </Th>
                   <Th
-                    fontSize="13px"
+                    fontSize="12px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     status
                   </Th>
                   <Th
-                    fontSize="13px"
+                    fontSize="12px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     actions
@@ -606,9 +625,13 @@ export default function UserManagement() {
                     />
                   ))
                 ) : (
-                  <Text textAlign={"center"} mt="32px" color="black">
-                    *--No record found--*
-                  </Text>
+                  <Tr>
+                    <Td colSpan={7} textAlign="center">
+                      <Text mt="32px" color={textColor}>
+                        *--No record found--*
+                      </Text>
+                    </Td>
+                  </Tr>
                 )}
               </Tbody>
             </Table>

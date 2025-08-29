@@ -13,6 +13,7 @@ import {
 import { Tr, Td } from "@chakra-ui/react";
 import { BsThreeDots } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
+import { useColors } from "../Utils/colors";
 
 export default function TableRow({
   type,
@@ -173,10 +174,18 @@ export default function TableRow({
   isHematology,
   hmo,
   male,
-  female
+  female,
+  dischargeReason,
+  referredIn,
+  referredFrom,
 
 }) {
   const router = useNavigate();
+  const {
+     
+    tableColor,
+   tableColorBold,
+   } = useColors();
 
   const onlineUser = JSON.parse(localStorage.getItem("onlineUser"));
 
@@ -195,7 +204,7 @@ export default function TableRow({
   };
 
   return (
-    <Tr textTransform="capitalize" cursor="pointer">
+    <Tr textTransform="capitalize" cursor="pointer" color={tableColor}>
       {type === "user-management" && (
         <>
           <Td>
@@ -206,11 +215,11 @@ export default function TableRow({
                 src="https://bit.ly/tioluwani-kolawole"
               />
               <Box>
-                <Text color={"#101828"} fontWeight={"500"} fontSize={"13px"}>
+                <Text color={tableColorBold} fontWeight={"500"} fontSize={"13px"}>
                   {name}
                 </Text>
                 <Text
-                  color={"#667085"}
+                  color={tableColor}
                   textTransform={"lowercase"}
                   fontWeight={"400"}
                   fontSize={"11px"}
@@ -220,36 +229,27 @@ export default function TableRow({
               </Box>
             </HStack>
           </Td>
-          <Td>
+          <Td >
             <Text
               fontWeight="400"
-              fontSize={"13px"}
+              fontSize={"12px"}
               textTransform={"capitalize"}
-              color={
-                role === "doctor"
-                  ? "#2936e4"
-                  : role === "nurse"
-                  ? "#a529e4"
-                  : role === "pharmacists"
-                  ? "#29a3d5"
-                  : "black"
-              }
             >
               {role}
             </Text>
           </Td>
           <Td>
-            <Text fontWeight="400" fontSize={"13px"}>
+            <Text fontWeight="400" fontSize={"12px"}>
               {clinic}
             </Text>
           </Td>
           <Td>
-            <Text fontWeight="400" fontSize={"13px"}>
+            <Text fontWeight="400" fontSize={"12px"}>
               {phone}
             </Text>
           </Td>
           <Td>
-            <Text fontWeight="400" fontSize={"13px"}>
+            <Text fontWeight="400" fontSize={"12px"}>
               {date}
             </Text>
           </Td>
@@ -275,7 +275,7 @@ export default function TableRow({
                     : "#FD4739"
                 }
               ></Box>
-              <Text fontWeight="400" fontSize={"13px"}>
+              <Text fontWeight="400" fontSize={"12px"}>
                 {status}
               </Text>
             </HStack>
@@ -299,7 +299,7 @@ export default function TableRow({
                     bg: "blue.blue500",
                   }}
                 >
-                  <HStack fontSize="14px">
+                  <HStack fontSize="12px">
                     <Text>Edit</Text>
                   </HStack>
                 </MenuItem>
@@ -315,7 +315,7 @@ export default function TableRow({
                     bg: "blue.blue500",
                   }}
                 >
-                  <HStack fontSize="14px">
+                  <HStack fontSize="12px">
                     <Text>Change status</Text>
                   </HStack>
                 </MenuItem>
@@ -330,7 +330,7 @@ export default function TableRow({
                     bg: "blue.blue500",
                   }}
                 >
-                  <HStack fontSize="14px">
+                  <HStack fontSize="12px">
                     <Text>Reset Password</Text>
                   </HStack>
                 </MenuItem>
@@ -345,7 +345,7 @@ export default function TableRow({
                     bg: "blue.blue500",
                   }}
                 >
-                  <HStack fontSize="14px">
+                  <HStack fontSize="12px">
                     <Text>Edit Permission</Text>
                   </HStack>
                 </MenuItem>
@@ -360,7 +360,7 @@ export default function TableRow({
                     bg: "blue.blue500",
                   }}
                 >
-                  <HStack fontSize="14px">
+                  <HStack fontSize="12px">
                     <Text>Remove User</Text>
                   </HStack>
                 </MenuItem>
@@ -2398,6 +2398,21 @@ export default function TableRow({
           <Td>
             <Text fontWeight="400" fontSize="12px">
               {date}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {dischargeReason}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {referredIn}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {referredFrom}
             </Text>
           </Td>
           <Td>

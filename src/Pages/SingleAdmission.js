@@ -35,6 +35,7 @@ import BedFeeModal from "../Components/BedFeeModal";
 import AdmissionModal from "../Components/AdmissionModal";
 import { configuration } from "../Utils/Helpers";
 import Preloader from "../Components/Preloader";
+import DischargePatientModal from "../Components/DischargePatientModal";
 
 export default function SingleAdmission() {
   const [IsLoading, setIsLoading] = useState(true);
@@ -47,6 +48,8 @@ export default function SingleAdmission() {
   const [OldPayload, setOldPayload] = useState({});
   const [FilterData, setFilterData] = useState([]);
   const [isDischarging, setIsDischarging] = useState(false);
+  const [selectedAdmission, setSelectedAdmission] = useState(null);
+  const [isDischargeModalOpen, setIsDischargeModalOpen] = useState(false);
   const [Trigger, setTrigger] = useState(false);
   const [CurrentPage, setCurrentPage] = useState(1);
   const [PostPerPage] = useState(configuration.sizePerPage);
@@ -73,16 +76,31 @@ export default function SingleAdmission() {
   const { pathname } = useLocation();
   const nav = useNavigate();
   const id = localStorage.getItem("appointmentId");
+  const patientId = localStorage.getItem("patientId");
 
-  const handleDischarge = async (id) => {
+  const openDischargeModal = (admission) => {
+    setSelectedAdmission(admission);
+    setIsDischargeModalOpen(true);
+  };
+
+  const closeDischargeModal = () => {
+    setSelectedAdmission(null);
+    setIsDischargeModalOpen(false);
+  };
+
+  const handleDischarge = async (dischargeReason) => {
     setIsDischarging(true);
     try {
-      const result = await DischargePatientApi(id);
+      const result = await DischargePatientApi(
+        selectedAdmission._id,
+        dischargeReason
+      );
       console.log("Discharge API response:", result);
 
       if (result.status === true) {
         activateNotifications("Patient Discharged Successfully", "success");
         setTrigger(!Trigger);
+        closeDischargeModal();
       } else {
         activateNotifications("Discharge failed: Unexpected response", "error");
       }
@@ -121,7 +139,9 @@ export default function SingleAdmission() {
   const getAllAdmissionHistory = async () => {
     setIsLoading(true);
     try {
-      const result = await GetAllAdmissionHistoryApi(id);
+      const result = await GetAllAdmissionHistoryApi(patientId);
+
+      console.log("Get All Admission History API response:", result);
       if (result.status === true) {
         setIsLoading(false);
         setData(result.queryresult.admissiondetails);
@@ -361,6 +381,15 @@ export default function SingleAdmission() {
                   Referred Date
                 </Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  Discharge Reason
+                </Th>
+                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  Referred In
+                </Th>
+                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  Referred From
+                </Th>
+                <Th fontSize="13px" color="#534D59" fontWeight="600">
                   Status
                 </Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">
@@ -382,7 +411,10 @@ export default function SingleAdmission() {
                   wardName={item.referedward?.wardname}
                   BedName={item.bed?.bednumber}
                   bedFee={item.bedfee}
-                  onDischarge={() => handleDischarge(item._id)}
+                  dischargeReason={item.dischargeReason}
+                  referredIn={item.referredIn ? "Yes":"No"}
+                  referredFrom={item.referredFrom}
+                  onDischarge={() => openDischargeModal(item)}
                   onTransfer={() => handleTransfer(item)}
                   onBedFee={() => handleBedFee(item._id)}
                   isDischarging={isDischarging}
@@ -415,6 +447,12 @@ export default function SingleAdmission() {
           setTrigger={setTrigger}
         />
       </Box>
+      <DischargePatientModal
+        isOpen={isDischargeModalOpen}
+        onClose={closeDischargeModal}
+        onConfirm={handleDischarge}
+        isDischarging={isDischarging}
+      />
 
       <Pagination
         postPerPage={PostPerPage}
