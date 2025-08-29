@@ -174,7 +174,10 @@ export default function TableRow({
   isHematology,
   hmo,
   male,
-  female
+  female,
+  dischargeReason,
+  referredIn,
+  referredFrom,
 
 }) {
   const router = useNavigate();
@@ -2395,6 +2398,21 @@ export default function TableRow({
           <Td>
             <Text fontWeight="400" fontSize="12px">
               {date}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {dischargeReason}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {referredIn}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {referredFrom}
             </Text>
           </Td>
           <Td>

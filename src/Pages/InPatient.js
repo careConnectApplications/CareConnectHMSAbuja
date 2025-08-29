@@ -39,6 +39,7 @@ import {
 import Pagination from "../Components/Pagination";
 import { configuration } from "../Utils/Helpers";
 import Preloader from "../Components/Preloader";
+import DischargePatientModal from "../Components/DischargePatientModal";
 
 export default function InPatient() {
   const [IsLoading, setIsLoading] = useState(false);
@@ -53,6 +54,8 @@ export default function InPatient() {
   const [OldPayload, setOldPayload] = useState({});
   const [updating, setUpdating] = useState(null);
   const [isDischarging, setIsDischarging] = useState(false); // New state for discharge loading
+  const [selectedAdmission, setSelectedAdmission] = useState(null);
+  const [isDischargeModalOpen, setIsDischargeModalOpen] = useState(false);
 
   const [Data, setData] = useState([]);
   const [QueueData, setQueueData] = useState([]);
@@ -189,15 +192,29 @@ export default function InPatient() {
     }, 5000);
   };
 
+  const openDischargeModal = (admission) => {
+    setSelectedAdmission(admission);
+    setIsDischargeModalOpen(true);
+  };
+
+  const closeDischargeModal = () => {
+    setSelectedAdmission(null);
+    setIsDischargeModalOpen(false);
+  };
+
   // Handle discharge functionality
-  const handleDischarge = async (admissionId) => {
-    setUpdating(admissionId);
+  const handleDischarge = async (dischargeReason) => {
+    setUpdating(selectedAdmission._id);
     setIsDischarging(true);
     try {
-      const result = await DischargePatientApi(admissionId);
+      const result = await DischargePatientApi(
+        selectedAdmission._id,
+        dischargeReason
+      );
       if (result.status === true) {
         activateNotifications("Patient discharged successfully!", "success");
         getAllPatientHistory(); // Refresh the data
+        closeDischargeModal();
       }
     } catch (error) {
       activateNotifications(
@@ -579,12 +596,21 @@ export default function InPatient() {
                   <Th fontSize="13px" color="#534D59" fontWeight="600">
                     Bed Fee
                   </Th>
-                  <Th fontSize="13px" color="#534D59" fontWeight="600">
-                    Referred Date
-                  </Th>
-                  <Th fontSize="13px" color="#534D59" fontWeight="600">
-                    Status
-                  </Th>
+                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  Referred Date
+                </Th>
+                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  Discharge Reason
+                </Th>
+                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  Referred In
+                </Th>
+                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  Referred From
+                </Th>
+                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  Status
+                </Th>
                   <Th fontSize="13px" color="#534D59" fontWeight="600">
                     Actions
                   </Th>
@@ -604,6 +630,9 @@ export default function InPatient() {
                       BedName={item.bed?.bednumber}
                       bedFee={item.bedfee}
                       mrn={`${item.patient?.MRN} `}
+                      dischargeReason={item.dischargeReason}
+                      referredIn={item.referredIn ? "Yes":"No"}
+                      referredFrom={item.referredFrom}
                       status={item.status}
                       onView={() =>
                         item.patient &&
@@ -615,7 +644,7 @@ export default function InPatient() {
                           item.status
                         )
                       }
-                      onDischarge={() => handleDischarge(item._id)}
+                      onDischarge={() => openDischargeModal(item)}
                       onTransfer={() => handleTransfer(item)}
                       onBedFee={() => handleBedFee(item)} // Added bed fee handler
                       isUpdating={updating === item._id}
@@ -635,6 +664,9 @@ export default function InPatient() {
                       BedName={item.bed?.bednumber}
                       bedFee={item.bedfee}
                       mrn={`${item.patient?.MRN} `}
+                      dischargeReason={item.dischargeReason}
+                      referredIn={item.referredIn}
+                      referredFrom={item.referredFrom}
                       status={item.status}
                       onView={() =>
                         item.patient &&
@@ -646,7 +678,7 @@ export default function InPatient() {
                           item.status
                         )
                       }
-                      onDischarge={() => handleDischarge(item._id)}
+                      onDischarge={() => openDischargeModal(item)}
                       onTransfer={() => handleTransfer(item)}
                       onBedFee={() => handleBedFee(item)} // Added bed fee handler
                       isUpdating={updating === item._id}
@@ -708,6 +740,12 @@ export default function InPatient() {
           activateNotifications={activateNotifications}
         />
       </Box>
+      <DischargePatientModal
+        isOpen={isDischargeModalOpen}
+        onClose={closeDischargeModal}
+        onConfirm={handleDischarge}
+        isDischarging={isDischarging}
+      />
     </MainLayout>
   );
 }

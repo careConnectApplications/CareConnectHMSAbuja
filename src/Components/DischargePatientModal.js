@@ -31,7 +31,7 @@ const DischargePatientModal = ({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
+    <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <ModalOverlay />
       <ModalContent>
         <ModalHeader>Discharge Patient</ModalHeader>
@@ -62,7 +62,7 @@ const DischargePatientModal = ({
             )}
           </FormControl>
         </ModalBody>
-        <ModalFooter>
+              <ModalFooter gap={4}>
           <Button variant="ghost" onClick={onClose}>
             Cancel
           </Button>

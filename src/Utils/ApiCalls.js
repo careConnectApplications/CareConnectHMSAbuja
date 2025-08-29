@@ -9254,7 +9254,7 @@ export const UpdateAdmissionStatusApiDoc = (admissionId, updateData) => {
       }
     });
 };
-export const DischargePatientApi = (admissionId) => {
+export const DischargePatientApi = (admissionId, dischargeReason) => {
   console.log("Discharging admission ID:", admissionId);
 
   const config = {
@@ -9264,7 +9264,7 @@ export const DischargePatientApi = (admissionId) => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    data: { status: "discharged" },
+    data: { status: "discharged", dischargeReason },
   };
 
   return axios
