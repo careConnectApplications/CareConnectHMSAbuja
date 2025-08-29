@@ -364,6 +364,30 @@ export default function SummaryReport() {
 
           localStorage.setItem("reportCategory", QueryType);
           nav("/dashboard/report-analytics/print-summary");
+        } else if (
+          QueryType === "lab investigation report" ||
+          QueryType === "radiology diagnosis" ||
+          QueryType === "operation" ||
+          QueryType === "special consultative" ||
+          QueryType === "immunization"
+        ) {
+          const grandTotal = Object.values(result.queryresult).reduce(
+            (acc, curr) => {
+              acc.male += curr.male;
+              acc.female += curr.female;
+              acc.total += curr.total;
+              return acc;
+            },
+            { male: 0, female: 0, total: 0 }
+          );
+
+          localStorage.setItem(
+            "reportSummary",
+            JSON.stringify(result.queryresult)
+          );
+          localStorage.setItem("reportGrandTotal", JSON.stringify(grandTotal));
+          localStorage.setItem("reportCategory", QueryType);
+          nav("/dashboard/report-analytics/print-summary");
         }
       }
     } catch (e) {

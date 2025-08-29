@@ -73,6 +73,7 @@ export default function SingleAdmission() {
   const { pathname } = useLocation();
   const nav = useNavigate();
   const id = localStorage.getItem("appointmentId");
+  const patientId = localStorage.getItem("patientId");
 
   const handleDischarge = async (id) => {
     setIsDischarging(true);
@@ -121,7 +122,9 @@ export default function SingleAdmission() {
   const getAllAdmissionHistory = async () => {
     setIsLoading(true);
     try {
-      const result = await GetAllAdmissionHistoryApi(id);
+      const result = await GetAllAdmissionHistoryApi(patientId);
+
+      console.log("Get All Admission History API response:", result);
       if (result.status === true) {
         setIsLoading(false);
         setData(result.queryresult.admissiondetails);

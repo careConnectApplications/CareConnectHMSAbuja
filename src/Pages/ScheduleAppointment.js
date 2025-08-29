@@ -404,7 +404,7 @@ export default function ScheduleAppointment() {
                     fontWeight={"500"}
                     color="#2F2F2F"
                     _hover={{
-                      color: "#fff",
+                      color: "#614040ff",
                       fontWeight: "400",
                       bg: "blue.blue500",
                     }}

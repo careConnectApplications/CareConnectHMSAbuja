@@ -1608,6 +1608,69 @@ export default function PrintReportSummary() {
             </Box>
           </>
         )}
+
+        {(Category === "lab investigation report" ||
+          Category === "radiology diagnosis" ||
+          Category === "operation" ||
+          Category === "special consultative" ||
+          Category === "immunization") && (
+          <>
+            <TableContainer mt="15px">
+              <Table variant="striped">
+                <Thead>
+                  <Tr>
+                    <Th>Category</Th>
+                    <Th isNumeric>Male</Th>
+                    <Th isNumeric>Female</Th>
+                    <Th isNumeric>Total</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {Object.entries(Data).map(([key, value], i) => (
+                    <TableRow
+                      key={i}
+                      type="generic-gender-total-aggregate"
+                      category={key}
+                      male={value.male}
+                      female={value.female}
+                      total={value.total}
+                    />
+                  ))}
+                </Tbody>
+              </Table>
+            </TableContainer>
+            <Box
+              mt="20px"
+              p="20px"
+              borderWidth="1px"
+              borderColor="gray.200"
+              borderRadius="md"
+              bg="gray.50"
+            >
+              <Text fontWeight="700" fontSize="16px">
+                Grand Total Male:{" "}
+                {
+                  JSON.parse(localStorage.getItem("reportGrandTotal"))
+                    ?.male
+                }
+              </Text>
+              <Text fontWeight="700" fontSize="16px">
+                Grand Total Female:{" "}
+                {
+                  JSON.parse(localStorage.getItem("reportGrandTotal"))
+                    ?.female
+                }
+              </Text>
+              <Text fontWeight="700" fontSize="16px">
+                Grand Total:{" "}
+                {
+                  JSON.parse(localStorage.getItem("reportGrandTotal"))
+                    ?.total
+                }
+              </Text>
+            </Box>
+          </>
+        )}
       </Box>
     </Box>
   );

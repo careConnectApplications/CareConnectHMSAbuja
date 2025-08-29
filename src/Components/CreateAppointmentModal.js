@@ -53,6 +53,7 @@ export default function CreateAppointmentModal({
     policaename: "",
     servicenumber: "",
     policephonenumber: "",
+    cliniccategory: "",
   };
 
   const [formData, setFormData] = useState(initialFormState);
@@ -70,7 +71,7 @@ export default function CreateAppointmentModal({
 
   const showToast = (toastData) => {
     setToast(toastData);
-    setTimeout(() => setToast(null), 2000);
+    setTimeout(() => setToast(null), 7000);
   };
 
   useEffect(() => {
@@ -80,6 +81,9 @@ export default function CreateAppointmentModal({
         try {
           // Only fetch settings here; patients will be fetched via search.
           const settingsData = await SettingsApi();
+
+          console.log("Fetched settings:", settingsData);
+          
           setSettings(settingsData);
           if (type === "edit" && initialData) {
             setFormData({
@@ -108,7 +112,7 @@ export default function CreateAppointmentModal({
       };
       fetchData();
     } else {
-      setFormData(initialFormState);
+      // setFormData(initialFormState);
     }
   }, [isOpen, type, initialData]);
 
@@ -266,9 +270,11 @@ export default function CreateAppointmentModal({
       console.error("API Error:", error);
       showToast({
         status: "error",
-        message: `Failed to ${type === "edit" ? "update" : "schedule"} appointment: ${error.message}`,
+        message: ` ${error.message}`,
       });
-      onClose();
+     onClose(); 
+     
+      
     } finally {
       setLoading(false);
     }
@@ -406,6 +412,21 @@ export default function CreateAppointmentModal({
                   onChange={handleInputChange}
                   placeholder="Reason for appointment"
                 />
+              </FormControl>
+              <FormControl>
+                <FormLabel>Clinic  Category</FormLabel>
+                <Select
+                  name="cliniccategory"
+                  value={formData.cliniccategory}
+                  onChange={handleInputChange}
+                  placeholder="Select Appointment Category"
+                >
+                  {settings?.cliniccategory?.map((item, index) => (
+                      <option key={index} value={item}>
+                        {item}
+                      </option>
+                    ))}
+                </Select>
               </FormControl>
               <FormControl>
                 <FormLabel>Appointment Category</FormLabel>

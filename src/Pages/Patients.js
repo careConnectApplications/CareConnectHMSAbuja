@@ -9,6 +9,7 @@ import Input from "../Components/Input";
 import { CgSearch } from "react-icons/cg";
 import { IoFilter } from "react-icons/io5";
 import { FaPlus } from "react-icons/fa";
+import { useColors } from "../Utils/colors";
 import {
   Table,
   Thead,
@@ -38,6 +39,26 @@ import Preloader from "../Components/Preloader";
 import { FaCalendarAlt } from "react-icons/fa";
 
 export default function Patients() {
+  const {
+    bgColor,
+    textColor,
+    borderColor,
+    titleTextColor,
+    subTitleTextColor,
+    chartFillColor,
+    chartFillXColor,
+    cardBgColor,
+    primaryColor,
+    secondaryColor,
+    dangerColor,
+    successColor,
+    warningColor,
+    infoColor,
+    NavbarText,
+    lightTextColor,
+    NavListColor,
+    NavListBg,
+  } = useColors();
   const [All, setAll] = useState(true);
   const [Paid, setPaid] = useState(false);
   const [PendingPayment, setPendingPayment] = useState(false);
@@ -213,9 +234,18 @@ export default function Patients() {
       if (result.data && result.data.status === true) {
         setShowToast({
           show: true,
-          message: "Payment Successful",
+          message: "Payment invoice raised successful. Kindly proceed to cash point",
           status: "success",
         });
+
+        setTimeout(() => {
+          setShowToast({
+            show: false,
+
+          });
+
+        }, 6000);
+
         setTrigger(!Trigger);
       } else {
         setShowToast({
@@ -258,30 +288,32 @@ export default function Patients() {
     router(`/dashboard/patient/${id}`);
   };
 
-  if (isLoading) {
-    return <Preloader />; // Show Preloader while data is loading
-  }
+
 
   return (
     <MainLayout>
+
+      {
+        isLoading && <Preloader />
+      }
       {showToast.show && (
         <ShowToast message={showToast.message} status={showToast.status} />
       )}
       <HStack>
-        <Text color="#1F2937" fontWeight="600" fontSize="18px">
+        <Text color={titleTextColor} fontWeight="600" fontSize="18px">
           Out Patients
         </Text>
-        <Text color="#667085" fontWeight="400" fontSize="16px">
+        <Text color={subTitleTextColor} fontWeight="400" fontSize="16px">
           ({TotalData.toLocaleString()})
         </Text>
       </HStack>
-      <Text color="#686C75" mt="9px" fontWeight="400" fontSize="12px">
+      <Text color={subTitleTextColor} mt="9px" fontWeight="400" fontSize="12px">
         Create, View and manage all Patients in one place. Quickly assign
         statuses, and update details as needed.
       </Text>
       <Box
-        bg="#fff"
-        border="1px solid #EFEFEF"
+        bg={bgColor}
+        border={`1px solid ${borderColor}`}
         mt="12px"
         py="17px"
         px={["18px", "18px"]}
@@ -292,40 +324,40 @@ export default function Patients() {
           <Flex
             alignItems="center"
             flexWrap="wrap"
-            bg="#E4F3FF"
+            bg={chartFillColor}
             rounded="7px"
             py="3.5px"
             px="5px"
             cursor="pointer"
             mt={["10px", "10px", "0px", "0px"]}
           >
-            <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={filterAll}>
+            <Box borderRight={`1px solid ${borderColor}`} pr="5px" onClick={filterAll}>
               <Text
                 py="8.5px"
                 px="12px"
-                bg={All ? "#fff" : "transparent"}
+                bg={All ? bgColor : "transparent"}
                 rounded="7px"
-                color={"#1F2937"}
+                color={titleTextColor}
                 fontWeight={"500"}
                 fontSize={"13px"}
               >
                 All{" "}
-                <Box color="#667085" as="span" fontWeight="400" fontSize="13px">
+                <Box color={subTitleTextColor} as="span" fontWeight="400" fontSize="13px">
                   ({Data?.length.toLocaleString()})
                 </Box>
               </Text>
             </Box>
             <Box
-              borderRight="1px solid #EDEFF2"
+              borderRight={`1px solid ${borderColor}`}
               pr="5px"
               onClick={filterActive}
             >
               <Text
                 py="8.5px"
                 px="12px"
-                bg={Paid ? "#fff" : "transparent"}
+                bg={Paid ? bgColor : "transparent"}
                 rounded="7px"
-                color={"#1F2937"}
+                color={titleTextColor}
                 fontWeight={"500"}
                 fontSize={"13px"}
               >
@@ -333,16 +365,16 @@ export default function Patients() {
               </Text>
             </Box>
             <Box
-              borderRight="1px solid #EDEFF2"
+              borderRight={`1px solid ${borderColor}`}
               pr="5px"
               onClick={filterInactive}
             >
               <Text
                 py="8.5px"
                 px="12px"
-                bg={PendingPayment ? "#fff" : "transparent"}
+                bg={PendingPayment ? bgColor : "transparent"}
                 rounded="7px"
-                color={"#1F2937"}
+                color={titleTextColor}
                 fontWeight={"500"}
                 fontSize={"13px"}
               >
@@ -366,7 +398,7 @@ export default function Patients() {
                     setCurrentPage(1);
                   }}
                   value={SearchInput}
-                  bColor="#E4E4E4"
+                  bColor={borderColor}
                   leftIcon={<BiSearch />}
                 />
               ) : (
@@ -376,7 +408,7 @@ export default function Patients() {
                     type="date"
                     onChange={(e) => setStartDate(e.target.value)}
                     value={StartDate}
-                    bColor="#E4E4E4"
+                    bColor={borderColor}
                     leftIcon={<FaCalendarAlt />}
                   />
                   <Input
@@ -384,7 +416,7 @@ export default function Patients() {
                     type="date"
                     onChange={(e) => setEndDate(e.target.value)}
                     value={EndDate}
-                    bColor="#E4E4E4"
+                    bColor={borderColor}
                     leftIcon={<FaCalendarAlt />}
                   />
 
@@ -394,8 +426,8 @@ export default function Patients() {
                     px="5px"
                     py="3px"
                     rounded="5px"
-                    bg="blue.blue500"
-                    color="#fff"
+                    bg={primaryColor}
+                    color={bgColor}
                     justifyContent="center"
                     alignItems="center"
                   >
@@ -406,13 +438,13 @@ export default function Patients() {
               <Menu isLazy>
                 <MenuButton as={Box}>
                   <HStack
-                    border="1px solid #EA5937"
+                    border={`1px solid ${NavListBg}`}
                     rounded="7px"
                     cursor="pointer"
                     py="11.64px"
                     px="16.98px"
-                    bg="#f8ddd1"
-                    color="blue.blue500"
+                    bg={NavListBg}
+                    color={secondaryColor}
                     fontWeight="500"
                     fontSize="14px"
                   >
@@ -420,16 +452,16 @@ export default function Patients() {
                     <IoFilter />
                   </HStack>
                 </MenuButton>
-                <MenuList>
+                <MenuList bg={bgColor} border={`1px solid ${borderColor}`}>
                   <MenuItem
                     onClick={() => filterBy("FirstName")}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -440,11 +472,11 @@ export default function Patients() {
                     onClick={() => filterBy("LastName")}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -456,11 +488,11 @@ export default function Patients() {
                     onClick={() => filterBy("mrn")}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -471,11 +503,11 @@ export default function Patients() {
                     onClick={() => filterBy("phoneNumber")}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -486,11 +518,11 @@ export default function Patients() {
                     onClick={() => filterBy("hmoId")}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -501,11 +533,11 @@ export default function Patients() {
                     onClick={() => filterBy("email")}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -516,11 +548,11 @@ export default function Patients() {
                     onClick={() => setByDate(true)}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -539,11 +571,11 @@ export default function Patients() {
                     }}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -573,8 +605,8 @@ export default function Patients() {
 
         {/* filter section end here */}
         <Box
-          bg="#fff"
-          border="1px solid #EFEFEF"
+          bg={bgColor}
+          border={`1px solid ${borderColor}`}
           mt="12px"
           py="15px"
           px="15px"
@@ -585,43 +617,44 @@ export default function Patients() {
             <Table variant="striped">
               <Thead>
                 <Tr>
-                  <Th fontSize="12px" fontWeight="600" color="#534D59">
+                  <Th fontSize="12px" fontWeight="600" color={subTitleTextColor}>
                     Patient Name
                   </Th>
-                  <Th fontSize="12px" fontWeight="600" color="#534D59">
+                  <Th fontSize="12px" fontWeight="600" color={subTitleTextColor}>
                     MRN
                   </Th>
-                  <Th fontSize="12px" fontWeight="600" color="#534D59">
+                  <Th fontSize="12px" fontWeight="600" color={subTitleTextColor}>
                     Patient Type
                   </Th>
-                  <Th fontSize="12px" fontWeight="600" color="#534D59">
-                    Authorization Code
-                  </Th>
-                  <Th fontSize="12px" fontWeight="600" color="#534D59">
+
+                  <Th fontSize="12px" fontWeight="600" color={subTitleTextColor}>
                     Phone Number
                   </Th>
-                  <Th fontSize="12px" fontWeight="600" color="#534D59">
+                  <Th fontSize="12px" fontWeight="600" color={subTitleTextColor}>
                     Age
                   </Th>
-                  <Th fontSize="12px" fontWeight="600" color="#534D59">
+                  <Th fontSize="12px" fontWeight="600" color={subTitleTextColor}>
                     gender
                   </Th>
-                  <Th fontSize="12px" fontWeight="600" color="#534D59">
+                  <Th fontSize="12px" fontWeight="600" color={subTitleTextColor}>
                     HMO Cover
                   </Th>
-                  <Th fontSize="12px" fontWeight="600" color="#534D59">
+                  <Th fontSize="12px" fontWeight="600" color={subTitleTextColor}>
                     HMO ID
                   </Th>
-                  <Th fontSize="12px" fontWeight="600" color="#534D59">
+                  <Th fontSize="12px" fontWeight="600" color={subTitleTextColor}>
+                    subscription Status
+                  </Th>
+                  <Th fontSize="12px" fontWeight="600" color={subTitleTextColor}>
                     Subscription Paid Until
                   </Th>
-                  <Th fontSize="12px" fontWeight="600" color="#534D59">
+                  <Th fontSize="12px" fontWeight="600" color={subTitleTextColor}>
                     Status
                   </Th>
-                  <Th fontSize="12px" fontWeight="600" color="#534D59">
+                  <Th fontSize="12px" fontWeight="600" color={subTitleTextColor}>
                     Date Created
                   </Th>
-                  <Th fontSize="12px" fontWeight="600" color="#534D59">
+                  <Th fontSize="12px" fontWeight="600" color={subTitleTextColor}>
                     Actions
                   </Th>
                 </Tr>
@@ -643,18 +676,19 @@ export default function Patients() {
                       status={item.status}
                       hmoStatus={item.isHMOCover}
                       hmoId={item.HMOId}
+                      subscriptionExpired={item.subscriptionExpired ? "Invalid" : "Valid"}
                       subscription={
                         item.subscriptionPaidUntil
                           ? moment(item.subscriptionPaidUntil).format(
-                              "DD-MM-YYYY"
-                            )
+                            "DD-MM-YYYY"
+                          )
                           : ""
                       }
                       date={moment(item.createdAt).format("lll")}
                       onEdit={() => onEdit(item._id)}
                       onView={() => navigateToPatientDetails(item._id)}
                       onClick={
-                        item.status?.toLowerCase() !== "active"
+                        item.subscriptionExpired === true
                           ? () => payAnnualSubscription(item._id)
                           : undefined
                       }
@@ -675,19 +709,20 @@ export default function Patients() {
                       gender={item.gender}
                       status={item.status}
                       hmoStatus={item.isHMOCover}
+                      subscriptionExpired={item.subscriptionExpired ? "Invalid" : "Valid"}
                       hmoId={item.HMOId}
                       subscription={
                         item.subscriptionPaidUntil
                           ? moment(item.subscriptionPaidUntil).format(
-                              "DD-MM-YYYY"
-                            )
+                            "DD-MM-YYYY"
+                          )
                           : ""
                       }
                       date={moment(item.createdAt).format("lll")}
                       onEdit={() => onEdit(item._id)}
                       onView={() => navigateToPatientDetails(item._id)}
                       onClick={
-                        item.status?.toLowerCase() !== "active"
+                        item.subscriptionExpired === true
                           ? () => payAnnualSubscription(item._id)
                           : undefined
                       }
@@ -696,7 +731,7 @@ export default function Patients() {
                 ) : (
                   <Tr>
                     <Td colSpan={13} textAlign="center">
-                      <Text mt="32px" color="black">
+                      <Text mt="32px" color={textColor}>
                         *--No record found--*
                       </Text>
                     </Td>

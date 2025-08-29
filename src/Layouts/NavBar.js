@@ -81,14 +81,7 @@ export default function NavBar({ showSearch = true, showNav = true }) {
 
 
     return (
-        <Flex borderLeft={`1px solid ${borderColor}`} pos="sticky" top="0" bgColor={bgColor} alignItems={"center"} justifyContent={"space-between"} zIndex={"10"} px="24px" py="15.6px" borderBottom={`1px solid ${borderColor}`}>
-
-
-
-
-            {/* <Box visibility={showSearch ? "visible" : "hidden"} w="40%" display={["none", "none", "block", "block"]} >
-              
-            </Box> */}
+        <Flex pos="sticky" top="0" bgColor={bgColor} alignItems={"center"} justifyContent={"space-between"} zIndex={"10"} px="24px" py="15.6px" borderBottom={`2px solid ${borderColor}`}>
 
             <Box w="20%" display={["block", "block", "block", "block", "none"]} color={NavbarText} fontSize="30px" onClick={onOpen}>
                 <CgMenuLeft />
@@ -224,10 +217,11 @@ export default function NavBar({ showSearch = true, showNav = true }) {
                     zIndex={"100px"}
                     placement='left'
                     onClose={onClose}
+                    
 
                 >
                     <DrawerOverlay />
-                    <DrawerContent>
+                    <DrawerContent bg={bgColor}  >
                         <DrawerCloseButton />
 
 

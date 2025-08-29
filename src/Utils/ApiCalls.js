@@ -1729,6 +1729,7 @@ export const GetAllPatientPharmacyApi = (id) => {
     });
 };
 export const GetAllAdmissionHistoryApi = (id) => {
+  console.log("patient id getalladmission apicall", id);
   // Configure the GET request
   let config = {
     method: "get",
