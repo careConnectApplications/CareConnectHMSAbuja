@@ -339,13 +339,6 @@ export const NavList = (location) => {
         //   active: isActive(location, "/dashboard/report-analytics/maternity-report"),
         //   display: isClinicalReport(),
         // },
-
-        // {
-        //   name: "Coding & Indexing",
-        //   link: "/dashboard/report-analytics/coding-indexing",
-        //   active: isActive(location, "/dashboard/report-analytics/coding-indexing"),
-        //   display: isClinicalReport(),
-        // },
       ],
     },
 

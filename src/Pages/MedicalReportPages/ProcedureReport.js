@@ -30,7 +30,7 @@ export default function ProcedureReport() {
     startDate: "",
     endDate: "",
     patient: "",
-    procedureType: "",
+    procedure: "",
     MRN: "",
     clinic: "",
     raiseby: "",
@@ -48,12 +48,17 @@ export default function ProcedureReport() {
       type: "patient-search",
       placeholder: "Enter patient's name",
     },
-    { name: "MRN", label: "MRN", type: "text", placeholder: "Enter MRN" },
     {
-      name: "procedureType",
-      label: "Procedure Type",
+      name: "MRN",
+      label: "MRN",
       type: "text",
-      placeholder: "Enter procedure type",
+      placeholder: "Enter MRN",
+    },
+    {
+      name: "procedure",
+      label: "Procedure",
+      type: "text",
+      placeholder: "Enter procedure",
     },
     {
       name: "clinic",
@@ -113,22 +118,37 @@ export default function ProcedureReport() {
       return;
     }
     setIsLoading(true);
+
+    // Create a filtered payload with only non-empty values
+    const filteredPayload = Object.fromEntries(
+      Object.entries(payload).filter(([_, value]) => value !== "")
+    );
+
+    console.log("API Request Payload:", filteredPayload);
+
     try {
       const result = await GetMedicalReportAPI(
-        { filters: payload },
+        { filters: filteredPayload },
         "procedurereport"
       );
+
+      console.log("API Response - Full Result:", result);
+      console.log("API Response - Data:", result?.data);
+      console.log("API Response - Query Result:", result?.data?.queryresult);
+
+      // Reset only the filter fields, keep date range
       setPayload({
-        startDate: payload.startDate,
-        endDate: payload.endDate,
+        ...payload,
         patient: "",
-        procedureType: "",
+        procedure: "",
         MRN: "",
         clinic: "",
         raiseby: "",
         status: "",
       });
-      setData(result.data.queryresult);
+
+      setData(result.data.queryresult || []);
+
       setIsLoading(false);
       setShowToast({
         show: true,
@@ -139,10 +159,15 @@ export default function ProcedureReport() {
         setShowToast({ show: false });
       }, 3000);
     } catch (e) {
+      console.error("API Error:", e);
+      console.error("Error Message:", e.message);
+
       setIsLoading(false);
       setShowToast({
         show: true,
-        message: "An error occurred while fetching the report",
+        message:
+          e.response?.data?.message ||
+          "An error occurred while fetching the report",
         status: "error",
       });
       setTimeout(() => {
@@ -156,7 +181,7 @@ export default function ProcedureReport() {
       startDate: "",
       endDate: "",
       patient: "",
-      procedureType: "",
+      procedure: "",
       MRN: "",
       clinic: "",
       raiseby: "",
@@ -164,6 +189,7 @@ export default function ProcedureReport() {
     });
     setData([]);
     setCurrentPage(1);
+    console.log("Filters cleared, data reset");
   };
 
   const downloadReport = () => {
@@ -179,11 +205,46 @@ export default function ProcedureReport() {
       return;
     }
 
+    let reportData = Data.map((item) => ({
+      "Patient Name": `${item.firstName} ${item.lastName}`,
+      MRN: item.MRN,
+      Age: item.age,
+      Gender: item.gender,
+      Procedure: item.procedure,
+      "Indication/Diagnosis": item.indicationdiagnosisprocedure,
+      Clinic: item.clinic,
+      "Raised By": item.raiseby,
+      Status: item.status,
+      Date: moment(item.createdAt).format("YYYY-MM-DD"),
+    }));
+
     var workbook = XLSX.utils.book_new();
-    var worksheet = XLSX.utils.json_to_sheet(Data);
+    var worksheet = XLSX.utils.json_to_sheet(reportData);
     XLSX.utils.book_append_sheet(workbook, worksheet, "Procedure Report");
     let date = moment(Date.now()).format("DD-MM-YYYY");
     XLSX.writeFile(workbook, `Procedure_Report_${date}.xlsx`);
+
+    console.log("Report downloaded with data:", reportData);
+  };
+
+  // Function to determine status color
+  const getStatusColor = (status) => {
+    if (!status) return "#667085";
+
+    const statusLower = status.toLowerCase();
+    if (
+      statusLower.includes("processed") ||
+      statusLower.includes("completed")
+    ) {
+      return "#027A48"; // Green for processed/completed
+    } else if (
+      statusLower.includes("inprogress") ||
+      statusLower.includes("pending")
+    ) {
+      return "#FFA30C"; // Orange for in progress/pending
+    } else {
+      return "#FD4739"; // Red for any other status
+    }
   };
 
   return (
@@ -312,6 +373,7 @@ export default function ProcedureReport() {
               border="1px solid #EA5937"
               color="blue.blue500"
               w={["100%", "100%", "144px", "144px"]}
+              h="40px"
             >
               Download
             </Button>
@@ -325,23 +387,15 @@ export default function ProcedureReport() {
                     <Th
                       fontSize="13px"
                       textTransform="capitalize"
-                      color="#534D59"
+                      color="#000000"
                       fontWeight="600"
                     >
-                      Patient Name
+                      Patient Details
                     </Th>
                     <Th
                       fontSize="13px"
                       textTransform="capitalize"
-                      color="#534D59"
-                      fontWeight="600"
-                    >
-                      MRN
-                    </Th>
-                    <Th
-                      fontSize="13px"
-                      textTransform="capitalize"
-                      color="#534D59"
+                      color="#000000"
                       fontWeight="600"
                     >
                       Age
@@ -349,7 +403,7 @@ export default function ProcedureReport() {
                     <Th
                       fontSize="13px"
                       textTransform="capitalize"
-                      color="#534D59"
+                      color="#000000"
                       fontWeight="600"
                     >
                       Gender
@@ -357,7 +411,7 @@ export default function ProcedureReport() {
                     <Th
                       fontSize="13px"
                       textTransform="capitalize"
-                      color="#534D59"
+                      color="#000000"
                       fontWeight="600"
                     >
                       Procedure
@@ -365,7 +419,7 @@ export default function ProcedureReport() {
                     <Th
                       fontSize="13px"
                       textTransform="capitalize"
-                      color="#534D59"
+                      color="#000000"
                       fontWeight="600"
                     >
                       Indication/Diagnosis
@@ -373,7 +427,7 @@ export default function ProcedureReport() {
                     <Th
                       fontSize="13px"
                       textTransform="capitalize"
-                      color="#534D59"
+                      color="#000000"
                       fontWeight="600"
                     >
                       Clinic
@@ -381,7 +435,7 @@ export default function ProcedureReport() {
                     <Th
                       fontSize="13px"
                       textTransform="capitalize"
-                      color="#534D59"
+                      color="#000000"
                       fontWeight="600"
                     >
                       Raised By
@@ -389,7 +443,7 @@ export default function ProcedureReport() {
                     <Th
                       fontSize="13px"
                       textTransform="capitalize"
-                      color="#534D59"
+                      color="#000000"
                       fontWeight="600"
                     >
                       Date
@@ -397,7 +451,7 @@ export default function ProcedureReport() {
                     <Th
                       fontSize="13px"
                       textTransform="capitalize"
-                      color="#534D59"
+                      color="#000000"
                       fontWeight="600"
                     >
                       Status
@@ -407,16 +461,30 @@ export default function ProcedureReport() {
                 <Tbody>
                   {PaginatedData.map((item, index) => (
                     <Tr key={index}>
-                      <Td fontSize="14px">
+                      <Td>
                         <HStack>
                           <Avatar
-                            name={`${item.firstName} ${item.lastName}`}
                             size="sm"
+                            name={`${item.firstName} ${item.lastName}`}
                           />
-                          <Text>{`${item.firstName} ${item.lastName}`}</Text>
+                          <Box>
+                            <Text
+                              color={"#101828"}
+                              fontWeight={"500"}
+                              fontSize={"13px"}
+                            >
+                              {`${item.firstName} ${item.lastName}`}
+                            </Text>
+                            <Text
+                              color={"#667085"}
+                              fontWeight={"400"}
+                              fontSize={"11px"}
+                            >
+                              MRN: {item.MRN}
+                            </Text>
+                          </Box>
                         </HStack>
                       </Td>
-                      <Td fontSize="14px">{item.MRN}</Td>
                       <Td fontSize="14px">{item.age}</Td>
                       <Td fontSize="14px">{item.gender}</Td>
                       <Td fontSize="14px">{item.procedure}</Td>
@@ -428,29 +496,21 @@ export default function ProcedureReport() {
                       <Td fontSize="14px">
                         {moment(item.createdAt).format("DD/MM/YYYY")}
                       </Td>
-                      <Td fontSize="14px">
-                        <HStack
-                          color={
-                            item.status === "processed"
-                              ? "#027A48"
-                              : item.status === "inprogress"
-                              ? "#FFA30C"
-                              : "#FD4739"
-                          }
-                        >
+                      <Td>
+                        <HStack color={getStatusColor(item.status)}>
                           <Box
                             rounded="100%"
                             w="8px"
                             h="8px"
-                            bg={
-                              item.status === "processed"
-                                ? "#027A48"
-                                : item.status === "inprogress"
-                                ? "#FFA30C"
-                                : "#FD4739"
-                            }
+                            bg={getStatusColor(item.status)}
                           ></Box>
-                          <Text>{item.status}</Text>
+                          <Text
+                            fontWeight="400"
+                            fontSize="13px"
+                            textTransform="capitalize"
+                          >
+                            {item.status}
+                          </Text>
                         </HStack>
                       </Td>
                     </Tr>

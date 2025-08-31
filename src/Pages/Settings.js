@@ -24,99 +24,108 @@ import PricingModelSettings from "./PricingModelSettings";
 import OutreachMedicationSettings from "./OutreachMedicationSettings";
 import BedManagement from "./BedManagement";
 import InsuranceCoverManagement from "./InsuranceCoverManagement";
+import { useColors } from "../Utils/colors";
 
 export default function Settings() {
+  const {
+    bgColor,
+    textColor,
+    borderColor,
+    titleTextColor,
+    subTitleTextColor,
+    primaryColor,
+  } = useColors();
   return (
     <MainLayout>
       <Seo title="Settings" description="Care Connect Settings" />
 
       <HStack>
-        <Text color="#1F2937" fontWeight="600" fontSize="19px">
+        <Text color={titleTextColor} fontWeight="600" fontSize="19px">
           Settings
         </Text>
       </HStack>
-      <Text color="#686C75" mt="9px" fontWeight="400" fontSize="15px">
+      <Text color={subTitleTextColor} mt="9px" fontWeight="400" fontSize="15px">
         Organize, manage and view all settings to suit what is needed at anytime
         at your convenience.
       </Text>
 
       <Tabs mt="12px">
-        <TabList color="#101828" pb="10px" flexWrap={"wrap"}>
+        <TabList color={textColor} pb="10px" flexWrap={"wrap"}>
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Price{" "}
           </Tab>
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Clinic/Pharmacy/Department
           </Tab>
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Service Type{" "}
           </Tab>
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Ward Management
           </Tab>
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Theatre Management
           </Tab>
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Insurance Management
           </Tab>
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             HMO Patient Management
           </Tab>
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Lab Result Management
           </Tab>
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Audit
           </Tab>
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Pricing Model
           </Tab>
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Outreach Medication
           </Tab>
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Bed Management
           </Tab>
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Insurance Cover Management
           </Tab>

@@ -31,8 +31,19 @@ import { configuration } from "../Utils/Helpers";
 import Preloader from "../Components/Preloader";
 import { SlPlus } from "react-icons/sl";
 import { FaCalendarAlt } from "react-icons/fa";
+import { useColors } from "../Utils/colors";
 
 export default function Histopathology() {
+  const {
+    bgColor,
+    textColor,
+    borderColor,
+    titleTextColor,
+    subTitleTextColor,
+    chartFillColor,
+    primaryColor,
+    NavListBg,
+  } = useColors();
   const [IsLoading, setIsLoading] = useState(true);
   const [Data, setData] = useState([]);
   const [QueueData, setQueueData] = useState([]);
@@ -248,19 +259,19 @@ export default function Histopathology() {
         <ShowToast message={showToast.message} status={showToast.status} />
       )}
       <HStack>
-        <Text color="#1F2937" fontWeight="600" fontSize="19px">
+        <Text color={titleTextColor} fontWeight="600" fontSize="19px">
           Histopathology
         </Text>
-        <Text color="#667085" fontWeight="400" fontSize="18px">
+        <Text color={subTitleTextColor} fontWeight="400" fontSize="18px">
           ({TotalData})
         </Text>
       </HStack>
-      <Text color="#686C75" mt="9px" fontWeight="400" fontSize="15px">
+      <Text color={subTitleTextColor} mt="9px" fontWeight="400" fontSize="15px">
         Create a new test order for a patient.
       </Text>
       <Box
-        bg="#fff"
-        border="1px solid #EFEFEF"
+        bg={bgColor}
+        border={`1px solid ${borderColor}`}
         mt="12px"
         py={["10px", "15px"]}
         px={["10px", "15px"]}
@@ -271,20 +282,20 @@ export default function Histopathology() {
           <Flex
             alignItems="center"
             flexWrap="wrap"
-            bg="#E4F3FF"
+            bg={chartFillColor}
             rounded="7px"
             py="3.5px"
             px="5px"
             cursor="pointer"
             mt={["10px", "10px", "0px", "0px"]}
           >
-            <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={filterScheduled}>
+            <Box borderRight={`1px solid ${borderColor}`} pr="5px" onClick={filterScheduled}>
               <Text
                 py="8.5px"
                 px="12px"
-                bg={Scheduled ? "#fff" : "transparent"}
+                bg={Scheduled ? bgColor : "transparent"}
                 rounded="7px"
-                color={"#1F2937"}
+                color={titleTextColor}
                 fontWeight={"500"}
                 fontSize={"13px"}
               >
@@ -292,13 +303,13 @@ export default function Histopathology() {
 
               </Text>
             </Box>
-            <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={filterProcessed}>
+            <Box borderRight={`1px solid ${borderColor}`} pr="5px" onClick={filterProcessed}>
               <Text
                 py="8.5px"
                 px="12px"
-                bg={Processed ? "#fff" : "transparent"}
+                bg={Processed ? bgColor : "transparent"}
                 rounded="7px"
-                color={"#1F2937"}
+                color={titleTextColor}
                 fontWeight={"500"}
                 fontSize={"13px"}
               >
@@ -324,7 +335,7 @@ export default function Histopathology() {
                     setCurrentPage(1)
                   }}
                   value={SearchInput}
-                  bColor="#E4E4E4"
+                  bColor={borderColor}
                   leftIcon={<BiSearch />}
                 />
               ) : (
@@ -334,7 +345,7 @@ export default function Histopathology() {
                     type="date"
                     onChange={(e) => setStartDate(e.target.value)}
                     value={StartDate}
-                    bColor="#E4E4E4"
+                    bColor={borderColor}
                     leftIcon={<FaCalendarAlt />}
                   />
                   <Input
@@ -342,7 +353,7 @@ export default function Histopathology() {
                     type="date"
                     onChange={(e) => setEndDate(e.target.value)}
                     value={EndDate}
-                    bColor="#E4E4E4"
+                    bColor={borderColor}
                     leftIcon={<FaCalendarAlt />}
                   />
                   <Flex
@@ -351,8 +362,8 @@ export default function Histopathology() {
                     px="5px"
                     py="3px"
                     rounded="5px"
-                    bg="blue.blue500"
-                    color="#fff"
+                    bg={primaryColor}
+                    color={bgColor}
                     justifyContent="center"
                     alignItems="center"
                   >
@@ -363,13 +374,13 @@ export default function Histopathology() {
               <Menu isLazy>
                 <MenuButton as={Box}>
                   <HStack
-                    border="1px solid #EA5937"
+                    border={`1px solid ${NavListBg}`}
                     rounded="7px"
                     cursor="pointer"
                     py="11.64px"
                     px="16.98px"
-                    bg="#f8ddd1"
-                    color="blue.blue500"
+                    bg={NavListBg}
+                    color={textColor}
                     fontWeight="500"
                     fontSize="14px"
                   >
@@ -377,16 +388,16 @@ export default function Histopathology() {
                     <IoFilter />
                   </HStack>
                 </MenuButton>
-                <MenuList>
+                <MenuList bg={bgColor} border={`1px solid ${borderColor}`}>
                   <MenuItem
                     onClick={() => filterBy("firstName")}
                     textTransform="capitalize"
                     fontWeight="500"
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -397,11 +408,11 @@ export default function Histopathology() {
                     onClick={() => filterBy("lastName")}
                     textTransform="capitalize"
                     fontWeight="500"
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -412,11 +423,11 @@ export default function Histopathology() {
                     onClick={() => filterBy("mrn")}
                     textTransform="capitalize"
                     fontWeight="500"
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -427,11 +438,11 @@ export default function Histopathology() {
                     onClick={() => filterBy("testName")}
                     textTransform="capitalize"
                     fontWeight="500"
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -442,11 +453,11 @@ export default function Histopathology() {
                     onClick={() => setByDate(true)}
                     textTransform="capitalize"
                     fontWeight="500"
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -465,11 +476,11 @@ export default function Histopathology() {
                     }}
                     textTransform="capitalize"
                     fontWeight="500"
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -501,8 +512,8 @@ export default function Histopathology() {
 
       {/* Data Table */}
       <Box
-        bg="#fff"
-        border="1px solid #EFEFEF"
+        bg={bgColor}
+        border={`1px solid ${borderColor}`}
         mt="12px"
         py="15px"
         px="15px"
@@ -511,36 +522,36 @@ export default function Histopathology() {
       >
         <TableContainer>
           <Table variant="striped">
-            <Thead bg="#fff">
+            <Thead bg={bgColor}>
               <Tr>
-                <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                <Th fontSize="13px" textTransform="capitalize" color={subTitleTextColor} fontWeight="600">
                   Patient name
                 </Th>
-                <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                <Th fontSize="13px" textTransform="capitalize" color={subTitleTextColor} fontWeight="600">
                   Test Name
                 </Th>
-                <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                <Th fontSize="13px" textTransform="capitalize" color={subTitleTextColor} fontWeight="600">
                  biopsy Type
                 </Th>
-                <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                <Th fontSize="13px" textTransform="capitalize" color={subTitleTextColor} fontWeight="600">
                   lmp
                 </Th>
-                <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                <Th fontSize="13px" textTransform="capitalize" color={subTitleTextColor} fontWeight="600">
                  phone Number
                 </Th>
-                <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                <Th fontSize="13px" textTransform="capitalize" color={subTitleTextColor} fontWeight="600">
                  previous Biopsy
                 </Th>
-                <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                <Th fontSize="13px" textTransform="capitalize" color={subTitleTextColor} fontWeight="600">
                 whole Organ
                 </Th>
-                <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                <Th fontSize="13px" textTransform="capitalize" color={subTitleTextColor} fontWeight="600">
                   Lab Status
                 </Th>
-                <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                <Th fontSize="13px" textTransform="capitalize" color={subTitleTextColor} fontWeight="600">
                   Payment Status
                 </Th>
-                <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                <Th fontSize="13px" textTransform="capitalize" color={subTitleTextColor} fontWeight="600">
                   Actions
                 </Th>
               </Tr>
@@ -609,7 +620,7 @@ export default function Histopathology() {
                   />
                 ))
               ) : (
-                <Text textAlign="center" mt="32px" color="black">
+                <Text textAlign="center" mt="32px" color={textColor}>
                   *--No record found--*
                 </Text>
               )}

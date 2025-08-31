@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Text, Flex, HStack, Box, SimpleGrid, Avatar } from "@chakra-ui/react";
 import {
   Table,
@@ -17,7 +17,7 @@ import ShowToast from "../../Components/ToastNotification";
 import { FaCalendarAlt, FaCloudDownloadAlt } from "react-icons/fa";
 import Pagination from "../../Components/Pagination";
 import { configuration } from "../../Utils/Helpers";
-import { GetMedicalReportAPI } from "../../Utils/ApiCalls";
+import { GetMedicalReportAPI, GetAllUsersApi } from "../../Utils/ApiCalls";
 import moment from "moment";
 import AdvancedSearchFilter from "../../Components/AdvancedSearchFilter";
 import { FaFilter } from "react-icons/fa";
@@ -25,6 +25,7 @@ import { FaFilter } from "react-icons/fa";
 export default function RadiologyReport() {
   const [IsLoading, setIsLoading] = useState(false);
   const [Data, setData] = useState([]);
+  const [Users, setUsers] = useState([]);
   const [showAdvancedFilter, setShowAdvancedFilter] = useState(false);
   const [payload, setPayload] = useState({
     startDate: "",
@@ -40,10 +41,32 @@ export default function RadiologyReport() {
     setPayload({ ...payload, patient: patient?._id || "" });
   };
 
+  const getUsers = async () => {
+    try {
+      const result = await GetAllUsersApi();
+      setUsers(result.queryresult.userdetails);
+    } catch (e) {}
+  };
+
+  useEffect(() => {
+    getUsers();
+  }, []);
+
   const advancedFilterFields = [
     { name: "patient", label: "Search Patient (First, Last Name)", type: "patient-search", placeholder: "Enter patient name" },
     { name: "examType", label: "Exam Type", type: "text", placeholder: "Enter exam type" },
-    { name: "requestingDoctor", label: "Requesting Doctor", type: "text", placeholder: "Enter doctor's name" },
+    {
+      name: "requestingDoctor",
+      label: "Requesting Doctor",
+      type: "select",
+      placeholder: "Select doctor",
+      options: Users.filter(
+        (user) => user.role === "Medical Doctor"
+      ).map((user) => ({
+        value: user.firstName + " " + user.lastName,
+        label: user.firstName + " " + user.lastName,
+      })),
+    },
     { name: "radiologist", label: "Radiologist", type: "text", placeholder: "Enter radiologist's name" },
     { name: "status", label: "Status", type: "select", placeholder: "Select status", options: [
         { value: "pending", label: "Pending" },

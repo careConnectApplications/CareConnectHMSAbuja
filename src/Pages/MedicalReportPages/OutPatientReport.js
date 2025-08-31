@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Text, Flex, HStack, Box, SimpleGrid, Avatar } from "@chakra-ui/react";
 import {
   Table,
@@ -17,7 +17,11 @@ import ShowToast from "../../Components/ToastNotification";
 import { FaCalendarAlt, FaCloudDownloadAlt } from "react-icons/fa";
 import Pagination from "../../Components/Pagination";
 import { configuration } from "../../Utils/Helpers";
-import { GetMedicalReportAPI } from "../../Utils/ApiCalls";
+import {
+  GetAllUsersApi,
+  GetMedicalReportAPI,
+  SettingsApi,
+} from "../../Utils/ApiCalls";
 import moment from "moment";
 import AdvancedSearchFilter from "../../Components/AdvancedSearchFilter";
 import { FaFilter } from "react-icons/fa";
@@ -25,6 +29,8 @@ import { FaFilter } from "react-icons/fa";
 export default function OutPatientReport() {
   const [IsLoading, setIsLoading] = useState(false);
   const [Data, setData] = useState([]);
+  const [Users, setUsers] = useState([]);
+  const [Settings, setSettings] = useState({});
   const [showAdvancedFilter, setShowAdvancedFilter] = useState(false);
   const [payload, setPayload] = useState({
     startDate: "",
@@ -34,11 +40,25 @@ export default function OutPatientReport() {
     minAge: "",
     maxAge: "",
     doctor: "",
-    visitType: "",
+    appointmenttype: "",
   });
 
   const handlePatientSelect = (patient) => {
     setPayload({ ...payload, patient: patient?._id || "" });
+  };
+
+  const getSettings = async () => {
+    try {
+      const result = await SettingsApi();
+      setSettings(result);
+    } catch (e) {}
+  };
+
+  const getUsers = async () => {
+    try {
+      const result = await GetAllUsersApi();
+      setUsers(result.queryresult.userdetails);
+    } catch (e) {}
   };
 
   const advancedFilterFields = [
@@ -51,12 +71,30 @@ export default function OutPatientReport() {
     },
     { name: "minAge", label: "Min Age", type: "number", placeholder: "Min Age" },
     { name: "maxAge", label: "Max Age", type: "number", placeholder: "Max Age" },
-    { name: "doctor", label: "Doctor", type: "text", placeholder: "Enter doctor's name" },
     {
-      name: "visitType", label: "Visit Type", type: "select", placeholder: "Select visit type", options: [
-        { value: "first-visit", label: "First Visit" },
-        { value: "follow-up", label: "Follow-up" },
-      ],
+      name: "doctor",
+      label: "Doctor",
+      type: "select",
+      placeholder: "Select doctor",
+      options: Users.filter(
+        (user) => user.role === "Medical Doctor"
+      ).map((user) => ({
+        value: user.firstName + " " + user.lastName,
+        label: user.firstName + " " + user.lastName,
+      })),
+    },
+    {
+      name: "appointmenttype",
+      label: "Appointment Type",
+      type: "select",
+      placeholder: "Select Appointment Type",
+      options:
+        Settings.servicecategory
+          ?.find((item) => item.category === "Appointment")
+          ?.type?.map((type) => ({
+            value: type,
+            label: type,
+          })) || [],
     },
   ];
 
@@ -102,7 +140,7 @@ export default function OutPatientReport() {
       setPayload({
         startDate: payload.startDate,
         endDate: payload.endDate,
-        doctorname: "",
+        doctor: "",
         status: "",
         gender: "",
         minAge: "",
@@ -142,7 +180,7 @@ export default function OutPatientReport() {
       minAge: "",
       maxAge: "",
       doctor: "",
-      visitType: "",
+      appointmenttype: "",
     });
     setData([]);
     setCurrentPage(1);
@@ -167,6 +205,11 @@ export default function OutPatientReport() {
     let date = moment(Date.now()).format("DD-MM-YYYY");
     XLSX.writeFile(workbook, `Out_Patient_Report_${date}.xlsx`);
   };
+
+  useEffect(() => {
+    getSettings();
+    getUsers();
+  }, []);
 
   return (
     <>
@@ -221,6 +264,7 @@ export default function OutPatientReport() {
             />
           </Box>
         </SimpleGrid>
+
 
         <Flex mt="20px" gap="12px" flexWrap="wrap">
           <Button

@@ -28,8 +28,19 @@ import Pagination from "../Components/Pagination";
 import { configuration } from "../Utils/Helpers";
 import moment from "moment";
 import Seo from "../Utils/Seo";
+import { useColors } from "../Utils/colors";
 
 export default function OperationalAnalysis() {
+    const {
+        bgColor,
+        textColor,
+        borderColor,
+        titleTextColor,
+        subTitleTextColor,
+        primaryColor,
+        secondaryColor,
+        NavListBg,
+    } = useColors();
     const [IsLoading, setIsLoading] = useState(false);
     const [Loading, setLoading] = useState(false);
     const [Data, setData] = useState([]);
@@ -112,22 +123,21 @@ export default function OperationalAnalysis() {
             )}
 
             <HStack>
-                <MdOutlineAnalytics size={24} color="#1F2937" />
-                <Text color="#1F2937" fontWeight="600" fontSize="19px">
+                <Text color={titleTextColor} fontWeight="600" fontSize="18px">
                     Operational Analysis
                 </Text>
-                <Text color="#667085" fontWeight="400" fontSize="18px">
+                <Text color={subTitleTextColor} fontWeight="400" fontSize="16px">
                     ({Data?.length})
                 </Text>
             </HStack>
-            <Text color="#686C75" mt="9px" fontWeight="400" fontSize="15px">
+            <Text color={subTitleTextColor} mt="9px" fontWeight="400" fontSize="12px">
                 Monitor hospital operations, resource utilization, and performance metrics across all departments.
             </Text>
 
             {/* Filter Section */}
             <Box
-                bg="#fff"
-                border="1px solid #EFEFEF"
+                bg={bgColor}
+                border={`1px solid ${borderColor}`}
                 mt="12px"
                 py="17px"
                 px={["18px", "18px"]}
@@ -135,14 +145,14 @@ export default function OperationalAnalysis() {
             >
                 <SimpleGrid mt="12px" columns={{ base: 2, md: 4 }} spacing={2}>
                     <Box>
-                        <Text color="#1F2937" fontWeight="500" fontSize="14px">Analysis Type</Text>
+                        <Text color={textColor} fontWeight="500" fontSize="14px">Analysis Type</Text>
                         <Select
                             fontSize={MetricType !== "" ? "16px" : "13px"}
                             h="45px"
                             borderWidth="2px"
-                            borderColor="#E4E4E4"
-                            _hover={{ borderColor: "#7A27AB" }}
-                            _focus={{ borderColor: "blue.blue500" }}
+                            borderColor={borderColor}
+                            _hover={{ borderColor: primaryColor }}
+                            _focus={{ borderColor: primaryColor }}
                             value={MetricType}
                             onChange={(e) => {
                                 setMetricType(e.target.value);
@@ -161,14 +171,14 @@ export default function OperationalAnalysis() {
                     </Box>
 
                     <Box>
-                        <Text color="#1F2937" fontWeight="500" fontSize="14px">Department/Unit</Text>
+                        <Text color={textColor} fontWeight="500" fontSize="14px">Department/Unit</Text>
                         <Select
                             fontSize={Department !== "" ? "16px" : "13px"}
                             h="45px"
                             borderWidth="2px"
-                            borderColor="#E4E4E4"
-                            _hover={{ borderColor: "#7A27AB" }}
-                            _focus={{ borderColor: "blue.blue500" }}
+                            borderColor={borderColor}
+                            _hover={{ borderColor: primaryColor }}
+                            _focus={{ borderColor: primaryColor }}
                             value={Department}
                             onChange={(e) => {
                                 setDepartment(e.target.value);
@@ -189,7 +199,7 @@ export default function OperationalAnalysis() {
                     </Box>
 
                     <Box>
-                        <Text color="#1F2937" fontWeight="500" fontSize="14px">Start Date</Text>
+                        <Text color={textColor} fontWeight="500" fontSize="14px">Start Date</Text>
                         <Input
                             type="date"
                             onChange={(e) => {
@@ -197,13 +207,13 @@ export default function OperationalAnalysis() {
                                 setData([]);
                             }}
                             value={StartDate}
-                            bColor="#E4E4E4"
+                            bColor={borderColor}
                             leftIcon={<FaCalendarAlt />}
                         />
                     </Box>
 
                     <Box>
-                        <Text color="#1F2937" fontWeight="500" fontSize="14px">End Date</Text>
+                        <Text color={textColor} fontWeight="500" fontSize="14px">End Date</Text>
                         <Input
                             type="date"
                             onChange={(e) => {
@@ -211,7 +221,7 @@ export default function OperationalAnalysis() {
                                 setData([]);
                             }}
                             value={EndDate}
-                            bColor="#E4E4E4"
+                            bColor={borderColor}
                             leftIcon={<FaCalendarAlt />}
                         />
                     </Box>
@@ -222,9 +232,9 @@ export default function OperationalAnalysis() {
                         mt={["10px", "10px", "0px", "0px"]}
                         isLoading={Loading}
                         loadingText="Analyzing..."
-                        background="#f8ddd1"
-                        border="1px solid #EA5937"
-                        color="blue.blue500"
+                        bg={NavListBg}
+                        border={`1px solid ${primaryColor}`}
+                        color={primaryColor}
                         w={["100%", "100%", "144px", "144px"]}
                         onClick={fetchOperationalData}
                         disabled={MetricType !== "" && Department !== "" && StartDate !== "" && EndDate !== "" ? false : true}
@@ -237,8 +247,8 @@ export default function OperationalAnalysis() {
             {/* Data Display Section */}
             {Data.length > 0 && (
                 <Box
-                    bg="#fff"
-                    border="1px solid #EFEFEF"
+                    bg={bgColor}
+                    border={`1px solid ${borderColor}`}
                     mt="12px"
                     py="17px"
                     px={["18px", "18px"]}
@@ -264,20 +274,20 @@ export default function OperationalAnalysis() {
                                     label="Search"
                                     onChange={handleInputChange}
                                     value={SearchInput}
-                                    bColor="#E4E4E4"
+                                    bColor={borderColor}
                                     leftIcon={<BiSearch />}
                                 />
 
                                 <Menu isLazy>
                                     <MenuButton as={Box}>
                                         <HStack
-                                            border="1px solid #EA5937"
+                                            border={`1px solid ${NavListBg}`}
                                             rounded="7px"
                                             cursor="pointer"
                                             py="11.64px"
                                             px="16.98px"
-                                            bg="#f8ddd1"
-                                            color="blue.blue500"
+                                            bg={NavListBg}
+                                            color={secondaryColor}
                                             fontWeight="500"
                                             fontSize="14px"
                                         >
@@ -285,7 +295,7 @@ export default function OperationalAnalysis() {
                                             <IoFilter />
                                         </HStack>
                                     </MenuButton>
-                                    <MenuList>
+                                    <MenuList bg={bgColor} border={`1px solid ${borderColor}`}>
                                         <MenuItem
                                             onClick={() => {
                                                 setFilteredData(null);
@@ -301,8 +311,8 @@ export default function OperationalAnalysis() {
                     </Flex>
 
                     <Box
-                        bg="#fff"
-                        border="1px solid #EFEFEF"
+                        bg={bgColor}
+                        border={`1px solid ${borderColor}`}
                         mt="12px"
                         py="15px"
                         px="15px"
@@ -311,27 +321,27 @@ export default function OperationalAnalysis() {
                     >
                         <TableContainer>
                             <Table variant="striped">
-                                <Thead bg="#fff">
+                                <Thead>
                                     <Tr>
-                                        <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                                        <Th fontSize="13px" textTransform="capitalize" color={subTitleTextColor} fontWeight="600">
                                             Department
                                         </Th>
-                                        <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                                        <Th fontSize="13px" textTransform="capitalize" color={subTitleTextColor} fontWeight="600">
                                             Metric
                                         </Th>
-                                        <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                                        <Th fontSize="13px" textTransform="capitalize" color={subTitleTextColor} fontWeight="600">
                                             Value
                                         </Th>
-                                        <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                                        <Th fontSize="13px" textTransform="capitalize" color={subTitleTextColor} fontWeight="600">
                                             Target
                                         </Th>
-                                        <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                                        <Th fontSize="13px" textTransform="capitalize" color={subTitleTextColor} fontWeight="600">
                                             Performance
                                         </Th>
-                                        <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                                        <Th fontSize="13px" textTransform="capitalize" color={subTitleTextColor} fontWeight="600">
                                             Date
                                         </Th>
-                                        <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                                        <Th fontSize="13px" textTransform="capitalize" color={subTitleTextColor} fontWeight="600">
                                             Status
                                         </Th>
                                     </Tr>

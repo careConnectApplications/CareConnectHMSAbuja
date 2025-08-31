@@ -53,6 +53,7 @@ export default function ScheduleProcedureModal({
     appointmentdate: "",
     cptcodes: "",
     dxcodes: "",
+    proceduretype: "",
   };
 
   const [Payload, setPayload] = useState({ ...emptyForm });
@@ -146,14 +147,16 @@ export default function ScheduleProcedureModal({
       mrn: patient.MRN,
     });
     setPatients([]); // Clear search results
-    setSearchMRN(`${patient.firstName} ${patient.lastName} (MRN: ${patient.MRN})`);
+    setSearchMRN(
+      `${patient.firstName} ${patient.lastName} (MRN: ${patient.MRN})`
+    );
   };
 
   // Handle search input change and clear selection if user starts typing new search
   const handleSearchInputChange = (e) => {
     const value = e.target.value;
     setSearchMRN(value);
-    
+
     // Clear selected patient if user modifies the search significantly
     if (selectedPatientInfo && !value.includes(selectedPatientInfo.mrn)) {
       setSelectedPatientInfo(null);
@@ -209,14 +212,27 @@ export default function ScheduleProcedureModal({
       patientId: p.patientId || p.patient?._id || "",
       clinic: p.clinic || "",
       indicationdiagnosisprocedure: p.indicationdiagnosisprocedure || "",
-      procedure: Array.isArray(p.procedure) ? p.procedure[0] : p.procedure || "",
+      procedure: Array.isArray(p.procedure)
+        ? p.procedure[0]
+        : p.procedure || "",
       appointmentdate: p.appointmentdate || "",
       cptcodes: Array.isArray(p.cptcodes) ? p.cptcodes[0] : p.cptcodes || "",
       dxcodes: Array.isArray(p.dxcodes) ? p.dxcodes[0] : p.dxcodes || "",
+      proceduretype: p.proceduretype || "",
     });
-    setProcedureArr(Array.isArray(p.procedure) ? p.procedure : p.procedure ? [p.procedure] : []);
-    setCptcodesArr(Array.isArray(p.cptodes) ? p.cptodes : p.cptodes ? [p.cptodes] : []);
-    setDxcodesArr(Array.isArray(p.dxcodes) ? p.dxcodes : p.dxcodes ? [p.dxcodes] : []);
+    setProcedureArr(
+      Array.isArray(p.procedure)
+        ? p.procedure
+        : p.procedure
+        ? [p.procedure]
+        : []
+    );
+    setCptcodesArr(
+      Array.isArray(p.cptodes) ? p.cptodes : p.cptodes ? [p.cptodes] : []
+    );
+    setDxcodesArr(
+      Array.isArray(p.dxcodes) ? p.dxcodes : p.dxcodes ? [p.dxcodes] : []
+    );
     if (p.patient) setPatients([p.patient]);
   }
 
@@ -236,9 +252,12 @@ export default function ScheduleProcedureModal({
     if (id === "dxcodes") setDxcodesArr((prev) => [...prev, value]);
   }
 
-  const removeProcedureArr = (item) => setProcedureArr((arr) => arr.filter((p) => p !== item));
-  const removeCptcodesArr = (item) => setCptcodesArr((arr) => arr.filter((c) => c !== item));
-  const removeDxcodesArr = (item) => setDxcodesArr((arr) => arr.filter((d) => d !== item));
+  const removeProcedureArr = (item) =>
+    setProcedureArr((arr) => arr.filter((p) => p !== item));
+  const removeCptcodesArr = (item) =>
+    setCptcodesArr((arr) => arr.filter((c) => c !== item));
+  const removeDxcodesArr = (item) =>
+    setDxcodesArr((arr) => arr.filter((d) => d !== item));
 
   const handleSearchPatient = async () => {
     setIsLoadingPatients(true);
@@ -265,6 +284,7 @@ export default function ScheduleProcedureModal({
           appointmentdate: Payload.appointmentdate,
           cptcodes: CptcodesArr,
           dxcodes: DxcodesArr,
+          proceduretype: Payload.proceduretype,
         },
         Payload.patientId
       );
@@ -283,11 +303,13 @@ export default function ScheduleProcedureModal({
       await UpdateProcedureAPI(
         {
           clinic: UpdatedPayload.clinic,
-          indicationdiagnosisprocedure: UpdatedPayload.indicationdiagnosisprocedure,
+          indicationdiagnosisprocedure:
+            UpdatedPayload.indicationdiagnosisprocedure,
           procedure: ProcedureArr,
           appointmentdate: UpdatedPayload.appointmentdate,
           cptcodes: CptcodesArr,
           dxcodes: DxcodesArr,
+          proceduretype: UpdatedPayload.proceduretype,
         },
         oldPayload._id
       );
@@ -310,12 +332,16 @@ export default function ScheduleProcedureModal({
     >
       <ModalOverlay />
       <ModalContent maxW={{ base: "90%", md: "60%" }} maxH="80vh">
-        <ModalHeader>{type === "new" ? "Add New Procedure" : "Edit Procedure"}</ModalHeader>
+        <ModalHeader>
+          {type === "new" ? "Add New Procedure" : "Edit Procedure"}
+        </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           {/* Patient Search */}
           <Box mb={4}>
-            <Text mb={2} fontWeight="medium">Patient</Text>
+            <Text mb={2} fontWeight="medium">
+              Patient
+            </Text>
             <Box position="relative">
               <Input
                 label="Search for Patient"
@@ -324,14 +350,25 @@ export default function ScheduleProcedureModal({
                 onChange={handleSearchInputChange}
                 leftIcon={<FiSearch size={16} color="blue.500" />}
               />
-              
+
               {/* Selected Patient Display */}
               {selectedPatientInfo && (
-                <Box mt={2} p={3} bg="blue.50" borderRadius="md" border="1px solid" borderColor="blue.200">
+                <Box
+                  mt={2}
+                  p={3}
+                  bg="blue.50"
+                  borderRadius="md"
+                  border="1px solid"
+                  borderColor="blue.200"
+                >
                   <HStack spacing={2}>
-                    <Badge colorScheme="blue" variant="solid">Selected</Badge>
+                    <Badge colorScheme="blue" variant="solid">
+                      Selected
+                    </Badge>
                     <Text fontWeight="medium">{selectedPatientInfo.name}</Text>
-                    <Text fontSize="sm" color="gray.600">MRN: {selectedPatientInfo.mrn}</Text>
+                    <Text fontSize="sm" color="gray.600">
+                      MRN: {selectedPatientInfo.mrn}
+                    </Text>
                   </HStack>
                 </Box>
               )}
@@ -423,6 +460,22 @@ export default function ScheduleProcedureModal({
               onChange={formHandler}
             />
 
+            <Select
+              onChange={formHandler}
+              placeholder="Select Procedure Type"
+              id="proceduretype"
+              value={formState.proceduretype}
+              size="lg"
+              fontSize={formState.proceduretype ? "16px" : "13px"}
+              border="2px solid"
+              borderColor="gray.500"
+            >
+              {Settings?.proceduretype?.map((type, i) => (
+                <option key={i} value={type}>
+                  {type}
+                </option>
+              ))}
+            </Select>
             {/* Procedure Search */}
             <Input
               label="Search for Procedure"
@@ -433,7 +486,11 @@ export default function ScheduleProcedureModal({
             />
             <Select
               onChange={formHandler}
-              placeholder={isLoadingProcedures ? "Loading procedures..." : "Select Procedure"}
+              placeholder={
+                isLoadingProcedures
+                  ? "Loading procedures..."
+                  : "Select Procedure"
+              }
               id="procedure"
               value={formState.procedure}
               size="lg"
@@ -442,11 +499,13 @@ export default function ScheduleProcedureModal({
               borderColor="gray.500"
             >
               {searchProcedureQuery.trim() === ""
-                ? Settings?.servicecategory?.find((s) => s.category === "Procedure")?.type?.map((item, i) => (
-                    <option key={i} value={item}>
-                      {item}
-                    </option>
-                  ))
+                ? Settings?.servicecategory
+                    ?.find((s) => s.category === "Procedure")
+                    ?.type?.map((item, i) => (
+                      <option key={i} value={item}>
+                        {item}
+                      </option>
+                    ))
                 : procedureSearchResults.map((item, i) => (
                     <option key={i} value={item.servicetype}>
                       {item.servicetype}
@@ -468,10 +527,18 @@ export default function ScheduleProcedureModal({
                   justifyContent="space-between"
                   alignItems="center"
                 >
-                  <Text color="#fff" fontWeight="500" textTransform="capitalize">
+                  <Text
+                    color="#fff"
+                    fontWeight="500"
+                    textTransform="capitalize"
+                  >
                     {item}
                   </Text>
-                  <IoIosCloseCircle fontSize="20px" color="#fff" onClick={() => removeProcedureArr(item)} />
+                  <IoIosCloseCircle
+                    fontSize="20px"
+                    color="#fff"
+                    onClick={() => removeProcedureArr(item)}
+                  />
                 </Flex>
               ))}
             </SimpleGrid>
@@ -516,10 +583,18 @@ export default function ScheduleProcedureModal({
                   justifyContent="space-between"
                   alignItems="center"
                 >
-                  <Text color="#fff" fontWeight="500" textTransform="capitalize">
+                  <Text
+                    color="#fff"
+                    fontWeight="500"
+                    textTransform="capitalize"
+                  >
                     {item}
                   </Text>
-                  <IoIosCloseCircle fontSize="20px" color="#fff" onClick={() => removeCptcodesArr(item)} />
+                  <IoIosCloseCircle
+                    fontSize="20px"
+                    color="#fff"
+                    onClick={() => removeCptcodesArr(item)}
+                  />
                 </Flex>
               ))}
             </SimpleGrid>
@@ -555,10 +630,18 @@ export default function ScheduleProcedureModal({
                   justifyContent="space-between"
                   alignItems="center"
                 >
-                  <Text color="#fff" fontWeight="500" textTransform="capitalize">
+                  <Text
+                    color="#fff"
+                    fontWeight="500"
+                    textTransform="capitalize"
+                  >
                     {item}
                   </Text>
-                  <IoIosCloseCircle fontSize="20px" color="#fff" onClick={() => removeDxcodesArr(item)} />
+                  <IoIosCloseCircle
+                    fontSize="20px"
+                    color="#fff"
+                    onClick={() => removeDxcodesArr(item)}
+                  />
                 </Flex>
               ))}
             </SimpleGrid>

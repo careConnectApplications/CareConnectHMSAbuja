@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, Flex, HStack, Box, SimpleGrid } from "@chakra-ui/react";
+import { Text, Flex, HStack, Box, SimpleGrid, Avatar } from "@chakra-ui/react";
 import {
   Table,
   Thead,
@@ -21,48 +21,111 @@ import { GetMedicalReportAPI } from "../../Utils/ApiCalls";
 import moment from "moment";
 import AdvancedSearchFilter from "../../Components/AdvancedSearchFilter";
 import { FaFilter } from "react-icons/fa";
+import { useColors } from "../../Utils/colors";
 
 export default function FinancialReport() {
+  const {
+    bgColor,
+    textColor,
+    borderColor,
+    titleTextColor,
+    subTitleTextColor,
+    primaryColor,
+  } = useColors();
   const [IsLoading, setIsLoading] = useState(false);
   const [Data, setData] = useState([]);
   const [showAdvancedFilter, setShowAdvancedFilter] = useState(false);
   const [payload, setPayload] = useState({
     startDate: "",
     endDate: "",
-    patient: "",
-    paymentType: "",
-    patientId: "",
+    patientMRN: "",
+    patientFirstName: "",
+    patientLastName: "",
+    paymentype: "",
+    paymentcategory: "",
     amount: "",
+    qty: "",
+    cashierid: "",
+    cashieremail: "",
+    status: "",
+    paymentreference: "",
   });
 
   const handlePatientSelect = (patient) => {
-    setPayload({ ...payload, patient: patient?._id || "" });
+    setPayload({
+      ...payload,
+      patientMRN: patient?.patientId || "",
+      patientFirstName: patient?.firstName || "",
+      patientLastName: patient?.lastName || "",
+    });
   };
 
   const advancedFilterFields = [
     {
-      name: "patient",
-      label: "Search Patient (First, Last Name)",
-      type: "patient-search",
-      placeholder: "Enter patient's name",
-    },
-    {
-      name: "patientId",
-      label: "Patient ID",
+      name: "patientFirstName",
+      label: "Patient First Name",
       type: "text",
-      placeholder: "Enter patient ID",
+      placeholder: "Enter patient first name",
     },
     {
-      name: "paymentType",
+      name: "patientLastName",
+      label: "Patient Last Name",
+      type: "text",
+      placeholder: "Enter patient last name",
+    },
+    {
+      name: "patientMRN",
+      label: "Patient MRN",
+      type: "text",
+      placeholder: "Enter patient MRN",
+    },
+    {
+      name: "paymentype",
       label: "Payment Type",
       type: "text",
       placeholder: "Enter payment type",
     },
     {
+      name: "paymentcategory",
+      label: "Payment Category",
+      type: "text",
+      placeholder: "Enter payment category",
+    },
+    {
       name: "amount",
       label: "Amount",
-      type: "text",
+      type: "number",
       placeholder: "Enter amount",
+    },
+    {
+      name: "qty",
+      label: "Quantity",
+      type: "number",
+      placeholder: "Enter quantity",
+    },
+    {
+      name: "cashierid",
+      label: "Cashier ID",
+      type: "text",
+      placeholder: "Enter cashier ID",
+    },
+    {
+      name: "cashieremail",
+      label: "Cashier Email",
+      type: "email",
+      placeholder: "Enter cashier email",
+    },
+    {
+      name: "status",
+      label: "Status",
+      type: "text",
+      placeholder: "Enter status",
+    },
+    {
+      name: "paymentreference",
+      label: "Payment Reference",
+      type: "text",
+      placeholder: "Enter payment reference",
     },
   ];
 
@@ -105,40 +168,40 @@ export default function FinancialReport() {
     }
     setIsLoading(true);
 
-    // Log the payload being sent to the API
-    console.log("API Request Payload:", payload);
+    // Create a filtered payload with only non-empty values
+    const filteredPayload = Object.fromEntries(
+      Object.entries(payload).filter(([_, value]) => value !== "")
+    );
+
+    console.log("API Request Payload:", filteredPayload);
 
     try {
       const result = await GetMedicalReportAPI(
-        { filters: payload },
+        { filters: filteredPayload },
         "financialreport"
       );
 
-      // Console log the full API response
       console.log("API Response - Full Result:", result);
       console.log("API Response - Data:", result?.data);
       console.log("API Response - Query Result:", result?.data?.queryresult);
-      console.log(
-        "API Response - Query Result Type:",
-        typeof result?.data?.queryresult
-      );
-      console.log(
-        "API Response - Query Result Length:",
-        result?.data?.queryresult?.length
-      );
 
+      // Reset only the filter fields, keep date range
       setPayload({
-        startDate: payload.startDate,
-        endDate: payload.endDate,
-        patient: "",
-        paymentType: "",
-        patientId: "",
+        ...payload,
+        patientMRN: "",
+        patientFirstName: "",
+        patientLastName: "",
+        paymentype: "",
+        paymentcategory: "",
         amount: "",
+        qty: "",
+        cashierid: "",
+        cashieremail: "",
+        status: "",
+        paymentreference: "",
       });
-      setData(result.data.queryresult || []);
 
-      // Log the data after setting it to state
-      console.log("Data state after setData:", result.data.queryresult || []);
+      setData(result.data.queryresult || []);
 
       setIsLoading(false);
       setShowToast({
@@ -150,17 +213,15 @@ export default function FinancialReport() {
         setShowToast({ show: false });
       }, 3000);
     } catch (e) {
-      // Console log any errors
       console.error("API Error:", e);
       console.error("Error Message:", e.message);
-      console.error("Error Response:", e.response);
-      console.error("Error Status:", e.response?.status);
-      console.error("Error Data:", e.response?.data);
 
       setIsLoading(false);
       setShowToast({
         show: true,
-        message: "An error occurred while fetching the report",
+        message:
+          e.response?.data?.message ||
+          "An error occurred while fetching the report",
         status: "error",
       });
       setTimeout(() => {
@@ -173,10 +234,17 @@ export default function FinancialReport() {
     setPayload({
       startDate: "",
       endDate: "",
-      patient: "",
-      paymentType: "",
-      patientId: "",
+      patientMRN: "",
+      patientFirstName: "",
+      patientLastName: "",
+      paymentype: "",
+      paymentcategory: "",
       amount: "",
+      qty: "",
+      cashierid: "",
+      cashieremail: "",
+      status: "",
+      paymentreference: "",
     });
     setData([]);
     setCurrentPage(1);
@@ -197,8 +265,9 @@ export default function FinancialReport() {
     }
 
     let reportData = Data.map((item) => ({
-      "Patient ID": item.patientMRN,
-      "Patient Name": `${item.patientFirstName} ${item.patientLastName}`,
+      "Patient MRN": item.patientMRN,
+      "Patient First Name": item.patientFirstName,
+      "Patient Last Name": item.patientLastName,
       "Payment Type": item.paymentype,
       "Payment Category": item.paymentcategory,
       Amount: item.amount,
@@ -219,6 +288,20 @@ export default function FinancialReport() {
     console.log("Report downloaded with data:", reportData);
   };
 
+  // Function to determine status color based on specific status values
+  const getStatusColor = (status) => {
+    if (!status) return "#667085";
+
+    const statusLower = status.toLowerCase();
+    if (statusLower.includes("paid")) {
+      return "#027A48"; // Green for paid
+    } else if (statusLower.includes("pending payment")) {
+      return "#FFA30C"; // Orange for pending payment
+    } else {
+      return "#667085"; // Gray for any other status
+    }
+  };
+
   return (
     <>
       {IsLoading && <Preloader />}
@@ -229,23 +312,23 @@ export default function FinancialReport() {
 
       {/* Header Section */}
       <Box
-        bg="#fff"
-        border="1px solid #EFEFEF"
+        bg={bgColor}
+        border={`1px solid ${borderColor}`}
         mt="12px"
         py="20px"
         px="20px"
         rounded="10px"
       >
-        <Text color="#1F2937" fontWeight="600" fontSize="17px">
+        <Text color={titleTextColor} fontWeight="600" fontSize="17px">
           Financial Report
         </Text>
-        <Text color="#667085" mt="8px" fontWeight="400" fontSize="14px">
+        <Text color={subTitleTextColor} mt="8px" fontWeight="400" fontSize="14px">
           To generate a report, select a date range and click apply
         </Text>
 
         <SimpleGrid mt="20px" columns={{ base: 1, md: 2 }} spacing={4}>
           <Box>
-            <Text color="#1F2937" fontWeight="500" fontSize="14px" mb="6px">
+            <Text color={titleTextColor} fontWeight="500" fontSize="14px" mb="6px">
               From Date
             </Text>
             <Input
@@ -253,13 +336,13 @@ export default function FinancialReport() {
               name="startDate"
               onChange={handleInputChange}
               value={payload.startDate}
-              bColor="#E4E4E4"
+              bColor={borderColor}
               leftIcon={<FaCalendarAlt />}
             />
           </Box>
 
           <Box>
-            <Text color="#1F2937" fontWeight="500" fontSize="14px" mb="6px">
+            <Text color={titleTextColor} fontWeight="500" fontSize="14px" mb="6px">
               To Date
             </Text>
             <Input
@@ -267,7 +350,7 @@ export default function FinancialReport() {
               name="endDate"
               onChange={handleInputChange}
               value={payload.endDate}
-              bColor="#E4E4E4"
+              bColor={borderColor}
               leftIcon={<FaCalendarAlt />}
             />
           </Box>
@@ -276,17 +359,15 @@ export default function FinancialReport() {
         <Flex mt="20px" gap="12px" flexWrap="wrap">
           <Button
             onClick={fetchFinancialReport}
-            background="#1F2937"
-            color="#fff"
             w={["100%", "100%", "120px", "120px"]}
           >
             Apply
           </Button>
           <Button
             onClick={clearFilters}
-            background="#fff"
-            border="1px solid #E4E4E4"
-            color="#667085"
+            bg={bgColor}
+            border={`1px solid ${borderColor}`}
+            color={textColor}
             w={["100%", "100%", "120px", "120px"]}
           >
             Clear
@@ -297,8 +378,8 @@ export default function FinancialReport() {
       {/* Data Display Section */}
       {Data.length > 0 && (
         <Box
-          bg="#fff"
-          border="1px solid #EFEFEF"
+          bg={bgColor}
+          border={`1px solid ${borderColor}`}
           mt="12px"
           py="17px"
           px="18px"
@@ -311,10 +392,10 @@ export default function FinancialReport() {
             cursor="pointer"
             mt="20px"
           >
-            <Text color="blue.blue500" fontWeight="600" fontSize="16px">
+            <Text color={primaryColor} fontWeight="600" fontSize="16px">
               Advanced Search Filter
             </Text>
-            <Box ml="8px" color="blue.blue500">
+            <Box ml="8px" color={primaryColor}>
               <FaFilter />
             </Box>
           </Flex>
@@ -330,10 +411,10 @@ export default function FinancialReport() {
           )}
           <Flex justifyContent="space-between" alignItems="center" mb="16px">
             <HStack>
-              <Text color="#1F2937" fontWeight="600" fontSize="16px">
+              <Text color={titleTextColor} fontWeight="600" fontSize="16px">
                 Report Results
               </Text>
-              <Text color="#667085" fontWeight="400" fontSize="15px">
+              <Text color={subTitleTextColor} fontWeight="400" fontSize="15px">
                 ({Data.length})
               </Text>
             </HStack>
@@ -341,9 +422,9 @@ export default function FinancialReport() {
             <Button
               rightIcon={<FaCloudDownloadAlt />}
               onClick={downloadReport}
-              background="#f8ddd1"
-              border="1px solid #EA5937"
-              color="blue.blue500"
+              bg={bgColor}
+              border={`1px solid ${primaryColor}`}
+              color={primaryColor}
               w={["100%", "100%", "144px", "144px"]}
             >
               Download
@@ -353,12 +434,12 @@ export default function FinancialReport() {
           <Box overflowX="auto">
             <TableContainer>
               <Table variant="striped">
-                <Thead bg="#fff">
+                <Thead bg={bgColor}>
                   <Tr>
                     <Th
                       fontSize="13px"
                       textTransform="capitalize"
-                      color="#534D59"
+                      color={subTitleTextColor}
                       fontWeight="600"
                     >
                       S/N
@@ -366,23 +447,15 @@ export default function FinancialReport() {
                     <Th
                       fontSize="13px"
                       textTransform="capitalize"
-                      color="#534D59"
+                      color={subTitleTextColor}
                       fontWeight="600"
                     >
-                      Patient ID
+                      Patient Details
                     </Th>
                     <Th
                       fontSize="13px"
                       textTransform="capitalize"
-                      color="#534D59"
-                      fontWeight="600"
-                    >
-                      Patient Name
-                    </Th>
-                    <Th
-                      fontSize="13px"
-                      textTransform="capitalize"
-                      color="#534D59"
+                      color={subTitleTextColor}
                       fontWeight="600"
                     >
                       Payment Type
@@ -390,7 +463,7 @@ export default function FinancialReport() {
                     <Th
                       fontSize="13px"
                       textTransform="capitalize"
-                      color="#534D59"
+                      color={subTitleTextColor}
                       fontWeight="600"
                     >
                       Payment Category
@@ -398,7 +471,7 @@ export default function FinancialReport() {
                     <Th
                       fontSize="13px"
                       textTransform="capitalize"
-                      color="#534D59"
+                      color={subTitleTextColor}
                       fontWeight="600"
                     >
                       Amount
@@ -406,7 +479,7 @@ export default function FinancialReport() {
                     <Th
                       fontSize="13px"
                       textTransform="capitalize"
-                      color="#534D59"
+                      color={subTitleTextColor}
                       fontWeight="600"
                     >
                       Quantity
@@ -414,10 +487,34 @@ export default function FinancialReport() {
                     <Th
                       fontSize="13px"
                       textTransform="capitalize"
+                      color={subTitleTextColor}
+                      fontWeight="600"
+                    >
+                      Cashier ID
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
                       color="#534D59"
                       fontWeight="600"
                     >
+                      Cashier Email
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color={subTitleTextColor}
+                      fontWeight="600"
+                    >
                       Status
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color={subTitleTextColor}
+                      fontWeight="600"
+                    >
+                      Payment Reference
                     </Th>
                     <Th
                       fontSize="13px"
@@ -432,14 +529,55 @@ export default function FinancialReport() {
                 <Tbody>
                   {PaginatedData.map((item, index) => (
                     <Tr key={index}>
-                      <Td fontSize="14px">{index + 1}</Td>
-                      <Td fontSize="14px">{item.patientMRN}</Td>
-                      <Td fontSize="14px">{`${item.patientFirstName} ${item.patientLastName}`}</Td>
+                      <Td fontSize="14px">{indexOfFirstItem + index + 1}</Td>
+                      <Td>
+                        <HStack>
+                          <Avatar
+                            size="sm"
+                            name={`${item.patientFirstName} ${item.patientLastName}`}
+                          />
+                          <Box>
+                            <Text
+                              color={"#101828"}
+                              fontWeight={"500"}
+                              fontSize={"13px"}
+                            >
+                              {`${item.patientFirstName} ${item.patientLastName}`}
+                            </Text>
+                            <Text
+                              color={"#667085"}
+                              fontWeight={"400"}
+                              fontSize={"11px"}
+                            >
+                              MRN: {item.patientMRN}
+                            </Text>
+                          </Box>
+                        </HStack>
+                      </Td>
                       <Td fontSize="14px">{item.paymentype}</Td>
                       <Td fontSize="14px">{item.paymentcategory}</Td>
                       <Td fontSize="14px">{item.amount}</Td>
                       <Td fontSize="14px">{item.qty}</Td>
-                      <Td fontSize="14px">{item.status}</Td>
+                      <Td fontSize="14px">{item.cashierid}</Td>
+                      <Td fontSize="14px">{item.cashieremail}</Td>
+                      <Td>
+                        <HStack color={getStatusColor(item.status)}>
+                          <Box
+                            rounded="100%"
+                            w="8px"
+                            h="8px"
+                            bg={getStatusColor(item.status)}
+                          ></Box>
+                          <Text
+                            fontWeight="400"
+                            fontSize="13px"
+                            textTransform="capitalize"
+                          >
+                            {item.status}
+                          </Text>
+                        </HStack>
+                      </Td>
+                      <Td fontSize="14px">{item.paymentreference}</Td>
                       <Td fontSize="14px">
                         {moment(item.createdAt).format("DD/MM/YYYY")}
                       </Td>

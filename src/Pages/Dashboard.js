@@ -6,7 +6,8 @@ import {
   Flex,
   Text,
   SimpleGrid,
- 
+  useTheme,
+  HStack,
 } from "@chakra-ui/react";
 
 import { useColors } from '../Utils/colors'
@@ -21,7 +22,27 @@ export default function Dashboard() {
   const [DataX, setDataX] = useState("");
   const [Data, setData] = useState({});
 
-  const { cardBgColor,chartFillColor,chartFillXColor,titleTextColor,subTitleTextColor } = useColors();
+  const {
+    bgColor,
+    textColor,
+    borderColor,
+    titleTextColor,
+    subTitleTextColor,
+    chartFillColor,
+    chartFillXColor,
+    cardBgColor,
+    primaryColor,
+    secondaryColor,
+    dangerColor,
+    successColor,
+    warningColor,
+    infoColor,
+    NavbarText,
+    lightTextColor,
+    NavListColor,
+    NavListBg,
+  } = useColors();
+  const theme = useTheme();
 
  const onlineUser = JSON.parse(localStorage.getItem("onlineUser"))
 
@@ -70,10 +91,23 @@ export default function Dashboard() {
     <MainLayout>
       {IsLoading && <Preloader />}
       <Seo title="Dashboard" description="Dashboard" />
-      <Box p={4} bg={cardBgColor} minH="100vh">
-        <Text color={titleTextColor} fontSize={"19px"} fontWeight="600">Welcome back, {` ${onlineUser?.firstName}`} &#x1F44B;</Text>
-        <Text color={subTitleTextColor} mt="3px" fontWeight="400" fontSize="15px">These are the latest update for the last 7 days</Text>
-        <SimpleGrid mt="22px" mb={2} columns={["1","2","3","4"]} spacing={4} bg="#8f0db6" rounded="10px" p='5'>
+      <HStack>
+        <Text color={titleTextColor} fontWeight="600" fontSize="18px">
+          Dashboard
+        </Text>
+      </HStack>
+      <Text color={subTitleTextColor} mt="9px" fontWeight="400" fontSize="12px">
+        Welcome back, {` ${onlineUser?.firstName}`} &#x1F44B; These are the latest update for the last 7 days
+      </Text>
+      <Box
+        bg={bgColor}
+        border={`1px solid ${borderColor}`}
+        mt="12px"
+        py="17px"
+        px={["18px", "18px"]}
+        rounded="10px"
+      >
+        <SimpleGrid columns={["1", "2", "3", "4"]} spacing={4} bg={primaryColor} rounded="10px" p='5'>
           <DashboardCard
             title="Total Out Patient"
             value={Data.totalnumberofactivepatient?.toLocaleString()}
@@ -111,8 +145,6 @@ export default function Dashboard() {
 
         <Text mt="22px" color={subTitleTextColor} fontSize={"16px"} fontWeight="600">Patients Statistic</Text>
 
-
-
         <Box width="100%" mt="22px" overflowX="auto">
         <BarChart
           width={950}
@@ -131,8 +163,8 @@ export default function Dashboard() {
           <YAxis />
           <Tooltip  color="red"/>
           <Legend color="red"/>
-          <Bar dataKey="OutPatients" fill="#651C91" background={{ fill: chartFillColor}} />
-          <Bar dataKey="InPatients" fill="#EA5937" background={{ fill: chartFillXColor }}/>
+          <Bar dataKey="OutPatients" fill={theme.colors.blue.blue400} background={{ fill: chartFillColor}} />
+          <Bar dataKey="InPatients" fill={theme.colors.blue.blue500} background={{ fill: chartFillXColor }}/>
         </BarChart>
         </Box>
 

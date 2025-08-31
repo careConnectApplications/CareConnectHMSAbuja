@@ -44,9 +44,20 @@ import Pagination from "../Components/Pagination";
 import { configuration } from "../Utils/Helpers";
 import Preloader from "../Components/Preloader";
 import { FaCalendarAlt } from "react-icons/fa";
+import { useColors } from "../Utils/colors";
 
 
 export default function ScheduleProcedure() {
+  const {
+    bgColor,
+    textColor,
+    borderColor,
+    titleTextColor,
+    subTitleTextColor,
+    chartFillColor,
+    primaryColor,
+    NavListBg,
+  } = useColors();
   const [IsLoading, setIsLoading] = useState(false);
   const [All, setAll] = useState(true);
   const [Inprogress, setInprogress] = useState(false);
@@ -347,18 +358,18 @@ export default function ScheduleProcedure() {
         <ShowToast message={showToast.message} status={showToast.status} />
       )}
       <HStack>
-        <Text color="#1F2937" fontWeight="600" fontSize="19px">
+        <Text color={titleTextColor} fontWeight="600" fontSize="19px">
           Scheduled Procedure
         </Text>
-        <Text color="#667085" fontWeight="400" fontSize="18px">
+        <Text color={subTitleTextColor} fontWeight="400" fontSize="18px">
           ({Data?.length})
         </Text>
       </HStack>
-      <Text color="#686C75" mt="9px" fontWeight="400" fontSize="15px">
+      <Text color={subTitleTextColor} mt="9px" fontWeight="400" fontSize="15px">
         View and manage all procedures in one place. Quickly access statuses,
         update details, and manage schedules as needed.
       </Text>
-      <Text color="blue.blue500" mt="9px" fontWeight="400" fontSize="15px">
+      <Text color={primaryColor} mt="9px" fontWeight="400" fontSize="15px">
         Kindly Select Clinic you want to manage
       </Text>
       <SimpleGrid mt="5px" columns={{ base: 1, md: 2, lg: 2 }} spacing={10}>
@@ -386,8 +397,8 @@ export default function ScheduleProcedure() {
       </SimpleGrid>
 
       <Box
-        bg="#fff"
-        border="1px solid #EFEFEF"
+        bg={bgColor}
+        border={`1px solid ${borderColor}`}
         mt="12px"
         py="17px"
         px={["18px", "18px"]}
@@ -398,45 +409,45 @@ export default function ScheduleProcedure() {
           <Flex
             alignItems="center"
             flexWrap="wrap"
-            bg="#E4F3FF"
+            bg={chartFillColor}
             rounded="7px"
             py="3.5px"
             px="5px"
             cursor="pointer"
             mt={["10px", "10px", "0px", "0px"]}
           >
-            <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={filterAll}>
+            <Box borderRight={`1px solid ${borderColor}`} pr="5px" onClick={filterAll}>
               <Text
                 py="8.5px"
                 px="12px"
-                bg={All ? "#fff" : "transparent"}
+                bg={All ? bgColor : "transparent"}
                 rounded="7px"
-                color="#1F2937"
+                color={titleTextColor}
                 fontWeight="500"
                 fontSize="13px"
               >
                 All{" "}
-                <Box color="#667085" as="span" fontWeight="400" fontSize="13px">
+                <Box color={subTitleTextColor} as="span" fontWeight="400" fontSize="13px">
                   ({Data?.length})
                 </Box>
               </Text>
             </Box>
             <Box
-              borderRight="1px solid #EDEFF2"
+              borderRight={`1px solid ${borderColor}`}
               pr="5px"
               onClick={filterInProgress}
             >
               <Text
                 py="8.5px"
                 px="12px"
-                bg={Inprogress ? "#fff" : "transparent"}
+                bg={Inprogress ? bgColor : "transparent"}
                 rounded="7px"
-                color="#1F2937"
+                color={titleTextColor}
                 fontWeight="500"
                 fontSize="13px"
               >
                 In Progress{" "}
-                <Box color="#667085" as="span" fontWeight="400" fontSize="13px">
+                <Box color={subTitleTextColor} as="span" fontWeight="400" fontSize="13px">
                   ({Data.filter((item) => item.status === "inprogress").length})
                 </Box>
               </Text>
@@ -445,14 +456,14 @@ export default function ScheduleProcedure() {
               <Text
                 py="8.5px"
                 px="12px"
-                bg={Processed ? "#fff" : "transparent"}
+                bg={Processed ? bgColor : "transparent"}
                 rounded="7px"
-                color="#1F2937"
+                color={titleTextColor}
                 fontWeight="500"
                 fontSize="13px"
               >
                 Processed{" "}
-                <Box color="#667085" as="span" fontWeight="400" fontSize="13px">
+                <Box color={subTitleTextColor} as="span" fontWeight="400" fontSize="13px">
                   ({Data.filter((item) => item.status === "processed").length})
                 </Box>
               </Text>
@@ -471,7 +482,7 @@ export default function ScheduleProcedure() {
                   label="Search"
                   onChange={(e) => setSearchInput(e.target.value)}
                   value={SearchInput}
-                  bColor="#E4E4E4"
+                  bColor={borderColor}
                   leftIcon={<BiSearch />}
                 />
               ) : (
@@ -481,7 +492,7 @@ export default function ScheduleProcedure() {
                     type="date"
                     onChange={(e) => setStartDate(e.target.value)}
                     value={StartDate}
-                    bColor="#E4E4E4"
+                    bColor={borderColor}
                     leftIcon={<FaCalendarAlt />}
                   />
                   <Input
@@ -489,7 +500,7 @@ export default function ScheduleProcedure() {
                     type="date"
                     onChange={(e) => setEndDate(e.target.value)}
                     value={EndDate}
-                    bColor="#E4E4E4"
+                    bColor={borderColor}
                     leftIcon={<FaCalendarAlt />}
                   />
 
@@ -499,8 +510,8 @@ export default function ScheduleProcedure() {
                     px="5px"
                     py="3px"
                     rounded="5px"
-                    bg="blue.blue500"
-                    color="#fff"
+                    bg={primaryColor}
+                    color={bgColor}
                     justifyContent="center"
                     alignItems="center"
                   >
@@ -511,13 +522,13 @@ export default function ScheduleProcedure() {
               <Menu isLazy>
                 <MenuButton as={Box}>
                   <HStack
-                    border="1px solid #EA5937"
+                    border={`1px solid ${primaryColor}`}
                     rounded="7px"
                     cursor="pointer"
                     py="11.64px"
                     px="16.98px"
-                    bg="#f8ddd1"
-                    color="blue.blue500"
+                    bg={NavListBg}
+                    color={primaryColor}
                     fontWeight="500"
                     fontSize="14px"
                   >
@@ -530,11 +541,11 @@ export default function ScheduleProcedure() {
                     onClick={() => filterBy("name")}
                     textTransform="capitalize"
                     fontWeight="500"
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: primaryColor,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -545,11 +556,11 @@ export default function ScheduleProcedure() {
                     onClick={() => filterBy("mrn")}
                     textTransform="capitalize"
                     fontWeight="500"
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: primaryColor,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -560,11 +571,11 @@ export default function ScheduleProcedure() {
                     onClick={() => filterBy("appointmentType")}
                     textTransform="capitalize"
                     fontWeight="500"
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: primaryColor,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -575,11 +586,11 @@ export default function ScheduleProcedure() {
                     onClick={() => filterBy("doctor")}
                     textTransform="capitalize"
                     fontWeight="500"
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: primaryColor,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -590,11 +601,11 @@ export default function ScheduleProcedure() {
                     onClick={() => filterBy("procedure")}
                     textTransform="capitalize"
                     fontWeight="500"
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: primaryColor,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -605,11 +616,11 @@ export default function ScheduleProcedure() {
                     onClick={() => setByDate(true)}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: primaryColor,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -626,11 +637,11 @@ export default function ScheduleProcedure() {
                     }}
                     textTransform="capitalize"
                     fontWeight="500"
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: primaryColor,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -661,8 +672,8 @@ export default function ScheduleProcedure() {
 
         {/* Procedure History Table */}
         <Box
-          bg="#fff"
-          border="1px solid #EFEFEF"
+          bg={bgColor}
+          border={`1px solid ${borderColor}`}
           mt="12px"
           py="15px"
           px="15px"
@@ -671,27 +682,27 @@ export default function ScheduleProcedure() {
         >
           <TableContainer>
             <Table variant="striped">
-              <Thead bg="#fff">
+              <Thead bg={bgColor}>
                 <Tr>
-                  <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                     Patient Name
                   </Th>
-                  <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                     Doctor
                   </Th>
-                  <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                     Appointment Date
                   </Th>
-                  <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                     Procedure Name
                   </Th>
-                  <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                     Status
                   </Th>
-                  <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                     Payment Status
                   </Th>
-                  <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                     Actions
                   </Th>
                 </Tr>
@@ -738,7 +749,7 @@ export default function ScheduleProcedure() {
                     />
                   ))
                 ) : (
-                  <Text textAlign="center" mt="32px" color="black">
+                  <Text textAlign="center" mt="32px" color={textColor}>
                     *--No record found--*
                   </Text>
                 )}
