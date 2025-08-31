@@ -16,6 +16,7 @@ import {
     Td,
     Spinner,
     useToast,
+    HStack,
 } from "@chakra-ui/react";
 import * as XLSX from "xlsx";
 import moment from "moment";
@@ -23,8 +24,19 @@ import MainLayout from "../Layouts/Index";
 import Preloader from "../Components/Preloader";
 import Pagination from "../Components/Pagination";
 import { configuration } from "../Utils/Helpers";
+import { useColors } from "../Utils/colors";
 
 const MaternityReport = () => {
+    const {
+        bgColor,
+        textColor,
+        borderColor,
+        titleTextColor,
+        subTitleTextColor,
+        primaryColor,
+        secondaryColor,
+        NavListBg,
+    } = useColors();
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState([]);
     const [filterData, setFilterData] = useState([]);
@@ -120,16 +132,28 @@ const MaternityReport = () => {
 
     return (
         <MainLayout>
-            <Box p={6} bg="white" borderRadius="lg" shadow="sm">
+            <HStack>
+                <Text color={titleTextColor} fontWeight="600" fontSize="18px">
+                    Maternity Report
+                </Text>
+            </HStack>
+            <Text color={subTitleTextColor} mt="9px" fontWeight="400" fontSize="12px">
+                Monitor and analyze maternity-related data and performance metrics.
+            </Text>
+            <Box
+                bg={bgColor}
+                border={`1px solid ${borderColor}`}
+                mt="12px"
+                py="17px"
+                px={["18px", "18px"]}
+                rounded="10px"
+            >
                 <Flex justifyContent="space-between" alignItems="center" mb={6}>
-                    <Text fontSize="2xl" fontWeight="bold">
-                        Maternity Report
-                    </Text>
                     <Flex gap={3}>
-                        <Button colorScheme="green" onClick={exportToExcel}>
+                        <Button bg={NavListBg} color={primaryColor} onClick={exportToExcel}>
                             Export to Excel
                         </Button>
-                        <Button colorScheme="blue" onClick={resetFilters}>
+                        <Button bg={NavListBg} color={primaryColor} onClick={resetFilters}>
                             Reset Filters
                         </Button>
                     </Flex>
@@ -138,11 +162,14 @@ const MaternityReport = () => {
                 {/* Filters Section */}
                 <Grid templateColumns="repeat(3, 1fr)" gap={4} mb={6}>
                     <GridItem>
-                        <Text fontSize="sm" mb={2} fontWeight="medium">
+                        <Text fontSize="sm" mb={2} fontWeight="medium" color={textColor}>
                             Report Type
                         </Text>
                         <Select
                             placeholder="Select Report Type"
+                            borderColor={borderColor}
+                            _hover={{ borderColor: primaryColor }}
+                            _focus={{ borderColor: primaryColor }}
                             value={reportType}
                             onChange={(e) => setReportType(e.target.value)}
                         >
@@ -157,11 +184,14 @@ const MaternityReport = () => {
                     </GridItem>
 
                     <GridItem>
-                        <Text fontSize="sm" mb={2} fontWeight="medium">
+                        <Text fontSize="sm" mb={2} fontWeight="medium" color={textColor}>
                             Delivery Type
                         </Text>
                         <Select
                             placeholder="All Delivery Types"
+                            borderColor={borderColor}
+                            _hover={{ borderColor: primaryColor }}
+                            _focus={{ borderColor: primaryColor }}
                             value={deliveryType}
                             onChange={(e) => setDeliveryType(e.target.value)}
                         >
@@ -174,11 +204,14 @@ const MaternityReport = () => {
                     </GridItem>
 
                     <GridItem>
-                        <Text fontSize="sm" mb={2} fontWeight="medium">
+                        <Text fontSize="sm" mb={2} fontWeight="medium" color={textColor}>
                             Outcome
                         </Text>
                         <Select
                             placeholder="All Outcomes"
+                            borderColor={borderColor}
+                            _hover={{ borderColor: primaryColor }}
+                            _focus={{ borderColor: primaryColor }}
                             value={outcome}
                             onChange={(e) => setOutcome(e.target.value)}
                         >
@@ -191,33 +224,42 @@ const MaternityReport = () => {
                     </GridItem>
 
                     <GridItem>
-                        <Text fontSize="sm" mb={2} fontWeight="medium">
+                        <Text fontSize="sm" mb={2} fontWeight="medium" color={textColor}>
                             Date From
                         </Text>
                         <Input
                             type="date"
+                            borderColor={borderColor}
+                            _hover={{ borderColor: primaryColor }}
+                            _focus={{ borderColor: primaryColor }}
                             value={dateFrom}
                             onChange={(e) => setDateFrom(e.target.value)}
                         />
                     </GridItem>
 
                     <GridItem>
-                        <Text fontSize="sm" mb={2} fontWeight="medium">
+                        <Text fontSize="sm" mb={2} fontWeight="medium" color={textColor}>
                             Date To
                         </Text>
                         <Input
                             type="date"
+                            borderColor={borderColor}
+                            _hover={{ borderColor: primaryColor }}
+                            _focus={{ borderColor: primaryColor }}
                             value={dateTo}
                             onChange={(e) => setDateTo(e.target.value)}
                         />
                     </GridItem>
 
                     <GridItem>
-                        <Text fontSize="sm" mb={2} fontWeight="medium">
+                        <Text fontSize="sm" mb={2} fontWeight="medium" color={textColor}>
                             Search
                         </Text>
                         <Input
                             placeholder="Search maternity records..."
+                            borderColor={borderColor}
+                            _hover={{ borderColor: primaryColor }}
+                            _focus={{ borderColor: primaryColor }}
                             value={search}
                             onChange={(e) => handleSearch(e.target.value)}
                         />
@@ -245,28 +287,36 @@ const MaternityReport = () => {
                 </Grid>
 
                 {/* Data Table */}
-                <Box overflowX="auto">
+                <Box
+                    bg={bgColor}
+                    border={`1px solid ${borderColor}`}
+                    mt="12px"
+                    py="15px"
+                    px="15px"
+                    rounded="10px"
+                    overflowX="auto"
+                >
                     {loading ? (
                         <Flex justifyContent="center" alignItems="center" h="200px">
-                            <Spinner size="xl" color="blue.500" />
+                            <Spinner size="xl" color={primaryColor} />
                         </Flex>
                     ) : (
                         <>
                             <Table variant="simple">
-                                <Thead bg="gray.50">
+                                <Thead>
                                     <Tr>
-                                        <Th>Date</Th>
-                                        <Th>Patient ID</Th>
-                                        <Th>Patient Name</Th>
-                                        <Th>Age</Th>
-                                        <Th>Gravidity</Th>
-                                        <Th>Parity</Th>
-                                        <Th>Service Type</Th>
-                                        <Th>Delivery Type</Th>
-                                        <Th>Baby Gender</Th>
-                                        <Th>Baby Weight</Th>
-                                        <Th>Outcome</Th>
-                                        <Th>Complications</Th>
+                                        <Th color={subTitleTextColor}>Date</Th>
+                                        <Th color={subTitleTextColor}>Patient ID</Th>
+                                        <Th color={subTitleTextColor}>Patient Name</Th>
+                                        <Th color={subTitleTextColor}>Age</Th>
+                                        <Th color={subTitleTextColor}>Gravidity</Th>
+                                        <Th color={subTitleTextColor}>Parity</Th>
+                                        <Th color={subTitleTextColor}>Service Type</Th>
+                                        <Th color={subTitleTextColor}>Delivery Type</Th>
+                                        <Th color={subTitleTextColor}>Baby Gender</Th>
+                                        <Th color={subTitleTextColor}>Baby Weight</Th>
+                                        <Th color={subTitleTextColor}>Outcome</Th>
+                                        <Th color={subTitleTextColor}>Complications</Th>
                                     </Tr>
                                 </Thead>
                                 <Tbody>

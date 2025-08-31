@@ -36,7 +36,19 @@ import { BiSearch } from "react-icons/bi";
 import { SlPlus } from "react-icons/sl";
 import Pagination from "../Components/Pagination";
 import { configuration } from "../Utils/Helpers";
+import { useColors } from "../Utils/colors";
 export default function Report() {
+    const {
+        bgColor,
+        textColor,
+        borderColor,
+        titleTextColor,
+        subTitleTextColor,
+        chartFillColor,
+        primaryColor,
+        secondaryColor,
+        NavListBg,
+    } = useColors();
     const [IsLoading, setIsLoading] = useState(true);
     const [Loading, setLoading] = useState(false);
     const [All, setAll] = useState(true);
@@ -238,20 +250,20 @@ export default function Report() {
                 <ShowToast message={showToast.message} status={showToast.status} />
             )}
             <HStack>
-                <Text color="#1F2937" fontWeight="600" fontSize="19px">
+                <Text color={titleTextColor} fontWeight="600" fontSize="19px">
                     Report
                 </Text>
-                <Text color="#667085" fontWeight="400" fontSize="18px">
+                <Text color={subTitleTextColor} fontWeight="400" fontSize="18px">
                     ({Data?.length})
                 </Text>
             </HStack>
-            <Text color="#686C75" mt="9px" fontWeight="400" fontSize="15px">
+            <Text color={subTitleTextColor} mt="9px" fontWeight="400" fontSize="15px">
               Access reports, and analytics across departments all in one place.
             </Text>
             {/* filters needed for the get full report */}
             <Box
-                bg="#fff"
-                border="1px solid #EFEFEF"
+                bg={bgColor}
+                border={`1px solid ${borderColor}`}
                 mt="12px"
                 py="17px"
                 px={["18px", "18px"]}
@@ -260,13 +272,13 @@ export default function Report() {
 
                 <SimpleGrid mt="12px" columns={{ base: 2, md: 4 }} spacing={2}>
                     <Box>
-                        <Text color="#1F2937" fontWeight="500" fontSize="14px">Report Category</Text>
+                        <Text color={titleTextColor} fontWeight="500" fontSize="14px">Report Category</Text>
                         <Select fontSize={QueryType !== "" ? "16px" : "13px"}
                             h="45px"
                             borderWidth="2px"
-                            borderColor="#E4E4E4"
-                            _hover={{ borderColor: "#7A27AB" }}
-                            _focus={{ borderColor: "blue.blue500" }}
+                            borderColor={borderColor}
+                            _hover={{ borderColor: primaryColor }}
+                            _focus={{ borderColor: primaryColor }}
                             value={QueryType}
                             textTransform="capitalize"
                             onChange={(e) =>{
@@ -274,6 +286,7 @@ export default function Report() {
                                 setData([])
                             }}
                             placeholder="Select Report Category"
+                            color={textColor}
                         >
 
                             {
@@ -288,13 +301,13 @@ export default function Report() {
                         </Select>
                     </Box>
                     <Box>
-                        <Text color="#1F2937" fontWeight="500" fontSize="14px">Department/Unit/Ward</Text>
+                        <Text color={titleTextColor} fontWeight="500" fontSize="14px">Department/Unit/Ward</Text>
                         <Select fontSize={QueryGroup !== "" ? "16px" : "13px"}
                             h="45px"
                             borderWidth="2px"
-                            borderColor="#E4E4E4"
-                            _hover={{ borderColor: "#7A27AB" }}
-                            _focus={{ borderColor: "blue.blue500" }}
+                            borderColor={borderColor}
+                            _hover={{ borderColor: primaryColor }}
+                            _focus={{ borderColor: primaryColor }}
                             value={QueryGroup}
                             textTransform="capitalize"
                             onChange={(e) => {
@@ -302,6 +315,7 @@ export default function Report() {
                                 setData([])
                             }}
                             placeholder="Select Department/Unit/Ward"
+                            color={textColor}
                         >
 
                             {
@@ -315,21 +329,21 @@ export default function Report() {
                         </Select>
                     </Box>
                     <Box>
-                        <Text color="#1F2937" fontWeight="500" fontSize="14px">Start Date</Text>
+                        <Text color={titleTextColor} fontWeight="500" fontSize="14px">Start Date</Text>
                         <Input type="date" onChange={(e) =>{
                          setQueryStartDate(e.target.value)
                          setData([])
                         }
-                        } value={QueryStartDate} bColor="#E4E4E4" leftIcon={<FaCalendarAlt />} />
+                        } value={QueryStartDate} bColor={borderColor} leftIcon={<FaCalendarAlt />} />
 
                     </Box>
                     <Box>
-                        <Text color="#1F2937" fontWeight="500" fontSize="14px">End Date</Text>
+                        <Text color={titleTextColor} fontWeight="500" fontSize="14px">End Date</Text>
                         <Input type="date" onChange={(e) => {
                             setQueryEndDate(e.target.value)
                             setData([])
 
-                            } } value={QueryEndDate} bColor="#E4E4E4" leftIcon={<FaCalendarAlt />} />
+                            } } value={QueryEndDate} bColor={borderColor} leftIcon={<FaCalendarAlt />} />
 
                     </Box>
 

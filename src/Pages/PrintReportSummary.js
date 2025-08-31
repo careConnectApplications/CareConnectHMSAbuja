@@ -21,8 +21,17 @@ import moment from "moment";
 import { FacilityName } from "../Utils/ApiConfig";
 import TableRow from "../Components/TableRow";
 import Preloader from "../Components/Preloader";
+import { useColors } from "../Utils/colors";
 
 export default function PrintReportSummary() {
+  const {
+    bgColor,
+    textColor,
+    borderColor,
+    titleTextColor,
+    subTitleTextColor,
+    chartFillColor,
+  } = useColors();
   const { id } = useParams();
   const nav = useNavigate();
   const pathname = localStorage.getItem("pathname");
@@ -75,7 +84,7 @@ export default function PrintReportSummary() {
         fontSize="20px"
         textTransform="uppercase"
         fontWeight="900"
-        color="#242424"
+        color={titleTextColor}
       >
         {FacilityName}
       </Text>
@@ -84,7 +93,7 @@ export default function PrintReportSummary() {
         fontSize="16px"
         textTransform="uppercase"
         fontWeight="500"
-        color="#242424"
+        color={subTitleTextColor}
       >
         Report Summary for {Category.replace("aggregate", " aggregate")}{" "}
         {`From ${DateRange.from} to ${DateRange.to}`}{" "}
@@ -99,7 +108,7 @@ export default function PrintReportSummary() {
                     <Th
                       fontSize="13px"
                       textTransform="capitalize"
-                      color="#000"
+                      color={subTitleTextColor}
                       fontWeight="600"
                     >
                       S/N
@@ -107,7 +116,7 @@ export default function PrintReportSummary() {
                     <Th
                       fontSize="13px"
                       textTransform="capitalize"
-                      color="#000"
+                      color={subTitleTextColor}
                       fontWeight="600"
                     >
                       Payment Category
@@ -115,7 +124,7 @@ export default function PrintReportSummary() {
                     <Th
                       fontSize="13px"
                       textTransform="capitalize"
-                      color="#000"
+                      color={subTitleTextColor}
                       fontWeight="600"
                     >
                       Total Amount (&#8358;)
@@ -123,7 +132,7 @@ export default function PrintReportSummary() {
                     <Th
                       fontSize="13px"
                       textTransform="capitalize"
-                      color="#000"
+                      color={subTitleTextColor}
                       fontWeight="600"
                     >
                       Status
@@ -147,11 +156,11 @@ export default function PrintReportSummary() {
               mt="20px"
               p="20px"
               borderWidth="1px"
-              borderColor="gray.200"
+              borderColor={borderColor}
               borderRadius="md"
-              bg="gray.50"
+              bg={chartFillColor}
             >
-              <Text fontWeight="700" fontSize="16px">
+              <Text fontWeight="700" fontSize="16px" color={titleTextColor}>
                 Grand Total Amount: &#8358;{" "}
                 {
                   JSON.parse(localStorage.getItem("reportGrandTotal"))

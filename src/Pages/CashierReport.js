@@ -30,8 +30,20 @@ import moment from "moment";
 import Seo from "../Utils/Seo";
 import { GetCashierSettingsApi, GetCashierReportApi } from "../Utils/ApiCalls";
 import { configuration } from "../Utils/Helpers";
+import { useColors } from "../Utils/colors";
 
 export default function CashierReport() {
+  const {
+    bgColor,
+    textColor,
+    borderColor,
+    titleTextColor,
+    subTitleTextColor,
+    chartFillColor,
+    primaryColor,
+    secondaryColor,
+    NavListBg,
+  } = useColors();
   // API & Table Data States
   const [isLoading, setIsLoading] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -169,37 +181,38 @@ export default function CashierReport() {
       {showToast.show && <ShowToast message={showToast.message} status={showToast.status} />}
 
       <HStack>
-        <Text color="#1F2937" fontWeight="600" fontSize="19px">
+        <Text color={titleTextColor} fontWeight="600" fontSize="19px">
           Cashier Report
         </Text>
-        <Text color="#667085" fontWeight="400" fontSize="18px">
+        <Text color={subTitleTextColor} fontWeight="400" fontSize="18px">
           ({data?.length})
         </Text>
       </HStack>
-      <Text color="#686C75" mt="9px" fontWeight="400" fontSize="15px">
+      <Text color={subTitleTextColor} mt="9px" fontWeight="400" fontSize="15px">
         Access cashier reports and analytics.
       </Text>
 
       {/* Report Filter Section */}
-      <Box bg="#fff" border="1px solid #EFEFEF" mt="12px" py="17px" px={["18px", "18px"]} rounded="10px">
+      <Box bg={bgColor} border={`1px solid ${borderColor}`} mt="12px" py="17px" px={["18px", "18px"]} rounded="10px">
         <SimpleGrid mt="12px" columns={{ base: 2, md: 3 }} spacing={2}>
           <Box>
-            <Text color="#1F2937" fontWeight="500" fontSize="14px">
+            <Text color={titleTextColor} fontWeight="500" fontSize="14px">
               Cashier Email
             </Text>
             <Select
               fontSize={cashierEmail !== "" ? "16px" : "13px"}
               h="45px"
               borderWidth="2px"
-              borderColor="#E4E4E4"
-              _hover={{ borderColor: "#7A27AB" }}
-              _focus={{ borderColor: "blue.blue500" }}
+              borderColor={borderColor}
+              _hover={{ borderColor: primaryColor }}
+              _focus={{ borderColor: primaryColor }}
               value={cashierEmail}
               onChange={(e) => {
                 setCashierEmail(e.target.value);
                 setData([]);
               }}
               placeholder="Select Cashier Email"
+              color={textColor}
             >
               {cashierSettings.map((item, i) => (
                 <option value={item.cashieremail} key={i}>
@@ -209,7 +222,7 @@ export default function CashierReport() {
             </Select>
           </Box>
           <Box>
-            <Text color="#1F2937" fontWeight="500" fontSize="14px">
+            <Text color={titleTextColor} fontWeight="500" fontSize="14px">
               Start Date
             </Text>
             <Input
@@ -219,12 +232,12 @@ export default function CashierReport() {
                 setData([]);
               }}
               value={startDate}
-              bColor="#E4E4E4"
+              bColor={borderColor}
               leftIcon={<FaCalendarAlt />}
             />
           </Box>
           <Box>
-            <Text color="#1F2937" fontWeight="500" fontSize="14px">
+            <Text color={titleTextColor} fontWeight="500" fontSize="14px">
               End Date
             </Text>
             <Input
@@ -234,7 +247,7 @@ export default function CashierReport() {
                 setData([]);
               }}
               value={endDate}
-              bColor="#E4E4E4"
+              bColor={borderColor}
               leftIcon={<FaCalendarAlt />}
             />
           </Box>
@@ -245,9 +258,6 @@ export default function CashierReport() {
             mt={["10px", "10px", "0px", "0px"]}
             isLoading={loading}
             loadingText="Fetching..."
-            background="#f8ddd1"
-            border="1px solid #EA5937"
-            color="blue.blue500"
             w={["100%", "100%", "144px", "144px"]}
             onClick={fetchReport}
             disabled={cashierEmail && startDate && endDate ? false : true}
@@ -259,14 +269,14 @@ export default function CashierReport() {
 
       {/* Only render when data exists */}
       {data.length > 0 && (
-        <Box bg="#fff" border="1px solid #EFEFEF" mt="12px" py="17px" px={["18px", "18px"]} rounded="10px">
+        <Box bg={bgColor} border={`1px solid ${borderColor}`} mt="12px" py="17px" px={["18px", "18px"]} rounded="10px">
           {/* Payment Summary Section */}
           {paymentSummary && (
-            <Box bg="#f8f8f8" border="1px solid #ddd" p="12px" mb="12px" rounded="8px">
-              <Text fontSize="16px" fontWeight="600">
+            <Box bg={chartFillColor} border={`1px solid ${borderColor}`} p="12px" mb="12px" rounded="8px">
+              <Text fontSize="16px" fontWeight="600" color={titleTextColor}>
                 Total Payment Amount: &#8358; {paymentSummary.totalAmount}
               </Text>
-              <Text fontSize="14px">
+              <Text fontSize="14px" color={subTitleTextColor}>
                 Cashier ID: {paymentSummary.cashierid} | Cashier Email: {paymentSummary.cashieremail} | Status: {paymentSummary.status}
               </Text>
             </Box>

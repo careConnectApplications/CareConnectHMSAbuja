@@ -5,8 +5,16 @@ import Input from "../Components/Input";
 import { MdLock } from "react-icons/md";
 import ShowToast from "../Components/ToastNotification";
 import { UpdatePasswordApi } from "../Utils/ApiCalls";
+import { useColors } from "../Utils/colors";
 
 export default function PasswordReset() {
+  const {
+    bgColor,
+    textColor,
+    borderColor,
+    titleTextColor,
+    subTitleTextColor,
+  } = useColors();
   // Retrieve the online user from localStorage to extract the userId
   const onlineUser = JSON.parse(localStorage.getItem("onlineUser"));
 
@@ -48,24 +56,24 @@ export default function PasswordReset() {
   return (
     <Box
       mt="12px"
-      bg="#fff"
-      border="2px solid #EFEFEF"
+      bg={bgColor}
+      border={`2px solid ${borderColor}`}
       py="30px"
       px={["8px", "8px", "18px", "18px"]}
       rounded="10px"
     >
       {toast && <ShowToast status={toast.status} message={toast.message} />}
-      <Text fontSize="17px" fontWeight="600" lineHeight="20.57px" color="#1F2937">
+      <Text fontSize="17px" fontWeight="600" lineHeight="20.57px" color={titleTextColor}>
         Password Reset
       </Text>
-      <Text fontSize="13px" fontWeight="400" lineHeight="27px" color="#626974">
+      <Text fontSize="13px" fontWeight="400" lineHeight="27px" color={subTitleTextColor}>
         Update your password
       </Text>
 
       <Stack mt="20px" spacing="15px" w="100%">
         <HStack justifyContent="space-between" w="100%">
           <Box w="30%">
-            <Text fontSize="14px" fontWeight="500" lineHeight="22px" color="#1F2937">
+            <Text fontSize="14px" fontWeight="500" lineHeight="22px" color={titleTextColor}>
               Current Password
             </Text>
           </Box>
@@ -83,7 +91,7 @@ export default function PasswordReset() {
 
         <HStack justifyContent="space-between" w="100%">
           <Box w="30%">
-            <Text fontSize="14px" fontWeight="500" lineHeight="22px" color="#1F2937">
+            <Text fontSize="14px" fontWeight="500" lineHeight="22px" color={titleTextColor}>
               New Password
             </Text>
           </Box>

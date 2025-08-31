@@ -17,8 +17,16 @@ import Pagination from "../Components/Pagination";
 import TableRowY from "../Components/TableRowY";
 import { ReadAllAuditApi } from "../Utils/ApiCalls";
 import { configuration } from "../Utils/Helpers";
+import { useColors } from "../Utils/colors";
 
 export default function AuditManagement() {
+  const {
+    bgColor,
+    textColor,
+    borderColor,
+    titleTextColor,
+    subTitleTextColor,
+  } = useColors();
   const [data, setData] = useState([]);
   const [filterData, setFilterData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -65,8 +73,8 @@ export default function AuditManagement() {
 
   return (
     <Box
-      bg="#fff"
-      border="1px solid #EFEFEF"
+      bg={bgColor}
+      border={`1px solid ${borderColor}`}
       mt="10px"
       py="17px"
       px="18px"
@@ -78,8 +86,8 @@ export default function AuditManagement() {
 
       {/* Table Section */}
       <Box
-        bg="#fff"
-        border="1px solid #EFEFEF"
+        bg={bgColor}
+        border={`1px solid ${borderColor}`}
         mt="12px"
         py="15px"
         px="15px"
@@ -88,24 +96,24 @@ export default function AuditManagement() {
       >
         <TableContainer>
           <Table variant="striped">
-            <Thead bg="#fff">
+            <Thead bg={bgColor}>
               <Tr>
-              <Th fontSize="13px" color="#534D59" fontWeight="600">
+              <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                   S/N
                 </Th>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                   Action
                 </Th>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                   Actor
                 </Th>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                   Affected Entity
                 </Th>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                   Created Date
                 </Th>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                   Updated Date
                 </Th>
               </Tr>

@@ -37,8 +37,20 @@ import SingleRadiologyModal from "../Components/SingleRadiologyModal";
 import ConfirmRadiologyOrderModal from "../Components/ConfirmRadiologyOrderModal";
 import RadiologyResultModal from "../Components/RadiologyResultModal";
 import MainLayout from "../Layouts/Index";
+import { useColors } from "../Utils/colors";
 
 export default function RadiologyPage() {
+  const {
+    bgColor,
+    textColor,
+    borderColor,
+    titleTextColor,
+    subTitleTextColor,
+    chartFillColor,
+    primaryColor,
+    secondaryColor,
+    NavListBg,
+  } = useColors();
   // Radiology data & filtering states
   const [Data, setData] = useState([]);
   const [FilterData, setFilterData] = useState([]);
@@ -476,21 +488,21 @@ export default function RadiologyPage() {
           <ShowToast message={toast.message} status={toast.status} />
         )}
         <HStack>
-          <Text color="#1F2937" fontWeight="600" fontSize="19px">
+          <Text color={titleTextColor} fontWeight="600" fontSize="19px">
             Radiology
           </Text>
-          <Text color="#667085" fontWeight="400" fontSize="18px">
+          <Text color={subTitleTextColor} fontWeight="400" fontSize="18px">
             ({TotalData})
           </Text>
         </HStack>
-        <Text color="#686C75" mt="9px" fontWeight="400" fontSize="15px">
+        <Text color={subTitleTextColor} mt="9px" fontWeight="400" fontSize="15px">
           Manage, Upload, View And Request Radiology Tests
         </Text>
 
         {/* Filter Section */}
         <Box
-          bg="#fff"
-          border="1px solid #EFEFEF"
+          bg={bgColor}
+          border={`1px solid ${borderColor}`}
           mt="12px"
           py={["10px", "15px"]}
           px={["10px", "15px"]}
@@ -501,7 +513,7 @@ export default function RadiologyPage() {
             <Flex
               alignItems="center"
               flexWrap="wrap"
-              bg="#E4F3FF"
+              bg={chartFillColor}
               rounded="7px"
               py="3.5px"
               px="5px"
@@ -509,13 +521,13 @@ export default function RadiologyPage() {
               mt={["10px", "10px", "0px", "0px"]}
             >
 
-            <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={filterAwaitingConfirmation}>
+            <Box borderRight={`1px solid ${borderColor}`} pr="5px" onClick={filterAwaitingConfirmation}>
                 <Text
                   py="8.5px"
                   px="12px"
-                  bg={AwaitingConfirmation ? "#fff" : "transparent"}
+                  bg={AwaitingConfirmation ? bgColor : "transparent"}
                   rounded="7px"
-                  color={"#1F2937"}
+                  color={titleTextColor}
                   fontWeight={"500"}
                   fontSize={"13px"}
                 >
@@ -523,13 +535,13 @@ export default function RadiologyPage() {
 
                 </Text>
               </Box>
-              <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={filterInProgress}>
+              <Box borderRight={`1px solid ${borderColor}`} pr="5px" onClick={filterInProgress}>
                 <Text
                   py="8.5px"
                   px="12px"
-                  bg={InProgress ? "#fff" : "transparent"}
+                  bg={InProgress ? bgColor : "transparent"}
                   rounded="7px"
-                  color={"#1F2937"}
+                  color={titleTextColor}
                   fontWeight={"500"}
                   fontSize={"13px"}
                 >
@@ -538,13 +550,13 @@ export default function RadiologyPage() {
                 </Text>
               </Box>
               
-              <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={filterProcessed}>
+              <Box borderRight={`1px solid ${borderColor}`} pr="5px" onClick={filterProcessed}>
                 <Text
                   py="8.5px"
                   px="12px"
-                  bg={Processed ? "#fff" : "transparent"}
+                  bg={Processed ? bgColor : "transparent"}
                   rounded="7px"
-                  color={"#1F2937"}
+                  color={titleTextColor}
                   fontWeight={"500"}
                   fontSize={"13px"}
                 >
@@ -564,174 +576,175 @@ export default function RadiologyPage() {
             >
               <HStack spacing="4">
                 {ByDate === false ? (
+                <Input
+                  label="Search"
+                  value={SearchInput}
+                  onChange={handleInputChange}
+                  bColor={borderColor}
+                  leftIcon={<BiSearch />}
+                  fontSize={["11px", "13px"]}
+                />
+              ) : (
+                <HStack>
                   <Input
-                    label="Search"
-                    value={SearchInput}
-                    onChange={handleInputChange}
-                    bColor="#E4E4E4"
-                    leftIcon={<BiSearch />}
-                    fontSize={["11px", "13px"]}
+                    label="Start Date"
+                    type="date"
+                    value={StartDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                    bColor={borderColor}
+                    leftIcon={<FaCalendarAlt />}
                   />
-                ) : (
-                  <HStack>
-                    <Input
-                      label="Start Date"
-                      type="date"
-                      value={StartDate}
-                      onChange={(e) => setStartDate(e.target.value)}
-                      bColor="#E4E4E4"
-                      leftIcon={<FaCalendarAlt />}
-                    />
-                    <Input
-                      label="End Date"
-                      type="date"
-                      value={EndDate}
-                      onChange={(e) => setEndDate(e.target.value)}
-                      bColor="#E4E4E4"
-                      leftIcon={<FaCalendarAlt />}
-                    />
-                    <Flex
-                      onClick={() => filterBy("date")}
-                      cursor="pointer"
-                      px="5px"
-                      py="3px"
-                      rounded="5px"
-                      bg="blue.blue500"
-                      color="#fff"
-                      justifyContent="center"
-                      alignItems="center"
-                    >
-                      <BiSearch />
-                    </Flex>
+                  <Input
+                    label="End Date"
+                    type="date"
+                    value={EndDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                    bColor={borderColor}
+                    leftIcon={<FaCalendarAlt />}
+                  />
+                  <Flex
+                    onClick={() => filterBy("date")}
+                    cursor="pointer"
+                    px="5px"
+                    py="3px"
+                    rounded="5px"
+                    bg={primaryColor}
+                    color={bgColor}
+                    justifyContent="center"
+                    alignItems="center"
+                  >
+                    <BiSearch />
+                  </Flex>
+                </HStack>
+              )}
+              <Menu isLazy>
+                <MenuButton as={Box}>
+                  <HStack
+                    border={`1px solid ${NavListBg}`}
+                    rounded="7px"
+                    cursor="pointer"
+                    py={["8px", "11.64px"]}
+                    px={["10px", "16.98px"]}
+                    bg={NavListBg}
+                    color={textColor}
+                    fontWeight="500"
+                    fontSize={["11px", "14px"]}
+                  >
+                    <Text>Filter</Text>
+                    <IoFilter />
                   </HStack>
-                )}
-                <Menu isLazy>
-                  <MenuButton as={Box}>
-                    <HStack
-                      border="1px solid #EA5937"
-                      rounded="7px"
-                      cursor="pointer"
-                      py={["8px", "11.64px"]}
-                      px={["10px", "16.98px"]}
-                      bg="#f8ddd1"
-                      color="blue.blue500"
-                      fontWeight="500"
-                      fontSize={["11px", "14px"]}
-                    >
-                      <Text>Filter</Text>
-                      <IoFilter />
+                </MenuButton>
+                <MenuList fontSize="14px" bg={bgColor} border={`1px solid ${borderColor}`}>
+                  <MenuItem
+                    onClick={() => filterBy("testid")}
+                    textTransform="capitalize"
+                    fontWeight="500"
+                    color={textColor}
+                    _hover={{
+                      color: bgColor,
+                      fontWeight: "400",
+                      bg: NavListBg,
+                    }}
+                  >
+                    <HStack fontSize="14px">
+                      <Text>by Test ID</Text>
                     </HStack>
-                  </MenuButton>
-                  <MenuList fontSize="14px">
-                    <MenuItem
-                      onClick={() => filterBy("testid")}
-                      textTransform="capitalize"
-                      fontWeight="500"
-                      color="#2F2F2F"
-                      _hover={{
-                        color: "#fff",
-                        fontWeight: "400",
-                        bg: "blue.blue500",
-                      }}
-                    >
-                      <HStack fontSize="14px">
-                        <Text>by Test ID</Text>
-                      </HStack>
-                    </MenuItem>
-                    <MenuItem
-                      onClick={() => filterBy("testName")}
-                      textTransform="capitalize"
-                      fontWeight="500"
-                      color="#2F2F2F"
-                      _hover={{
-                        color: "#fff",
-                        fontWeight: "400",
-                        bg: "blue.blue500",
-                      }}
-                    >
-                      <HStack fontSize="14px">
-                        <Text>by Test Name</Text>
-                      </HStack>
-                    </MenuItem>
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => filterBy("testName")}
+                    textTransform="capitalize"
+                    fontWeight="500"
+                    color={textColor}
+                    _hover={{
+                      color: bgColor,
+                      fontWeight: "400",
+                      bg: NavListBg,
+                    }}
+                  >
+                    <HStack fontSize="14px">
+                      <Text>by Test Name</Text>
+                    </HStack>
+                  </MenuItem>
                   
-                    <MenuItem
-                      onClick={() => filterBy("firstName")}
-                      textTransform="capitalize"
-                      fontWeight="500"
-                      color="#2F2F2F"
-                      _hover={{
-                        color: "#fff",
-                        fontWeight: "400",
-                        bg: "blue.blue500",
-                      }}
-                    >
-                      <HStack fontSize="14px">
-                        <Text>by First Name</Text>
-                      </HStack>
-                    </MenuItem>
-                    <MenuItem
-                      onClick={() => filterBy("lastName")}
-                      textTransform="capitalize"
-                      fontWeight="500"
-                      color="#2F2F2F"
-                      _hover={{
-                        color: "#fff",
-                        fontWeight: "400",
-                        bg: "blue.blue500",
-                      }}
-                    >
-                      <HStack fontSize="14px">
-                        <Text>by Last Name</Text>
-                      </HStack>
-                    </MenuItem>
-                    <MenuItem
-                      onClick={() => filterBy("mrn")}
-                      textTransform="capitalize"
-                      fontWeight="500"
-                      color="#2F2F2F"
-                      _hover={{
-                        color: "#fff",
-                        fontWeight: "400",
-                        bg: "blue.blue500",
-                      }}
-                    >
-                      <HStack fontSize="14px">
-                        <Text>by MRN</Text>
-                      </HStack>
-                    </MenuItem>
-                    <MenuItem
-                      onClick={() => setByDate(true)}
-                      textTransform="capitalize"
-                      fontWeight="500"
-                      color="#2F2F2F"
-                      _hover={{
-                        color: "#fff",
-                        fontWeight: "400",
-                        bg: "blue.blue500",
-                      }}
-                    >
-                      <HStack fontSize="14px">
-                        <Text>by Date</Text>
-                      </HStack>
-                    </MenuItem>
-                    <MenuItem
-                      onClick={clearFilter}
-                      textTransform="capitalize"
-                      fontWeight="500"
-                      color="#2F2F2F"
-                      _hover={{
-                        color: "#fff",
-                        fontWeight: "400",
-                        bg: "blue.blue500",
-                      }}
-                    >
-                      <HStack fontSize="14px">
-                        <Text>clear filter</Text>
-                      </HStack>
-                    </MenuItem>
-                  </MenuList>
-                </Menu>
-              </HStack>
+                  <MenuItem
+                    onClick={() => filterBy("firstName")}
+                    textTransform="capitalize"
+                    fontWeight="500"
+                    color={textColor}
+                    _hover={{
+                      color: bgColor,
+                      fontWeight: "400",
+                      bg: NavListBg,
+                    }}
+                  >
+                    <HStack fontSize="14px">
+                      <Text>by First Name</Text>
+                    </HStack>
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => filterBy("lastName")}
+                    textTransform="capitalize"
+                    fontWeight="500"
+                    color={textColor}
+                    _hover={{
+                      color: bgColor,
+                      fontWeight: "400",
+                      bg: NavListBg,
+                    }}
+                  >
+                    <HStack fontSize="14px">
+                      <Text>by Last Name</Text>
+                    </HStack>
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => filterBy("mrn")}
+                    textTransform="capitalize"
+                    fontWeight="500"
+                    color={textColor}
+                    _hover={{
+                      color: bgColor,
+                      fontWeight: "400",
+                      bg: NavListBg,
+                    }}
+                  >
+                    <HStack fontSize="14px">
+                      <Text>by MRN</Text>
+                    </HStack>
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => setByDate(true)}
+                    textTransform="capitalize"
+                    fontWeight="500"
+                    color={textColor}
+                    _hover={{
+                      color: bgColor,
+                      fontWeight: "400",
+                      bg: NavListBg,
+                    }}
+                  >
+                    <HStack fontSize="14px">
+                      <Text>by Date</Text>
+                    </HStack>
+                  </MenuItem>
+                  <MenuItem
+                    onClick={clearFilter}
+                    textTransform="capitalize"
+                    fontWeight="500"
+                    color={textColor}
+                    _hover={{
+                      color: bgColor,
+                      fontWeight: "400",
+                      bg: NavListBg,
+                    }}
+                  >
+                    <HStack fontSize="14px">
+                      <Text>clear filter</Text>
+                    </HStack>
+                  </MenuItem>
+                </MenuList>
+              </Menu>
+            </HStack>
+>>>>>>> Stashed changes
             </Flex>
             <Flex
               justifyContent="space-between"
@@ -752,8 +765,8 @@ export default function RadiologyPage() {
         </Box>
 
         <Box
-          bg="#fff"
-          border="1px solid #EFEFEF"
+          bg={bgColor}
+          border={`1px solid ${borderColor}`}
           mt="12px"
           py={["10px", "15px"]}
           px={["10px", "15px"]}
@@ -762,12 +775,12 @@ export default function RadiologyPage() {
         >
           <TableContainer>
             <Table variant="striped">
-              <Thead bg="#fff">
+              <Thead bg={bgColor}>
                 <Tr>
                   <Th
                     fontSize={["10px", "13px"]}
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     Date
@@ -775,7 +788,7 @@ export default function RadiologyPage() {
                   <Th
                     fontSize={["10px", "13px"]}
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     Patient
@@ -783,7 +796,7 @@ export default function RadiologyPage() {
                   <Th
                     fontSize={["10px", "13px"]}
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     Test Name
@@ -791,7 +804,7 @@ export default function RadiologyPage() {
                   <Th
                     fontSize={["10px", "13px"]}
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     Test ID
@@ -799,7 +812,7 @@ export default function RadiologyPage() {
                   <Th
                     fontSize={["10px", "13px"]}
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     Department
@@ -807,7 +820,7 @@ export default function RadiologyPage() {
                   <Th
                     fontSize={["10px", "13px"]}
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     Note
@@ -815,7 +828,7 @@ export default function RadiologyPage() {
                   <Th
                     fontSize={["10px", "13px"]}
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     Status
@@ -823,7 +836,7 @@ export default function RadiologyPage() {
                   <Th
                     fontSize={["10px", "13px"]}
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     Actions
@@ -859,7 +872,7 @@ export default function RadiologyPage() {
                       />
                     ))
                   ) : (
-                    <Text textAlign="center" mt="32px" color="black">
+                    <Text textAlign="center" mt="32px" color={textColor}>
                       *--No record found--*
                     </Text>
                   )

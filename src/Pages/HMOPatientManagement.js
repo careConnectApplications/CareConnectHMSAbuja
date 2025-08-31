@@ -24,8 +24,20 @@ import Pagination from "../Components/Pagination";
 import { GetAllHMOPatientsApi } from "../Utils/ApiCalls";
 import { configuration } from "../Utils/Helpers";
 import Preloader from "../Components/Preloader";
+import { useColors } from "../Utils/colors";
 
 export default function HMOPatientManagement() {
+  const {
+    bgColor,
+    textColor,
+    borderColor,
+    titleTextColor,
+    subTitleTextColor,
+    chartFillColor,
+    primaryColor,
+    secondaryColor,
+    NavListBg,
+  } = useColors();
   // Data states
   const [data, setData] = useState([]); // full dataset
   const [filterData, setFilterData] = useState([]); // dataset filtered by status
@@ -249,7 +261,7 @@ export default function HMOPatientManagement() {
   }, [isOpen]);
 
   return (
-    <Box bg="#fff" border="1px solid #EFEFEF" mt="10px" py="17px" px={["18px", "18px"]} rounded="10px">
+    <Box bg={bgColor} border={`1px solid ${borderColor}`} mt="10px" py="17px" px={["18px", "18px"]} rounded="10px">
       {/* Preloader */}
       {isLoading && <Preloader />}
 
@@ -263,32 +275,32 @@ export default function HMOPatientManagement() {
         <Flex
           alignItems="center"
           flexWrap="wrap"
-          bg="#E4F3FF"
+          bg={chartFillColor}
           rounded="7px"
           py="3.5px"
           px="5px"
           cursor="pointer"
         >
-          <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={filterAllStatus}>
+          <Box borderRight={`1px solid ${borderColor}`} pr="5px" onClick={filterAllStatus}>
             <Text
               py="8.5px"
               px="12px"
-              bg={allStatus ? "#fff" : "transparent"}
+              bg={allStatus ? bgColor : "transparent"}
               rounded="7px"
-              color="#1F2937"
+              color={titleTextColor}
               fontWeight="500"
               fontSize="13px"
             >
               All
             </Text>
           </Box>
-          <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={filterActiveStatus}>
+          <Box borderRight={`1px solid ${borderColor}`} pr="5px" onClick={filterActiveStatus}>
             <Text
               py="8.5px"
               px="12px"
-              bg={activeStatus ? "#fff" : "transparent"}
+              bg={activeStatus ? bgColor : "transparent"}
               rounded="7px"
-              color="#1F2937"
+              color={titleTextColor}
               fontWeight="500"
               fontSize="13px"
             >
@@ -299,9 +311,9 @@ export default function HMOPatientManagement() {
             <Text
               py="8.5px"
               px="12px"
-              bg={inactiveStatus ? "#fff" : "transparent"}
+              bg={inactiveStatus ? bgColor : "transparent"}
               rounded="7px"
-              color="#1F2937"
+              color={titleTextColor}
               fontWeight="500"
               fontSize="13px"
             >
@@ -317,7 +329,7 @@ export default function HMOPatientManagement() {
               label="Search"
               onChange={handleInputChange}
               value={searchInput}
-              bColor="#E4E4E4"
+              bColor={borderColor}
               leftIcon={<BiSearch />}
               width="250px"
             />
@@ -328,7 +340,7 @@ export default function HMOPatientManagement() {
                 type="date"
                 onChange={(e) => setStartDate(e.target.value)}
                 value={startDate}
-                bColor="#E4E4E4"
+                bColor={borderColor}
                 leftIcon={<FaCalendarAlt />}
               />
               <Input
@@ -336,7 +348,7 @@ export default function HMOPatientManagement() {
                 type="date"
                 onChange={(e) => setEndDate(e.target.value)}
                 value={endDate}
-                bColor="#E4E4E4"
+                bColor={borderColor}
                 leftIcon={<FaCalendarAlt />}
               />
               <Box
@@ -345,8 +357,8 @@ export default function HMOPatientManagement() {
                 px="5px"
                 py="3px"
                 rounded="5px"
-                bg="blue.blue500"
-                color="#fff"
+                bg={primaryColor}
+                color={bgColor}
                 display="flex"
                 alignItems="center"
               >
@@ -357,12 +369,12 @@ export default function HMOPatientManagement() {
           <Menu isLazy>
             <MenuButton as={Box} cursor="pointer">
               <HStack
-                border="1px solid #EA5937"
+                border={`1px solid ${NavListBg}`}
                 rounded="7px"
                 py="10px"
                 px="16px"
-                bg="#f8ddd1"
-                color="blue.blue500"
+                bg={NavListBg}
+                color={textColor}
                 fontWeight="500"
                 fontSize="14px"
               >
@@ -370,12 +382,12 @@ export default function HMOPatientManagement() {
                 <IoFilter />
               </HStack>
             </MenuButton>
-            <MenuList fontSize="14px">
+            <MenuList fontSize="14px" bg={bgColor} border={`1px solid ${borderColor}`}>
               <MenuItem
                 onClick={() => filterBy("patient")}
                 textTransform="capitalize"
                 fontWeight="500"
-                _hover={{ color: "#fff", fontWeight: "400", bg: "blue.blue500" }}
+                _hover={{ color: bgColor, fontWeight: "400", bg: NavListBg }}
               >
                 by Patient
               </MenuItem>
@@ -383,7 +395,7 @@ export default function HMOPatientManagement() {
                 onClick={() => filterBy("mrn")}
                 textTransform="capitalize"
                 fontWeight="500"
-                _hover={{ color: "#fff", fontWeight: "400", bg: "blue.blue500" }}
+                _hover={{ color: bgColor, fontWeight: "400", bg: NavListBg }}
               >
                 by MRN
               </MenuItem>
@@ -391,7 +403,7 @@ export default function HMOPatientManagement() {
                 onClick={() => filterBy("hmo")}
                 textTransform="capitalize"
                 fontWeight="500"
-                _hover={{ color: "#fff", fontWeight: "400", bg: "blue.blue500" }}
+                _hover={{ color: bgColor, fontWeight: "400", bg: NavListBg }}
               >
                 by HMO Id
               </MenuItem>
@@ -403,7 +415,7 @@ export default function HMOPatientManagement() {
                 }}
                 textTransform="capitalize"
                 fontWeight="500"
-                _hover={{ color: "#fff", fontWeight: "400", bg: "blue.blue500" }}
+                _hover={{ color: bgColor, fontWeight: "400", bg: NavListBg }}
               >
                 by Date
               </MenuItem>
@@ -411,7 +423,7 @@ export default function HMOPatientManagement() {
                 onClick={clearFilter}
                 textTransform="capitalize"
                 fontWeight="500"
-                _hover={{ color: "#fff", fontWeight: "400", bg: "blue.blue500" }}
+                _hover={{ color: bgColor, fontWeight: "400", bg: NavListBg }}
               >
                 clear filter
               </MenuItem>
@@ -429,8 +441,8 @@ export default function HMOPatientManagement() {
 
       {/* Table Section */}
       <Box
-        bg="#fff"
-        border="1px solid #EFEFEF"
+        bg={bgColor}
+        border={`1px solid ${borderColor}`}
         mt="12px"
         py="15px"
         px="15px"
@@ -439,39 +451,39 @@ export default function HMOPatientManagement() {
       >
         <TableContainer>
           <Table variant="striped">
-            <Thead bg="#fff">
+            <Thead bg={bgColor}>
               <Tr>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                   S/N
                 </Th>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                   Name
                 </Th>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                   MRN
                 </Th>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                   Phone
                 </Th>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                   Age
                 </Th>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                   Gender
                 </Th>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                   Status
                 </Th>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                   HMO ID
                 </Th>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                   HMO Name
                 </Th>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                   HMO Plan
                 </Th>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                   Date
                 </Th>
               </Tr>

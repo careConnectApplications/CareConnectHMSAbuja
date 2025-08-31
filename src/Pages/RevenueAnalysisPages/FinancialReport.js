@@ -21,8 +21,17 @@ import { GetMedicalReportAPI } from "../../Utils/ApiCalls";
 import moment from "moment";
 import AdvancedSearchFilter from "../../Components/AdvancedSearchFilter";
 import { FaFilter } from "react-icons/fa";
+import { useColors } from "../../Utils/colors";
 
 export default function FinancialReport() {
+  const {
+    bgColor,
+    textColor,
+    borderColor,
+    titleTextColor,
+    subTitleTextColor,
+    primaryColor,
+  } = useColors();
   const [IsLoading, setIsLoading] = useState(false);
   const [Data, setData] = useState([]);
   const [showAdvancedFilter, setShowAdvancedFilter] = useState(false);
@@ -229,23 +238,23 @@ export default function FinancialReport() {
 
       {/* Header Section */}
       <Box
-        bg="#fff"
-        border="1px solid #EFEFEF"
+        bg={bgColor}
+        border={`1px solid ${borderColor}`}
         mt="12px"
         py="20px"
         px="20px"
         rounded="10px"
       >
-        <Text color="#1F2937" fontWeight="600" fontSize="17px">
+        <Text color={titleTextColor} fontWeight="600" fontSize="17px">
           Financial Report
         </Text>
-        <Text color="#667085" mt="8px" fontWeight="400" fontSize="14px">
+        <Text color={subTitleTextColor} mt="8px" fontWeight="400" fontSize="14px">
           To generate a report, select a date range and click apply
         </Text>
 
         <SimpleGrid mt="20px" columns={{ base: 1, md: 2 }} spacing={4}>
           <Box>
-            <Text color="#1F2937" fontWeight="500" fontSize="14px" mb="6px">
+            <Text color={titleTextColor} fontWeight="500" fontSize="14px" mb="6px">
               From Date
             </Text>
             <Input
@@ -253,13 +262,13 @@ export default function FinancialReport() {
               name="startDate"
               onChange={handleInputChange}
               value={payload.startDate}
-              bColor="#E4E4E4"
+              bColor={borderColor}
               leftIcon={<FaCalendarAlt />}
             />
           </Box>
 
           <Box>
-            <Text color="#1F2937" fontWeight="500" fontSize="14px" mb="6px">
+            <Text color={titleTextColor} fontWeight="500" fontSize="14px" mb="6px">
               To Date
             </Text>
             <Input
@@ -267,7 +276,7 @@ export default function FinancialReport() {
               name="endDate"
               onChange={handleInputChange}
               value={payload.endDate}
-              bColor="#E4E4E4"
+              bColor={borderColor}
               leftIcon={<FaCalendarAlt />}
             />
           </Box>
@@ -276,17 +285,15 @@ export default function FinancialReport() {
         <Flex mt="20px" gap="12px" flexWrap="wrap">
           <Button
             onClick={fetchFinancialReport}
-            background="#1F2937"
-            color="#fff"
             w={["100%", "100%", "120px", "120px"]}
           >
             Apply
           </Button>
           <Button
             onClick={clearFilters}
-            background="#fff"
-            border="1px solid #E4E4E4"
-            color="#667085"
+            bg={bgColor}
+            border={`1px solid ${borderColor}`}
+            color={textColor}
             w={["100%", "100%", "120px", "120px"]}
           >
             Clear
@@ -297,8 +304,8 @@ export default function FinancialReport() {
       {/* Data Display Section */}
       {Data.length > 0 && (
         <Box
-          bg="#fff"
-          border="1px solid #EFEFEF"
+          bg={bgColor}
+          border={`1px solid ${borderColor}`}
           mt="12px"
           py="17px"
           px="18px"
@@ -311,10 +318,10 @@ export default function FinancialReport() {
             cursor="pointer"
             mt="20px"
           >
-            <Text color="blue.blue500" fontWeight="600" fontSize="16px">
+            <Text color={primaryColor} fontWeight="600" fontSize="16px">
               Advanced Search Filter
             </Text>
-            <Box ml="8px" color="blue.blue500">
+            <Box ml="8px" color={primaryColor}>
               <FaFilter />
             </Box>
           </Flex>
@@ -330,10 +337,10 @@ export default function FinancialReport() {
           )}
           <Flex justifyContent="space-between" alignItems="center" mb="16px">
             <HStack>
-              <Text color="#1F2937" fontWeight="600" fontSize="16px">
+              <Text color={titleTextColor} fontWeight="600" fontSize="16px">
                 Report Results
               </Text>
-              <Text color="#667085" fontWeight="400" fontSize="15px">
+              <Text color={subTitleTextColor} fontWeight="400" fontSize="15px">
                 ({Data.length})
               </Text>
             </HStack>
@@ -341,9 +348,9 @@ export default function FinancialReport() {
             <Button
               rightIcon={<FaCloudDownloadAlt />}
               onClick={downloadReport}
-              background="#f8ddd1"
-              border="1px solid #EA5937"
-              color="blue.blue500"
+              bg={bgColor}
+              border={`1px solid ${primaryColor}`}
+              color={primaryColor}
               w={["100%", "100%", "144px", "144px"]}
             >
               Download
@@ -353,12 +360,12 @@ export default function FinancialReport() {
           <Box overflowX="auto">
             <TableContainer>
               <Table variant="striped">
-                <Thead bg="#fff">
+                <Thead bg={bgColor}>
                   <Tr>
                     <Th
                       fontSize="13px"
                       textTransform="capitalize"
-                      color="#534D59"
+                      color={subTitleTextColor}
                       fontWeight="600"
                     >
                       S/N
@@ -366,7 +373,7 @@ export default function FinancialReport() {
                     <Th
                       fontSize="13px"
                       textTransform="capitalize"
-                      color="#534D59"
+                      color={subTitleTextColor}
                       fontWeight="600"
                     >
                       Patient ID
@@ -374,7 +381,7 @@ export default function FinancialReport() {
                     <Th
                       fontSize="13px"
                       textTransform="capitalize"
-                      color="#534D59"
+                      color={subTitleTextColor}
                       fontWeight="600"
                     >
                       Patient Name
@@ -382,7 +389,7 @@ export default function FinancialReport() {
                     <Th
                       fontSize="13px"
                       textTransform="capitalize"
-                      color="#534D59"
+                      color={subTitleTextColor}
                       fontWeight="600"
                     >
                       Payment Type
@@ -390,7 +397,7 @@ export default function FinancialReport() {
                     <Th
                       fontSize="13px"
                       textTransform="capitalize"
-                      color="#534D59"
+                      color={subTitleTextColor}
                       fontWeight="600"
                     >
                       Payment Category
@@ -398,7 +405,7 @@ export default function FinancialReport() {
                     <Th
                       fontSize="13px"
                       textTransform="capitalize"
-                      color="#534D59"
+                      color={subTitleTextColor}
                       fontWeight="600"
                     >
                       Amount
@@ -406,7 +413,7 @@ export default function FinancialReport() {
                     <Th
                       fontSize="13px"
                       textTransform="capitalize"
-                      color="#534D59"
+                      color={subTitleTextColor}
                       fontWeight="600"
                     >
                       Quantity
@@ -414,7 +421,7 @@ export default function FinancialReport() {
                     <Th
                       fontSize="13px"
                       textTransform="capitalize"
-                      color="#534D59"
+                      color={subTitleTextColor}
                       fontWeight="600"
                     >
                       Status
@@ -422,7 +429,7 @@ export default function FinancialReport() {
                     <Th
                       fontSize="13px"
                       textTransform="capitalize"
-                      color="#534D59"
+                      color={subTitleTextColor}
                       fontWeight="600"
                     >
                       Date
