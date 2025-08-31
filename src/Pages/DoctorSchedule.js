@@ -21,10 +21,22 @@ import { GetAllPatientsHistoryApi, GetAllTodayQueueHistoryApi, GetOnlyClinicApi,
 import Pagination from "../Components/Pagination";
 import { configuration } from '../Utils/Helpers'
 import Preloader from "../Components/Preloader";
+import { useColors } from "../Utils/colors";
 
 
 
 export default function DoctoerSchedule() {
+  const {
+    bgColor,
+    textColor,
+    borderColor,
+    titleTextColor,
+    subTitleTextColor,
+    chartFillColor,
+    primaryColor,
+    secondaryColor,
+    NavListBg,
+  } = useColors();
   const [IsLoading, setIsLoading] = useState(false);
   const [ClinicData, setClinicData] = useState([]);
   const [Loading, setLoading] = useState(false);
@@ -200,18 +212,18 @@ export default function DoctoerSchedule() {
         <ShowToast message={showToast.message} status={showToast.status} />
       )}
       <HStack>
-        <Text color="#1F2937" fontWeight="600" fontSize="19px">
+        <Text color={titleTextColor} fontWeight="600" fontSize="19px">
           Doctor Schedule
         </Text>
-        <Text color="#667085" fontWeight="400" fontSize="18px">
+        <Text color={subTitleTextColor} fontWeight="400" fontSize="18px">
           ({TotalData})
         </Text>
       </HStack>
-      <Text color="#686C75" mt="9px" fontWeight="400" fontSize="15px">
+      <Text color={subTitleTextColor} mt="9px" fontWeight="400" fontSize="15px">
         View and manage all appointments in one place. Quickly access statuses,
         update details, and manage schedules as needed.
       </Text>
-      <Text color="blue.blue500" mt="9px" fontWeight="400" fontSize="15px">
+      <Text color={primaryColor} mt="9px" fontWeight="400" fontSize="15px">
         Kindly Select Clinic you want to manage
       </Text>
       <SimpleGrid mt="5px" columns={{ base: 1, md: 2, lg: 2 }} spacing={10}>
@@ -236,8 +248,8 @@ export default function DoctoerSchedule() {
 
 
       <Box
-        bg="#fff"
-        border="1px solid #EFEFEF"
+        bg={bgColor}
+        border={`1px solid ${borderColor}`}
         mt="12px"
         py="17px"
         px={["18px", "18px"]}
@@ -248,20 +260,20 @@ export default function DoctoerSchedule() {
           <Flex
             alignItems="center"
             flexWrap="wrap"
-            bg="#E4F3FF"
+            bg={chartFillColor}
             rounded="7px"
             py="3.5px"
             px="5px"
             cursor="pointer"
             mt={["10px", "10px", "0px", "0px"]}
           >
-            <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={() => handleFilterChange("status", "scheduled")}>
+            <Box borderRight={`1px solid ${borderColor}`} pr="5px" onClick={() => handleFilterChange("status", "scheduled")}>
               <Text
                 py="8.5px"
                 px="12px"
-                bg={filters.status === "scheduled" ? "#fff" : "transparent"}
+                bg={filters.status === "scheduled" ? bgColor : "transparent"}
                 rounded="7px"
-                color={"#1F2937"}
+                color={titleTextColor}
                 fontWeight={"500"}
                 fontSize={"13px"}
               >
@@ -269,29 +281,29 @@ export default function DoctoerSchedule() {
 
               </Text>
             </Box>
-            <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={() => handleFilterChange("status", "today_queue")}>
+            <Box borderRight={`1px solid ${borderColor}`} pr="5px" onClick={() => handleFilterChange("status", "today_queue")}>
               <Text
                 py="8.5px"
                 px="12px"
-                bg={filters.status === "today_queue" ? "#fff" : "transparent"}
+                bg={filters.status === "today_queue" ? bgColor : "transparent"}
                 rounded="7px"
-                color={"#1F2937"}
+                color={titleTextColor}
                 fontWeight={"500"}
                 fontSize={"13px"}
               >
                 Today Queue
-                <Box color="#667085" as="span" fontWeight="400" fontSize="13px">
+                <Box color={subTitleTextColor} as="span" fontWeight="400" fontSize="13px">
                   ({QueueData?.length})
                 </Box>
               </Text>
             </Box>
-            <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={() => handleFilterChange("status", "complete")}>
+            <Box borderRight={`1px solid ${borderColor}`} pr="5px" onClick={() => handleFilterChange("status", "complete")}>
               <Text
                 py="8.5px"
                 px="12px"
-                bg={filters.status === "complete" ? "#fff" : "transparent"}
+                bg={filters.status === "complete" ? bgColor : "transparent"}
                 rounded="7px"
-                color={"#1F2937"}
+                color={titleTextColor}
                 fontWeight={"500"}
                 fontSize={"13px"}
               >
@@ -299,13 +311,13 @@ export default function DoctoerSchedule() {
 
               </Text>
             </Box>
-            <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={() => handleFilterChange("status", "inprogress")}>
+            <Box borderRight={`1px solid ${borderColor}`} pr="5px" onClick={() => handleFilterChange("status", "inprogress")}>
               <Text
                 py="8.5px"
                 px="12px"
-                bg={filters.status === "inprogress" ? "#fff" : "transparent"}
+                bg={filters.status === "inprogress" ? bgColor : "transparent"}
                 rounded="7px"
-                color={"#1F2937"}
+                color={titleTextColor}
                 fontWeight={"500"}
                 fontSize={"13px"}
               >
@@ -327,20 +339,20 @@ export default function DoctoerSchedule() {
                 label="Search"
                 onChange={(e) => handleFilterChange("searchTerm", e.target.value)}
                 value={filters.searchTerm}
-                bColor="#E4E4E4"
+                bColor={borderColor}
                 leftIcon={<BiSearch />}
               />
               <Menu isLazy>
                 <MenuButton as={Box}>
 
                   <HStack
-                    border="1px solid #EA5937"
+                    border={`1px solid ${primaryColor}`}
                     rounded="7px"
                     cursor="pointer"
                     py="11.64px"
                     px="16.98px"
-                    bg="#f8ddd1"
-                    color="blue.blue500"
+                    bg={NavListBg}
+                    color={primaryColor}
                     fontWeight="500"
                     fontSize="14px"
                   >
@@ -353,11 +365,11 @@ export default function DoctoerSchedule() {
                     onClick={() => handleFilterChange("searchField", "firstName")}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: primaryColor,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -368,11 +380,11 @@ export default function DoctoerSchedule() {
                     onClick={() => handleFilterChange("searchField", "lastName")}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: primaryColor,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -383,11 +395,11 @@ export default function DoctoerSchedule() {
                     onClick={() => handleFilterChange("searchField", "MRN")}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: primaryColor,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -400,11 +412,11 @@ export default function DoctoerSchedule() {
                     }
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: primaryColor,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -421,11 +433,11 @@ export default function DoctoerSchedule() {
                     }}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: primaryColor,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -447,8 +459,8 @@ export default function DoctoerSchedule() {
         {/* filter section end here */}
 
         <Box
-          bg="#fff"
-          border="1px solid #EFEFEF"
+          bg={bgColor}
+          border={`1px solid ${borderColor}`}
           mt="12px"
           py="15px"
           px="15px"
@@ -457,12 +469,12 @@ export default function DoctoerSchedule() {
         >
           <TableContainer>
             <Table variant="striped">
-              <Thead bg="#fff">
+              <Thead bg={bgColor}>
                 <Tr>
                   <Th
                     fontSize="13px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     Patient
@@ -470,7 +482,7 @@ export default function DoctoerSchedule() {
                   <Th
                     fontSize="13px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     Scheduled Date
@@ -478,7 +490,7 @@ export default function DoctoerSchedule() {
                   <Th
                     fontSize="13px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     Reason
@@ -486,7 +498,7 @@ export default function DoctoerSchedule() {
                   <Th
                     fontSize="13px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     Appointment
@@ -494,7 +506,7 @@ export default function DoctoerSchedule() {
                   <Th
                     fontSize="13px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     Type
@@ -502,7 +514,7 @@ export default function DoctoerSchedule() {
                   <Th
                     fontSize="13px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     Clinic
@@ -510,7 +522,7 @@ export default function DoctoerSchedule() {
                   <Th
                     fontSize="13px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     Vital Status
@@ -518,7 +530,7 @@ export default function DoctoerSchedule() {
                   <Th
                     fontSize="13px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     Status
@@ -526,7 +538,7 @@ export default function DoctoerSchedule() {
                   <Th
                     fontSize="13px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     Actions
@@ -555,7 +567,7 @@ export default function DoctoerSchedule() {
                     />
                   ))
                 ) : (
-                  <Text textAlign={"center"} mt="32px" color="black">
+                  <Text textAlign={"center"} mt="32px" color={textColor}>
                     *--No record found--*
                   </Text>
                 )}

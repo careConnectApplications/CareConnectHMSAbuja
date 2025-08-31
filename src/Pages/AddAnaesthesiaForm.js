@@ -1,6 +1,7 @@
-import { Text, Box, Flex, Stack, SimpleGrid, Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon } from '@chakra-ui/react'
+import { Text, Box, Flex, Stack, SimpleGrid, Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon, HStack, Checkbox } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import MainLayout from "../Layouts/Index";
+import { useColors } from '../Utils/colors';
 import Seo from "../Utils/Seo";
 import Button from "../Components/Button";
 import Input from "../Components/Input";
@@ -11,6 +12,16 @@ import { IoMdArrowRoundBack } from "react-icons/io";
 import { AddAnaesthesiaFormAPI } from "../Utils/ApiCalls";
 
 export default function AddAnaesthesiaForm() {
+  const {
+    bgColor,
+    textColor,
+    borderColor,
+    titleTextColor,
+    subTitleTextColor,
+    primaryColor,
+    secondaryColor,
+    NavListBg,
+  } = useColors();
   const { id } = useParams();
   const nav = useNavigate();
   const pathName = localStorage.getItem("pathname") || "/";
@@ -35,6 +46,8 @@ export default function AddAnaesthesiaForm() {
 
   const [PostInstructions, setPostInstructions] = useState([]);
   const [postInstructionNote, setPostInstructionNote] = useState("");
+
+  const [Monitors, setMonitors] = useState([]);
 
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState({ show: false, message: "", status: "" });
@@ -61,6 +74,16 @@ export default function AddAnaesthesiaForm() {
     setPostInstructions(PostInstructions.filter(p => p !== item));
   };
 
+  const handleMonitorChange = (monitor) => {
+    setMonitors(prev =>
+      prev.includes(monitor)
+        ? prev.filter(item => item !== monitor)
+        : [...prev, monitor]
+    );
+  };
+
+  const monitorOptions = ["ECG", "NIBP", "SPO2", "TEMP", "EtCO2"];
+
   const showNotification = (message, status) => {
     setToast({ show: true, message, status });
     setTimeout(() => setToast(prev => ({ ...prev, show: false })), 5000);
@@ -73,6 +96,7 @@ export default function AddAnaesthesiaForm() {
         ...payload,
         technique: Technique,
         postofinstruction: PostInstructions,
+        monitors: Monitors,
       };
       const res = await AddAnaesthesiaFormAPI(fullPayload, id);
       if (res.status === 200) {
@@ -91,7 +115,23 @@ export default function AddAnaesthesiaForm() {
       {toast.show && <ShowToast message={toast.message} status={toast.status} />}
       <Seo title="Add Anaesthesia Form" description="Care Connect Theatre Anaesthesia Form" />
 
-      <Box>
+      <HStack>
+        <Text color={titleTextColor} fontWeight="600" fontSize="18px">
+          Anaesthesia Form
+        </Text>
+      </HStack>
+      <Text color={subTitleTextColor} mt="9px" fontWeight="400" fontSize="12px">
+        Create, View and manage all Anaesthesia Forms in one place.
+      </Text>
+
+      <Box
+        bg={bgColor}
+        border={`1px solid ${borderColor}`}
+        mt="12px"
+        py="17px"
+        px={["18px", "18px"]}
+        rounded="10px"
+      >
         <Button
           leftIcon={<IoMdArrowRoundBack />}
           px="40px"
@@ -105,29 +145,29 @@ export default function AddAnaesthesiaForm() {
           {/* Basic Details */}
           <AccordionItem mb="15px">
             <AccordionButton
-              _hover={{ border: "1px solid #EA5937", color: "#000" }}
+              _hover={{ border: `1px solid ${primaryColor}`, color: textColor }}
               _focus={{ outline: "none" }}
-              border="1px solid #fff"
+              border={`1px solid ${borderColor}`}
               _expanded={{ rounded: "8px 8px 0 0", border: 0 }}
-              bg="#fff"
-              color="#000"
+              bg={bgColor}
+              color={textColor}
               rounded="8px"
             >
               <Box flex="1" textAlign="left">Anaesthesia Details</Box>
               <AccordionIcon />
             </AccordionButton>
-            <AccordionPanel pb={4} bg="#fff" rounded="0 0 8px 8px">
+            <AccordionPanel pb={4} bg={bgColor} rounded="0 0 8px 8px">
               <SimpleGrid columns={{ base: 1, md: 2 }} spacing={5} mt="32px">
-                <Input id="preopeassessment" label="Pre-op Assessment" value={payload.preopeassessment} onChange={handleScalarChange} />
-                <Input id="allergies" label="Allergies" value={payload.allergies} onChange={handleScalarChange} />
-                <Input id="weight" label="Weight" value={payload.weight} onChange={handleScalarChange} />
-                <Input id="asa" label="ASA Grade" value={payload.asa} onChange={handleScalarChange} />
-                <Input id="temp" label="Temperature" value={payload.temp} onChange={handleScalarChange} />
-                <Input id="premedication" label="Premedication" value={payload.premedication} onChange={handleScalarChange} />
-                <Input id="timegivenpremedication" label="Time Given Premedication" type="date" value={payload.timegivenpremedication} onChange={handleScalarChange} />
-                <Input id="timeoflastfood" label="Time of Last Food" type="date" value={payload.timeoflastfood} onChange={handleScalarChange} />
-                <Input id="vlinesite" label="V-line Site" value={payload.vlinesite} onChange={handleScalarChange} />
-                <Input id="cannulasize" label="Cannula Size" value={payload.cannulasize} onChange={handleScalarChange} />
+                <Input bColor={borderColor} id="preopeassessment" label="Pre-op Assessment" value={payload.preopeassessment} onChange={handleScalarChange} />
+                <Input bColor={borderColor} id="allergies" label="Allergies" value={payload.allergies} onChange={handleScalarChange} />
+                <Input bColor={borderColor} id="weight" label="Weight" value={payload.weight} onChange={handleScalarChange} />
+                <Input bColor={borderColor} id="asa" label="ASA Grade" value={payload.asa} onChange={handleScalarChange} />
+                <Input bColor={borderColor} id="temp" label="Temperature" value={payload.temp} onChange={handleScalarChange} />
+                <Input bColor={borderColor} id="premedication" label="Premedication" value={payload.premedication} onChange={handleScalarChange} />
+                <Input bColor={borderColor} id="timegivenpremedication" label="Time Given Premedication" type="date" value={payload.timegivenpremedication} onChange={handleScalarChange} />
+                <Input bColor={borderColor} id="timeoflastfood" label="Time of Last Food" type="date" value={payload.timeoflastfood} onChange={handleScalarChange} />
+                <Input bColor={borderColor} id="vlinesite" label="V-line Site" value={payload.vlinesite} onChange={handleScalarChange} />
+                <Input bColor={borderColor} id="cannulasize" label="Cannula Size" value={payload.cannulasize} onChange={handleScalarChange} />
               </SimpleGrid>
             </AccordionPanel>
           </AccordionItem>
@@ -135,20 +175,21 @@ export default function AddAnaesthesiaForm() {
           {/* Technique */}
           <AccordionItem mb="15px">
             <AccordionButton
-              _hover={{ border: "1px solid #EA5937", color: "#000" }}
+              _hover={{ border: `1px solid ${primaryColor}`, color: textColor }}
               _focus={{ outline: "none" }}
-              border="1px solid #fff"
+              border={`1px solid ${borderColor}`}
               _expanded={{ rounded: "8px 8px 0 0", border: 0 }}
-              bg="#fff"
-              color="#000"
+              bg={bgColor}
+              color={textColor}
               rounded="8px"
             >
               <Box flex="1" textAlign="left">Technique</Box>
               <AccordionIcon />
             </AccordionButton>
-            <AccordionPanel pb={4} bg="#fff" rounded="0 0 8px 8px">
+            <AccordionPanel pb={4} bg={bgColor} rounded="0 0 8px 8px">
               <Stack spacing={4} pt="10">
                 <TextArea
+                  bColor={borderColor}
                   label="Technique Note"
                   value={techniqueNote}
                   onChange={e => setTechniqueNote(e.target.value)}
@@ -167,14 +208,43 @@ export default function AddAnaesthesiaForm() {
                     rounded="20px"
                     fontSize="12px"
                     _hover={{ bg: "blue.blue400" }}
-                    bg="blue.blue500"
+                    bg={primaryColor}
                     w="100%"
                     justify="space-between"
                     align="center"
                   >
-                    <Text color="#fff" fontWeight="500" textTransform="capitalize">{item}</Text>
-                    <Box fontSize="20px" color="#fff" onClick={() => removeTechnique(item)}>×</Box>
+                    <Text color={bgColor} fontWeight="500" textTransform="capitalize">{item}</Text>
+                    <Box fontSize="20px" color={bgColor} onClick={() => removeTechnique(item)}>×</Box>
                   </Flex>
+                ))}
+              </SimpleGrid>
+            </AccordionPanel>
+          </AccordionItem>
+
+          {/* Monitors */}
+          <AccordionItem mb="15px">
+            <AccordionButton
+              _hover={{ border: `1px solid ${primaryColor}`, color: textColor }}
+              _focus={{ outline: "none" }}
+              border={`1px solid ${borderColor}`}
+              _expanded={{ rounded: "8px 8px 0 0", border: 0 }}
+              bg={bgColor}
+              color={textColor}
+              rounded="8px"
+            >
+              <Box flex="1" textAlign="left">Monitors</Box>
+              <AccordionIcon />
+            </AccordionButton>
+            <AccordionPanel pb={4} bg={bgColor} rounded="0 0 8px 8px">
+              <SimpleGrid columns={{ base: 2, md: 3 }} spacing={4} mt="16px">
+                {monitorOptions.map(monitor => (
+                  <Checkbox
+                    key={monitor}
+                    isChecked={Monitors.includes(monitor)}
+                    onChange={() => handleMonitorChange(monitor)}
+                  >
+                    {monitor}
+                  </Checkbox>
                 ))}
               </SimpleGrid>
             </AccordionPanel>
@@ -183,21 +253,21 @@ export default function AddAnaesthesiaForm() {
           {/* Input / Output */}
           <AccordionItem mb="15px">
             <AccordionButton
-              _hover={{ border: "1px solid #EA5937", color: "#000" }}
+              _hover={{ border: `1px solid ${primaryColor}`, color: textColor }}
               _focus={{ outline: "none" }}
-              border="1px solid #fff"
+              border={`1px solid ${borderColor}`}
               _expanded={{ rounded: "8px 8px 0 0", border: 0 }}
-              bg="#fff"
-              color="#000"
+              bg={bgColor}
+              color={textColor}
               rounded="8px"
             >
               <Box flex="1" textAlign="left">Input / Output</Box>
               <AccordionIcon />
             </AccordionButton>
-            <AccordionPanel pb={4} bg="#fff" rounded="0 0 8px 8px">
+            <AccordionPanel pb={4} bg={bgColor} rounded="0 0 8px 8px">
               <SimpleGrid columns={{ base: 1, md: 2 }} spacing={5} mt="32px">
-                <Input id="bloodloss" label="Blood Loss" value={payload.bloodloss} onChange={handleScalarChange} />
-                <Input id="totalinput" label="Total Input" value={payload.totalinput} onChange={handleScalarChange} />
+                <Input bColor={borderColor} id="bloodloss" label="Blood Loss" value={payload.bloodloss} onChange={handleScalarChange} />
+                <Input bColor={borderColor} id="totalinput" label="Total Input" value={payload.totalinput} onChange={handleScalarChange} />
               </SimpleGrid>
             </AccordionPanel>
           </AccordionItem>
@@ -205,20 +275,21 @@ export default function AddAnaesthesiaForm() {
           {/* Post Instructions */}
           <AccordionItem mb="15px">
             <AccordionButton
-              _hover={{ border: "1px solid #EA5937", color: "#000" }}
+              _hover={{ border: `1px solid ${primaryColor}`, color: textColor }}
               _focus={{ outline: "none" }}
-              border="1px solid #fff"
+              border={`1px solid ${borderColor}`}
               _expanded={{ rounded: "8px 8px 0 0", border: 0 }}
-              bg="#fff"
-              color="#000"
+              bg={bgColor}
+              color={textColor}
               rounded="8px"
             >
               <Box flex="1" textAlign="left">Post Instructions</Box>
               <AccordionIcon />
             </AccordionButton>
-            <AccordionPanel pb={4} bg="#fff" rounded="0 0 8px 8px">
+            <AccordionPanel pb={4} bg={bgColor} rounded="0 0 8px 8px">
               <Stack spacing={4} pt="10">
                 <TextArea
+                  bColor={borderColor}
                   label="Post Instruction Note"
                   value={postInstructionNote}
                   onChange={e => setPostInstructionNote(e.target.value)}
@@ -237,13 +308,13 @@ export default function AddAnaesthesiaForm() {
                     rounded="20px"
                     fontSize="12px"
                     _hover={{ bg: "blue.blue400" }}
-                    bg="blue.blue500"
+                    bg={primaryColor}
                     w="100%"
                     justify="space-between"
                     align="center"
                   >
-                    <Text color="#fff" fontWeight="500" textTransform="capitalize">{item}</Text>
-                    <Box fontSize="20px" color="#fff" onClick={() => removePostInstruction(item)}>×</Box>
+                    <Text color={bgColor} fontWeight="500" textTransform="capitalize">{item}</Text>
+                    <Box fontSize="20px" color={bgColor} onClick={() => removePostInstruction(item)}>×</Box>
                   </Flex>
                 ))}
               </SimpleGrid>

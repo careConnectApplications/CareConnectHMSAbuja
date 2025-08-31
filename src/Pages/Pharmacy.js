@@ -38,8 +38,20 @@ import {
 } from "../Utils/ApiCalls";
 import { FaCalendarAlt } from "react-icons/fa";
 import ConfirmPharmacyOrderModal from "../Components/ConfirmPharmacyOrderModal";
+import { useColors } from "../Utils/colors";
 
 export default function Pharmacy() {
+  const {
+    bgColor,
+    textColor,
+    borderColor,
+    titleTextColor,
+    subTitleTextColor,
+    chartFillColor,
+    primaryColor,
+    secondaryColor,
+    NavListBg,
+  } = useColors();
   const [selectedOrderData, setSelectedOrderData] = useState(null);
 
   // Data states
@@ -295,22 +307,22 @@ export default function Pharmacy() {
         <ShowToast message={showToast.message} status={showToast.status} />
       )}
       <HStack>
-        <Text color="#1F2937" fontWeight="600" fontSize="19px">
+        <Text color={titleTextColor} fontWeight="600" fontSize="19px">
           Pharmacy
         </Text>
-        <Text color="#667085" fontWeight="400" fontSize="18px">
+        <Text color={subTitleTextColor} fontWeight="400" fontSize="18px">
           ({FilterData.length})
         </Text>
       </HStack>
-      <Text color="#686C75" mt="9px" fontWeight="400" fontSize="15px">
+      <Text color={subTitleTextColor} mt="9px" fontWeight="400" fontSize="15px">
         Manage your pharmacy records, track prescriptions, and view patient
         details.
       </Text>
 
       {/* Filter Section */}
       <Box
-        bg="#fff"
-        border="1px solid #EFEFEF"
+        bg={bgColor}
+        border={`1px solid ${borderColor}`}
         mt="12px"
         py="17px"
         px={["18px", "18px"]}
@@ -321,33 +333,33 @@ export default function Pharmacy() {
           <Flex
             alignItems="center"
             flexWrap="wrap"
-            bg="#E4F3FF"
+            bg={chartFillColor}
             rounded="7px"
             py="3.5px"
             px="5px"
             cursor="pointer"
             mt="10px"
           >
-            <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={filterAll}>
+            <Box borderRight={`1px solid ${borderColor}`} pr="5px" onClick={filterAll}>
               <Text
                 py="8.5px"
                 px="12px"
-                bg={All ? "#fff" : "transparent"}
+                bg={All ? bgColor : "transparent"}
                 rounded="7px"
-                color="#1F2937"
+                color={titleTextColor}
                 fontWeight="500"
                 fontSize="13px"
               >
                 All
               </Text>
             </Box>
-            <Box borderRight="1px solid #EDEFF2" pr="5px" >
+            <Box borderRight={`1px solid ${borderColor}`} pr="5px" >
               <Text
                 py="8.5px"
                 px="12px"
-                bg={Paid ? "#fff" : "transparent"}
+                bg={Paid ? bgColor : "transparent"}
                 rounded="7px"
-                color="#1F2937"
+                color={titleTextColor}
                 fontWeight="500"
                 fontSize="13px"
               >
@@ -355,16 +367,16 @@ export default function Pharmacy() {
               </Text>
             </Box>
             <Box
-              borderRight="1px solid #EDEFF2"
+              borderRight={`1px solid ${borderColor}`}
               pr="5px"
              
             >
               <Text
                 py="8.5px"
                 px="12px"
-                bg={Pending ? "#fff" : "transparent"}
+                bg={Pending ? bgColor : "transparent"}
                 rounded="7px"
-                color="#1F2937"
+                color={titleTextColor}
                 fontWeight="500"
                 fontSize="13px"
               >
@@ -375,9 +387,9 @@ export default function Pharmacy() {
               <Text
                 py="8.5px"
                 px="12px"
-                bg={Dispensed ? "#fff" : "transparent"}
+                bg={Dispensed ? bgColor : "transparent"}
                 rounded="7px"
-                color="#1F2937"
+                color={titleTextColor}
                 fontWeight="500"
                 fontSize="13px"
               >
@@ -399,7 +411,7 @@ export default function Pharmacy() {
                   label="Search"
                   onChange={handleInputChange}
                   value={SearchInput}
-                  bColor="#E4E4E4"
+                  bColor={borderColor}
                   leftIcon={<BiSearch />}
                 />
               ) : (
@@ -409,7 +421,7 @@ export default function Pharmacy() {
                     type="date"
                     onChange={(e) => setStartDate(e.target.value)}
                     value={StartDate}
-                    bColor="#E4E4E4"
+                    bColor={borderColor}
                     leftIcon={<FaCalendarAlt />}
                   />
                   <Input
@@ -417,7 +429,7 @@ export default function Pharmacy() {
                     type="date"
                     onChange={(e) => setEndDate(e.target.value)}
                     value={EndDate}
-                    bColor="#E4E4E4"
+                    bColor={borderColor}
                     leftIcon={<FaCalendarAlt />}
                   />
                   <Flex
@@ -426,8 +438,8 @@ export default function Pharmacy() {
                     px="5px"
                     py="3px"
                     rounded="5px"
-                    bg="blue.blue500"
-                    color="#fff"
+                    bg={primaryColor}
+                    color={bgColor}
                     justifyContent="center"
                     alignItems="center"
                   >
@@ -438,13 +450,13 @@ export default function Pharmacy() {
               <Menu isLazy>
                 <MenuButton as={Box}>
                   <HStack
-                    border="1px solid #EA5937"
+                    border={`1px solid ${NavListBg}`}
                     rounded="7px"
                     cursor="pointer"
                     py="11.64px"
                     px="16.98px"
-                    bg="#f8ddd1"
-                    color="blue.blue500"
+                    bg={NavListBg}
+                    color={textColor}
                     fontWeight="500"
                     fontSize="14px"
                   >
@@ -452,16 +464,16 @@ export default function Pharmacy() {
                     <IoFilter />
                   </HStack>
                 </MenuButton>
-                <MenuList fontSize="14px">
+                <MenuList fontSize="14px" bg={bgColor} border={`1px solid ${borderColor}`}>
                   <MenuItem
                     onClick={() => filterBy("patient")}
                     textTransform="capitalize"
                     fontWeight="500"
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     by Patient
@@ -470,11 +482,11 @@ export default function Pharmacy() {
                     onClick={() => filterBy("prescriber")}
                     textTransform="capitalize"
                     fontWeight="500"
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     by Prescriber
@@ -483,11 +495,11 @@ export default function Pharmacy() {
                     onClick={() => filterBy("mrn")}
                     textTransform="capitalize"
                     fontWeight="500"
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     by MRN
@@ -497,11 +509,11 @@ export default function Pharmacy() {
                     onClick={() => filterBy("orderid")}
                     textTransform="capitalize"
                     fontWeight="500"
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     by Order ID
@@ -510,11 +522,11 @@ export default function Pharmacy() {
                     onClick={() => setByDate(true)}
                     textTransform="capitalize"
                     fontWeight="500"
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     by Date
@@ -523,11 +535,11 @@ export default function Pharmacy() {
                     onClick={clearFilter}
                     textTransform="capitalize"
                     fontWeight="500"
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     clear filter
@@ -557,8 +569,8 @@ export default function Pharmacy() {
 
       {/* Table Section */}
       <Box
-        bg="#fff"
-        border="1px solid #EFEFEF"
+        bg={bgColor}
+        border={`1px solid ${borderColor}`}
         mt="12px"
         py="15px"
         px="15px"
@@ -567,12 +579,12 @@ export default function Pharmacy() {
       >
         <TableContainer>
           <Table variant="striped">
-            <Thead bg="#fff">
+            <Thead bg={bgColor}>
               <Tr>
                 <Th
                   fontSize="13px"
                   textTransform="capitalize"
-                  color="#534D59"
+                  color={subTitleTextColor}
                   fontWeight="600"
                 >
                   Order ID
@@ -580,7 +592,7 @@ export default function Pharmacy() {
                 <Th
                   fontSize="13px"
                   textTransform="capitalize"
-                  color="#534D59"
+                  color={subTitleTextColor}
                   fontWeight="600"
                 >
                   Patient Name
@@ -588,7 +600,7 @@ export default function Pharmacy() {
                 <Th
                   fontSize="13px"
                   textTransform="capitalize"
-                  color="#534D59"
+                  color={subTitleTextColor}
                   fontWeight="600"
                 >
                   MRN
@@ -596,7 +608,7 @@ export default function Pharmacy() {
                 <Th
                   fontSize="13px"
                   textTransform="capitalize"
-                  color="#534D59"
+                  color={subTitleTextColor}
                   fontWeight="600"
                 >
                   Creation Date
@@ -604,7 +616,7 @@ export default function Pharmacy() {
                 <Th
                   fontSize="13px"
                   textTransform="capitalize"
-                  color="#534D59"
+                  color={subTitleTextColor}
                   fontWeight="600"
                 >
                   Prescriber Name
@@ -613,7 +625,7 @@ export default function Pharmacy() {
                 <Th
                   fontSize="13px"
                   textTransform="capitalize"
-                  color="#534D59"
+                  color={subTitleTextColor}
                   fontWeight="600"
                 >
                   HMO Cover
@@ -621,7 +633,7 @@ export default function Pharmacy() {
                 <Th
                   fontSize="13px"
                   textTransform="capitalize"
-                  color="#534D59"
+                  color={subTitleTextColor}
                   fontWeight="600"
                 >
                   HMO Name
@@ -629,7 +641,7 @@ export default function Pharmacy() {
                 <Th
                   fontSize="13px"
                   textTransform="capitalize"
-                  color="#534D59"
+                  color={subTitleTextColor}
                   fontWeight="600"
                 >
                   HMO Plan
@@ -638,7 +650,7 @@ export default function Pharmacy() {
                 <Th
                   fontSize="13px"
                   textTransform="capitalize"
-                  color="#534D59"
+                  color={subTitleTextColor}
                   fontWeight="600"
                 >
                   Appointment Date
@@ -646,7 +658,7 @@ export default function Pharmacy() {
                 <Th
                   fontSize="13px"
                   textTransform="capitalize"
-                  color="#534D59"
+                  color={subTitleTextColor}
                   fontWeight="600"
                 >
                   Clinic
@@ -654,7 +666,7 @@ export default function Pharmacy() {
                 <Th
                   fontSize="13px"
                   textTransform="capitalize"
-                  color="#534D59"
+                  color={subTitleTextColor}
                   fontWeight="600"
                 >
                   Appointment ID
@@ -662,7 +674,7 @@ export default function Pharmacy() {
                 <Th
                   fontSize="13px"
                   textTransform="capitalize"
-                  color="#534D59"
+                  color={subTitleTextColor}
                   fontWeight="600"
                 >
                   Action
@@ -713,7 +725,7 @@ export default function Pharmacy() {
                   />
                 ))
               ) : (
-                <Text textAlign={"center"} mt="32px" color="black">
+                <Text textAlign={"center"} mt="32px" color={textColor}>
                   *--No record found--*
                 </Text>
               )}

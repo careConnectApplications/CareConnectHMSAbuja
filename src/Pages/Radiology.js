@@ -29,6 +29,8 @@ import ShowToast from "../Components/ToastNotification";
 import { ReadAllRadiologyByPatientApi, ViewMultipleRadiologyResultsApi } from "../Utils/ApiCalls";
 import RadiologyOrderRequestModal from "../Components/RadiologyOrderRequestModal";
 import TableRowY from "../Components/TableRowY";
+import MainLayout from "../Layouts/Index";
+import { useColors } from "../Utils/colors";
 
 // Helper function to format the date and time in a simpler format
 const formatDateTime = (dateString) => {
@@ -44,6 +46,17 @@ const formatDateTime = (dateString) => {
 };
 
 export default function Radiology() {
+  const {
+    bgColor,
+    textColor,
+    borderColor,
+    titleTextColor,
+    subTitleTextColor,
+    chartFillColor,
+    primaryColor,
+    secondaryColor,
+    NavListBg,
+  } = useColors();
   const [isLoading, setIsLoading] = useState(false);
   const [filterData, setFilterData] = useState([]);
   const [originalData, setOriginalData] = useState([]);
@@ -261,51 +274,60 @@ export default function Radiology() {
   };
 
   return (
-    <Box p={["10px", "15px", "20px"]}>
+    <MainLayout>
       {isLoading && <Preloader />}
 
       {showToast.show && (
         <ShowToast message={showToast.message} status={showToast.status} />
       )}
+      <Seo title="Radiology" description="Radiology Requests and Results" />
+      <HStack>
+        <Text color={titleTextColor} fontWeight="600" fontSize="18px">
+          Radiology
+        </Text>
+      </HStack>
+      <Text color={subTitleTextColor} mt="9px" fontWeight="400" fontSize="12px">
+        Manage all radiology requests and view results in one place.
+      </Text>
       <Box
-        bg="#fff"
-        border="1px solid #EFEFEF"
+        bg={bgColor}
+        border={`1px solid ${borderColor}`}
         mt="12px"
-        py={["10px", "15px"]}
-        px={["10px", "15px"]}
+        py="17px"
+        px={["18px", "18px"]}
         rounded="10px"
       >
         <Flex justifyContent="space-between" flexWrap="wrap">
           <Flex
             alignItems="center"
             flexWrap="wrap"
-            bg="#E4F3FF"
+            bg={chartFillColor}
             rounded="7px"
             py="3.5px"
             px="5px"
             cursor="pointer"
             mt="10px"
           >
-            <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={filterAwaiting}>
+            <Box borderRight={`1px solid ${borderColor}`} pr="5px" onClick={filterAwaiting}>
               <Text
                 py="8.5px"
                 px="12px"
-                bg={awaiting ? "#fff" : "transparent"}
+                bg={awaiting ? bgColor : "transparent"}
                 rounded="7px"
-                color="#1F2937"
+                color={titleTextColor}
                 fontWeight="500"
                 fontSize={["11px", "13px"]}
               >
                 Awaiting
               </Text>
             </Box>
-            <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={filterInProgress}>
+            <Box borderRight={`1px solid ${borderColor}`} pr="5px" onClick={filterInProgress}>
               <Text
                 py="8.5px"
                 px="12px"
-                bg={inProgress ? "#fff" : "transparent"}
+                bg={inProgress ? bgColor : "transparent"}
                 rounded="7px"
-                color="#1F2937"
+                color={titleTextColor}
                 fontWeight="500"
                 fontSize={["11px", "13px"]}
               >
@@ -316,9 +338,9 @@ export default function Radiology() {
               <Text
                 py="8.5px"
                 px="12px"
-                bg={processed ? "#fff" : "transparent"}
+                bg={processed ? bgColor : "transparent"}
                 rounded="7px"
-                color="#1F2937"
+                color={titleTextColor}
                 fontWeight="500"
                 fontSize={["11px", "13px"]}
               >
@@ -337,20 +359,20 @@ export default function Radiology() {
                 label="Search"
                 onChange={handleInputChange}
                 value={searchInput}
-                bColor="#E4E4E4"
+                bColor={borderColor}
                 leftIcon={<BiSearch />}
                 fontSize={["11px", "13px"]}
               />
               <Menu>
                 <MenuButton as={Box}>
                   <HStack
-                    border="1px solid #EA5937"
+                    border={`1px solid ${NavListBg}`}
                     rounded="7px"
                     cursor="pointer"
                     py={["8px", "11.64px"]}
                     px={["10px", "16.98px"]}
-                    bg="#f8ddd1"
-                    color="blue.blue500"
+                    bg={NavListBg}
+                    color={secondaryColor}
                     fontWeight="500"
                     fontSize={["11px", "14px"]}
                   >
@@ -358,15 +380,15 @@ export default function Radiology() {
                     <IoFilter />
                   </HStack>
                 </MenuButton>
-                <MenuList>
+                <MenuList bg={bgColor} border={`1px solid ${borderColor}`}>
                   <MenuItem
                     textTransform="capitalize"
                     fontWeight="500"
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                     onClick={filterAwaiting}
                   >
@@ -396,37 +418,37 @@ export default function Radiology() {
       </Box>
 
       <Box
-        bg="#fff"
-        border="1px solid #EFEFEF"
+        bg={bgColor}
+        border={`1px solid ${borderColor}`}
         mt="12px"
-        py={["10px", "15px"]}
-        px={["10px", "15px"]}
+        py="15px"
+        px="15px"
         rounded="10px"
         overflowX="auto"
       >
         <TableContainer>
           <Table variant="striped">
-            <Thead bg="#fff">
+            <Thead>
               <Tr>
-                <Th fontSize={["10px", "13px"]} textTransform="capitalize" color="#534D59" fontWeight="600">
+                <Th fontSize={["10px", "13px"]} textTransform="capitalize" color={subTitleTextColor} fontWeight="600">
                   Date
                 </Th>
-                <Th fontSize={["10px", "13px"]} textTransform="capitalize" color="#534D59" fontWeight="600">
+                <Th fontSize={["10px", "13px"]} textTransform="capitalize" color={subTitleTextColor} fontWeight="600">
                   Test Name
                 </Th>
-                <Th fontSize={["10px", "13px"]} textTransform="capitalize" color="#534D59" fontWeight="600">
+                <Th fontSize={["10px", "13px"]} textTransform="capitalize" color={subTitleTextColor} fontWeight="600">
                   Test ID
                 </Th>
-                <Th fontSize={["10px", "13px"]} textTransform="capitalize" color="#534D59" fontWeight="600">
+                <Th fontSize={["10px", "13px"]} textTransform="capitalize" color={subTitleTextColor} fontWeight="600">
                   Department
                 </Th>
-                <Th fontSize={["10px", "13px"]} textTransform="capitalize" color="#534D59" fontWeight="600">
+                <Th fontSize={["10px", "13px"]} textTransform="capitalize" color={subTitleTextColor} fontWeight="600">
                   Note
                 </Th>
-                <Th fontSize={["10px", "13px"]} textTransform="capitalize" color="#534D59" fontWeight="600">
+                <Th fontSize={["10px", "13px"]} textTransform="capitalize" color={subTitleTextColor} fontWeight="600">
                   Status
                 </Th>
-                <Th fontSize={["10px", "13px"]} textTransform="capitalize" color="#534D59" fontWeight="600">
+                <Th fontSize={["10px", "13px"]} textTransform="capitalize" color={subTitleTextColor} fontWeight="600">
                   Actions
                 </Th>
               </Tr>
@@ -465,6 +487,6 @@ export default function Radiology() {
         initialData={selectedRadiology}
         onSuccess={handleSuccess}
       />
-    </Box>
+    </MainLayout>
   );
 }

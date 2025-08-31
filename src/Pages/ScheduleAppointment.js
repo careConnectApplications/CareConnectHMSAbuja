@@ -33,8 +33,19 @@ import Pagination from "../Components/Pagination";
 import Preloader from "../Components/Preloader";
 import { FaCalendarAlt } from "react-icons/fa";
 import AssignDoctorModal from "../Components/AssignDoctorModal";
+import { useColors } from "../Utils/colors";
 
 export default function ScheduleAppointment() {
+  const {
+    bgColor,
+    textColor,
+    borderColor,
+    titleTextColor,
+    subTitleTextColor,
+    chartFillColor,
+    primaryColor,
+    NavListBg,
+  } = useColors();
   const [IsLoading, setIsLoading] = useState(true);
   const [All, setAll] = useState(true);
   const [Approved, setScheduled] = useState(false);
@@ -247,22 +258,22 @@ export default function ScheduleAppointment() {
         <ShowToast message={showToast.message} status={showToast.status} />
       )}
       <HStack>
-        <Text color="#1F2937" fontWeight="600" fontSize="19px">
+        <Text color={titleTextColor} fontWeight="600" fontSize="19px">
           Scheduled Appointments
         </Text>
-        <Text color="#667085" fontWeight="400" fontSize="18px">
+        <Text color={subTitleTextColor} fontWeight="400" fontSize="18px">
           ({TotalData})
         </Text>
       </HStack>
-      <Text color="#686C75" mt="9px" fontWeight="400" fontSize="15px">
+      <Text color={subTitleTextColor} mt="9px" fontWeight="400" fontSize="15px">
         View and manage all appointments in one place. Quickly access statuses,
         update details, and manage schedules as needed.
       </Text>
 
 
       <Box
-        bg="#fff"
-        border="1px solid #EFEFEF"
+        bg={bgColor}
+        border={`1px solid ${borderColor}`}
         mt="12px"
         py="17px"
         px={["18px", "18px"]}
@@ -272,25 +283,25 @@ export default function ScheduleAppointment() {
           <Flex
             alignItems="center"
             flexWrap="wrap"
-            bg="#E4F3FF"
+            bg={chartFillColor}
             rounded="7px"
             py="3.5px"
             px="5px"
             cursor="pointer"
             mt={["10px", "10px", "0px", "0px"]}
           >
-            <Box borderRight="1px solid #EDEFF2" pr="5px">
+            <Box borderRight={`1px solid ${borderColor}`} pr="5px">
               <Text
                 py="8.5px"
                 px="12px"
-                bg={All ? "#fff" : "transparent"}
+                bg={All ? bgColor : "transparent"}
                 rounded="7px"
-                color={"#1F2937"}
+                color={titleTextColor}
                 fontWeight={"500"}
                 fontSize={"13px"}
               >
                 All
-                <Box color="#667085" as="span" fontWeight="400" fontSize="13px">
+                <Box color={subTitleTextColor} as="span" fontWeight="400" fontSize="13px">
                   ({TotalData})
                 </Box>
               </Text>
@@ -346,7 +357,7 @@ export default function ScheduleAppointment() {
                     setCurrentPage(1);
                   }}
                   value={SearchInput}
-                  bColor="#E4E4E4"
+                  bColor={borderColor}
                   leftIcon={<BiSearch />}
                 />
               ) : (
@@ -356,7 +367,7 @@ export default function ScheduleAppointment() {
                     type="date"
                     onChange={(e) => setStartDate(e.target.value)}
                     value={StartDate}
-                    bColor="#E4E4E4"
+                    bColor={borderColor}
                     leftIcon={<FaCalendarAlt />}
                   />
                   <Input
@@ -364,7 +375,7 @@ export default function ScheduleAppointment() {
                     type="date"
                     onChange={(e) => setEndDate(e.target.value)}
                     value={EndDate}
-                    bColor="#E4E4E4"
+                    bColor={borderColor}
                     leftIcon={<FaCalendarAlt />}
                   />
 
@@ -374,8 +385,8 @@ export default function ScheduleAppointment() {
                     px="5px"
                     py="3px"
                     rounded="5px"
-                    bg="blue.blue500"
-                    color="#fff"
+                    bg={primaryColor}
+                    color={bgColor}
                     justifyContent="center"
                     alignItems="center"
                   >
@@ -387,13 +398,13 @@ export default function ScheduleAppointment() {
               <Menu isLazy>
                 <MenuButton as={Box}>
                   <HStack
-                    border="1px solid #EA5937"
+                    border={`1px solid ${primaryColor}`}
                     rounded="7px"
                     cursor="pointer"
                     py="11.64px"
                     px="16.98px"
-                    bg="#f8ddd1"
-                    color="blue.blue500"
+                    bg={NavListBg}
+                    color={primaryColor}
                     fontWeight="500"
                     fontSize="14px"
                   >
@@ -406,11 +417,11 @@ export default function ScheduleAppointment() {
                     onClick={() => filterBy("appointment")}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#614040ff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: primaryColor,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -421,11 +432,11 @@ export default function ScheduleAppointment() {
                     onClick={() => filterBy("firstName")}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: primaryColor,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -436,11 +447,11 @@ export default function ScheduleAppointment() {
                     onClick={() => filterBy("lastName")}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: primaryColor,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -451,11 +462,11 @@ export default function ScheduleAppointment() {
                     onClick={() => filterBy("mrn")}
                     textTransform="capitalize"
                     fontWeight="500"
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: primaryColor,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -466,11 +477,11 @@ export default function ScheduleAppointment() {
                     onClick={() => filterBy("type")}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: primaryColor,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -481,11 +492,11 @@ export default function ScheduleAppointment() {
                     onClick={() => setByDate(true)}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: primaryColor,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -504,11 +515,11 @@ export default function ScheduleAppointment() {
                     }}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: primaryColor,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -538,8 +549,8 @@ export default function ScheduleAppointment() {
         </Flex>
 
         <Box
-          bg="#fff"
-          border="1px solid #EFEFEF"
+          bg={bgColor}
+          border={`1px solid ${borderColor}`}
           mt="12px"
           py="15px"
           px="15px"
@@ -548,12 +559,12 @@ export default function ScheduleAppointment() {
         >
           <TableContainer>
             <Table variant="striped">
-              <Thead bg="#fff">
+              <Thead bg={bgColor}>
                 <Tr>
                   <Th
                     fontSize="13px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     Date
@@ -562,7 +573,7 @@ export default function ScheduleAppointment() {
                   <Th
                     fontSize="13px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     Appointment
@@ -570,7 +581,7 @@ export default function ScheduleAppointment() {
                   <Th
                     fontSize="13px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     Type
@@ -578,7 +589,7 @@ export default function ScheduleAppointment() {
                   <Th
                     fontSize="13px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     Category
@@ -594,7 +605,7 @@ export default function ScheduleAppointment() {
                   <Th
                     fontSize="13px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     MRN
@@ -602,7 +613,7 @@ export default function ScheduleAppointment() {
                   <Th
                     fontSize="13px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     Clinic
@@ -610,7 +621,7 @@ export default function ScheduleAppointment() {
                                     <Th
                     fontSize="13px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     Assigned Doctor
@@ -618,7 +629,7 @@ export default function ScheduleAppointment() {
                   <Th
                     fontSize="13px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     Status
@@ -626,7 +637,7 @@ export default function ScheduleAppointment() {
                   <Th
                     fontSize="13px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     Actions
@@ -677,7 +688,7 @@ export default function ScheduleAppointment() {
                     />
                   ))
                 ) : (
-                  <Text textAlign={"center"} mt="32px" color="black">
+                  <Text textAlign={"center"} mt="32px" color={textColor}>
                     *--No record found--*
                   </Text>
                 )}

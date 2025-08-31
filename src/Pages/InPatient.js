@@ -40,8 +40,20 @@ import Pagination from "../Components/Pagination";
 import { configuration } from "../Utils/Helpers";
 import Preloader from "../Components/Preloader";
 import DischargePatientModal from "../Components/DischargePatientModal";
+import { useColors } from "../Utils/colors";
 
 export default function InPatient() {
+  const {
+    bgColor,
+    textColor,
+    borderColor,
+    titleTextColor,
+    subTitleTextColor,
+    chartFillColor,
+    primaryColor,
+    secondaryColor,
+    NavListBg,
+  } = useColors();
   const [IsLoading, setIsLoading] = useState(false);
   const [Ward, setWard] = useState([]);
   const [All, setAll] = useState(true);
@@ -312,15 +324,15 @@ export default function InPatient() {
       )}
 
       <HStack>
-        <Text color="#1F2937" fontWeight="600" fontSize="19px">
+        <Text color={titleTextColor} fontWeight="600" fontSize="19px">
           In Patient
         </Text>
-        <Text color="#667085" fontWeight="400" fontSize="18px">
+        <Text color={subTitleTextColor} fontWeight="400" fontSize="18px">
           ({Data?.length})
         </Text>
       </HStack>
 
-      <Text color="#686C75" mt="9px" fontWeight="400" fontSize="15px">
+      <Text color={subTitleTextColor} mt="9px" fontWeight="400" fontSize="15px">
         View and manage all admitted patients in one place. Quickly access
         statuses, Patient timeline, and oversee the care of patient as needed.
       </Text>
@@ -347,7 +359,7 @@ export default function InPatient() {
         </Button>
       </HStack>
 
-      <Text color="blue.blue500" mt="9px" fontWeight="400" fontSize="15px">
+      <Text color={primaryColor} mt="9px" fontWeight="400" fontSize="15px">
         Kindly Select Ward you want to manage
       </Text>
 
@@ -376,8 +388,8 @@ export default function InPatient() {
       </SimpleGrid>
 
       <Box
-        bg="#fff"
-        border="1px solid #EFEFEF"
+        bg={bgColor}
+        border={`1px solid ${borderColor}`}
         mt="12px"
         py="17px"
         px={["18px", "18px"]}
@@ -388,40 +400,40 @@ export default function InPatient() {
           <Flex
             alignItems="center"
             flexWrap="wrap"
-            bg="#E4F3FF"
+            bg={chartFillColor}
             rounded="7px"
             py="3.5px"
             px="5px"
             cursor="pointer"
             mt={["10px", "10px", "0px", "0px"]}
           >
-            <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={filterAll}>
+            <Box borderRight={`1px solid ${borderColor}`} pr="5px" onClick={filterAll}>
               <Text
                 py="8.5px"
                 px="12px"
-                bg={All ? "#fff" : "transparent"}
+                bg={All ? bgColor : "transparent"}
                 rounded="7px"
-                color={"#1F2937"}
+                color={titleTextColor}
                 fontWeight={"500"}
                 fontSize={"13px"}
               >
                 All
-                <Box color="#667085" as="span" fontWeight="400" fontSize="13px">
+                <Box color={subTitleTextColor} as="span" fontWeight="400" fontSize="13px">
                   ({Data?.length})
                 </Box>
               </Text>
             </Box>
             <Box
-              borderRight="1px solid #EDEFF2"
+              borderRight={`1px solid ${borderColor}`}
               pr="5px"
               onClick={filterToAdmit}
             >
               <Text
                 py="8.5px"
                 px="12px"
-                bg={ToAdmit ? "#fff" : "transparent"}
+                bg={ToAdmit ? bgColor : "transparent"}
                 rounded="7px"
-                color={"#1F2937"}
+                color={titleTextColor}
                 fontWeight={"500"}
                 fontSize={"13px"}
               >
@@ -429,16 +441,16 @@ export default function InPatient() {
               </Text>
             </Box>
             <Box
-              borderRight="1px solid #EDEFF2"
+              borderRight={`1px solid ${borderColor}`}
               pr="5px"
               onClick={filterAdmitted}
             >
               <Text
                 py="8.5px"
                 px="12px"
-                bg={Admitted ? "#fff" : "transparent"}
+                bg={Admitted ? bgColor : "transparent"}
                 rounded="7px"
-                color={"#1F2937"}
+                color={titleTextColor}
                 fontWeight={"500"}
                 fontSize={"13px"}
               >
@@ -458,20 +470,20 @@ export default function InPatient() {
                 label="Search"
                 onChange={(e) => setSearchInput(e.target.value)}
                 value={SearchInput}
-                bColor="#E4E4E4"
+                bColor={borderColor}
                 leftIcon={<BiSearch />}
               />
 
               <Menu isLazy>
                 <MenuButton as={Box}>
                   <HStack
-                    border="1px solid #EA5937"
+                    border={`1px solid ${primaryColor}`}
                     rounded="7px"
                     cursor="pointer"
                     py="11.64px"
                     px="16.98px"
-                    bg="#f8ddd1"
-                    color="blue.blue500"
+                    bg={NavListBg}
+                    color={primaryColor}
                     fontWeight="500"
                     fontSize="14px"
                   >
@@ -484,11 +496,11 @@ export default function InPatient() {
                     onClick={() => filterBy("name")}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: primaryColor,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -499,11 +511,11 @@ export default function InPatient() {
                     onClick={() => filterBy("mrn")}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: primaryColor,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -514,11 +526,11 @@ export default function InPatient() {
                     onClick={() => filterBy("hmoId")}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: primaryColor,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -529,11 +541,11 @@ export default function InPatient() {
                     onClick={() => filterBy("appointmentType")}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: primaryColor,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -547,11 +559,11 @@ export default function InPatient() {
                     }}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: primaryColor,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -561,13 +573,14 @@ export default function InPatient() {
                 </MenuList>
               </Menu>
             </HStack>
+>>>>>>> Stashed changes
           </Flex>
         </Flex>
 
         {/* Table section */}
         <Box
-          bg="#fff"
-          border="1px solid #EFEFEF"
+          bg={bgColor}
+          border={`1px solid ${borderColor}`}
           mt="12px"
           py="15px"
           px="15px"
@@ -576,42 +589,42 @@ export default function InPatient() {
         >
           <TableContainer>
             <Table variant="striped">
-              <Thead bg="#fff">
+              <Thead bg={bgColor}>
                 <Tr>
-                  <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                     Patient Name
                   </Th>
-                  <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                     Doctor
                   </Th>
-                  <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                     Specialization
                   </Th>
-                  <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                     Ward
                   </Th>
-                  <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                     Bed
                   </Th>
-                  <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                     Bed Fee
                   </Th>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                   Referred Date
                 </Th>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                   Discharge Reason
                 </Th>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                   Referred In
                 </Th>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                   Referred From
                 </Th>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                   Status
                 </Th>
-                  <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                     Actions
                   </Th>
                 </Tr>
@@ -686,7 +699,7 @@ export default function InPatient() {
                     />
                   ))
                 ) : (
-                  <Text textAlign={"center"} mt="32px" color="black">
+                  <Text textAlign={"center"} mt="32px" color={textColor}>
                     *--No record found--*
                   </Text>
                 )}

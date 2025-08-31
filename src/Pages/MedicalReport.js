@@ -19,74 +19,83 @@ import RadiologyReport from "./MedicalReportPages/RadiologyReport";
 import ProcedureReport from "./MedicalReportPages/ProcedureReport";
 import ImmunizationReport from "./MedicalReportPages/ImmunizationReport";
 import PharmacyReport from "./MedicalReportPages/PharmacyReport";
+import { useColors } from "../Utils/colors";
 
 export default function MedicalReport() {
+    const {
+        bgColor,
+        textColor,
+        borderColor,
+        titleTextColor,
+        subTitleTextColor,
+        primaryColor,
+    } = useColors();
     return (
         <MainLayout>
             <Seo title="Medical Report" description="Care Connect Medical Report" />
 
             <HStack>
-                <Text color="#1F2937" fontWeight="600" fontSize="19px">
+                <Text color={titleTextColor} fontWeight="600" fontSize="18px">
                     Medical Report
                 </Text>
             </HStack>
-            <Text color="#686C75" mt="9px" fontWeight="400" fontSize="15px">
+            <Text color={subTitleTextColor} mt="9px" fontWeight="400" fontSize="12px">
                 Access medical reports, clinical summaries, and patient care analytics across all departments.
             </Text>
 
             <Tabs mt="12px">
-                <TabList color="#101828" pb="10px" flexWrap={"wrap"}>
+                <TabList color={textColor} pb="10px" flexWrap={"wrap"}>
                     <Tab
                         _focus={{ outline: "none" }}
-                        _selected={{ color: "blue.blue500", fontWeight: "700" }}
+                        _selected={{ color: primaryColor, fontWeight: "700" }}
                     >
                         Birth Report
                     </Tab>
                     <Tab
                         _focus={{ outline: "none" }}
-                        _selected={{ color: "blue.blue500", fontWeight: "700" }}
+                        _selected={{ color: primaryColor, fontWeight: "700" }}
                     >
                         Death Report
                     </Tab>
                     <Tab
                         _focus={{ outline: "none" }}
-                        _selected={{ color: "blue.blue500", fontWeight: "700" }}
+                        _selected={{ color: primaryColor, fontWeight: "700" }}
                     >
                         In-Patient
                     </Tab>
                     <Tab
                         _focus={{ outline: "none" }}
-                        _selected={{ color: "blue.blue500", fontWeight: "700" }}
+                        _selected={{ color: primaryColor, fontWeight: "700" }}
                     >
                         Out-Patient
                     </Tab>
                     <Tab
                         _focus={{ outline: "none" }}
-                        _selected={{ color: "blue.blue500", fontWeight: "700" }}
+                        _selected={{ color: primaryColor, fontWeight: "700" }}
                     >
                         Lab Investigation
                     </Tab>
                     <Tab
                         _focus={{ outline: "none" }}
-                        _selected={{ color: "blue.blue500", fontWeight: "700" }}
+                        _selected={{ color: primaryColor, fontWeight: "700" }}
                     >
                         Radiology Report
                     </Tab>
                     <Tab
                         _focus={{ outline: "none" }}
-                        _selected={{ color: "blue.blue500", fontWeight: "700" }}
+                        _selected={{ color: primaryColor, fontWeight: "700" }}
                     >
                         Procedure Report
                     </Tab>
                     <Tab
                         _focus={{ outline: "none" }}
-                        _selected={{ color: "blue.blue500", fontWeight: "700" }}
+                        _selected={{ color: primaryColor, fontWeight: "700" }}
                     >
                         Immunization Report
                     </Tab>
                     <Tab
                         _focus={{ outline: "none" }}
-                        _selected={{ color: "blue.blue500", fontWeight: "700" }}
+                        _selected={{ color: primaryColor, fontWeight: "700" }}
                     >
                         Pharmacy Report
                     </Tab>

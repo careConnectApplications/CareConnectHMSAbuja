@@ -11,7 +11,7 @@ export const useColors = () => {
   const NavbarText = theme === 'light' ? 'blue.blue500' : "blue.blue400";
   const chartFillColor = theme === 'light' ? '#eee' : '#6e299aff';
   const chartFillXColor = theme === 'light' ? '#e1e1e1ff' : '#b44d36ff';
-  const primaryColor = 'blue.500';
+  const primaryColor = theme === 'light' ? 'blue.blue500' : "blue.blue400";
   const secondaryColor = '#eeeeeeff';
   const dangerColor = 'red.500';
   const successColor = 'green.500';

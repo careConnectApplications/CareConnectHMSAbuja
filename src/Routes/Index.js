@@ -98,7 +98,6 @@ import MedicalReport from "../Pages/MedicalReport";
 import OperationalAnalysis from "../Pages/OperationalAnalysis";
 import RevenueAnalysis from "../Pages/RevenueAnalysis";
 import MaternityReport from "../Pages/MaternityReport";
-import CodingIndexing from "../Pages/CodingIndexing";
 
 
 export default function IndexRoutes() {
@@ -306,10 +305,6 @@ export default function IndexRoutes() {
             <Route
               path="/dashboard/report-analytics/maternity-report"
               element={<MaternityReport />}
-            />
-            <Route
-              path="/dashboard/report-analytics/coding-indexing"
-              element={<CodingIndexing />}
             />
           </Route>
           <Route element={<ReferTheatreRoutes />}>

@@ -29,7 +29,7 @@ export default function Button({
 }) {
 
   const history = useNavigate();
-  const { primaryColor, bgColor } = useColors();
+  const { primaryColor, secondaryColor } = useColors();
  
 
   return (
@@ -37,7 +37,7 @@ export default function Button({
       fontSize={size === 'xs' ? 'xs' : size === 'sm' ? 'sm' : '16px'}
       fontWeight={'400'}
       pos={pos}
-      color={color ? color : bgColor}
+      color={color ? color : secondaryColor}
       bg={background ? background : primaryColor}
       border={border}
       _focus={{outline: "none"}}
