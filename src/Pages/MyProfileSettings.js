@@ -8,8 +8,17 @@ import { MdModeEdit } from "react-icons/md";
 import { SettingsApi, UpdateUserApi } from "../Utils/ApiCalls";
 import ShowToast from "../Components/ToastNotification";
 import { useNavigate } from 'react-router-dom';
+import { useColors } from "../Utils/colors";
 
 export default function MyProfileSettings() {
+    const {
+        bgColor,
+        textColor,
+        borderColor,
+        titleTextColor,
+        subTitleTextColor,
+        primaryColor,
+    } = useColors();
     const token = localStorage.getItem("token");
     const onlineUser = JSON.parse(localStorage.getItem("onlineUser"));
 
@@ -82,10 +91,10 @@ export default function MyProfileSettings() {
     }, []);
 
     return (
-        <Box mt="12px" bg="#fff" border="2px solid #EFEFEF" py='30px' px={["8px", "8px", "18px", "18px"]} rounded='10px'>
+        <Box mt="12px" bg={bgColor} border={`2px solid ${borderColor}`} py='30px' px={["8px", "8px", "18px", "18px"]} rounded='10px'>
             {Toast && <ShowToast status={Toast.status} message={Toast.message} />}
-            <Text fontSize={"17px"} fontWeight={"600"} lineHeight={"20.57px"} color={"#1F2937"}>Personal Information</Text>
-            <Text fontSize={"13px"} fontWeight={"400"} lineHeight={"27px"} color={"#626974"}>Manage and update your profile information</Text>
+            <Text fontSize={"17px"} fontWeight={"600"} lineHeight={"20.57px"} color={titleTextColor}>Personal Information</Text>
+            <Text fontSize={"13px"} fontWeight={"400"} lineHeight={"27px"} color={subTitleTextColor}>Manage and update your profile information</Text>
 
             <Flex justifyContent="flex-start" alignItems="center" mt="20px">
                 <Button w="10%" leftIcon={<MdModeEdit />} onClick={() => setEditable(!Editable)}> {Editable === false ? "Edit Profile" : "Cancel Edit Mode"}</Button>
@@ -95,7 +104,7 @@ export default function MyProfileSettings() {
                 <hr className="remove" />
                 <HStack justifyContent="space-between" w="100%">
                     <Box w="30%">
-                        <Text fontSize={"14px"} fontWeight={"500"} lineHeight={"22px"} color={"#1F2937"}>First Name</Text>
+                        <Text fontSize={"14px"} fontWeight={"500"} lineHeight={"22px"} color={titleTextColor}>First Name</Text>
                     </Box>
                     <Box w="70%">
                         <Input leftIcon={<FaUser />} isDisabled={Editable === false ? true : false} val={Payload.firstName !== "" ? true : false} label="First Name" type="text" value={Payload.firstName} onChange={handlePayload} id="firstName" />
@@ -105,7 +114,7 @@ export default function MyProfileSettings() {
                 <hr className="remove" />
                 <HStack justifyContent="space-between" w="100%">
                     <Box w="30%">
-                        <Text fontSize={"14px"} fontWeight={"500"} lineHeight={"22px"} color={"#1F2937"}>Last Name</Text>
+                        <Text fontSize={"14px"} fontWeight={"500"} lineHeight={"22px"} color={titleTextColor}>Last Name</Text>
                     </Box>
                     <Box w="70%">
                         <Input leftIcon={<FaUser />} isDisabled={Editable === false ? true : false} val={Payload.lastName !== "" ? true : false} label="Last Name" type="text" value={Payload.lastName} onChange={handlePayload} id="lastName" />
@@ -114,7 +123,7 @@ export default function MyProfileSettings() {
                 <hr className="remove" />
                 <HStack justifyContent="space-between" w="100%">
                     <Box w="30%">
-                        <Text fontSize={"14px"} fontWeight={"500"} lineHeight={"22px"} color={"#1F2937"}>Email</Text>
+                        <Text fontSize={"14px"} fontWeight={"500"} lineHeight={"22px"} color={titleTextColor}>Email</Text>
                     </Box>
                     <Box w="70%">
                         <Input leftIcon={<MdEmail />} isDisabled={Editable === false ? true : false} val={Payload.email !== "" ? true : false} label="Email  Address" type="email" value={Payload.email} onChange={handlePayload} id="email" />
@@ -124,10 +133,10 @@ export default function MyProfileSettings() {
                 <hr className="remove" />
                 <HStack justifyContent="space-between" w="100%">
                     <Box w="30%">
-                        <Text fontSize={"14px"} fontWeight={"500"} lineHeight={"22px"} color={"#1F2937"}>Clinic</Text>
+                        <Text fontSize={"14px"} fontWeight={"500"} lineHeight={"22px"} color={titleTextColor}>Clinic</Text>
                     </Box>
                     <Box w="70%">
-                        <Select h="45px" borderWidth="2px" isDisabled={Editable === false ? true : false} fontSize={Payload.clinic !== "" ? "16px" : "13px"} borderColor="#6B7280" id="clinic" value={Payload.clinic} onChange={handlePayload} placeholder="Select Clinic" >
+                        <Select h="45px" borderWidth="2px" isDisabled={Editable === false ? true : false} fontSize={Payload.clinic !== "" ? "16px" : "13px"} borderColor={borderColor} id="clinic" value={Payload.clinic} onChange={handlePayload} placeholder="Select Clinic" color={textColor}>
                             {
                                 Settings?.clinics?.map((item, i) => (
                                     <option value={`${item.clinic}`} key={i}>{item.clinic}</option>

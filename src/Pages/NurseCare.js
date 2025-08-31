@@ -17,9 +17,17 @@ import DailyWardReport from "./DailyWardReport";
 import BedReport from "./BedReport";
 import Preloader from "../Components/Preloader";
 import ManageDailyWardReports from "./ManageDailyWardReports";
+import { useColors } from "../Utils/colors";
 
 function NurseCare() {
-
+  const {
+    bgColor,
+    textColor,
+    borderColor,
+    titleTextColor,
+    subTitleTextColor,
+    primaryColor,
+  } = useColors();
   const [isLoading, setIsLoading] = useState(true);
 
  
@@ -39,44 +47,44 @@ function NurseCare() {
     <MainLayout>
       <Seo title="Settings" description="Care Connect Settings" />
       <HStack>
-        <Text color="#1F2937" fontWeight="600" fontSize="19px">
+        <Text color={titleTextColor} fontWeight="600" fontSize="19px">
           In-Patient
         </Text>
       </HStack>
-      <Text color="#686C75" mt="9px" fontWeight="400" fontSize="15px">
+      <Text color={subTitleTextColor} mt="9px" fontWeight="400" fontSize="15px">
         Streamlines patient admission flow with real-time tracking and efficient
         management.
       </Text>
 
       <Tabs mt="12px">
-        <TabList color="#101828" pb="10px">
+        <TabList color={textColor} pb="10px">
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             In-Patient Admission
           </Tab>
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Admission Daily Register
           </Tab>
           {/* <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Bed Status Report
           </Tab> */}
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Daily Ward Report
           </Tab>
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Bed Report
           </Tab>
@@ -84,7 +92,7 @@ function NurseCare() {
         <TabIndicator
           mt="-1.5px"
           height="2px"
-          bg="blue.blue500"
+          bg={primaryColor}
           borderRadius="1px"
         />
         <TabPanels>

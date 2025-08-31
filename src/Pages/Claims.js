@@ -35,8 +35,19 @@ import Preloader from "../Components/Preloader";
 import UpdateClaimStatusModal from "../Components/UpdateClaimStatusModal";
 import { IoFilter } from "react-icons/io5";
 import { FaCalendarAlt } from "react-icons/fa";
+import { useColors } from "../Utils/colors";
 
 export default function Claims() {
+  const {
+    bgColor,
+    textColor,
+    borderColor,
+    titleTextColor,
+    subTitleTextColor,
+    chartFillColor,
+    primaryColor,
+    NavListBg,
+  } = useColors();
   const [IsLoading, setIsLoading] = useState(true);
   const [Data, setData] = useState([]);
   const [showToast, setShowToast] = useState({
@@ -201,19 +212,19 @@ export default function Claims() {
         <ShowToast message={showToast.message} status={showToast.status} />
       )}
       <HStack>
-        <Text color="#1F2937" fontWeight="600" fontSize="19px">
+        <Text color={titleTextColor} fontWeight="600" fontSize="19px">
           Claims
         </Text>
-        <Text color="#667085" fontWeight="400" fontSize="18px">
+        <Text color={subTitleTextColor} fontWeight="400" fontSize="18px">
           ({TotalData})
         </Text>
       </HStack>
-      <Text color="#686C75" mt="9px" fontWeight="400" fontSize="15px">
+      <Text color={subTitleTextColor} mt="9px" fontWeight="400" fontSize="15px">
         Manage and view all claims.
       </Text>
       <Box
-        bg="#fff"
-        border="1px solid #EFEFEF"
+        bg={bgColor}
+        border={`1px solid ${borderColor}`}
         mt="12px"
         py={["10px", "15px"]}
         px={["10px", "15px"]}
@@ -223,7 +234,7 @@ export default function Claims() {
           <Flex
             alignItems="center"
             flexWrap="wrap"
-            bg="#E4F3FF"
+            bg={chartFillColor}
             rounded="7px"
             py="3.5px"
             px="5px"
@@ -231,16 +242,16 @@ export default function Claims() {
             mt={["10px", "10px", "0px", "0px"]}
           >
             <Box
-              borderRight="1px solid #EDEFF2"
+              borderRight={`1px solid ${borderColor}`}
               pr="5px"
               onClick={filterSubmitted}
             >
               <Text
                 py="8.5px"
                 px="12px"
-                bg={Submitted ? "#fff" : "transparent"}
+                bg={Submitted ? bgColor : "transparent"}
                 rounded="7px"
-                color={"#1F2937"}
+                color={titleTextColor}
                 fontWeight={"500"}
                 fontSize={"13px"}
               >
@@ -248,16 +259,16 @@ export default function Claims() {
               </Text>
             </Box>
             <Box
-              borderRight="1px solid #EDEFF2"
+              borderRight={`1px solid ${borderColor}`}
               pr="5px"
               onClick={filterResubmitted}
             >
               <Text
                 py="8.5px"
                 px="12px"
-                bg={Resubmitted ? "#fff" : "transparent"}
+                bg={Resubmitted ? bgColor : "transparent"}
                 rounded="7px"
-                color={"#1F2937"}
+                color={titleTextColor}
                 fontWeight={"500"}
                 fontSize={"13px"}
               >
@@ -265,16 +276,16 @@ export default function Claims() {
               </Text>
             </Box>
             <Box
-              borderRight="1px solid #EDEFF2"
+              borderRight={`1px solid ${borderColor}`}
               pr="5px"
               onClick={filterCancelled}
             >
               <Text
                 py="8.5px"
                 px="12px"
-                bg={Cancelled ? "#fff" : "transparent"}
+                bg={Cancelled ? bgColor : "transparent"}
                 rounded="7px"
-                color={"#1F2937"}
+                color={titleTextColor}
                 fontWeight={"500"}
                 fontSize={"13px"}
               >
@@ -282,16 +293,16 @@ export default function Claims() {
               </Text>
             </Box>
             <Box
-              borderRight="1px solid #EDEFF2"
+              borderRight={`1px solid ${borderColor}`}
               pr="5px"
               onClick={filterRejected}
             >
               <Text
                 py="8.5px"
                 px="12px"
-                bg={Rejected ? "#fff" : "transparent"}
+                bg={Rejected ? bgColor : "transparent"}
                 rounded="7px"
-                color={"#1F2937"}
+                color={titleTextColor}
                 fontWeight={"500"}
                 fontSize={"13px"}
               >
@@ -302,9 +313,9 @@ export default function Claims() {
               <Text
                 py="8.5px"
                 px="12px"
-                bg={Paid ? "#fff" : "transparent"}
+                bg={Paid ? bgColor : "transparent"}
                 rounded="7px"
-                color={"#1F2937"}
+                color={titleTextColor}
                 fontWeight={"500"}
                 fontSize={"13px"}
               >
@@ -327,7 +338,7 @@ export default function Claims() {
                     setCurrentPage(1);
                   }}
                   value={SearchInput}
-                  bColor="#E4E4E4"
+                  bColor={borderColor}
                   leftIcon={<BiSearch />}
                 />
               ) : (
@@ -337,7 +348,7 @@ export default function Claims() {
                     type="date"
                     onChange={(e) => setStartDate(e.target.value)}
                     value={StartDate}
-                    bColor="#E4E4E4"
+                    bColor={borderColor}
                     leftIcon={<FaCalendarAlt />}
                   />
                   <Input
@@ -345,7 +356,7 @@ export default function Claims() {
                     type="date"
                     onChange={(e) => setEndDate(e.target.value)}
                     value={EndDate}
-                    bColor="#E4E4E4"
+                    bColor={borderColor}
                     leftIcon={<FaCalendarAlt />}
                   />
                   <Flex
@@ -354,8 +365,8 @@ export default function Claims() {
                     px="5px"
                     py="3px"
                     rounded="5px"
-                    bg="blue.blue500"
-                    color="#fff"
+                    bg={primaryColor}
+                    color={bgColor}
                     justifyContent="center"
                     alignItems="center"
                   >
@@ -366,13 +377,13 @@ export default function Claims() {
               <Menu isLazy>
                 <MenuButton as={Box}>
                   <HStack
-                    border="1px solid #EA5937"
+                    border={`1px solid ${NavListBg}`}
                     rounded="7px"
                     cursor="pointer"
                     py="11.64px"
                     px="16.98px"
-                    bg="#f8ddd1"
-                    color="blue.blue500"
+                    bg={NavListBg}
+                    color={textColor}
                     fontWeight="500"
                     fontSize="14px"
                   >
@@ -380,16 +391,16 @@ export default function Claims() {
                     <IoFilter />
                   </HStack>
                 </MenuButton>
-                <MenuList>
+                <MenuList bg={bgColor} border={`1px solid ${borderColor}`}>
                   <MenuItem
                     onClick={() => filterBy("mrn")}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -400,11 +411,11 @@ export default function Claims() {
                     onClick={() => filterBy("hmo")}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -415,11 +426,11 @@ export default function Claims() {
                     onClick={() => setByDate(true)}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -439,11 +450,11 @@ export default function Claims() {
                     }}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -459,8 +470,8 @@ export default function Claims() {
 
       {/* Data Table */}
       <Box
-        bg="#fff"
-        border="1px solid #EFEFEF"
+        bg={bgColor}
+        border={`1px solid ${borderColor}`}
         mt="12px"
         py="15px"
         px="15px"
@@ -469,12 +480,12 @@ export default function Claims() {
       >
         <TableContainer>
           <Table variant="striped">
-            <Thead bg="#fff">
+            <Thead bg={bgColor}>
               <Tr>
                 <Th
                   fontSize="13px"
                   textTransform="capitalize"
-                  color="#534D59"
+                  color={subTitleTextColor}
                   fontWeight="600"
                 >
                   Patient Name
@@ -482,7 +493,7 @@ export default function Claims() {
                 <Th
                   fontSize="13px"
                   textTransform="capitalize"
-                  color="#534D59"
+                  color={subTitleTextColor}
                   fontWeight="600"
                 >
                   HMO name
@@ -490,7 +501,7 @@ export default function Claims() {
                 <Th
                   fontSize="13px"
                   textTransform="capitalize"
-                  color="#534D59"
+                  color={subTitleTextColor}
                   fontWeight="600"
                 >
                   Service Category
@@ -498,7 +509,7 @@ export default function Claims() {
                 <Th
                   fontSize="13px"
                   textTransform="capitalize"
-                  color="#534D59"
+                  color={subTitleTextColor}
                   fontWeight="600"
                 >
                   Amount Claimed
@@ -506,7 +517,7 @@ export default function Claims() {
                 <Th
                   fontSize="13px"
                   textTransform="capitalize"
-                  color="#534D59"
+                  color={subTitleTextColor}
                   fontWeight="600"
                 >
                   Amount Approved
@@ -514,7 +525,7 @@ export default function Claims() {
                 <Th
                   fontSize="13px"
                   textTransform="capitalize"
-                  color="#534D59"
+                  color={subTitleTextColor}
                   fontWeight="600"
                 >
                   Status
@@ -522,7 +533,7 @@ export default function Claims() {
                 <Th
                   fontSize="13px"
                   textTransform="capitalize"
-                  color="#534D59"
+                  color={subTitleTextColor}
                   fontWeight="600"
                 >
                   Created At
@@ -530,7 +541,7 @@ export default function Claims() {
                 <Th
                   fontSize="13px"
                   textTransform="capitalize"
-                  color="#534D59"
+                  color={subTitleTextColor}
                   fontWeight="600"
                 >
                   actions

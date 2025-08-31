@@ -21,8 +21,17 @@ import moment from "moment";
 import { FacilityName } from "../Utils/ApiConfig";
 import TableRow from "../Components/TableRow";
 import Preloader from "../Components/Preloader";
+import { useColors } from "../Utils/colors";
 
 export default function PrintReportSummary() {
+  const {
+    bgColor,
+    textColor,
+    borderColor,
+    titleTextColor,
+    subTitleTextColor,
+    chartFillColor,
+  } = useColors();
   const { id } = useParams();
   const nav = useNavigate();
   const pathname = localStorage.getItem("pathname");
@@ -45,6 +54,10 @@ export default function PrintReportSummary() {
   };
 
   useEffect(() => {}, []);
+
+  const formatCategory = (category) => {
+    return category.replace(/([A-Z])/g, ' $1').trim();
+  };
 
   return (
     <Box px="6%" mt="32px">
@@ -71,7 +84,7 @@ export default function PrintReportSummary() {
         fontSize="20px"
         textTransform="uppercase"
         fontWeight="900"
-        color="#242424"
+        color={titleTextColor}
       >
         {FacilityName}
       </Text>
@@ -80,7 +93,7 @@ export default function PrintReportSummary() {
         fontSize="16px"
         textTransform="uppercase"
         fontWeight="500"
-        color="#242424"
+        color={subTitleTextColor}
       >
         Report Summary for {Category.replace("aggregate", " aggregate")}{" "}
         {`From ${DateRange.from} to ${DateRange.to}`}{" "}
@@ -95,7 +108,7 @@ export default function PrintReportSummary() {
                     <Th
                       fontSize="13px"
                       textTransform="capitalize"
-                      color="#000"
+                      color={subTitleTextColor}
                       fontWeight="600"
                     >
                       S/N
@@ -103,7 +116,7 @@ export default function PrintReportSummary() {
                     <Th
                       fontSize="13px"
                       textTransform="capitalize"
-                      color="#000"
+                      color={subTitleTextColor}
                       fontWeight="600"
                     >
                       Payment Category
@@ -111,7 +124,7 @@ export default function PrintReportSummary() {
                     <Th
                       fontSize="13px"
                       textTransform="capitalize"
-                      color="#000"
+                      color={subTitleTextColor}
                       fontWeight="600"
                     >
                       Total Amount (&#8358;)
@@ -119,7 +132,7 @@ export default function PrintReportSummary() {
                     <Th
                       fontSize="13px"
                       textTransform="capitalize"
-                      color="#000"
+                      color={subTitleTextColor}
                       fontWeight="600"
                     >
                       Status
@@ -143,11 +156,11 @@ export default function PrintReportSummary() {
               mt="20px"
               p="20px"
               borderWidth="1px"
-              borderColor="gray.200"
+              borderColor={borderColor}
               borderRadius="md"
-              bg="gray.50"
+              bg={chartFillColor}
             >
-              <Text fontWeight="700" fontSize="16px">
+              <Text fontWeight="700" fontSize="16px" color={titleTextColor}>
                 Grand Total Amount: &#8358;{" "}
                 {
                   JSON.parse(localStorage.getItem("reportGrandTotal"))
@@ -1447,6 +1460,223 @@ export default function PrintReportSummary() {
                   </Text>
                 </Box>
               </SimpleGrid>
+            </Box>
+          </>
+        )}
+
+        {Category === "inpatients records" && (
+          <TableContainer mt="15px">
+            <Table variant="striped">
+              <Thead>
+                <Tr>
+                  <Th>Category</Th>
+                  <Th isNumeric>Male</Th>
+                  <Th isNumeric>Female</Th>
+                  <Th isNumeric>Total</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {Object.entries(Data).map(([key, value], i) => (
+                  <TableRow
+                    key={i}
+                    type="generic-gender-total-aggregate"
+                    category={formatCategory(key)}
+                    male={value.male}
+                    female={value.female}
+                    total={value.total}
+                  />
+                ))}
+              </Tbody>
+            </Table>
+          </TableContainer>
+        )}
+
+        {Category === "outpatients records" && (
+          <TableContainer mt="15px">
+            <Table variant="striped">
+              <Thead>
+                <Tr>
+                  <Th>Category</Th>
+                  <Th isNumeric>Male</Th>
+                  <Th isNumeric>Female</Th>
+                  <Th isNumeric>Total</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {Object.entries(Data).map(([key, value], i) => (
+                  <TableRow
+                    key={i}
+                    type="generic-gender-total-aggregate"
+                    category={key}
+                    male={value.male}
+                    female={value.female}
+                    total={value.total}
+                  />
+                ))}
+              </Tbody>
+            </Table>
+          </TableContainer>
+        )}
+
+        {Category === "accident and emergency records" && (
+          <TableContainer mt="15px">
+            <Table variant="striped">
+              <Thead>
+                <Tr>
+                  <Th>Category</Th>
+                  <Th isNumeric>Male</Th>
+                  <Th isNumeric>Female</Th>
+                  <Th isNumeric>Total</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {Object.entries(Data).map(([key, value], i) => (
+                  <TableRow
+                    key={i}
+                    type="generic-gender-total-aggregate"
+                    category={key}
+                    male={value.male}
+                    female={value.female}
+                    total={value.total}
+                  />
+                ))}
+              </Tbody>
+            </Table>
+          </TableContainer>
+        )}
+
+        {Category === "national health insurance services" && (
+          <>
+            <TableContainer mt="15px">
+              <Table variant="striped">
+                <Thead>
+                  <Tr>
+                    <Th>S/N</Th>
+                    <Th>Insurance Name</Th>
+                    <Th isNumeric>Male</Th>
+                    <Th isNumeric>Female</Th>
+                    <Th isNumeric>Total</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {Data.map((item, i) => {
+                    let maleCount = 0;
+                    let femaleCount = 0;
+                    item.data.forEach((d) => {
+                      if (d._id.toLowerCase() === "male") {
+                        maleCount += d.count;
+                      } else if (d._id.toLowerCase() === "female") {
+                        femaleCount += d.count;
+                      }
+                    });
+                    const total = maleCount + femaleCount;
+                    return (
+                      <TableRow
+                        key={i}
+                        type="nhis-aggregate"
+                        sn={i + 1}
+                        name={item._id}
+                        male={maleCount}
+                        female={femaleCount}
+                        total={total}
+                      />
+                    );
+                  })}
+                </Tbody>
+              </Table>
+            </TableContainer>
+            <Box
+              mt="20px"
+              p="20px"
+              borderWidth="1px"
+              borderColor="gray.200"
+              borderRadius="md"
+              bg="gray.50"
+            >
+              <Text fontWeight="700" fontSize="16px">
+                Grand Total Male:{" "}
+                {
+                  JSON.parse(localStorage.getItem("reportGrandTotal"))
+                    ?.male
+                }
+              </Text>
+              <Text fontWeight="700" fontSize="16px">
+                Grand Total Female:{" "}
+                {
+                  JSON.parse(localStorage.getItem("reportGrandTotal"))
+                    ?.female
+                }
+              </Text>
+              <Text fontWeight="700" fontSize="16px">
+                Grand Total:{" "}
+                {
+                  JSON.parse(localStorage.getItem("reportGrandTotal"))
+                    ?.total
+                }
+              </Text>
+            </Box>
+          </>
+        )}
+
+        {(Category === "lab investigation report" ||
+          Category === "radiology diagnosis" ||
+          Category === "operation" ||
+          Category === "special consultative" ||
+          Category === "immunization") && (
+          <>
+            <TableContainer mt="15px">
+              <Table variant="striped">
+                <Thead>
+                  <Tr>
+                    <Th>Category</Th>
+                    <Th isNumeric>Male</Th>
+                    <Th isNumeric>Female</Th>
+                    <Th isNumeric>Total</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {Object.entries(Data).map(([key, value], i) => (
+                    <TableRow
+                      key={i}
+                      type="generic-gender-total-aggregate"
+                      category={key}
+                      male={value.male}
+                      female={value.female}
+                      total={value.total}
+                    />
+                  ))}
+                </Tbody>
+              </Table>
+            </TableContainer>
+            <Box
+              mt="20px"
+              p="20px"
+              borderWidth="1px"
+              borderColor="gray.200"
+              borderRadius="md"
+              bg="gray.50"
+            >
+              <Text fontWeight="700" fontSize="16px">
+                Grand Total Male:{" "}
+                {
+                  JSON.parse(localStorage.getItem("reportGrandTotal"))
+                    ?.male
+                }
+              </Text>
+              <Text fontWeight="700" fontSize="16px">
+                Grand Total Female:{" "}
+                {
+                  JSON.parse(localStorage.getItem("reportGrandTotal"))
+                    ?.female
+                }
+              </Text>
+              <Text fontWeight="700" fontSize="16px">
+                Grand Total:{" "}
+                {
+                  JSON.parse(localStorage.getItem("reportGrandTotal"))
+                    ?.total
+                }
+              </Text>
             </Box>
           </>
         )}

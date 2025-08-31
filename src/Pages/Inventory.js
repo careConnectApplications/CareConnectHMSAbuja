@@ -33,8 +33,20 @@ import InventoryModal from "../Components/InventoryModal";
 import PharmacyBulkUploadModal from "../Components/PharmacyBulkUploadModal";
 import { fetchPharmacyStock } from "../Utils/ApiCalls";
 import { FaCalendarAlt } from "react-icons/fa";
+import { useColors } from "../Utils/colors";
 
 export default function Inventory() {
+  const {
+    bgColor,
+    textColor,
+    borderColor,
+    titleTextColor,
+    subTitleTextColor,
+    chartFillColor,
+    primaryColor,
+    secondaryColor,
+    NavListBg,
+  } = useColors();
   // Data states
   const [Data, setData] = useState([]);
   const [FilterData, setFilterData] = useState([]);
@@ -262,21 +274,21 @@ export default function Inventory() {
       )}
 
       <HStack>
-        <Text color="#1F2937" fontWeight="600" fontSize="19px">
+        <Text color={titleTextColor} fontWeight="600" fontSize="19px">
           Inventory
         </Text>
-        <Text color="#667085" fontWeight="400" fontSize="18px">
+        <Text color={subTitleTextColor} fontWeight="400" fontSize="18px">
           ({Data.length})
         </Text>
       </HStack>
-      <Text color="#686C75" mt="9px" fontWeight="400" fontSize="15px">
+      <Text color={subTitleTextColor} mt="9px" fontWeight="400" fontSize="15px">
         Manage your inventory data, track stock levels, and view item details.
       </Text>
 
       {/* Filter Section */}
       <Box
-        bg="#fff"
-        border="1px solid #EFEFEF"
+        bg={bgColor}
+        border={`1px solid ${borderColor}`}
         mt="12px"
         py="17px"
         px={["18px", "18px"]}
@@ -287,20 +299,20 @@ export default function Inventory() {
           <Flex
             alignItems="center"
             flexWrap="wrap"
-            bg="#E4F3FF"
+            bg={chartFillColor}
             rounded="7px"
             py="3.5px"
             px="5px"
             cursor="pointer"
             mt="10px"
           >
-            <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={filterAll}>
+            <Box borderRight={`1px solid ${borderColor}`} pr="5px" onClick={filterAll}>
               <Text
                 py="8.5px"
                 px="12px"
-                bg={All ? "#fff" : "transparent"}
+                bg={All ? bgColor : "transparent"}
                 rounded="7px"
-                color="#1F2937"
+                color={titleTextColor}
                 fontWeight="500"
                 fontSize="13px"
               >
@@ -308,16 +320,16 @@ export default function Inventory() {
               </Text>
             </Box>
             <Box
-              borderRight="1px solid #EDEFF2"
+              borderRight={`1px solid ${borderColor}`}
               pr="5px"
               onClick={filterAvailable}
             >
               <Text
                 py="8.5px"
                 px="12px"
-                bg={Available ? "#fff" : "transparent"}
+                bg={Available ? bgColor : "transparent"}
                 rounded="7px"
-                color="#1F2937"
+                color={titleTextColor}
                 fontWeight="500"
                 fontSize="13px"
               >
@@ -325,16 +337,16 @@ export default function Inventory() {
               </Text>
             </Box>
             <Box
-              borderRight="1px solid #EDEFF2"
+              borderRight={`1px solid ${borderColor}`}
               pr="5px"
               onClick={filterLowStock}
             >
               <Text
                 py="8.5px"
                 px="12px"
-                bg={LowStock ? "#fff" : "transparent"}
+                bg={LowStock ? bgColor : "transparent"}
                 rounded="7px"
-                color="#1F2937"
+                color={titleTextColor}
                 fontWeight="500"
                 fontSize="13px"
               >
@@ -345,9 +357,9 @@ export default function Inventory() {
               <Text
                 py="8.5px"
                 px="12px"
-                bg={OutOfStock ? "#fff" : "transparent"}
+                bg={OutOfStock ? bgColor : "transparent"}
                 rounded="7px"
-                color="#1F2937"
+                color={titleTextColor}
                 fontWeight="500"
                 fontSize="13px"
               >

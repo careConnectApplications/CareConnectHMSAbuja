@@ -53,6 +53,11 @@ export default function CreateAppointmentModal({
     policaename: "",
     servicenumber: "",
     policephonenumber: "",
+    cliniccategory: "",
+    unit: "",
+    arrivalMode: "",
+    accidentType: "",
+    dateOfAccident: "",
   };
 
   const [formData, setFormData] = useState(initialFormState);
@@ -70,7 +75,7 @@ export default function CreateAppointmentModal({
 
   const showToast = (toastData) => {
     setToast(toastData);
-    setTimeout(() => setToast(null), 2000);
+    setTimeout(() => setToast(null), 7000);
   };
 
   useEffect(() => {
@@ -80,6 +85,9 @@ export default function CreateAppointmentModal({
         try {
           // Only fetch settings here; patients will be fetched via search.
           const settingsData = await SettingsApi();
+
+          console.log("Fetched settings:", settingsData);
+          
           setSettings(settingsData);
           if (type === "edit" && initialData) {
             setFormData({
@@ -95,6 +103,10 @@ export default function CreateAppointmentModal({
               policaename: initialData.policaename || "",
               servicenumber: initialData.servicenumber || "",
               policephonenumber: initialData.policephonenumber || "",
+              unit: initialData.unit || "",
+              arrivalMode: initialData.arrivalMode || "",
+              accidentType: initialData.accidentType || "",
+              dateOfAccident: initialData.dateOfAccident || "",
             });
           }
         } catch (error) {
@@ -108,7 +120,7 @@ export default function CreateAppointmentModal({
       };
       fetchData();
     } else {
-      setFormData(initialFormState);
+      // setFormData(initialFormState);
     }
   }, [isOpen, type, initialData]);
 
@@ -246,15 +258,20 @@ export default function CreateAppointmentModal({
     }
     setLoading(true);
     try {
+      const { cliniccategory, ...rest } = formData;
+      const apiData = {
+        ...rest,
+        category: cliniccategory,
+      };
       let response;
       if (type === "edit") {
-        response = await UpdateAppointmentApi(initialData.id, formData);
+        response = await UpdateAppointmentApi(initialData.id, apiData);
         showToast({
           status: "success",
           message: "Appointment updated successfully!",
         });
       } else {
-        response = await ScheduleAppointmentApi(formData);
+        response = await ScheduleAppointmentApi(apiData);
         showToast({
           status: "success",
           message: "Appointment created successfully!",
@@ -266,9 +283,10 @@ export default function CreateAppointmentModal({
       console.error("API Error:", error);
       showToast({
         status: "error",
-        message: `Failed to ${type === "edit" ? "update" : "schedule"} appointment: ${error.message}`,
+        message: ` ${error.message}`,
       });
       onClose();
+      setFormData(initialFormState);
     } finally {
       setLoading(false);
     }
@@ -408,6 +426,21 @@ export default function CreateAppointmentModal({
                 />
               </FormControl>
               <FormControl>
+                <FormLabel>Clinic  Category</FormLabel>
+                <Select
+                  name="cliniccategory"
+                  value={formData.cliniccategory}
+                  onChange={handleInputChange}
+                  placeholder="Select Appointment Category"
+                >
+                  {settings?.cliniccategory?.map((item, index) => (
+                      <option key={index} value={item}>
+                        {item}
+                      </option>
+                    ))}
+                </Select>
+              </FormControl>
+              <FormControl>
                 <FormLabel>Appointment Category</FormLabel>
                 <Select
                   name="appointmentcategory"
@@ -459,6 +492,36 @@ export default function CreateAppointmentModal({
                   ))}
                 </Select>
               </FormControl>
+              <FormControl>
+                <FormLabel>Unit</FormLabel>
+                <Select
+                  name="unit"
+                  value={formData.unit}
+                  onChange={handleInputChange}
+                  placeholder="Select Unit"
+                >
+                  {settings?.unitcategory?.map((item, index) => (
+                    <option key={index} value={item}>
+                      {item}
+                    </option>
+                  ))}
+                </Select>
+              </FormControl>
+              <FormControl>
+                <FormLabel>Arrival Mode</FormLabel>
+                <Select
+                  name="arrivalMode"
+                  value={formData.arrivalMode}
+                  onChange={handleInputChange}
+                  placeholder="Select Arrival Mode"
+                >
+                  {settings?.arrivalMode?.map((item, index) => (
+                    <option key={index} value={item}>
+                      {item}
+                    </option>
+                  ))}
+                </Select>
+              </FormControl>
             </SimpleGrid>
 
             {/* Police Report Section */}
@@ -484,6 +547,24 @@ export default function CreateAppointmentModal({
               {formData.policecase && (
                 <>
                   <SimpleGrid columns={1} spacing={4} mt={4}>
+                    <FormControl>
+                      <FormLabel>Accident Type</FormLabel>
+                      <Input
+                        name="accidentType"
+                        value={formData.accidentType}
+                        onChange={handleInputChange}
+                        placeholder="Enter Accident Type"
+                      />
+                    </FormControl>
+                    <FormControl>
+                      <FormLabel>Date of Accident</FormLabel>
+                      <Input
+                        type="date"
+                        name="dateOfAccident"
+                        value={formData.dateOfAccident}
+                        onChange={handleInputChange}
+                      />
+                    </FormControl>
                     <FormControl display="flex" alignItems="center">
                       <Checkbox
                         isChecked={formData.physicalassault}

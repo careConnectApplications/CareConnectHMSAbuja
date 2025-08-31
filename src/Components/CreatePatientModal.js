@@ -163,6 +163,9 @@ export default function CreatePatientModal({
     clinic: "",
     reason: "",
     appointmentdate: "",
+    unit: "",
+    appointmentcategory: "",
+    appointmenttype: "",
 
     // New fields
     policecase: false,
@@ -272,6 +275,9 @@ export default function CreatePatientModal({
         clinic: "",
         reason: "",
         appointmentdate: "",
+        unit: "",
+        appointmentcategory: "",
+        appointmenttype: "",
 
         physicalassault: false,
         sexualassault: false,
@@ -837,7 +843,7 @@ export default function CreatePatientModal({
                 >
                   Scheduling Information
                 </Text>
-                <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4}>
+                <SimpleGrid columns={{ base: 1, md: 6 }} spacing={4}>
                   <Input
                     type="date"
                     name="appointmentdate"
@@ -865,6 +871,56 @@ export default function CreatePatientModal({
                       {ClinicData?.map((item, i) => (
                         <option value={item.clinic}>{item.clinic}</option>
                       ))}
+                    </Select>
+                  </FormControl>
+                  <FormControl>
+                    <Select
+                      name="unit"
+                      value={patientData.unit}
+                      onChange={handleInputChange}
+                      placeholder="Select Unit"
+                    >
+                      {Settings?.unitcategory?.map((item, index) => (
+                        <option key={index} value={item}>
+                          {item}
+                        </option>
+                      ))}
+                    </Select>
+                  </FormControl>
+                  <FormControl>
+                    <Select
+                      name="appointmentcategory"
+                      value={patientData.appointmentcategory}
+                      onChange={handleInputChange}
+                      placeholder="Select Appointment Category"
+                    >
+                      {Settings.servicecategory
+                        ?.filter((item) => item.category === "Appointment")
+                        .map((item, index) => (
+                          <option key={index} value={item.category}>
+                            {item.category}
+                          </option>
+                        ))}
+                    </Select>
+                  </FormControl>
+
+                  <FormControl>
+                    <Select
+                      name="appointmenttype"
+                      value={patientData.appointmenttype}
+                      onChange={handleInputChange}
+                      placeholder="Select Appointment Type"
+                    >
+                      {Settings.servicecategory
+                        ?.find(
+                          (item) =>
+                            item.category === patientData.appointmentcategory
+                        )
+                        ?.type?.map((type, index) => (
+                          <option key={index} value={type}>
+                            {type}
+                          </option>
+                        ))}
                     </Select>
                   </FormControl>
                 </SimpleGrid>

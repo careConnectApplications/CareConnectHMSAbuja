@@ -51,6 +51,8 @@ export default function AdmissionModal({
     admittospecialization: "",
     referddate: currentDate,
     bed_id: "", // Add bed_id to payload
+    referredIn: false,
+    referredFrom: "",
   });
 
   const handlePayload = (e) => {
@@ -102,6 +104,8 @@ export default function AdmissionModal({
           admittospecialization: "",
           referddate: currentDate,
           bed_id: "",
+          referredIn: false,
+          referredFrom: "",
         });
         activateNotifications("Patient Admitted Successfully", "success");
       }
@@ -236,6 +240,28 @@ export default function AdmissionModal({
                 </option>
               ))}
             </Select>
+            <Select
+              h="45px"
+              borderWidth="2px"
+              fontSize={Payload.referredIn !== "" ? "16px" : "13px"}
+              borderColor="#6B7280"
+              id="referredIn"
+              value={Payload.referredIn}
+              onChange={handlePayload}
+              placeholder="Referred In?"
+            >
+              <option value={true}>Yes</option>
+              <option value={false}>No</option>
+            </Select>
+
+            {Payload.referredIn === "true" && (
+              <Input
+                label="Referred From"
+                value={Payload.referredFrom}
+                onChange={handlePayload}
+                id="referredFrom"
+              />
+            )}
           </SimpleGrid>
 
           <Button mt="32px" isLoading={Loading} onClick={save}>

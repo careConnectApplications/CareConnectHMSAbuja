@@ -19,10 +19,22 @@ import { GetAllPatientsHistoryApi, GetAllTodayQueueHistoryApi, GetOnlyClinicApi,
 import Pagination from "../Components/Pagination";
 import { configuration } from '../Utils/Helpers'
 import Preloader from "../Components/Preloader";
+import { useColors } from "../Utils/colors";
 
 
 
 export default function EyeClinicSchedule() {
+  const {
+    bgColor,
+    textColor,
+    borderColor,
+    titleTextColor,
+    subTitleTextColor,
+    chartFillColor,
+    primaryColor,
+    secondaryColor,
+    NavListBg,
+  } = useColors();
   const [IsLoading, setIsLoading] = useState(false);
   const [All, setAll] = useState(true);
   const [TodayQueue, setTodayQueue] = useState(false);
@@ -281,18 +293,18 @@ export default function EyeClinicSchedule() {
         <ShowToast message={showToast.message} status={showToast.status} />
       )}
       <HStack>
-        <Text color="#1F2937" fontWeight="600" fontSize="19px">
+        <Text color={titleTextColor} fontWeight="600" fontSize="19px">
           Eye Clinic Scheduled
         </Text>
-        <Text color="#667085" fontWeight="400" fontSize="18px">
+        <Text color={subTitleTextColor} fontWeight="400" fontSize="18px">
           ({TotalData})
         </Text>
       </HStack>
-      <Text color="#686C75" mt="9px" fontWeight="400" fontSize="15px">
+      <Text color={subTitleTextColor} mt="9px" fontWeight="400" fontSize="15px">
         View and manage all appointments in one place. Quickly access statuses,
         update details, and manage schedules as needed.
       </Text>
-      <Text color="blue.blue500" mt="9px" fontWeight="400" fontSize="15px">
+      <Text color={primaryColor} mt="9px" fontWeight="400" fontSize="15px">
         Kindly Select Clinic you want to manage
       </Text>
       <SimpleGrid mt="5px" columns={{ base: 1, md: 2, lg: 2 }} spacing={10}>
@@ -302,6 +314,7 @@ export default function EyeClinicSchedule() {
           onChange={(e) => setClinic(e.target.value)}
           placeholder="Select Clinic"
           fontSize={Clinic !== "" ? "16px" : "13px"}
+          color={textColor}
         >
           {
             ClinicData?.map((item, i) => (
@@ -319,8 +332,8 @@ export default function EyeClinicSchedule() {
 
 
       <Box
-        bg="#fff"
-        border="1px solid #EFEFEF"
+        bg={bgColor}
+        border={`1px solid ${borderColor}`}
         mt="12px"
         py="17px"
         px={["18px", "18px"]}
@@ -331,20 +344,20 @@ export default function EyeClinicSchedule() {
           <Flex
             alignItems="center"
             flexWrap="wrap"
-            bg="#E4F3FF"
+            bg={chartFillColor}
             rounded="7px"
             py="3.5px"
             px="5px"
             cursor="pointer"
             mt={["10px", "10px", "0px", "0px"]}
           >
-            <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={filterAll}>
+            <Box borderRight={`1px solid ${borderColor}`} pr="5px" onClick={filterAll}>
               <Text
                 py="8.5px"
                 px="12px"
-                bg={All ? "#fff" : "transparent"}
+                bg={All ? bgColor : "transparent"}
                 rounded="7px"
-                color={"#1F2937"}
+                color={titleTextColor}
                 fontWeight={"500"}
                 fontSize={"13px"}
               >
@@ -352,29 +365,29 @@ export default function EyeClinicSchedule() {
 
               </Text>
             </Box>
-            <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={filterTodayQueue}>
+            <Box borderRight={`1px solid ${borderColor}`} pr="5px" onClick={filterTodayQueue}>
               <Text
                 py="8.5px"
                 px="12px"
-                bg={TodayQueue ? "#fff" : "transparent"}
+                bg={TodayQueue ? bgColor : "transparent"}
                 rounded="7px"
-                color={"#1F2937"}
+                color={titleTextColor}
                 fontWeight={"500"}
                 fontSize={"13px"}
               >
                 Today Queue
-                <Box color="#667085" as="span" fontWeight="400" fontSize="13px">
+                <Box color={subTitleTextColor} as="span" fontWeight="400" fontSize="13px">
                   ({QueueData?.length})
                 </Box>
               </Text>
             </Box>
-            <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={filterCompleted}>
+            <Box borderRight={`1px solid ${borderColor}`} pr="5px" onClick={filterCompleted}>
               <Text
                 py="8.5px"
                 px="12px"
-                bg={Completed ? "#fff" : "transparent"}
+                bg={Completed ? bgColor : "transparent"}
                 rounded="7px"
-                color={"#1F2937"}
+                color={titleTextColor}
                 fontWeight={"500"}
                 fontSize={"13px"}
               >
@@ -382,13 +395,13 @@ export default function EyeClinicSchedule() {
 
               </Text>
             </Box>
-            <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={filterInprogress}>
+            <Box borderRight={`1px solid ${borderColor}`} pr="5px" onClick={filterInprogress}>
               <Text
                 py="8.5px"
                 px="12px"
-                bg={Inprogress ? "#fff" : "transparent"}
+                bg={Inprogress ? bgColor : "transparent"}
                 rounded="7px"
-                color={"#1F2937"}
+                color={titleTextColor}
                 fontWeight={"500"}
                 fontSize={"13px"}
               >
@@ -409,19 +422,19 @@ export default function EyeClinicSchedule() {
               <Input label="Search" onChange={(e) => {
                 setSearchInput(e.target.value);
                 setCurrentPage(1)
-              }} value={SearchInput} bColor="#E4E4E4" leftIcon={<BiSearch />} />
+              }} value={SearchInput} bColor={borderColor} leftIcon={<BiSearch />} />
 
               <Menu isLazy>
                 <MenuButton as={Box}>
 
                   <HStack
-                    border="1px solid #EA5937"
+                    border={`1px solid ${NavListBg}`}
                     rounded="7px"
                     cursor="pointer"
                     py="11.64px"
                     px="16.98px"
-                    bg="#f8ddd1"
-                    color="blue.blue500"
+                    bg={NavListBg}
+                    color={textColor}
                     fontWeight="500"
                     fontSize="14px"
                   >
@@ -429,27 +442,27 @@ export default function EyeClinicSchedule() {
                     <IoFilter />
                   </HStack>
                 </MenuButton>
-                <MenuList >
+                <MenuList bg={bgColor} border={`1px solid ${borderColor}`}>
 
-                  <MenuItem onClick={() => filterBy("firstName")} textTransform="capitalize" fontWeight={"500"} color='#2F2F2F' _hover={{ color: "#fff", fontWeight: "400", bg: "blue.blue500" }}>
+                  <MenuItem onClick={() => filterBy("firstName")} textTransform="capitalize" fontWeight={"500"} color={textColor} _hover={{ color: bgColor, fontWeight: "400", bg: NavListBg }}>
                     <HStack fontSize="14px">
 
                       <Text>by First Name</Text>
                     </HStack>
                   </MenuItem>
-                  <MenuItem onClick={() => filterBy("lastName")} textTransform="capitalize" fontWeight={"500"} color='#2F2F2F' _hover={{ color: "#fff", fontWeight: "400", bg: "blue.blue500" }}>
+                  <MenuItem onClick={() => filterBy("lastName")} textTransform="capitalize" fontWeight={"500"} color={textColor} _hover={{ color: bgColor, fontWeight: "400", bg: NavListBg }}>
                     <HStack fontSize="14px">
 
                       <Text>by Last Name</Text>
                     </HStack>
                   </MenuItem>
-                  <MenuItem onClick={() => filterBy("mrn")} textTransform="capitalize" fontWeight={"500"} color='#2F2F2F' _hover={{ color: "#fff", fontWeight: "400", bg: "blue.blue500" }}>
+                  <MenuItem onClick={() => filterBy("mrn")} textTransform="capitalize" fontWeight={"500"} color={textColor} _hover={{ color: bgColor, fontWeight: "400", bg: NavListBg }}>
                     <HStack fontSize="14px">
 
                       <Text>by MRN</Text>
                     </HStack>
                   </MenuItem>
-                  <MenuItem onClick={() => filterBy("appointmentType")} textTransform="capitalize" fontWeight={"500"} color='#2F2F2F' _hover={{ color: "#fff", fontWeight: "400", bg: "blue.blue500" }}>
+                  <MenuItem onClick={() => filterBy("appointmentType")} textTransform="capitalize" fontWeight={"500"} color={textColor} _hover={{ color: bgColor, fontWeight: "400", bg: NavListBg }}>
                     <HStack fontSize="14px">
 
                       <Text>by Appointment Type</Text>
@@ -460,7 +473,7 @@ export default function EyeClinicSchedule() {
                     setSearchInput("")
                     filterAll()
                     setCurrentPage(1)
-                  }} textTransform="capitalize" fontWeight={"500"} color='#2F2F2F' _hover={{ color: "#fff", fontWeight: "400", bg: "blue.blue500" }}>
+                  }} textTransform="capitalize" fontWeight={"500"} color={textColor} _hover={{ color: bgColor, fontWeight: "400", bg: NavListBg }}>
                     <HStack fontSize="14px">
 
                       <Text>clear filter</Text>
@@ -480,8 +493,8 @@ export default function EyeClinicSchedule() {
         {/* filter section end here */}
 
         <Box
-          bg="#fff"
-          border="1px solid #EFEFEF"
+          bg={bgColor}
+          border={`1px solid ${borderColor}`}
           mt="12px"
           py="15px"
           px="15px"
@@ -490,12 +503,12 @@ export default function EyeClinicSchedule() {
         >
           <TableContainer>
             <Table variant="striped">
-              <Thead bg="#fff">
+              <Thead bg={bgColor}>
                 <Tr>
                   <Th
                     fontSize="13px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     Patient
@@ -503,7 +516,7 @@ export default function EyeClinicSchedule() {
                   <Th
                     fontSize="13px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     Scheduled Date
@@ -511,7 +524,7 @@ export default function EyeClinicSchedule() {
                   <Th
                     fontSize="13px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     Reason
@@ -519,7 +532,7 @@ export default function EyeClinicSchedule() {
                   <Th
                     fontSize="13px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     Appointment
@@ -527,7 +540,7 @@ export default function EyeClinicSchedule() {
                   <Th
                     fontSize="13px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     Type
@@ -535,7 +548,7 @@ export default function EyeClinicSchedule() {
                   <Th
                     fontSize="13px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     Clinic
@@ -543,7 +556,7 @@ export default function EyeClinicSchedule() {
                   <Th
                     fontSize="13px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     Vital Status
@@ -551,7 +564,7 @@ export default function EyeClinicSchedule() {
                   <Th
                     fontSize="13px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     Status
@@ -559,7 +572,7 @@ export default function EyeClinicSchedule() {
                   <Th
                     fontSize="13px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     Actions
@@ -611,7 +624,7 @@ export default function EyeClinicSchedule() {
                         />
                       ))
                     ) : (
-                      <Text textAlign={"center"} mt="32px" color="black">*--No record found--*</Text>
+                      <Text textAlign={"center"} mt="32px" color={textColor}>*--No record found--*</Text>
                     )
                   )
 

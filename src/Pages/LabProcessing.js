@@ -40,8 +40,19 @@ import { configuration } from "../Utils/Helpers";
 import Preloader from "../Components/Preloader";
 import { SlPlus } from "react-icons/sl";
 import { FaCalendarAlt } from "react-icons/fa";
+import { useColors } from "../Utils/colors";
 
 export default function LabProcessing() {
+  const {
+    bgColor,
+    textColor,
+    borderColor,
+    titleTextColor,
+    subTitleTextColor,
+    chartFillColor,
+    primaryColor,
+    NavListBg,
+  } = useColors();
   const [IsLoading, setIsLoading] = useState(true);
   const [Data, setData] = useState([]);
   const [QueueData, setQueueData] = useState([]);
@@ -583,19 +594,19 @@ export default function LabProcessing() {
         <ShowToast message={showToast.message} status={showToast.status} />
       )}
       <HStack>
-        <Text color="#1F2937" fontWeight="600" fontSize="19px">
+        <Text color={titleTextColor} fontWeight="600" fontSize="19px">
           Lab Processing
         </Text>
-        <Text color="#667085" fontWeight="400" fontSize="18px">
+        <Text color={subTitleTextColor} fontWeight="400" fontSize="18px">
           ({TotalData})
         </Text>
       </HStack>
-      <Text color="#686C75" mt="9px" fontWeight="400" fontSize="15px">
+      <Text color={subTitleTextColor} mt="9px" fontWeight="400" fontSize="15px">
         Create a new test order for a patient.
       </Text>
       <Box
-        bg="#fff"
-        border="1px solid #EFEFEF"
+        bg={bgColor}
+        border={`1px solid ${borderColor}`}
         mt="12px"
         py={["10px", "15px"]}
         px={["10px", "15px"]}
@@ -610,23 +621,23 @@ export default function LabProcessing() {
             <Flex
               alignItems="center"
               flexWrap="wrap"
-              bg="#E4F3FF"
+              bg={chartFillColor}
               rounded="7px"
               py="3.5px"
               px="5px"
               cursor="pointer"
             >
               <Box
-                borderRight="1px solid #EDEFF2"
+                borderRight={`1px solid ${borderColor}`}
                 pr="5px"
                 onClick={filterScheduled}
               >
                 <Text
                   py="8.5px"
                   px="12px"
-                  bg={Scheduled ? "#fff" : "transparent"}
+                  bg={Scheduled ? bgColor : "transparent"}
                   rounded="7px"
-                  color={"#1F2937"}
+                  color={titleTextColor}
                   fontWeight={"500"}
                   fontSize={"13px"}
                 >
@@ -634,16 +645,16 @@ export default function LabProcessing() {
                 </Text>
               </Box>
               <Box
-                borderRight="1px solid #EDEFF2"
+                borderRight={`1px solid ${borderColor}`}
                 pr="5px"
                 onClick={filterAwaitingConfirmation}
               >
                 <Text
                   py="8.5px"
                   px="12px"
-                  bg={AwaitingConfirmation ? "#fff" : "transparent"}
+                  bg={AwaitingConfirmation ? bgColor : "transparent"}
                   rounded="7px"
-                  color={"#1F2937"}
+                  color={titleTextColor}
                   fontWeight={"500"}
                   fontSize={"13px"}
                 >
@@ -651,16 +662,16 @@ export default function LabProcessing() {
                 </Text>
               </Box>
               <Box
-                borderRight="1px solid #EDEFF2"
+                borderRight={`1px solid ${borderColor}`}
                 pr="5px"
                 onClick={filterProcessed}
               >
                 <Text
                   py="8.5px"
                   px="12px"
-                  bg={Processed ? "#fff" : "transparent"}
+                  bg={Processed ? bgColor : "transparent"}
                   rounded="7px"
-                  color={"#1F2937"}
+                  color={titleTextColor}
                   fontWeight={"500"}
                   fontSize={"13px"}
                 >
@@ -668,16 +679,16 @@ export default function LabProcessing() {
                 </Text>
               </Box>
               <Box
-                borderRight="1px solid #EDEFF2"
+                borderRight={`1px solid ${borderColor}`}
                 pr="5px"
                 onClick={filterRejected}
               >
                 <Text
                   py="8.5px"
                   px="12px"
-                  bg={Rejected ? "#fff" : "transparent"}
+                  bg={Rejected ? bgColor : "transparent"}
                   rounded="7px"
-                  color={"#1F2937"}
+                  color={titleTextColor}
                   fontWeight={"500"}
                   fontSize={"13px"}
                 >
@@ -685,16 +696,16 @@ export default function LabProcessing() {
                 </Text>
               </Box>
               <Box
-                borderRight="1px solid #EDEFF2"
+                borderRight={`1px solid ${borderColor}`}
                 pr="5px"
                 onClick={filterHematology}
               >
                 <Text
                   py="8.5px"
                   px="12px"
-                  bg={Hematology ? "#fff" : "transparent"}
+                  bg={Hematology ? bgColor : "transparent"}
                   rounded="7px"
-                  color={"#1F2937"}
+                  color={titleTextColor}
                   fontWeight={"500"}
                   fontSize={"13px"}
                 >
@@ -705,9 +716,9 @@ export default function LabProcessing() {
                 <Text
                   py="8.5px"
                   px="12px"
-                  bg={Chemical ? "#fff" : "transparent"}
+                  bg={Chemical ? bgColor : "transparent"}
                   rounded="7px"
-                  color={"#1F2937"}
+                  color={titleTextColor}
                   fontWeight={"500"}
                   fontSize={"13px"}
                 >
@@ -737,172 +748,172 @@ export default function LabProcessing() {
             {ByDate === false ? (
               <Input
                 label="Search"
-                onChange={(e) => {
-                  setSearchInput(e.target.value);
-                  setCurrentPage(1);
-                }}
-                value={SearchInput}
-                bColor="#E4E4E4"
-                leftIcon={<BiSearch />}
-              />
-            ) : (
-              <HStack flexWrap={["wrap", "nowrap"]}>
-                <Input
-                  label="Start Date"
-                  type="date"
-                  onChange={(e) => setStartDate(e.target.value)}
-                  value={StartDate}
-                  bColor="#E4E4E4"
-                  leftIcon={<FaCalendarAlt />}
-                />
-                <Input
-                  label="End Date"
-                  type="date"
-                  onChange={(e) => setEndDate(e.target.value)}
-                  value={EndDate}
-                  bColor="#E4E4E4"
-                  leftIcon={<FaCalendarAlt />}
-                />
-                <Flex
-                  onClick={() => filterBy("date")}
-                  cursor="pointer"
-                  px="5px"
-                  py="3px"
-                  rounded="5px"
-                  bg="blue.blue500"
-                  color="#fff"
-                  justifyContent="center"
-                  alignItems="center"
-                >
-                  <BiSearch />
-                </Flex>
-              </HStack>
-            )}
-            <Menu isLazy>
-              <MenuButton as={Box}>
-                <HStack
-                  border="1px solid #EA5937"
-                  rounded="7px"
-                  cursor="pointer"
-                  py="11.64px"
-                  px="16.98px"
-                  bg="#f8ddd1"
-                  color="blue.blue500"
-                  fontWeight="500"
-                  fontSize="14px"
-                >
-                  <Text>Filter</Text>
-                  <IoFilter />
-                </HStack>
-              </MenuButton>
-              <MenuList>
-                <MenuItem
-                  onClick={() => filterBy("firstName")}
-                  textTransform="capitalize"
-                  fontWeight="500"
-                  color="#2F2F2F"
-                  _hover={{
-                    color: "#fff",
-                    fontWeight: "400",
-                    bg: "blue.blue500",
-                  }}
-                >
-                  <HStack fontSize="14px">
-                    <Text>by First Name</Text>
-                  </HStack>
-                </MenuItem>
-                <MenuItem
-                  onClick={() => filterBy("lastName")}
-                  textTransform="capitalize"
-                  fontWeight="500"
-                  color="#2F2F2F"
-                  _hover={{
-                    color: "#fff",
-                    fontWeight: "400",
-                    bg: "blue.blue500",
-                  }}
-                >
-                  <HStack fontSize="14px">
-                    <Text>by Last Name</Text>
-                  </HStack>
-                </MenuItem>
-                <MenuItem
-                  onClick={() => filterBy("mrn")}
-                  textTransform="capitalize"
-                  fontWeight="500"
-                  color="#2F2F2F"
-                  _hover={{
-                    color: "#fff",
-                    fontWeight: "400",
-                    bg: "blue.blue500",
-                  }}
-                >
-                  <HStack fontSize="14px">
-                    <Text>by MRN</Text>
-                  </HStack>
-                </MenuItem>
-                <MenuItem
-                  onClick={() => filterBy("testName")}
-                  textTransform="capitalize"
-                  fontWeight="500"
-                  color="#2F2F2F"
-                  _hover={{
-                    color: "#fff",
-                    fontWeight: "400",
-                    bg: "blue.blue500",
-                  }}
-                >
-                  <HStack fontSize="14px">
-                    <Text>by Test Name</Text>
-                  </HStack>
-                </MenuItem>
-                <MenuItem
-                  onClick={() => setByDate(true)}
-                  textTransform="capitalize"
-                  fontWeight="500"
-                  color="#2F2F2F"
-                  _hover={{
-                    color: "#fff",
-                    fontWeight: "400",
-                    bg: "blue.blue500",
-                  }}
-                >
-                  <HStack fontSize="14px">
-                    <Text>by date</Text>
-                  </HStack>
-                </MenuItem>
-                <MenuItem
-                  onClick={() => {
-                    setFilteredData(null);
-                    setSearchInput("");
-                    setByDate(false);
-                    setStartDate("");
-                    setEndDate("");
-                    filterScheduled();
+                  onChange={(e) => {
+                    setSearchInput(e.target.value);
                     setCurrentPage(1);
                   }}
-                  textTransform="capitalize"
-                  fontWeight="500"
-                  color="#2F2F2F"
-                  _hover={{
-                    color: "#fff",
-                    fontWeight: "400",
-                    bg: "blue.blue500",
-                  }}
-                >
-                  <HStack fontSize="14px">
-                    <Text>clear filter</Text>
+                  value={SearchInput}
+                  bColor={borderColor}
+                  leftIcon={<BiSearch />}
+                />
+              ) : (
+                <HStack flexWrap={["wrap", "nowrap"]}>
+                  <Input
+                    label="Start Date"
+                    type="date"
+                    onChange={(e) => setStartDate(e.target.value)}
+                    value={StartDate}
+                    bColor={borderColor}
+                    leftIcon={<FaCalendarAlt />}
+                  />
+                  <Input
+                    label="End Date"
+                    type="date"
+                    onChange={(e) => setEndDate(e.target.value)}
+                    value={EndDate}
+                    bColor={borderColor}
+                    leftIcon={<FaCalendarAlt />}
+                  />
+                  <Flex
+                    onClick={() => filterBy("date")}
+                    cursor="pointer"
+                    px="5px"
+                    py="3px"
+                    rounded="5px"
+                    bg={primaryColor}
+                    color={bgColor}
+                    justifyContent="center"
+                    alignItems="center"
+                  >
+                    <BiSearch />
+                  </Flex>
+                </HStack>
+              )}
+              <Menu isLazy>
+                <MenuButton as={Box}>
+                  <HStack
+                    border={`1px solid ${primaryColor}`}
+                    rounded="7px"
+                    cursor="pointer"
+                    py="11.64px"
+                    px="16.98px"
+                    bg={NavListBg}
+                    color={primaryColor}
+                    fontWeight="500"
+                    fontSize="14px"
+                  >
+                    <Text>Filter</Text>
+                    <IoFilter />
                   </HStack>
-                </MenuItem>
-              </MenuList>
-            </Menu>
-          </HStack>
+                </MenuButton>
+                <MenuList>
+                  <MenuItem
+                    onClick={() => filterBy("firstName")}
+                    textTransform="capitalize"
+                    fontWeight="500"
+                    color={textColor}
+                    _hover={{
+                      color: bgColor,
+                      fontWeight: "400",
+                      bg: primaryColor,
+                    }}
+                  >
+                    <HStack fontSize="14px">
+                      <Text>by First Name</Text>
+                    </HStack>
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => filterBy("lastName")}
+                    textTransform="capitalize"
+                    fontWeight="500"
+                    color={textColor}
+                    _hover={{
+                      color: bgColor,
+                      fontWeight: "400",
+                      bg: primaryColor,
+                    }}
+                  >
+                    <HStack fontSize="14px">
+                      <Text>by Last Name</Text>
+                    </HStack>
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => filterBy("mrn")}
+                    textTransform="capitalize"
+                    fontWeight="500"
+                    color={textColor}
+                    _hover={{
+                      color: bgColor,
+                      fontWeight: "400",
+                      bg: primaryColor,
+                    }}
+                  >
+                    <HStack fontSize="14px">
+                      <Text>by MRN</Text>
+                    </HStack>
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => filterBy("testName")}
+                    textTransform="capitalize"
+                    fontWeight="500"
+                    color={textColor}
+                    _hover={{
+                      color: bgColor,
+                      fontWeight: "400",
+                      bg: primaryColor,
+                    }}
+                  >
+                    <HStack fontSize="14px">
+                      <Text>by Test Name</Text>
+                    </HStack>
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => setByDate(true)}
+                    textTransform="capitalize"
+                    fontWeight="500"
+                    color={textColor}
+                    _hover={{
+                      color: bgColor,
+                      fontWeight: "400",
+                      bg: primaryColor,
+                    }}
+                  >
+                    <HStack fontSize="14px">
+                      <Text>by date</Text>
+                    </HStack>
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      setFilteredData(null);
+                      setSearchInput("");
+                      setByDate(false);
+                      setStartDate("");
+                      setEndDate("");
+                      filterScheduled();
+                      setCurrentPage(1);
+                    }}
+                    textTransform="capitalize"
+                    fontWeight="500"
+                    color={textColor}
+                    _hover={{
+                      color: bgColor,
+                      fontWeight: "400",
+                      bg: primaryColor,
+                    }}
+                  >
+                    <HStack fontSize="14px">
+                      <Text>clear filter</Text>
+                    </HStack>
+                  </MenuItem>
+                </MenuList>
+              </Menu>
+            </HStack>
         </Flex>
       </Box>
 
       <Box
-        bg="#fff"
-        border="1px solid #EFEFEF"
+        bg={bgColor}
+        border={`1px solid ${borderColor}`}
         mt="12px"
         py="15px"
         px="15px"
@@ -911,12 +922,12 @@ export default function LabProcessing() {
       >
         <TableContainer>
           <Table variant="striped">
-            <Thead bg="#fff">
+            <Thead bg={bgColor}>
               <Tr>
                 <Th
                   fontSize="13px"
                   textTransform="capitalize"
-                  color="#534D59"
+                  color={subTitleTextColor}
                   fontWeight="600"
                 >
                   Test ID
@@ -924,7 +935,7 @@ export default function LabProcessing() {
                 <Th
                   fontSize="13px"
                   textTransform="capitalize"
-                  color="#534D59"
+                  color={subTitleTextColor}
                   fontWeight="600"
                 >
                   Patient name
@@ -932,7 +943,7 @@ export default function LabProcessing() {
                 <Th
                   fontSize="13px"
                   textTransform="capitalize"
-                  color="#534D59"
+                  color={subTitleTextColor}
                   fontWeight="600"
                 >
                   Department
@@ -940,7 +951,7 @@ export default function LabProcessing() {
                 <Th
                   fontSize="13px"
                   textTransform="capitalize"
-                  color="#534D59"
+                  color={subTitleTextColor}
                   fontWeight="600"
                 >
                   Test Name
@@ -948,7 +959,7 @@ export default function LabProcessing() {
                 <Th
                   fontSize="13px"
                   textTransform="capitalize"
-                  color="#534D59"
+                  color={subTitleTextColor}
                   fontWeight="600"
                 >
                   Order Date
@@ -956,7 +967,7 @@ export default function LabProcessing() {
                 <Th
                   fontSize="13px"
                   textTransform="capitalize"
-                  color="#534D59"
+                  color={subTitleTextColor}
                   fontWeight="600"
                 >
                   Lab Status
@@ -964,7 +975,7 @@ export default function LabProcessing() {
                 <Th
                   fontSize="13px"
                   textTransform="capitalize"
-                  color="#534D59"
+                  color={subTitleTextColor}
                   fontWeight="600"
                 >
                   Actions
@@ -1091,12 +1102,12 @@ export default function LabProcessing() {
                     />
                   );
                 })
-              ) : (
-                <Text textAlign="center" mt="32px" color="black">
-                  *--No record found--*
-                </Text>
-              )}
-            </Tbody>
+                ) : (
+                  <Text textAlign="center" mt="32px" color={textColor}>
+                    *--No record found--*
+                  </Text>
+                )}
+              </Tbody>
           </Table>
         </TableContainer>
         <Pagination

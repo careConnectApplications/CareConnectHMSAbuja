@@ -41,8 +41,20 @@ import { BiSearch } from "react-icons/bi";
 import { SlPlus } from "react-icons/sl";
 import Pagination from "../Components/Pagination";
 import { configuration } from "../Utils/Helpers";
+import { useColors } from "../Utils/colors";
 
 export default function SummaryReport() {
+  const {
+    bgColor,
+    textColor,
+    borderColor,
+    titleTextColor,
+    subTitleTextColor,
+    chartFillColor,
+    primaryColor,
+    secondaryColor,
+    NavListBg,
+  } = useColors();
   const [IsLoading, setIsLoading] = useState(true);
   const [Loading, setLoading] = useState(false);
   const [All, setAll] = useState(true);
@@ -316,6 +328,78 @@ export default function SummaryReport() {
           localStorage.setItem("reportCategory", QueryType);
           localStorage.setItem("reportGrandTotal", JSON.stringify(totals));
           nav("/dashboard/report-analytics/print-summary");
+        } else if (QueryType === "inpatients records") {
+          localStorage.setItem(
+            "reportSummary",
+            JSON.stringify(result.queryresult)
+          );
+          localStorage.setItem("reportCategory", QueryType);
+          nav("/dashboard/report-analytics/print-summary");
+        } else if (QueryType === "outpatients records") {
+          localStorage.setItem(
+            "reportSummary",
+            JSON.stringify(result.queryresult)
+          );
+          localStorage.setItem("reportCategory", QueryType);
+          nav("/dashboard/report-analytics/print-summary");
+        } else if (QueryType === "accident and emergency records") {
+          localStorage.setItem(
+            "reportSummary",
+            JSON.stringify(result.queryresult)
+          );
+          localStorage.setItem("reportCategory", QueryType);
+          nav("/dashboard/report-analytics/print-summary");
+        } else if (QueryType === "national health insurance services") {
+          const grandTotal = {
+            male: 0,
+            female: 0,
+            total: 0,
+          };
+
+          result.queryresult[0].totalPatientsByInsurance.forEach((item) => {
+            item.data.forEach((genderData) => {
+              if (genderData._id.toLowerCase() === "male") {
+                grandTotal.male += genderData.count;
+              } else if (genderData._id.toLowerCase() === "female") {
+                grandTotal.female += genderData.count;
+              }
+            });
+          });
+
+          grandTotal.total = grandTotal.male + grandTotal.female;
+
+          localStorage.setItem(
+            "reportSummary",
+            JSON.stringify(result.queryresult[0].totalPatientsByInsurance)
+          );
+          localStorage.setItem("reportGrandTotal", JSON.stringify(grandTotal));
+
+          localStorage.setItem("reportCategory", QueryType);
+          nav("/dashboard/report-analytics/print-summary");
+        } else if (
+          QueryType === "lab investigation report" ||
+          QueryType === "radiology diagnosis" ||
+          QueryType === "operation" ||
+          QueryType === "special consultative" ||
+          QueryType === "immunization"
+        ) {
+          const grandTotal = Object.values(result.queryresult).reduce(
+            (acc, curr) => {
+              acc.male += curr.male;
+              acc.female += curr.female;
+              acc.total += curr.total;
+              return acc;
+            },
+            { male: 0, female: 0, total: 0 }
+          );
+
+          localStorage.setItem(
+            "reportSummary",
+            JSON.stringify(result.queryresult)
+          );
+          localStorage.setItem("reportGrandTotal", JSON.stringify(grandTotal));
+          localStorage.setItem("reportCategory", QueryType);
+          nav("/dashboard/report-analytics/print-summary");
         }
       }
     } catch (e) {
@@ -380,20 +464,20 @@ export default function SummaryReport() {
         <ShowToast message={showToast.message} status={showToast.status} />
       )}
       <HStack>
-        <Text color="#1F2937" fontWeight="600" fontSize="19px">
+        <Text color={titleTextColor} fontWeight="600" fontSize="19px">
           Report Summary
         </Text>
-        <Text color="#667085" fontWeight="400" fontSize="18px">
+        <Text color={subTitleTextColor} fontWeight="400" fontSize="18px">
           ({Data?.length})
         </Text>
       </HStack>
-      <Text color="#686C75" mt="9px" fontWeight="400" fontSize="15px">
+      <Text color={subTitleTextColor} mt="9px" fontWeight="400" fontSize="15px">
         Access reports, and analytics across departments all in one place
       </Text>
       {/* filters needed for the get full report */}
       <Box
-        bg="#fff"
-        border="1px solid #EFEFEF"
+        bg={bgColor}
+        border={`1px solid ${borderColor}`}
         mt="12px"
         py="17px"
         px={["18px", "18px"]}
@@ -401,16 +485,16 @@ export default function SummaryReport() {
       >
         <SimpleGrid mt="12px" columns={{ base: 2, md: 3 }} spacing={2}>
           <Box>
-            <Text color="#1F2937" fontWeight="500" fontSize="14px">
+            <Text color={titleTextColor} fontWeight="500" fontSize="14px">
               Report Category
             </Text>
             <Select
               fontSize={QueryType !== "" ? "16px" : "13px"}
               h="45px"
               borderWidth="2px"
-              borderColor="#E4E4E4"
-              _hover={{ borderColor: "#7A27AB" }}
-              _focus={{ borderColor: "blue.blue500" }}
+              borderColor={borderColor}
+              _hover={{ borderColor: primaryColor }}
+              _focus={{ borderColor: primaryColor }}
               textTransform="capitalize"
               value={QueryType}
               onChange={(e) => {
@@ -418,6 +502,7 @@ export default function SummaryReport() {
                 setData([]);
               }}
               placeholder="Select Report Category"
+              color={textColor}
             >
               {QuerySettings?.map((item, i) => (
                 <option value={`${item}`} key={i}>
@@ -428,7 +513,7 @@ export default function SummaryReport() {
           </Box>
 
           <Box>
-            <Text color="#1F2937" fontWeight="500" fontSize="14px">
+            <Text color={titleTextColor} fontWeight="500" fontSize="14px">
               Start Date
             </Text>
             <Input
@@ -438,12 +523,12 @@ export default function SummaryReport() {
                 setData([]);
               }}
               value={QueryStartDate}
-              bColor="#E4E4E4"
+              bColor={borderColor}
               leftIcon={<FaCalendarAlt />}
             />
           </Box>
           <Box>
-            <Text color="#1F2937" fontWeight="500" fontSize="14px">
+            <Text color={titleTextColor} fontWeight="500" fontSize="14px">
               End Date
             </Text>
             <Input
@@ -453,7 +538,7 @@ export default function SummaryReport() {
                 setData([]);
               }}
               value={QueryEndDate}
-              bColor="#E4E4E4"
+              bColor={borderColor}
               leftIcon={<FaCalendarAlt />}
             />
           </Box>
@@ -464,9 +549,6 @@ export default function SummaryReport() {
             mt={["10px", "10px", "0px", "0px"]}
             isLoading={Loading}
             loadingText="Fetching..."
-            background="#f8ddd1 "
-            border="1px solid #EA5937"
-            color="blue.blue500"
             w={["100%", "100%", "144px", "144px"]}
             onClick={fetchReport}
             disabled={

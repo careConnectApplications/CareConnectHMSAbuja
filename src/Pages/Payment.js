@@ -38,8 +38,20 @@ import Pagination from "../Components/Pagination";
 import { configuration } from "../Utils/Helpers";
 import Preloader from "../Components/Preloader";
 import { FaCalendarAlt } from "react-icons/fa";
+import { useColors } from "../Utils/colors";
 
 export default function Payment() {
+  const {
+    bgColor,
+    textColor,
+    borderColor,
+    titleTextColor,
+    subTitleTextColor,
+    chartFillColor,
+    primaryColor,
+    secondaryColor,
+    NavListBg,
+  } = useColors();
   const [IsLoading, setIsLoading] = useState(true);
   const [All, setAll] = useState(true);
   const [Paid, setPaid] = useState(false);
@@ -244,34 +256,34 @@ export default function Payment() {
       )}
       <Flex justifyContent="space-between" alignItems="center" mb={4}>
         <HStack spacing={4}>
-          <Text color="#1F2937" fontWeight="600" fontSize="19px">
+          <Text color={titleTextColor} fontWeight="600" fontSize="19px">
             Payment
           </Text>
-          <Text color="#667085" fontWeight="400" fontSize="18px">
+          <Text color={subTitleTextColor} fontWeight="400" fontSize="18px">
             ({TotalData.toLocaleString()})
           </Text>
         </HStack>
 
         <Box
-          bg="green.50"
+          bg={chartFillColor}
           px={4}
           py={2}
           borderRadius="md"
           border="1px solid"
-          borderColor="green.100"
+          borderColor={borderColor}
         >
-          <Text color="green.700" fontWeight="600" fontSize="18px">
+          <Text color={titleTextColor} fontWeight="600" fontSize="18px">
             Total: ₦{CashierTotal?.toLocaleString() || "0"}
           </Text>
         </Box>
       </Flex>
-      <Text color="#686C75" mt="9px" fontWeight="400" fontSize="15px">
+      <Text color={subTitleTextColor} mt="9px" fontWeight="400" fontSize="15px">
         Confirm and manage pending payment from patient from one place
       </Text>
 
       <Box
-        bg="#fff"
-        border="1px solid #EFEFEF"
+        bg={bgColor}
+        border={`1px solid ${borderColor}`}
         mt="12px"
         py="17px"
         px={["18px", "18px"]}
@@ -282,33 +294,33 @@ export default function Payment() {
           <Flex
             alignItems="center"
             flexWrap="wrap"
-            bg="#E4F3FF"
+            bg={chartFillColor}
             rounded="7px"
             py="3.5px"
             px="5px"
             cursor="pointer"
             mt={["10px", "10px", "0px", "0px"]}
           >
-            <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={filterAll}>
+            <Box borderRight={`1px solid ${borderColor}`} pr="5px" onClick={filterAll}>
               <Text
                 py="8.5px"
                 px="12px"
-                bg={All ? "#fff" : "transparent"}
+                bg={All ? bgColor : "transparent"}
                 rounded="7px"
-                color={"#1F2937"}
+                color={titleTextColor}
                 fontWeight={"500"}
                 fontSize={"13px"}
               >
                 All Pending
               </Text>
             </Box>
-            <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={filterPaid}>
+            <Box borderRight={`1px solid ${borderColor}`} pr="5px" onClick={filterPaid}>
               <Text
                 py="8.5px"
                 px="12px"
-                bg={Paid ? "#fff" : "transparent"}
+                bg={Paid ? bgColor : "transparent"}
                 rounded="7px"
-                color={"#1F2937"}
+                color={titleTextColor}
                 fontWeight={"500"}
                 fontSize={"13px"}
               >
@@ -332,7 +344,7 @@ export default function Payment() {
                     setCurrentPage(1);
                   }}
                   value={SearchInput}
-                  bColor="#E4E4E4"
+                  bColor={borderColor}
                   leftIcon={<BiSearch />}
                 />
               ) : (
@@ -342,7 +354,7 @@ export default function Payment() {
                     type="date"
                     onChange={(e) => setStartDate(e.target.value)}
                     value={StartDate}
-                    bColor="#E4E4E4"
+                    bColor={borderColor}
                     leftIcon={<FaCalendarAlt />}
                   />
                   <Input
@@ -350,7 +362,7 @@ export default function Payment() {
                     type="date"
                     onChange={(e) => setEndDate(e.target.value)}
                     value={EndDate}
-                    bColor="#E4E4E4"
+                    bColor={borderColor}
                     leftIcon={<FaCalendarAlt />}
                   />
 
@@ -360,8 +372,8 @@ export default function Payment() {
                     px="5px"
                     py="3px"
                     rounded="5px"
-                    bg="blue.blue500"
-                    color="#fff"
+                    bg={primaryColor}
+                    color={bgColor}
                     justifyContent="center"
                     alignItems="center"
                   >
@@ -373,13 +385,13 @@ export default function Payment() {
               <Menu isLazy>
                 <MenuButton as={Box}>
                   <HStack
-                    border="1px solid #EA5937"
+                    border={`1px solid ${NavListBg}`}
                     rounded="7px"
                     cursor="pointer"
                     py="11.64px"
                     px="16.98px"
-                    bg="#f8ddd1"
-                    color="blue.blue500"
+                    bg={NavListBg}
+                    color={textColor}
                     fontWeight="500"
                     fontSize="14px"
                   >
@@ -387,18 +399,19 @@ export default function Payment() {
                     <IoFilter />
                   </HStack>
                 </MenuButton>
-                <MenuList>
+                <MenuList bg={bgColor} border={`1px solid ${borderColor}`}>
                   <MenuItem
                     onClick={() => filterBy("firstName")}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
+>>>>>>> Stashed changes
                     <HStack fontSize="14px">
                       <Text>by First Name</Text>
                     </HStack>
@@ -407,11 +420,11 @@ export default function Payment() {
                     onClick={() => filterBy("lastName")}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -422,11 +435,11 @@ export default function Payment() {
                     onClick={() => filterBy("mrn")}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -437,11 +450,11 @@ export default function Payment() {
                     onClick={() => filterBy("phoneNumber")}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -452,11 +465,11 @@ export default function Payment() {
                     onClick={() => filterBy("ref")}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -467,11 +480,11 @@ export default function Payment() {
                     onClick={() => setByDate(true)}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -490,11 +503,11 @@ export default function Payment() {
                     }}
                     textTransform="capitalize"
                     fontWeight={"500"}
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -510,8 +523,8 @@ export default function Payment() {
         {/* filter section end here */}
 
         <Box
-          bg="#fff"
-          border="1px solid #EFEFEF"
+          bg={bgColor}
+          border={`1px solid ${borderColor}`}
           mt="12px"
           py="15px"
           px="15px"
@@ -520,12 +533,12 @@ export default function Payment() {
         >
           <TableContainer>
             <Table variant="striped">
-              <Thead bg="#fff">
+              <Thead bg={bgColor}>
                 <Tr>
                   <Th
                     fontSize="13px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     patient name
@@ -533,7 +546,7 @@ export default function Payment() {
                   <Th
                     fontSize="13px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     MRN
@@ -541,7 +554,7 @@ export default function Payment() {
                   <Th
                     fontSize="13px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     phone
@@ -549,7 +562,7 @@ export default function Payment() {
                   <Th
                     fontSize="13px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     age
@@ -558,7 +571,7 @@ export default function Payment() {
                   <Th
                     fontSize="13px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     Reference No
@@ -566,7 +579,7 @@ export default function Payment() {
                   <Th
                     fontSize="13px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     Total Amount
@@ -574,7 +587,7 @@ export default function Payment() {
                   <Th
                     fontSize="13px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     date created
@@ -582,7 +595,7 @@ export default function Payment() {
                   <Th
                     fontSize="13px"
                     textTransform="capitalize"
-                    color="#534D59"
+                    color={subTitleTextColor}
                     fontWeight="600"
                   >
                     actions
@@ -630,7 +643,7 @@ export default function Payment() {
                     />
                   ))
                 ) : (
-                  <Text textAlign={"center"} mt="32px" color="black">
+                  <Text textAlign={"center"} mt="32px" color={textColor}>
                     *--No record found--*
                   </Text>
                 )}

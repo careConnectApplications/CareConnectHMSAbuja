@@ -16,50 +16,59 @@ import ProcedureInsurance from "../Components/Insurance/ProcedureInsurance";
 import PharmacyInsurance from "../Components/Insurance/PharmacyInsurance";
 import LabInsurance from "../Components/Insurance/LabInsurance";
 import HistopathologyInsurance from "../Components/Insurance/HistopathologyInsurance";
+import { useColors } from "../Utils/colors";
 
 export default function Insurance() {
+  const {
+    bgColor,
+    textColor,
+    borderColor,
+    titleTextColor,
+    subTitleTextColor,
+    primaryColor,
+  } = useColors();
   return (
     <MainLayout>
       <Seo title="Insurance" description="Care Connect Insurance" />
 
       <HStack>
-        <Text color="#1F2937" fontWeight="600" fontSize="19px">
+        <Text color={titleTextColor} fontWeight="600" fontSize="19px">
           Insurance
         </Text>
       </HStack>
-      <Text color="#686C75" mt="9px" fontWeight="400" fontSize="15px">
+      <Text color={subTitleTextColor} mt="9px" fontWeight="400" fontSize="15px">
         Manage and view all insurance details and claims.
       </Text>
 
       <Tabs mt="12px">
-        <TabList color="#101828" pb="10px" flexWrap={"wrap"}>
+        <TabList color={textColor} pb="10px" flexWrap={"wrap"}>
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Radiology
           </Tab>
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Procedure
           </Tab>
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Pharmacy
           </Tab>
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Lab
           </Tab>
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Histopathology
           </Tab>

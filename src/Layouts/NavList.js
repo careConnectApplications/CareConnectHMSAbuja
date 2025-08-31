@@ -1,6 +1,21 @@
-import { isActive, isOutPatient,isOutPatientParent,isRecordStaff,isInPatient,
-  isScheduleAppointmentStaff,isScheduleProcedureStaff,isLabStaff,isRadiologyStaff,
-  isPharmacyStaff,isInventoryStaff,isBillingStaff,isUserManagerStaff,isTheatreStaff,isClinicalReport,isBillingStaffHOD } from "../Authentication/Index";
+import {
+  isActive,
+  isOutPatient,
+  isOutPatientParent,
+  isRecordStaff,
+  isInPatient,
+  isScheduleAppointmentStaff,
+  isScheduleProcedureStaff,
+  isLabStaff,
+  isRadiologyStaff,
+  isPharmacyStaff,
+  isInventoryStaff,
+  isBillingStaff,
+  isUserManagerStaff,
+  isTheatreStaff,
+  isClinicalReport,
+  isBillingStaffHOD,
+} from "../Authentication/Index";
 import { MdOutlineAnalytics } from "react-icons/md";
 import { IoBody } from "react-icons/io5";
 import { FaUserInjured, FaUsers } from "react-icons/fa";
@@ -15,7 +30,7 @@ import { MdInventory2 } from "react-icons/md";
 import { MdLocalPharmacy } from "react-icons/md";
 import { FaRadiation } from "react-icons/fa";
 import { FaEye } from "react-icons/fa";
-import { MdLocalHospital } from 'react-icons/md';
+import { MdLocalHospital } from "react-icons/md";
 
 export const NavList = (location) => {
   const checkActiveLab = () => {
@@ -33,8 +48,6 @@ export const NavList = (location) => {
     }
   };
 
-  
-
   let List = [
     {
       name: "overview",
@@ -45,16 +58,16 @@ export const NavList = (location) => {
     },
     {
       name: "Out Patient",
-      icon:  <FaUserNurse />,
+      icon: <FaUserNurse />,
       link: "#",
       active: isActive(location, "#"),
-      display:  isOutPatientParent(),
+      display: isOutPatientParent(),
       children: [
         {
           name: "Patient Registration",
           icon: <FaUserInjured />,
           link: "/dashboard/patient",
-          active: isActive(location, "/dashboard/patient"), 
+          active: isActive(location, "/dashboard/patient"),
           display: isScheduleAppointmentStaff(),
         },
         {
@@ -77,7 +90,7 @@ export const NavList = (location) => {
           name: "Nursing Care",
           icon: <FaUserInjured />,
           link: "/dashboard/nurse-care",
-          active: isActive(location, "/dashboard/nurse-care"), 
+          active: isActive(location, "/dashboard/nurse-care"),
           display: isInPatient(),
         },
         {
@@ -90,8 +103,6 @@ export const NavList = (location) => {
       ],
     },
 
-   
-   
     {
       name: "Schedule Appointment",
       icon: <RiCalendarScheduleFill />,
@@ -106,8 +117,6 @@ export const NavList = (location) => {
       active: isActive(location, "/dashboard/schedule-procedure"),
       display: isScheduleProcedureStaff(),
     },
-
-   
 
     {
       name: "lab Process",
@@ -158,7 +167,10 @@ export const NavList = (location) => {
           name: "histopathology",
           icon: <MdOutlineAnalytics />,
           link: "/dashboard/histopathology-process/histopathology",
-          active: isActive(location, "/dashboard/histopathology-process/histopathology"),
+          active: isActive(
+            location,
+            "/dashboard/histopathology-process/histopathology"
+          ),
           display: isLabStaff(),
         },
 
@@ -166,7 +178,10 @@ export const NavList = (location) => {
           name: "report",
           icon: <MdOutlineAnalytics />,
           link: "/dashboard/histopathology-process/report",
-          active: isActive(location, "/dashboard/histopathology-process/report"),
+          active: isActive(
+            location,
+            "/dashboard/histopathology-process/report"
+          ),
           display: isLabStaff(),
         },
       ],
@@ -180,14 +195,14 @@ export const NavList = (location) => {
     },
     {
       name: "radiology",
-      icon: <FaRadiation/>,
+      icon: <FaRadiation />,
       link: "/dashboard/radiology",
       active: isActive(location, "/dashboard/radiology"),
       display: isRadiologyStaff(),
     },
     {
       name: "theatre",
-      icon: <MdLocalHospital/>,
+      icon: <MdLocalHospital />,
       link: "/dashboard/single-theatre",
       active: isActive(location, "/dashboard/single-theatre"),
       display: isTheatreStaff(),
@@ -206,10 +221,9 @@ export const NavList = (location) => {
           active: isActive(location, "/dashboard/pharmacy-new"),
           display: isPharmacyStaff(),
         },
-       
       ],
     },
-   
+
     {
       name: "inventory",
       icon: <MdInventory2 />,
@@ -233,14 +247,12 @@ export const NavList = (location) => {
           display: isBillingStaff(),
         },
 
-       
         {
           name: "cashier Report",
           link: "/dashboard/billing/cashier-report",
           active: isActive(location, "/dashboard/billing/cashier-report"),
           display: isBillingStaffHOD(),
         },
-
       ],
     },
     {
@@ -293,7 +305,40 @@ export const NavList = (location) => {
           active: isActive(location, "/dashboard/report-analytics/summary"),
           display: isClinicalReport(),
         },
-      
+
+        {
+          name: "Medical Report",
+          link: "/dashboard/report-analytics/medical-report",
+          active: isActive(
+            location,
+            "/dashboard/report-analytics/medical-report"
+          ),
+          display: isClinicalReport(),
+        },
+
+        // {
+        //   name: "Operational Analysis",
+        //   link: "/dashboard/report-analytics/operational-analysis",
+        //   active: isActive(location, "/dashboard/report-analytics/operational-analysis"),
+        //   display: isClinicalReport(),
+        // },
+
+        {
+          name: "Revenue Analysis",
+          link: "/dashboard/report-analytics/revenue-analysis",
+          active: isActive(
+            location,
+            "/dashboard/report-analytics/revenue-analysis"
+          ),
+          display: isClinicalReport(),
+        },
+
+        // {
+        //   name: "Maternity Report",
+        //   link: "/dashboard/report-analytics/maternity-report",
+        //   active: isActive(location, "/dashboard/report-analytics/maternity-report"),
+        //   display: isClinicalReport(),
+        // },
       ],
     },
 

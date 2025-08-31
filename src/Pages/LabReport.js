@@ -15,10 +15,21 @@ import { GetAllLabReportApi } from "../Utils/ApiCalls";
 import Pagination from "../Components/Pagination";
 import { configuration } from '../Utils/Helpers'
 import Preloader from "../Components/Preloader";
+import { useColors } from "../Utils/colors";
 
 
 
 export default function LabReport() {
+    const {
+        bgColor,
+        textColor,
+        borderColor,
+        titleTextColor,
+        subTitleTextColor,
+        chartFillColor,
+        primaryColor,
+        NavListBg,
+    } = useColors();
     const [IsLoading, setIsLoading] = useState(true);
     const [All, setAll] = useState(true);
     const [TodayQueue, setTodayQueue] = useState(false);
@@ -156,20 +167,20 @@ export default function LabReport() {
                 <ShowToast message={showToast.message} status={showToast.status} />
             )}
             <HStack>
-                <Text color="#1F2937" fontWeight="600" fontSize="19px">
+                <Text color={titleTextColor} fontWeight="600" fontSize="19px">
                     Lab Report
                 </Text>
-                <Text color="#667085" fontWeight="400" fontSize="18px">
+                <Text color={subTitleTextColor} fontWeight="400" fontSize="18px">
                     ({Data?.length})
                 </Text>
             </HStack>
-            <Text color="#686C75" mt="9px" fontWeight="400" fontSize="15px">
+            <Text color={subTitleTextColor} mt="9px" fontWeight="400" fontSize="15px">
                 Create a new test order for a patient.
             </Text>
 
             <Box
-                bg="#fff"
-                border="1px solid #EFEFEF"
+                bg={bgColor}
+                border={`1px solid ${borderColor}`}
                 mt="12px"
                 py="17px"
                 px={["18px", "18px"]}
@@ -180,25 +191,25 @@ export default function LabReport() {
                     <Flex
                         alignItems="center"
                         flexWrap="wrap"
-                        bg="#E4F3FF"
+                        bg={chartFillColor}
                         rounded="7px"
                         py="3.5px"
                         px="5px"
                         cursor="pointer"
                         mt={["10px", "10px", "0px", "0px"]}
                     >
-                        <Box borderRight="1px solid #EDEFF2" pr="5px" onClick={filterAll}>
+                        <Box borderRight={`1px solid ${borderColor}`} pr="5px" onClick={filterAll}>
                             <Text
                                 py="8.5px"
                                 px="12px"
-                                bg={All ? "#fff" : "transparent"}
+                                bg={All ? bgColor : "transparent"}
                                 rounded="7px"
-                                color={"#1F2937"}
+                                color={titleTextColor}
                                 fontWeight={"500"}
                                 fontSize={"13px"}
                             >
                                 All
-                                <Box color="#667085" as="span" fontWeight="400" fontSize="13px">
+                                <Box color={subTitleTextColor} as="span" fontWeight="400" fontSize="13px">
                                     ({Data?.length})
                                 </Box>
                             </Text>
@@ -214,19 +225,19 @@ export default function LabReport() {
                         justifyContent={"flex-end"}
                     >
                         <HStack>
-                            <Input label="Search" onChange={(e) => setSearchInput(e.target.value)} value={SearchInput} bColor="#E4E4E4" leftIcon={<BiSearch />} />
+                            <Input label="Search" onChange={(e) => setSearchInput(e.target.value)} value={SearchInput} bColor={borderColor} leftIcon={<BiSearch />} />
 
                             <Menu isLazy>
                                 <MenuButton as={Box}>
 
                                     <HStack
-                                        border="1px solid #EA5937"
+                                        border={`1px solid ${primaryColor}`}
                                         rounded="7px"
                                         cursor="pointer"
                                         py="11.64px"
                                         px="16.98px"
-                                        bg="#f8ddd1"
-                                        color="blue.blue500"
+                                        bg={NavListBg}
+                                        color={primaryColor}
                                         fontWeight="500"
                                         fontSize="14px"
                                     >
@@ -236,19 +247,19 @@ export default function LabReport() {
                                 </MenuButton>
                                 <MenuList >
 
-                                    <MenuItem onClick={() => filterBy("name")} textTransform="capitalize" fontWeight={"500"} color='#2F2F2F' _hover={{ color: "#fff", fontWeight: "400", bg: "blue.blue500" }}>
+                                    <MenuItem onClick={() => filterBy("name")} textTransform="capitalize" fontWeight={"500"} color={textColor} _hover={{ color: bgColor, fontWeight: "400", bg: primaryColor }}>
                                         <HStack fontSize="14px">
 
                                             <Text>by Patient Name</Text>
                                         </HStack>
                                     </MenuItem>
-                                    <MenuItem onClick={() => filterBy("mrn")} textTransform="capitalize" fontWeight={"500"} color='#2F2F2F' _hover={{ color: "#fff", fontWeight: "400", bg: "blue.blue500" }}>
+                                    <MenuItem onClick={() => filterBy("mrn")} textTransform="capitalize" fontWeight={"500"} color={textColor} _hover={{ color: bgColor, fontWeight: "400", bg: primaryColor }}>
                                         <HStack fontSize="14px">
 
                                             <Text>by MRN</Text>
                                         </HStack>
                                     </MenuItem>
-                                    <MenuItem onClick={() => filterBy("appointmentId")} textTransform="capitalize" fontWeight={"500"} color='#2F2F2F' _hover={{ color: "#fff", fontWeight: "400", bg: "blue.blue500" }}>
+                                    <MenuItem onClick={() => filterBy("appointmentId")} textTransform="capitalize" fontWeight={"500"} color={textColor} _hover={{ color: bgColor, fontWeight: "400", bg: primaryColor }}>
                                         <HStack fontSize="14px">
 
                                             <Text>by Appointment ID</Text>
@@ -258,7 +269,7 @@ export default function LabReport() {
                                     <MenuItem onClick={() => {
                                         setFilteredData(null)
                                         setSearchInput("")
-                                    }} textTransform="capitalize" fontWeight={"500"} color='#2F2F2F' _hover={{ color: "#fff", fontWeight: "400", bg: "blue.blue500" }}>
+                                    }} textTransform="capitalize" fontWeight={"500"} color={textColor} _hover={{ color: bgColor, fontWeight: "400", bg: primaryColor }}>
                                         <HStack fontSize="14px">
 
                                             <Text>clear filter</Text>
@@ -277,8 +288,8 @@ export default function LabReport() {
                 {/* filter section end here */}
 
                 <Box
-                    bg="#fff"
-                    border="1px solid #EFEFEF"
+                    bg={bgColor}
+                    border={`1px solid ${borderColor}`}
                     mt="12px"
                     py="15px"
                     px="15px"
@@ -287,12 +298,12 @@ export default function LabReport() {
                 >
                     <TableContainer>
                         <Table variant="striped">
-                            <Thead bg="#fff">
+                            <Thead bg={bgColor}>
                                 <Tr>
                                     <Th
                                         fontSize="13px"
                                         textTransform="capitalize"
-                                        color="#534D59"
+                                        color={subTitleTextColor}
                                         fontWeight="600"
                                     >
                                         Patient name
@@ -300,7 +311,7 @@ export default function LabReport() {
                                     <Th
                                         fontSize="13px"
                                         textTransform="capitalize"
-                                        color="#534D59"
+                                        color={subTitleTextColor}
                                         fontWeight="600"
                                     >
                                         appointment ID
@@ -308,7 +319,7 @@ export default function LabReport() {
                                     <Th
                                         fontSize="13px"
                                         textTransform="capitalize"
-                                        color="#534D59"
+                                        color={subTitleTextColor}
                                         fontWeight="600"
                                     >
                                         Created At
@@ -316,7 +327,7 @@ export default function LabReport() {
                                     <Th
                                         fontSize="13px"
                                         textTransform="capitalize"
-                                        color="#534D59"
+                                        color={subTitleTextColor}
                                         fontWeight="600"
                                     >
                                         Phone number
@@ -326,7 +337,7 @@ export default function LabReport() {
                                     <Th
                                         fontSize="13px"
                                         textTransform="capitalize"
-                                        color="#534D59"
+                                        color={subTitleTextColor}
                                         fontWeight="600"
                                     >
                                         Actions
@@ -374,7 +385,7 @@ export default function LabReport() {
                                             ))
                                         ) : (
 
-                                            <Text textAlign={"center"} mt="32px" color="black">*--No record found--*</Text>
+                                            <Text textAlign={"center"} mt="32px" color={textColor}>*--No record found--*</Text>
                                         )
 
                                     )

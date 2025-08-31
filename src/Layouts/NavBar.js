@@ -1,6 +1,9 @@
-import { Box, Flex, HStack, Avatar, Text, Menu, MenuButton, MenuList, MenuItem, useDisclosure } from '@chakra-ui/react'
+import { Box, Flex, HStack, Avatar, Text, Menu, MenuButton, MenuList, MenuItem, useDisclosure, IconButton } from '@chakra-ui/react'
 import { Tabs, TabList, TabPanels, Tab, TabPanel, TabIndicator, Image } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
+import { FaSun, FaMoon } from 'react-icons/fa'
+import { ThemeContext } from '../Context/ThemeContext'
+import { useColors } from '../Utils/colors'
 import Button from '../Components/Button'
 import NotificationCard from '../Components/NotificationCard'
 import { IoIosArrowDown, IoMdNotificationsOutline } from 'react-icons/io'
@@ -24,50 +27,52 @@ import {
 } from '@chakra-ui/react'
 
 import logo from "../Assets/carelogo.png"
-import { useNavigate,useLocation} from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 import { jwtDecode } from "jwt-decode"
 import { NavList } from './NavList';
 import NavItem from "./NavLink";
 
 
-export default function NavBar({ showSearch = true,showNav = true }) {
+export default function NavBar({ showSearch = true, showNav = true }) {
 
 
     const { isOpen, onOpen, onClose } = useDisclosure()
+    const { theme, toggleTheme } = useContext(ThemeContext)
+    const { bgColor, borderColor, NavbarText, textColor, lightTextColor } = useColors();
 
-      const [isOpenx, setIsOpenx] = useState('');
+    const [isOpenx, setIsOpenx] = useState('');
     const location = useLocation();
-    
-    
-    
-        const List = NavList(location);
+
+
+
+    const List = NavList(location);
     const nav = useNavigate()
     const onlineUser = JSON.parse(localStorage.getItem("onlineUser"))
     const token = localStorage.getItem("token")
     const expiredAt = localStorage.getItem("expiredAt")
 
-    
+
     const Logout = () => {
-        
+
         localStorage.clear("token")
         localStorage.clear("onlineUser")
-        
+
         nav("/")
-        
-        
+
+
     }
-    
-    
-    
+
+
+
     const date = new Date(expiredAt);
 
     console.log("expiredAt", date)
-    console.log("expiration",date.getTime() <= Date.now())
-    console.log("new date", expiredAt * 1000 )
+    console.log("expiration", date.getTime() <= Date.now())
+    console.log("new date", expiredAt * 1000)
     console.log("dateNow", Date.now())
     if (expiredAt * 1000 <= Date.now()) {
-        
+
 
         Logout()
         alert("Session has expired")
@@ -76,29 +81,39 @@ export default function NavBar({ showSearch = true,showNav = true }) {
 
 
     return (
-        <Flex borderLeft="1px solid #EDEFF2" pos="sticky" top="0" bgColor={"white"} alignItems={"center"} justifyContent={"space-between"} zIndex={"10"} px="24px" py="15.6px" borderBottom={"1px solid #EDEFF2"}>
+        <Flex pos="sticky" top="0" bgColor={bgColor} alignItems={"center"} justifyContent={"space-between"} zIndex={"10"} px="24px" py="15.6px" borderBottom={`2px solid ${borderColor}`}>
 
-
-
-
-            {/* <Box visibility={showSearch ? "visible" : "hidden"} w="40%" display={["none", "none", "block", "block"]} >
-              
-            </Box> */}
-
-            <Box w="20%" display={["block", "block", "block", "block", "none"]} color="blue.blue500" fontSize="30px" onClick={onOpen}>
+            <Box w="20%" display={["block", "block", "block", "block", "none"]} color={NavbarText} fontSize="30px" onClick={onOpen}>
                 <CgMenuLeft />
             </Box>
-            <Box w="40%" display={["none", "none", "none", "none", "block"]} color="blue.blue500" textTransform="uppercase" fontWeight="700" fontSize="15px">
+            <Box w="40%" display={["none", "none", "none", "none", "block"]} color={NavbarText} textTransform="uppercase" fontWeight="700" fontSize="15px">
                 <Text>{onlineUser.role} ~ {FacilityName}</Text>
             </Box>
             <Flex justifyContent="flex-end" w={["65%", "45%", "45%", "80%", "60%"]} cursor={"pointer"}>
 
 
                 <HStack>
+                    <IconButton
+                        aria-label="Toggle theme"
+                        icon={theme === 'light' ? <FaMoon /> : <FaSun />}
+                        onClick={toggleTheme}
+                        isRound={true}
+                        size="md"
+                        color={lightTextColor}
+                        alignSelf="center"
+                        background={borderColor}
+                        _hover={{ background: borderColor }}
+                        _active={{ background: borderColor }}
+                        _focus={{ background: borderColor }}
+                    />
 
+                    {/* <Flex width="24px" height="24px" p="4"   bg={borderColor} alignSelf="center" justifyContent="center" alignItems="center" borderRadius="100%" cursor="pointer" onClick={toggleTheme}>
+                        {theme === 'light' ? <FaMoon color={"black"}/> : <FaSun color={"black"}/>}
+                    </Flex> */}
+ 
                     <Menu isLazy aria-expanded={true}>
                         <MenuButton as={Box}>
-                            <Box color="#46455F" fontSize={"24px"} pos={"relative"} pr={"9px"} borderRight={"1px solid #D0D0D0"}>
+                            <Box color={lightTextColor} fontSize={"24px"} pos={"relative"} pr={"9px"} borderRight={`1px solid ${borderColor}`}>
                                 <Box h="2.4px" w="2.4px" rounded={"100%"} pos={"absolute"} top={"3px"} left={"20px"} bg="#FC0202"></Box>
                                 <IoMdNotificationsOutline />
                             </Box>
@@ -107,9 +122,9 @@ export default function NavBar({ showSearch = true,showNav = true }) {
                             {/* MenuItems are not rendered unless Menu is open */}
                             <Box pos='relative'>
                                 <Tabs>
-                                    <TabList color="#101828" pb="10px">
-                                        <Tab _selected={{ color: "blue.blue500" }}>All</Tab>
-                                        <Tab _selected={{ color: "blue.blue500" }}>Unread</Tab>
+                                    <TabList color={textColor} pb="10px">
+                                        <Tab _selected={{ color: NavbarText }}>All</Tab>
+                                        <Tab _selected={{ color: NavbarText }}>Unread</Tab>
 
                                     </TabList>
                                     <TabIndicator mt='-1.5px' height='2px' bg='blue.blue500' borderRadius='1px' />
@@ -166,27 +181,27 @@ export default function NavBar({ showSearch = true,showNav = true }) {
 
                                 <HStack cursor={"pointer"}>
                                     <Avatar name={`${onlineUser?.firstName} ${onlineUser?.lastName}`} size='sm' src='https://bit.ly/tioluwani-kolawole' />
-                                    <Text color={"#2E2E2E"} fontWeight={"500"} fontSize={"14px"} >{`${onlineUser?.firstName} ${onlineUser?.lastName}`}</Text>
-                                    <IoIosArrowDown size={"18px"} color='#000000' />
+                                    <Text color={textColor} fontWeight={"500"} fontSize={"14px"} >{`${onlineUser?.firstName} ${onlineUser?.lastName}`}</Text>
+                                    <IoIosArrowDown size={"18px"} color={textColor} />
 
                                 </HStack>
                             </MenuButton>
                             <MenuList minWidth='232px'>
                                 {/* MenuItems are not rendered unless Menu is open */}
-                                <MenuItem onClick={() => nav("/dashboard/profile-settings")} textTransform="capitalize" fontWeight={"400"} color='#586375' _hover={{ color: "blue.blue500", fontWeight: "600", bg: "orange.orange500" }}>
+                                <MenuItem onClick={() => nav("/dashboard/profile-settings")} textTransform="capitalize" fontWeight={"400"} color={lightTextColor} _hover={{ color: "blue.blue500", fontWeight: "600", bg: "orange.orange500" }}>
                                     <HStack fontSize="14px" >
 
                                         <IoSettingsOutline fontWeight={"900"} />
                                         <Text>Profile Settings</Text>
                                     </HStack>
                                 </MenuItem>
-                                <MenuItem textTransform="capitalize" fontWeight={"400"} color='#586375' _hover={{ color: "blue.blue500", fontWeight: "600", bg: "orange.orange500" }}>
+                                <MenuItem textTransform="capitalize" fontWeight={"400"} color={lightTextColor} _hover={{ color: "blue.blue500", fontWeight: "600", bg: "orange.orange500" }}>
                                     <HStack fontSize="14px"  >
                                         <BsQuestionCircle fontWeight={"900"} />
                                         <Text>help center</Text>
                                     </HStack>
                                 </MenuItem>
-                                <MenuItem onClick={Logout} textTransform="capitalize" fontWeight={"400"} color='#586375' _hover={{ color: "blue.blue500", fontWeight: "600", bg: "orange.orange500" }}>
+                                <MenuItem onClick={Logout} textTransform="capitalize" fontWeight={"400"} color={lightTextColor} _hover={{ color: "blue.blue500", fontWeight: "600", bg: "orange.orange500" }}>
                                     <HStack fontSize="14px"  >
                                         <MdLogout />
                                         <Text >log out</Text>
@@ -202,17 +217,18 @@ export default function NavBar({ showSearch = true,showNav = true }) {
                     zIndex={"100px"}
                     placement='left'
                     onClose={onClose}
+                    
 
                 >
                     <DrawerOverlay />
-                    <DrawerContent>
+                    <DrawerContent bg={bgColor}  >
                         <DrawerCloseButton />
 
 
                         <DrawerBody>
                             {/* <SideBar borderRight="none" h="auto" /> */}
 
-                            <Box pb="32px" h={"auto"} overflowY={"auto"} bgColor={"white"} borderRight={"none"} cursor="pointer" >
+                            <Box pb="32px" h={"auto"} overflowY={"auto"} bgColor={bgColor} borderRight={"none"} cursor="pointer" >
 
 
                                 <Flex justifyContent={"flex-start"} alignItems={"center"} px="18.5px" py="13.6px">

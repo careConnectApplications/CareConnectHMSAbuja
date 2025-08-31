@@ -2,6 +2,7 @@ import { Button as ButtonBox } from '@chakra-ui/button';
 import { Box } from '@chakra-ui/react';
 import React from 'react';
 import {  useNavigate } from 'react-router-dom';
+import { useColors } from '../Utils/colors';
 
 export default function Button({
   children,
@@ -13,8 +14,8 @@ export default function Button({
   size = 'md',
   disabled = false,
   full = false,
-  background = 'blue.blue500',
-  color = '#fff',
+  background,
+  color,
   border,
   w= "100%",
   leftIcon,
@@ -28,6 +29,7 @@ export default function Button({
 }) {
 
   const history = useNavigate();
+  const { primaryColor, secondaryColor } = useColors();
  
 
   return (
@@ -35,8 +37,8 @@ export default function Button({
       fontSize={size === 'xs' ? 'xs' : size === 'sm' ? 'sm' : '16px'}
       fontWeight={'400'}
       pos={pos}
-      color={color}
-      bg={background}
+      color={color ? color : secondaryColor}
+      bg={background ? background : primaryColor}
       border={border}
       _focus={{outline: "none"}}
       transition= "0.5s"
