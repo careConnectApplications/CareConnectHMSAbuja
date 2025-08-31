@@ -260,6 +260,11 @@ export default function TableRowY({
             </Text>
           </Td>
           <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {category}
+            </Text>
+          </Td>
+          <Td>
             <HStack>
               <Avatar size="sm" name={patient} />
               <Box>

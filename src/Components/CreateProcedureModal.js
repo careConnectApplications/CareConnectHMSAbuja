@@ -47,6 +47,7 @@ export default function CreateProcedureModal({
     appointmentdate: "",
     cptcodes: "",
     dxcodes: "",
+    proceduretype: "",
   });
   const [UpdatedPayload, setUpdatedPayload] = useState({
     clinic: "",
@@ -55,6 +56,7 @@ export default function CreateProcedureModal({
     appointmentdate: "",
     cptcodes: "",
     dxcodes: "",
+    proceduretype: "",
   });
 
   const [ProcedureArr, setProcedureArr] = useState([]);
@@ -97,6 +99,7 @@ export default function CreateProcedureModal({
       appointmentdate: oldPayload?.appointmentdate || "",
       cptcodes: oldPayload?.cptcodes || "",
       dxcodes: oldPayload?.dxcodes || "",
+      proceduretype: oldPayload?.proceduretype || "",
     });
 
     // Initialize procedure array if editing
@@ -183,6 +186,7 @@ export default function CreateProcedureModal({
       appointmentdate: "",
       cptcodes: "",
       dxcodes: "",
+      proceduretype: "",
     });
     setUpdatedPayload({
       clinic: "",
@@ -191,6 +195,7 @@ export default function CreateProcedureModal({
       appointmentdate: "",
       cptcodes: "",
       dxcodes: "",
+      proceduretype: "",
     });
     setProcedureArr([]);
     setCptcodesArr([]);
@@ -253,6 +258,7 @@ export default function CreateProcedureModal({
           cptcodes: CptcodesArr,
           dxcodes: DxcodesArr,
           appointmentid: oldPayload.id,
+          proceduretype: Payload.proceduretype,
         },
         patientId
       );
@@ -284,6 +290,7 @@ export default function CreateProcedureModal({
           appointmentdate: UpdatedPayload.appointmentdate,
           cptcodes: CptcodesArr,
           dxcodes: DxcodesArr,
+          proceduretype: UpdatedPayload.proceduretype,
         },
         oldPayload._id
       );
@@ -378,6 +385,23 @@ export default function CreateProcedureModal({
                   onChange={handlePayload}
                   label="Indication Diagnosis Procedure"
                 />
+
+                <Select
+                  onChange={handlePayload}
+                  placeholder="Select Procedure Type"
+                  id="proceduretype"
+                  value={Payload.proceduretype}
+                  fontSize={Payload.proceduretype ? "16px" : "13px"}
+                  size="lg"
+                  border="2px solid"
+                  borderColor="gray.500"
+                >
+                  {Settings?.proceduretype?.map((type, i) => (
+                    <option key={i} value={type}>
+                      {type}
+                    </option>
+                  ))}
+                </Select>
 
                 {/* Procedure search and select */}
                 <Input
@@ -520,6 +544,22 @@ export default function CreateProcedureModal({
                   label="Indication Diagnosis Procedure"
                 />
 
+                <Select
+                  onChange={handleUpdatedPayload}
+                  placeholder="Select Procedure Type"
+                  id="proceduretype"
+                  value={UpdatedPayload.proceduretype}
+                  fontSize={UpdatedPayload.proceduretype ? "16px" : "13px"}
+                  size="lg"
+                  border="2px solid"
+                  borderColor="gray.500"
+                >
+                  {Settings?.proceduretype?.map((type, i) => (
+                    <option key={i} value={type}>
+                      {type}
+                    </option>
+                  ))}
+                </Select>
                 {/* Procedure search + select */}
                 <Input
                   label="Search for Procedure"
@@ -654,6 +694,15 @@ export default function CreateProcedureModal({
                   value={UpdatedPayload.indicationdiagnosisprocedure}
                   label="Indication Diagnosis Procedure"
                 />
+
+                <Select
+                  isDisabled
+                  value={UpdatedPayload.proceduretype}
+                  size="lg"
+                  border="2px solid"
+                >
+                  <option>{UpdatedPayload.proceduretype || "N/A"}</option>
+                </Select>
 
                 <Select
                   isDisabled

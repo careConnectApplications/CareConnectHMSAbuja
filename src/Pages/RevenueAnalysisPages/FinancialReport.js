@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, Flex, HStack, Box, SimpleGrid } from "@chakra-ui/react";
+import { Text, Flex, HStack, Box, SimpleGrid, Avatar } from "@chakra-ui/react";
 import {
   Table,
   Thead,
@@ -29,40 +29,94 @@ export default function FinancialReport() {
   const [payload, setPayload] = useState({
     startDate: "",
     endDate: "",
-    patient: "",
-    paymentType: "",
-    patientId: "",
+    patientMRN: "",
+    patientFirstName: "",
+    patientLastName: "",
+    paymentype: "",
+    paymentcategory: "",
     amount: "",
+    qty: "",
+    cashierid: "",
+    cashieremail: "",
+    status: "",
+    paymentreference: "",
   });
 
   const handlePatientSelect = (patient) => {
-    setPayload({ ...payload, patient: patient?._id || "" });
+    setPayload({
+      ...payload,
+      patientMRN: patient?.patientId || "",
+      patientFirstName: patient?.firstName || "",
+      patientLastName: patient?.lastName || "",
+    });
   };
 
   const advancedFilterFields = [
     {
-      name: "patient",
-      label: "Search Patient (First, Last Name)",
-      type: "patient-search",
-      placeholder: "Enter patient's name",
-    },
-    {
-      name: "patientId",
-      label: "Patient ID",
+      name: "patientFirstName",
+      label: "Patient First Name",
       type: "text",
-      placeholder: "Enter patient ID",
+      placeholder: "Enter patient first name",
     },
     {
-      name: "paymentType",
+      name: "patientLastName",
+      label: "Patient Last Name",
+      type: "text",
+      placeholder: "Enter patient last name",
+    },
+    {
+      name: "patientMRN",
+      label: "Patient MRN",
+      type: "text",
+      placeholder: "Enter patient MRN",
+    },
+    {
+      name: "paymentype",
       label: "Payment Type",
       type: "text",
       placeholder: "Enter payment type",
     },
     {
+      name: "paymentcategory",
+      label: "Payment Category",
+      type: "text",
+      placeholder: "Enter payment category",
+    },
+    {
       name: "amount",
       label: "Amount",
-      type: "text",
+      type: "number",
       placeholder: "Enter amount",
+    },
+    {
+      name: "qty",
+      label: "Quantity",
+      type: "number",
+      placeholder: "Enter quantity",
+    },
+    {
+      name: "cashierid",
+      label: "Cashier ID",
+      type: "text",
+      placeholder: "Enter cashier ID",
+    },
+    {
+      name: "cashieremail",
+      label: "Cashier Email",
+      type: "email",
+      placeholder: "Enter cashier email",
+    },
+    {
+      name: "status",
+      label: "Status",
+      type: "text",
+      placeholder: "Enter status",
+    },
+    {
+      name: "paymentreference",
+      label: "Payment Reference",
+      type: "text",
+      placeholder: "Enter payment reference",
     },
   ];
 
@@ -105,40 +159,40 @@ export default function FinancialReport() {
     }
     setIsLoading(true);
 
-    // Log the payload being sent to the API
-    console.log("API Request Payload:", payload);
+    // Create a filtered payload with only non-empty values
+    const filteredPayload = Object.fromEntries(
+      Object.entries(payload).filter(([_, value]) => value !== "")
+    );
+
+    console.log("API Request Payload:", filteredPayload);
 
     try {
       const result = await GetMedicalReportAPI(
-        { filters: payload },
+        { filters: filteredPayload },
         "financialreport"
       );
 
-      // Console log the full API response
       console.log("API Response - Full Result:", result);
       console.log("API Response - Data:", result?.data);
       console.log("API Response - Query Result:", result?.data?.queryresult);
-      console.log(
-        "API Response - Query Result Type:",
-        typeof result?.data?.queryresult
-      );
-      console.log(
-        "API Response - Query Result Length:",
-        result?.data?.queryresult?.length
-      );
 
+      // Reset only the filter fields, keep date range
       setPayload({
-        startDate: payload.startDate,
-        endDate: payload.endDate,
-        patient: "",
-        paymentType: "",
-        patientId: "",
+        ...payload,
+        patientMRN: "",
+        patientFirstName: "",
+        patientLastName: "",
+        paymentype: "",
+        paymentcategory: "",
         amount: "",
+        qty: "",
+        cashierid: "",
+        cashieremail: "",
+        status: "",
+        paymentreference: "",
       });
-      setData(result.data.queryresult || []);
 
-      // Log the data after setting it to state
-      console.log("Data state after setData:", result.data.queryresult || []);
+      setData(result.data.queryresult || []);
 
       setIsLoading(false);
       setShowToast({
@@ -150,17 +204,15 @@ export default function FinancialReport() {
         setShowToast({ show: false });
       }, 3000);
     } catch (e) {
-      // Console log any errors
       console.error("API Error:", e);
       console.error("Error Message:", e.message);
-      console.error("Error Response:", e.response);
-      console.error("Error Status:", e.response?.status);
-      console.error("Error Data:", e.response?.data);
 
       setIsLoading(false);
       setShowToast({
         show: true,
-        message: "An error occurred while fetching the report",
+        message:
+          e.response?.data?.message ||
+          "An error occurred while fetching the report",
         status: "error",
       });
       setTimeout(() => {
@@ -173,10 +225,17 @@ export default function FinancialReport() {
     setPayload({
       startDate: "",
       endDate: "",
-      patient: "",
-      paymentType: "",
-      patientId: "",
+      patientMRN: "",
+      patientFirstName: "",
+      patientLastName: "",
+      paymentype: "",
+      paymentcategory: "",
       amount: "",
+      qty: "",
+      cashierid: "",
+      cashieremail: "",
+      status: "",
+      paymentreference: "",
     });
     setData([]);
     setCurrentPage(1);
@@ -197,8 +256,9 @@ export default function FinancialReport() {
     }
 
     let reportData = Data.map((item) => ({
-      "Patient ID": item.patientMRN,
-      "Patient Name": `${item.patientFirstName} ${item.patientLastName}`,
+      "Patient MRN": item.patientMRN,
+      "Patient First Name": item.patientFirstName,
+      "Patient Last Name": item.patientLastName,
       "Payment Type": item.paymentype,
       "Payment Category": item.paymentcategory,
       Amount: item.amount,
@@ -217,6 +277,20 @@ export default function FinancialReport() {
     XLSX.writeFile(workbook, `Financial_Report_${date}.xlsx`);
 
     console.log("Report downloaded with data:", reportData);
+  };
+
+  // Function to determine status color based on specific status values
+  const getStatusColor = (status) => {
+    if (!status) return "#667085";
+
+    const statusLower = status.toLowerCase();
+    if (statusLower.includes("paid")) {
+      return "#027A48"; // Green for paid
+    } else if (statusLower.includes("pending payment")) {
+      return "#FFA30C"; // Orange for pending payment
+    } else {
+      return "#667085"; // Gray for any other status
+    }
   };
 
   return (
@@ -369,15 +443,7 @@ export default function FinancialReport() {
                       color="#534D59"
                       fontWeight="600"
                     >
-                      Patient ID
-                    </Th>
-                    <Th
-                      fontSize="13px"
-                      textTransform="capitalize"
-                      color="#534D59"
-                      fontWeight="600"
-                    >
-                      Patient Name
+                      Patient Details
                     </Th>
                     <Th
                       fontSize="13px"
@@ -417,7 +483,31 @@ export default function FinancialReport() {
                       color="#534D59"
                       fontWeight="600"
                     >
+                      Cashier ID
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
+                      Cashier Email
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
                       Status
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
+                      Payment Reference
                     </Th>
                     <Th
                       fontSize="13px"
@@ -432,14 +522,55 @@ export default function FinancialReport() {
                 <Tbody>
                   {PaginatedData.map((item, index) => (
                     <Tr key={index}>
-                      <Td fontSize="14px">{index + 1}</Td>
-                      <Td fontSize="14px">{item.patientMRN}</Td>
-                      <Td fontSize="14px">{`${item.patientFirstName} ${item.patientLastName}`}</Td>
+                      <Td fontSize="14px">{indexOfFirstItem + index + 1}</Td>
+                      <Td>
+                        <HStack>
+                          <Avatar
+                            size="sm"
+                            name={`${item.patientFirstName} ${item.patientLastName}`}
+                          />
+                          <Box>
+                            <Text
+                              color={"#101828"}
+                              fontWeight={"500"}
+                              fontSize={"13px"}
+                            >
+                              {`${item.patientFirstName} ${item.patientLastName}`}
+                            </Text>
+                            <Text
+                              color={"#667085"}
+                              fontWeight={"400"}
+                              fontSize={"11px"}
+                            >
+                              MRN: {item.patientMRN}
+                            </Text>
+                          </Box>
+                        </HStack>
+                      </Td>
                       <Td fontSize="14px">{item.paymentype}</Td>
                       <Td fontSize="14px">{item.paymentcategory}</Td>
                       <Td fontSize="14px">{item.amount}</Td>
                       <Td fontSize="14px">{item.qty}</Td>
-                      <Td fontSize="14px">{item.status}</Td>
+                      <Td fontSize="14px">{item.cashierid}</Td>
+                      <Td fontSize="14px">{item.cashieremail}</Td>
+                      <Td>
+                        <HStack color={getStatusColor(item.status)}>
+                          <Box
+                            rounded="100%"
+                            w="8px"
+                            h="8px"
+                            bg={getStatusColor(item.status)}
+                          ></Box>
+                          <Text
+                            fontWeight="400"
+                            fontSize="13px"
+                            textTransform="capitalize"
+                          >
+                            {item.status}
+                          </Text>
+                        </HStack>
+                      </Td>
+                      <Td fontSize="14px">{item.paymentreference}</Td>
                       <Td fontSize="14px">
                         {moment(item.createdAt).format("DD/MM/YYYY")}
                       </Td>

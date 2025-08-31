@@ -201,6 +201,10 @@ export default function ScheduleAppointment() {
         patient: appointment.patient._id,
         clinic: appointment.clinic,
         id: appointment._id,
+        unit: appointment.unit,
+        arrivalMode: appointment.arrivalMode,
+        accidentType: appointment.accidentType,
+        dateOfAccident: appointment.dateOfAccident,
       });
       setModalState("edit");
       onOpen();
@@ -577,6 +581,14 @@ export default function ScheduleAppointment() {
                     color="#534D59"
                     fontWeight="600"
                   >
+                    Category
+                  </Th>
+                  <Th
+                    fontSize="13px"
+                    textTransform="capitalize"
+                    color="#534D59"
+                    fontWeight="600"
+                  >
                     Patient
                   </Th>
                   <Th
@@ -631,6 +643,7 @@ export default function ScheduleAppointment() {
                       reason={item.reason}
                       appointment={item.appointmentcategory}
                       appointmentType={item.appointmenttype}
+                      category={item.category}
                       patient={`${item.firstName} ${item.lastName}`}
                       mrn={item.MRN}
                       assignedDoctor={`${item.doctorsfirstName} ${item.doctorslastName}`}
@@ -651,6 +664,7 @@ export default function ScheduleAppointment() {
                       reason={item.reason}
                       appointment={item.appointmentcategory}
                       appointmentType={item.appointmenttype}
+                      category={item.appointmentcategory}
                       patient={`${item.firstName} ${item.lastName}`}
                       mrn={item.MRN}
                       clinic={item.clinic}

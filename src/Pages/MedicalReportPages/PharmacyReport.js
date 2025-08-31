@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Text, Flex, HStack, Box, SimpleGrid, Avatar } from "@chakra-ui/react";
 import {
   Table,
@@ -17,7 +17,7 @@ import ShowToast from "../../Components/ToastNotification";
 import { FaCalendarAlt, FaCloudDownloadAlt } from "react-icons/fa";
 import Pagination from "../../Components/Pagination";
 import { configuration } from "../../Utils/Helpers";
-import { GetMedicalReportAPI } from "../../Utils/ApiCalls";
+import { GetMedicalReportAPI, GetAllUsersApi } from "../../Utils/ApiCalls";
 import moment from "moment";
 import AdvancedSearchFilter from "../../Components/AdvancedSearchFilter";
 import { FaFilter } from "react-icons/fa";
@@ -25,18 +25,31 @@ import { FaFilter } from "react-icons/fa";
 export default function PharmacyReport() {
   const [IsLoading, setIsLoading] = useState(false);
   const [Data, setData] = useState([]);
+  const [Users, setUsers] = useState([]);
   const [showAdvancedFilter, setShowAdvancedFilter] = useState(false);
   const [payload, setPayload] = useState({
     startDate: "",
     endDate: "",
     patient: "",
-    drug: "",
-    prescribingDoctor: "",
+    prescription: "",
+    prescribersname: "",
+    dispensestatus: "",
   });
 
   const handlePatientSelect = (patient) => {
     setPayload({ ...payload, patient: patient?._id || "" });
   };
+
+  const getUsers = async () => {
+    try {
+      const result = await GetAllUsersApi();
+      setUsers(result.queryresult.userdetails);
+    } catch (e) {}
+  };
+
+  useEffect(() => {
+    getUsers();
+  }, []);
 
   const advancedFilterFields = [
     {
@@ -46,16 +59,33 @@ export default function PharmacyReport() {
       placeholder: "Enter patient's name",
     },
     {
-      name: "drug",
+      name: "prescription",
       label: "Drug",
       type: "text",
       placeholder: "Enter drug name",
     },
     {
-      name: "prescribingDoctor",
+      name: "prescribersname",
       label: "Prescribing Doctor",
-      type: "text",
-      placeholder: "Enter doctor's name",
+      type: "select",
+      placeholder: "Select doctor",
+      options: Users.filter(
+        (user) => user.role === "Medical Doctor"
+      ).map((user) => ({
+        value: user.firstName + " " + user.lastName,
+        label: user.firstName + " " + user.lastName,
+      })),
+    },
+    {
+      name: "dispensestatus",
+      label: "Status",
+      type: "select",
+      placeholder: "Select status",
+      options: [
+        { value: "pending", label: "Pending" },
+        { value: "reject", label: "Reject" },
+        { value: "awaiting confirmation", label: "Awaiting Confirmation" },
+      ],
     },
   ];
 
@@ -103,10 +133,6 @@ export default function PharmacyReport() {
         "pharmacyreport"
       );
 
-      // Log the API response to see the actual structure
-      console.log("API Response:", result);
-      console.log("Query Result:", result?.data?.queryresult);
-
       setData(result.data.queryresult || []);
       setIsLoading(false);
       setShowToast({
@@ -135,8 +161,9 @@ export default function PharmacyReport() {
       startDate: "",
       endDate: "",
       patient: "",
-      drug: "",
-      prescribingDoctor: "",
+      prescription: "",
+      prescribersname: "",
+      dispensestatus: "",
     });
     setData([]);
     setCurrentPage(1);
@@ -177,6 +204,21 @@ export default function PharmacyReport() {
     XLSX.utils.book_append_sheet(workbook, worksheet, "Pharmacy Report");
     let date = moment(Date.now()).format("DD-MM-YYYY");
     XLSX.writeFile(workbook, `Pharmacy_Report_${date}.xlsx`);
+  };
+
+  const getStatusColor = (status) => {
+    if (!status) return "#667085"; // Default gray for no status
+
+    const statusLower = status.toLowerCase();
+    if (statusLower.includes("pending")) {
+      return "#FFA30C"; // Orange for pending
+    } else if (statusLower.includes("reject")) {
+      return "#D92D20"; // Red for reject
+    } else if (statusLower.includes("awaiting confirmation")) {
+      return "#FFA30C"; // Orange for awaiting confirmation
+    } else {
+      return "#027A48"; // Green for all other statuses
+    }
   };
 
   return (
@@ -347,22 +389,6 @@ export default function PharmacyReport() {
                       color="#534D59"
                       fontWeight="600"
                     >
-                      Dosage
-                    </Th>
-                    <Th
-                      fontSize="13px"
-                      textTransform="capitalize"
-                      color="#534D59"
-                      fontWeight="600"
-                    >
-                      Duration
-                    </Th>
-                    <Th
-                      fontSize="13px"
-                      textTransform="capitalize"
-                      color="#534D59"
-                      fontWeight="600"
-                    >
                       Quantity
                     </Th>
                     <Th
@@ -405,31 +431,24 @@ export default function PharmacyReport() {
                       </Td>
                       <Td fontSize="14px">{item.patientMRN}</Td>
                       <Td fontSize="14px">{item.prescription}</Td>
-                      <Td fontSize="14px">{item.dosage}</Td>
-                      <Td fontSize="14px">{item.duration}</Td>
                       <Td fontSize="14px">{item.qty}</Td>
                       <Td fontSize="14px">{item.prescribersname}</Td>
-                      <Td fontSize="14px">
-                        <Box
-                          display="inline-block"
-                          px="8px"
-                          py="2px"
-                          borderRadius="12px"
-                          bg={
-                            item.servedstatus === "served"
-                              ? "green.100"
-                              : "orange.100"
-                          }
-                          color={
-                            item.servedstatus === "served"
-                              ? "green.800"
-                              : "orange.800"
-                          }
-                          fontSize="12px"
-                          fontWeight="500"
-                        >
-                          {item.servedstatus}
-                        </Box>
+                      <Td>
+                        <HStack color={getStatusColor(item.dispensestatus)}>
+                          <Box
+                            rounded="100%"
+                            w="8px"
+                            h="8px"
+                            bg={getStatusColor(item.dispensestatus)}
+                          ></Box>
+                          <Text
+                            fontWeight="400"
+                            fontSize="13px"
+                            textTransform="capitalize"
+                          >
+                            {item.dispensestatus}
+                          </Text>
+                        </HStack>
                       </Td>
                       <Td fontSize="14px">
                         {moment(item.createdAt).format("DD/MM/YYYY")}

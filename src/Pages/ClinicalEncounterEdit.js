@@ -68,6 +68,7 @@ export default function ClinicalEncounterEdit() {
     const [PlanNotes, setPlanNotes] = useState([]);
     const [DiagnosisICD, setDiagnosisICD] = useState([]);
     const [NurseVitals, setNurseVitals] = useState({});
+    const [Outcomes, setOutcomes] = useState([]);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [ModalState, setModalState] = useState("");
     const [Disabled, setDisabled] = useState(true);
@@ -148,6 +149,7 @@ export default function ClinicalEncounterEdit() {
             const result = await SettingsApi();
             let checker = result?.servicecategory?.filter(item => item.category === "Appointment")
             setSettings(result);
+            setOutcomes(result.encounterplanoutcome);
         } catch (e) {
 
         }
@@ -596,12 +598,9 @@ export default function ClinicalEncounterEdit() {
 
                                 <Select fontSize={Payload.outcome !== "" ? "16px" : "13px"} h="45px" borderWidth="2px" borderColor="#6B7280" id="outcome"
                                     value={Payload.outcome} onChange={handlePayload} placeholder="Select outcome" >
-                                    <option value={`Treated`}>Treated</option>
-                                    <option value={`Admitted`}>Admitted</option>
-                                    <option value={`Referred`}>Referred</option>
-                                    <option value={`Deceased`}>Deceased</option>
-                                    <option value={`Other`}>Other</option>
-
+                                    {Outcomes?.map(item => (
+                                        <option key={item} value={item}>{item}</option>
+                                    ))}
                                 </Select>
 
 

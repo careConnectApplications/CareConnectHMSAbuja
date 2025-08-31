@@ -9,7 +9,7 @@ import {
   Td,
   TableContainer,
 } from "@chakra-ui/react";
-import * as XLSX from 'xlsx/xlsx.mjs';
+import * as XLSX from "xlsx/xlsx.mjs";
 import Button from "../../Components/Button";
 import Input from "../../Components/Input";
 import Preloader from "../../Components/Preloader";
@@ -29,29 +29,107 @@ export default function ImmunizationReport() {
   const [payload, setPayload] = useState({
     startDate: "",
     endDate: "",
-    patient: "",
-    immunizationType: "",
-    attendingNurse: "",
+    firstName: "",
+    lastName: "",
+    MRN: "",
+    vaccinetype: "",
+    staffname: "",
+    schedule: "",
+    vaccination: "",
+    immunizationstatus: "",
+    anynotedadverseeffect: "",
+    manufacturer: "",
+    batchno: "",
   });
 
   const handlePatientSelect = (patient) => {
-    setPayload({ ...payload, patient: patient?._id || "" });
+    setPayload({
+      ...payload,
+      firstName: patient?.firstName || "",
+      lastName: patient?.lastName || "",
+      MRN: patient?.MRN || "",
+    });
   };
 
   const advancedFilterFields = [
-    { name: "patient", label: "Search Patient (First, Last Name)", type: "patient-search", placeholder: "Enter patient's name" },
-    { name: "immunizationType", label: "Immunization Type", type: "text", placeholder: "Enter immunization type" },
-    { name: "attendingNurse", label: "Attending Nurse", type: "text", placeholder: "Enter nurse's name" },
+    {
+      name: "firstName",
+      label: "Patient First Name",
+      type: "text",
+      placeholder: "Enter patient first name",
+    },
+    {
+      name: "lastName",
+      label: "Patient Last Name",
+      type: "text",
+      placeholder: "Enter patient last name",
+    },
+    {
+      name: "MRN",
+      label: "Patient MRN",
+      type: "text",
+      placeholder: "Enter patient MRN",
+    },
+    {
+      name: "vaccinetype",
+      label: "Vaccine Type",
+      type: "text",
+      placeholder: "Enter vaccine type",
+    },
+    {
+      name: "staffname",
+      label: "Attending Staff",
+      type: "text",
+      placeholder: "Enter staff's name",
+    },
+    {
+      name: "schedule",
+      label: "Schedule",
+      type: "text",
+      placeholder: "Enter schedule",
+    },
+    {
+      name: "vaccination",
+      label: "Vaccination",
+      type: "text",
+      placeholder: "Enter vaccination",
+    },
+    {
+      name: "immunizationstatus",
+      label: "Immunization Status",
+      type: "text",
+      placeholder: "Enter status",
+    },
+    {
+      name: "anynotedadverseeffect",
+      label: "Adverse Effect",
+      type: "text",
+      placeholder: "Enter adverse effect",
+    },
+    {
+      name: "manufacturer",
+      label: "Manufacturer",
+      type: "text",
+      placeholder: "Enter manufacturer",
+    },
+    {
+      name: "batchno",
+      label: "Batch No",
+      type: "text",
+      placeholder: "Enter batch number",
+    },
   ];
 
   // Pagination settings
   const [CurrentPage, setCurrentPage] = useState(1);
-  const [PostPerPage, setPostPerPage] = useState(configuration.sizePerPage || 10);
+  const [PostPerPage, setPostPerPage] = useState(
+    configuration.sizePerPage || 10
+  );
 
   const indexOfLastItem = CurrentPage * PostPerPage;
   const indexOfFirstItem = indexOfLastItem - PostPerPage;
   const PaginatedData = Data.slice(indexOfFirstItem, indexOfLastItem);
-  
+
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
@@ -80,8 +158,17 @@ export default function ImmunizationReport() {
       return;
     }
     setIsLoading(true);
+
+    // Create a filtered payload with only non-empty values
+    const filteredPayload = Object.fromEntries(
+      Object.entries(payload).filter(([_, value]) => value !== "")
+    );
+
     try {
-      const result = await GetMedicalReportAPI({ filters: payload }, "immunizationreport");
+      const result = await GetMedicalReportAPI(
+        { filters: filteredPayload },
+        "immunizationreport"
+      );
       setData(result.data.queryresult);
       setIsLoading(false);
       setShowToast({
@@ -109,9 +196,17 @@ export default function ImmunizationReport() {
     setPayload({
       startDate: "",
       endDate: "",
-      patient: "",
-      immunizationType: "",
-      attendingNurse: "",
+      firstName: "",
+      lastName: "",
+      MRN: "",
+      vaccinetype: "",
+      staffname: "",
+      schedule: "",
+      vaccination: "",
+      immunizationstatus: "",
+      anynotedadverseeffect: "",
+      manufacturer: "",
+      batchno: "",
     });
     setData([]);
     setCurrentPage(1);
@@ -135,6 +230,25 @@ export default function ImmunizationReport() {
     XLSX.utils.book_append_sheet(workbook, worksheet, "Immunization Report");
     let date = moment(Date.now()).format("DD-MM-YYYY");
     XLSX.writeFile(workbook, `Immunization_Report_${date}.xlsx`);
+  };
+
+  // Function to determine status color based on specific status values
+  const getStatusColor = (status) => {
+    if (!status) return "#667085";
+
+    const statusLower = status.toLowerCase();
+    if (statusLower.includes("completed")) {
+      return "#027A48"; // Green for completed
+    } else if (statusLower.includes("pending")) {
+      return "#FFA30C"; // Orange for pending
+    } else if (
+      statusLower.includes("cancelled") ||
+      statusLower.includes("rejected")
+    ) {
+      return "#F04438"; // Red for cancelled/rejected
+    } else {
+      return "#667085"; // Gray for any other status
+    }
   };
 
   return (
@@ -210,7 +324,6 @@ export default function ImmunizationReport() {
             Clear
           </Button>
         </Flex>
-
       </Box>
 
       {/* Data Display Section */}
@@ -276,32 +389,176 @@ export default function ImmunizationReport() {
               <Table variant="striped">
                 <Thead bg="#fff">
                   <Tr>
-                    <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
+                      S/N
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
                       Patient Name
                     </Th>
-                    <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
-                      Immunization
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
+                      MRN
                     </Th>
-                    <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
-                      Date
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
+                      Age
                     </Th>
-                    <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
+                      Gender
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
+                      Vaccination
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
+                      Schedule
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
+                      Dose
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
+                      Vaccine Type
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
+                      Batch No
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
+                      Manufacturer
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
+                      Adverse Effect
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
+                      Status
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
                       Attending Nurse
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
+                      Date
                     </Th>
                   </Tr>
                 </Thead>
                 <Tbody>
                   {PaginatedData.map((item, index) => (
                     <Tr key={index}>
+                      <Td fontSize="14px">{indexOfFirstItem + index + 1}</Td>
                       <Td fontSize="14px">
                         <HStack>
-                          <Avatar name={`${item.patientFirstName} ${item.patientLastName}`} size="sm" />
-                          <Text>{`${item.patientFirstName} ${item.patientLastName}`}</Text>
+                          <Avatar
+                            name={`${item.firstName} ${item.lastName}`}
+                            size="sm"
+                          />
+                          <Text>{`${item.firstName} ${item.lastName}`}</Text>
                         </HStack>
                       </Td>
-                      <Td fontSize="14px">{item.immunization}</Td>
-                      <Td fontSize="14px">{moment(item.date).format("DD/MM/YYYY")}</Td>
-                      <Td fontSize="14px">{item.attendingNurse}</Td>
+                      <Td fontSize="14px">{item.MRN}</Td>
+                      <Td fontSize="14px">{item.age}</Td>
+                      <Td fontSize="14px">{item.gender}</Td>
+                      <Td fontSize="14px">{item.vaccination}</Td>
+                      <Td fontSize="14px">{item.schedule}</Td>
+                      <Td fontSize="14px">{item.dose}</Td>
+                      <Td fontSize="14px">{item.vaccinetype}</Td>
+                      <Td fontSize="14px">{item.batchno}</Td>
+                      <Td fontSize="14px">{item.manufacturer}</Td>
+                      <Td fontSize="14px">
+                        {item.anynotedadverseeffect === "Yes"
+                          ? `${item.adverseeffectseverity || "Adverse Effect"}`
+                          : "None"}
+                      </Td>
+                      <Td>
+                        <HStack color={getStatusColor(item.immunizationstatus)}>
+                          <Box
+                            rounded="100%"
+                            w="8px"
+                            h="8px"
+                            bg={getStatusColor(item.immunizationstatus)}
+                          ></Box>
+                          <Text
+                            fontWeight="400"
+                            fontSize="13px"
+                            textTransform="capitalize"
+                          >
+                            {item.immunizationstatus}
+                          </Text>
+                        </HStack>
+                      </Td>
+                      <Td fontSize="14px">{item.staffname}</Td>
+                      <Td fontSize="14px">
+                        {moment(item.createdAt).format("DD/MM/YYYY")}
+                      </Td>
                     </Tr>
                   ))}
                 </Tbody>
