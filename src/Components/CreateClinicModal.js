@@ -26,9 +26,11 @@ export default function CreateClinicModal({ isOpen, onClose, type, activateNotif
     const [Payload, setPayload] = useState({
         clinic: "",
         type: "",
+        category: "",
     });
     const [UpdatedPayload, setUpdatedPayload] = useState({
-        clinic: ""
+        clinic: "",
+        category: "",
     });
 
     const handleUpdatedPayload = (e) => {
@@ -60,7 +62,8 @@ export default function CreateClinicModal({ isOpen, onClose, type, activateNotif
                 setLoading(false)
                 setPayload({
                     clinic: "",
-                    type: ""
+                    type: "",
+                    category: "",
                 })
 
                 activateNotifications("Clinic Added Successfully", "success")
@@ -102,7 +105,8 @@ export default function CreateClinicModal({ isOpen, onClose, type, activateNotif
 
         getSettings();
         setUpdatedPayload({
-            clinic: oldPayload.clinic
+            clinic: oldPayload.clinic,
+            category: oldPayload.category
 
         })
     }, [isOpen]);
@@ -137,6 +141,22 @@ export default function CreateClinicModal({ isOpen, onClose, type, activateNotif
 
 
                                     </Select>
+                                     <Select
+                                        id="category"
+                                        value={Payload.category}
+                                        onChange={handlePayload}
+                                        placeholder="Select Category"
+                                        fontSize={Payload.category !== "" ? "16px" : "13px"}
+                                    >
+                                        {
+                                            Settings?.cliniccategory?.map((item, i) => (
+
+                                                <option value={item}>{item}</option>
+                                            ))
+                                        }
+
+
+                                    </Select>
 
                                     <Input val={Payload.clinic !== "" ? true : false} leftIcon={<FaClinicMedical />} onChange={handlePayload} id="clinic" value={Payload.clinic} label="Clinic/Department/Pharmacy" />
 
@@ -156,6 +176,22 @@ export default function CreateClinicModal({ isOpen, onClose, type, activateNotif
                                     >
                                         {
                                             Settings?.clinictype?.map((item, i) => (
+
+                                                <option value={item}>{item}</option>
+                                            ))
+                                        }
+
+
+                                    </Select>
+                                    <Select
+                                        id="category"
+                                        value={UpdatedPayload.category}
+                                        onChange={handleUpdatedPayload}
+                                        placeholder="Select Category"
+                                        fontSize={UpdatedPayload.category !== "" ? "16px" : "13px"}
+                                    >
+                                        {
+                                            Settings?.cliniccategory?.map((item, i) => (
 
                                                 <option value={item}>{item}</option>
                                             ))
