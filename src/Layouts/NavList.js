@@ -292,12 +292,19 @@ export const NavList = (location) => {
       active: isActive(location, "#"),
       display: isClinicalReport(),
       children: [
-        // {
-        //   name: "report",
-        //   link: "/dashboard/report-analytics/report",
-        //   active: isActive(location, "/dashboard/report-analytics/report"),
-        //   display: isClinicalReport(),
-        // },
+        {
+          name: "report",
+          link: "/dashboard/report-analytics/report",
+          active: isActive(location, "/dashboard/report-analytics/report"),
+          display: isClinicalReport(),
+        },
+
+        {
+          name: "summary",
+          link: "/dashboard/report-analytics/summary",
+          active: isActive(location, "/dashboard/report-analytics/summary"),
+          display: isClinicalReport(),
+        },
 
         {
           name: "Medical Report",
@@ -325,12 +332,7 @@ export const NavList = (location) => {
           ),
           display: isClinicalReport(),
         },
-        {
-          name: "summary",
-          link: "/dashboard/report-analytics/summary",
-          active: isActive(location, "/dashboard/report-analytics/summary"),
-          display: isClinicalReport(),
-        },
+
         // {
         //   name: "Maternity Report",
         //   link: "/dashboard/report-analytics/maternity-report",

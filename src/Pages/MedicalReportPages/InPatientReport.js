@@ -39,8 +39,6 @@ export default function InPatientReport() {
     ageInMonths: "",
     ageInYears: "",
     wardname: "",
-    HMOName: "",
-    admittospecialization: "",
   });
 
   const handlePatientSelect = (patient) => {
@@ -87,8 +85,7 @@ export default function InPatientReport() {
         label: ward.wardname,
       })),
     },
-    { name: "HMOName", label: "HMO Name", type: "text", placeholder: "Enter HMO name" },
-    { name: "admittospecialization", label: "Specialization", type: "text", placeholder: "Enter specialization" },
+
   ];
 
   // Pagination settings
@@ -128,7 +125,22 @@ export default function InPatientReport() {
     }
     setIsLoading(true);
     try {
-      const result = await GetMedicalReportAPI({ filters: payload }, "inpatient");
+      const result = await GetMedicalReportAPI({ filters: payload }, "inpatient")
+      setPayload({
+        startDate: payload.startDate,
+        endDate: payload.endDate,
+        doctorname: "",
+        status: "",
+        gender: "",
+        minAge: "",
+        maxAge: "",
+        ageInDays: "",
+        ageInMonths: "",
+        ageInYears: "",
+        wardName: "",
+        patient: "",
+      });
+
       console.log("medical report", result);
       setData(result.data.queryresult);
 
@@ -164,7 +176,7 @@ export default function InPatientReport() {
     setPayload({
       startDate: "",
       endDate: "",
-      patient: "",
+      patientName: "",
       doctorname: "",
       status: "",
       gender: "",
@@ -173,9 +185,8 @@ export default function InPatientReport() {
       ageInDays: "",
       ageInMonths: "",
       ageInYears: "",
-      wardname: "",
-      HMOName: "",
-      admittospecialization: "",
+      wardName: "",
+      patient: "",
     });
     setData([]);
     setCurrentPage(1);
