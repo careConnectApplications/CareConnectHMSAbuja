@@ -43,6 +43,7 @@ export default function Report() {
         textColor,
         borderColor,
         titleTextColor,
+        selectTitleTextColor,
         subTitleTextColor,
         chartFillColor,
         primaryColor,
@@ -272,7 +273,7 @@ export default function Report() {
 
                 <SimpleGrid mt="12px" columns={{ base: 2, md: 4 }} spacing={2}>
                     <Box>
-                        <Text color={titleTextColor} fontWeight="500" fontSize="14px">Report Category</Text>
+                        <Text color={selectTitleTextColor} fontWeight="500" fontSize="14px">Report Category</Text>
                         <Select fontSize={QueryType !== "" ? "16px" : "13px"}
                             h="45px"
                             borderWidth="2px"
@@ -301,7 +302,7 @@ export default function Report() {
                         </Select>
                     </Box>
                     <Box>
-                        <Text color={titleTextColor} fontWeight="500" fontSize="14px">Department/Unit/Ward</Text>
+                        <Text color={selectTitleTextColor} fontWeight="500" fontSize="14px">Department/Unit/Ward</Text>
                         <Select fontSize={QueryGroup !== "" ? "16px" : "13px"}
                             h="45px"
                             borderWidth="2px"
@@ -329,7 +330,7 @@ export default function Report() {
                         </Select>
                     </Box>
                     <Box>
-                        <Text color={titleTextColor} fontWeight="500" fontSize="14px">Start Date</Text>
+                        <Text color={selectTitleTextColor} fontWeight="500" fontSize="14px">Start Date</Text>
                         <Input type="date" onChange={(e) =>{
                          setQueryStartDate(e.target.value)
                          setData([])
@@ -338,7 +339,7 @@ export default function Report() {
 
                     </Box>
                     <Box>
-                        <Text color={titleTextColor} fontWeight="500" fontSize="14px">End Date</Text>
+                        <Text color={selectTitleTextColor} fontWeight="500" fontSize="14px">End Date</Text>
                         <Input type="date" onChange={(e) => {
                             setQueryEndDate(e.target.value)
                             setData([])
@@ -448,13 +449,13 @@ export default function Report() {
                                     <Menu isLazy>
                                         <MenuButton as={Box}>
                                             <HStack
-                                                border="1px solid #EA5937"
+                                                border={`1px solid ${NavListBg}`}
                                                 rounded="7px"
                                                 cursor="pointer"
                                                 py="11.64px"
                                                 px="16.98px"
-                                                bg="#f8ddd1"
-                                                color="blue.blue500"
+                                                bg={NavListBg}
+                                                color={secondaryColor}
                                                 fontWeight="500"
                                                 fontSize="14px"
                                             >
@@ -462,16 +463,16 @@ export default function Report() {
                                                 <IoFilter />
                                             </HStack>
                                         </MenuButton>
-                                        <MenuList>
+                                        <MenuList bg={bgColor} border={`1px solid ${borderColor}`}>
                                             <MenuItem
                                                 onClick={() => filterBy("name")}
                                                 textTransform="capitalize"
                                                 fontWeight={"500"}
-                                                color="#2F2F2F"
+                                                color={textColor}
                                                 _hover={{
-                                                    color: "#fff",
+                                                    color: bgColor,
                                                     fontWeight: "400",
-                                                    bg: "blue.blue500",
+                                                    bg: NavListBg,
                                                 }}
                                             >
                                                 <HStack fontSize="14px">
@@ -482,11 +483,11 @@ export default function Report() {
                                                 onClick={() => filterBy("email")}
                                                 textTransform="capitalize"
                                                 fontWeight={"500"}
-                                                color="#2F2F2F"
+                                                color={textColor}
                                                 _hover={{
-                                                    color: "#fff",
+                                                    color: bgColor,
                                                     fontWeight: "400",
-                                                    bg: "blue.blue500",
+                                                    bg: NavListBg,
                                                 }}
                                             >
                                                 <HStack fontSize="14px">
@@ -497,11 +498,11 @@ export default function Report() {
                                                 onClick={() => filterBy("phoneNumber")}
                                                 textTransform="capitalize"
                                                 fontWeight={"500"}
-                                                color="#2F2F2F"
+                                                color={textColor}
                                                 _hover={{
-                                                    color: "#fff",
+                                                    color: bgColor,
                                                     fontWeight: "400",
-                                                    bg: "blue.blue500",
+                                                    bg: NavListBg,
                                                 }}
                                             >
                                                 <HStack fontSize="14px">
@@ -512,11 +513,11 @@ export default function Report() {
                                                 onClick={() => filterBy("role")}
                                                 textTransform="capitalize"
                                                 fontWeight={"500"}
-                                                color="#2F2F2F"
+                                                color={textColor}
                                                 _hover={{
-                                                    color: "#fff",
+                                                    color: bgColor,
                                                     fontWeight: "400",
-                                                    bg: "blue.blue500",
+                                                    bg: NavListBg,
                                                 }}
                                             >
                                                 <HStack fontSize="14px">
@@ -527,11 +528,11 @@ export default function Report() {
                                                 onClick={() => setByDate(true)}
                                                 textTransform="capitalize"
                                                 fontWeight={"500"}
-                                                color="#2F2F2F"
+                                                color={textColor}
                                                 _hover={{
-                                                    color: "#fff",
+                                                    color: bgColor,
                                                     fontWeight: "400",
-                                                    bg: "blue.blue500",
+                                                    bg: NavListBg,
                                                 }}
                                             >
                                                 <HStack fontSize="14px">
@@ -548,11 +549,11 @@ export default function Report() {
                                                 }}
                                                 textTransform="capitalize"
                                                 fontWeight={"500"}
-                                                color="#2F2F2F"
+                                                color={textColor}
                                                 _hover={{
-                                                    color: "#fff",
+                                                    color: bgColor,
                                                     fontWeight: "400",
-                                                    bg: "blue.blue500",
+                                                    bg: NavListBg,
                                                 }}
                                             >
                                                 <HStack fontSize="14px">

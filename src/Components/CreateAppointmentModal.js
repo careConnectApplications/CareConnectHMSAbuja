@@ -87,7 +87,7 @@ export default function CreateAppointmentModal({
           const settingsData = await SettingsApi();
 
           console.log("Fetched settings:", settingsData);
-          
+
           setSettings(settingsData);
           if (type === "edit" && initialData) {
             setFormData({
@@ -190,7 +190,7 @@ export default function CreateAppointmentModal({
   const handleSearchInputChange = (e) => {
     const value = e.target.value;
     setSearchMRN(value);
-    
+
     // Clear selected patient if user modifies the search significantly
     if (selectedPatientInfo && !value.includes(selectedPatientInfo.mrn)) {
       setSelectedPatientInfo(null);
@@ -333,7 +333,7 @@ export default function CreateAppointmentModal({
                   onChange={handleSearchInputChange}
                   leftIcon={<FiSearch size={16} color="blue.500" />}
                 />
-                
+
                 {/* Selected Patient Display */}
                 {selectedPatientInfo && (
                   <Box mt={2} p={3} bg="blue.50" borderRadius="md" border="1px solid" borderColor="blue.200">
@@ -425,21 +425,7 @@ export default function CreateAppointmentModal({
                   placeholder="Reason for appointment"
                 />
               </FormControl>
-              <FormControl>
-                <FormLabel>Clinic  Category</FormLabel>
-                <Select
-                  name="cliniccategory"
-                  value={formData.cliniccategory}
-                  onChange={handleInputChange}
-                  placeholder="Select Appointment Category"
-                >
-                  {settings?.cliniccategory?.map((item, index) => (
-                      <option key={index} value={item}>
-                        {item}
-                      </option>
-                    ))}
-                </Select>
-              </FormControl>
+
               <FormControl>
                 <FormLabel>Appointment Category</FormLabel>
                 <Select
@@ -549,13 +535,20 @@ export default function CreateAppointmentModal({
                   <SimpleGrid columns={1} spacing={4} mt={4}>
                     <FormControl>
                       <FormLabel>Accident Type</FormLabel>
-                      <Input
+                      <Select
                         name="accidentType"
                         value={formData.accidentType}
                         onChange={handleInputChange}
-                        placeholder="Enter Accident Type"
-                      />
+                        placeholder="Select Accident Type"
+                      >
+                        {settings?.accidentType?.map((item, index) => (
+                          <option key={index} value={item}>
+                            {item}
+                          </option>
+                        ))}
+                      </Select>
                     </FormControl>
+
                     <FormControl>
                       <FormLabel>Date of Accident</FormLabel>
                       <Input

@@ -16,6 +16,7 @@ export default function MyProfileSettings() {
         textColor,
         borderColor,
         titleTextColor,
+        selectTitleTextColor,
         subTitleTextColor,
         primaryColor,
     } = useColors();
@@ -133,10 +134,10 @@ export default function MyProfileSettings() {
                 <hr className="remove" />
                 <HStack justifyContent="space-between" w="100%">
                     <Box w="30%">
-                        <Text fontSize={"14px"} fontWeight={"500"} lineHeight={"22px"} color={titleTextColor}>Clinic</Text>
+                        <Text fontSize={"14px"} fontWeight={"500"} lineHeight={"22px"} color={selectTitleTextColor}>Clinic</Text>
                     </Box>
                     <Box w="70%">
-                        <Select h="45px" borderWidth="2px" isDisabled={Editable === false ? true : false} fontSize={Payload.clinic !== "" ? "16px" : "13px"} borderColor={borderColor} id="clinic" value={Payload.clinic} onChange={handlePayload} placeholder="Select Clinic" color={textColor}>
+                        <Select h="45px" borderWidth="2px" isDisabled={Editable === false ? true : false} fontSize={Payload.clinic !== "" ? "16px" : "13px"} borderColor={borderColor} id="clinic" value={Payload.clinic} onChange={handlePayload} placeholder="Select Clinic" color={selectTitleTextColor}>
                             {
                                 Settings?.clinics?.map((item, i) => (
                                     <option value={`${item.clinic}`} key={i}>{item.clinic}</option>

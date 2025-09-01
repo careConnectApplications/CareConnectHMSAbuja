@@ -53,8 +53,20 @@ import PhysiotherapyAssessments from "./PhysiotherapyAssessments";
 import CustomBilling from "./CustomBilling";
 import SingleHistopathology from "./SingleHistopathology";
 import SingleHistopathologyReport from "./SingleHistopathologyReport";
+import { useColors } from "../Utils/colors";
 
 export default function DoctorScheduleDetails() {
+  const {
+    bgColor,
+    textColor,
+    borderColor,
+    titleTextColor,
+    subTitleTextColor,
+    chartFillColor,
+    primaryColor,
+    secondaryColor,
+    NavListBg,
+  } = useColors();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { id } = useParams();
   const [audio] = React.useState(new Audio("/beep.mp3"));
@@ -136,157 +148,181 @@ export default function DoctorScheduleDetails() {
       </Text>
 
       <Tabs mt="12px">
-        <TabList color="#101828" pb="10px" flexWrap={"wrap"}>
+        <TabList color={textColor} pb="10px" flexWrap={"wrap"}>
           {/* <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Encounter{" "}
           </Tab> */}
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Admission
           </Tab>
+
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             ANC
           </Tab>
+
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Clinical Encounter{" "}
           </Tab>
+
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Custom Billing
           </Tab>
+
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Delivery Note{" "}
           </Tab>
+
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Dental Encounter
           </Tab>
+
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Family Planning{" "}
           </Tab>
+
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Histopathology{" "}
           </Tab>
+
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Histopathology Result{" "}
           </Tab>
+
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Immunization{" "}
           </Tab>
+
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Lab Report{" "}
           </Tab>
+
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Lab Test{" "}
           </Tab>
+
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Medication{" "}
           </Tab>
+
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Nutrition{" "}
           </Tab>
+
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Partograph Chart{" "}
           </Tab>
+
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Partograph Entries
           </Tab>
+
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Pharmacy{" "}
           </Tab>
+
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Physiotherapy
           </Tab>
+
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Procedure{" "}
           </Tab>
+
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Psychiatric
           </Tab>
+
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Radiology{" "}
           </Tab>
+
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Referral{" "}
           </Tab>
+
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Theater{" "}
           </Tab>
+
           <Tab
             _focus={{ outline: "none" }}
-            _selected={{ color: "blue.blue500", fontWeight: "700" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Vitals{" "}
           </Tab>
+
         </TabList>
         {/* <TabIndicator mt='-1.5px' height='2px' bg='blue.blue500' borderRadius='1px' /> */}
         <TabPanels>

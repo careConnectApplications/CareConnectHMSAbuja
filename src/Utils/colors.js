@@ -10,6 +10,8 @@ export const useColors = () => {
   const cardBgColor = theme === 'light' ? 'gray.50' : 'gray.800';
   const NavbarText = theme === 'light' ? 'blue.blue500' : "blue.blue400";
   const chartFillColor = theme === 'light' ? '#eee' : '#6e299aff';
+  const chartFillColorBar = theme === 'light' ? '#eee' : '#301740ff';
+  const chartFillXColorBar = theme === 'light' ? '#e1e1e1ff' : '#381b15ff';
   const chartFillXColor = theme === 'light' ? '#e1e1e1ff' : '#b44d36ff';
   const primaryColor = theme === 'light' ? 'blue.blue500' : "blue.blue400";
   const secondaryColor = '#eeeeeeff';
@@ -21,6 +23,7 @@ export const useColors = () => {
   const tableColor = theme === 'light' ? "#667085" : "#6e299aff";
   const tableColorBold = theme === 'light' ? '#101828' : "blue.blue400";
   const titleTextColor = theme === 'light' ? '#1F2937' : '#eeeeeeff';
+  const selectTitleTextColor = theme === 'light' ? '#242424' : 'blue.blue400';
   const subTitleTextColor = theme === 'light' ? '#686C75' : 'white';
   const NavListColor = theme === 'light' ? "#333" : 'white';
   const NavListBg = theme === 'light' ? "blue.blue500" : "blue.blue400";
@@ -30,11 +33,14 @@ export const useColors = () => {
     textColor,
     borderColor,
     titleTextColor,
+    selectTitleTextColor,
     subTitleTextColor,
     chartFillColor,
     tableColor,
     tableColorBold,
     chartFillXColor,
+    chartFillXColorBar,
+    chartFillColorBar,
     cardBgColor,
     primaryColor,
     secondaryColor,
