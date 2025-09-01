@@ -21,6 +21,7 @@ export const useColors = () => {
   const tableColor = theme === 'light' ? "#667085" : "#6e299aff";
   const tableColorBold = theme === 'light' ? '#101828' : "blue.blue400";
   const titleTextColor = theme === 'light' ? '#1F2937' : '#eeeeeeff';
+  const selectTitleTextColor = theme === 'light' ? '#242424' : 'blue.blue400';
   const subTitleTextColor = theme === 'light' ? '#686C75' : 'white';
   const NavListColor = theme === 'light' ? "#333" : 'white';
   const NavListBg = theme === 'light' ? "blue.blue500" : "blue.blue400";
@@ -30,6 +31,7 @@ export const useColors = () => {
     textColor,
     borderColor,
     titleTextColor,
+    selectTitleTextColor,
     subTitleTextColor,
     chartFillColor,
     tableColor,

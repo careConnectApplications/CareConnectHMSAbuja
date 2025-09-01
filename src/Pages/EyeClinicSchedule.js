@@ -29,6 +29,7 @@ export default function EyeClinicSchedule() {
     textColor,
     borderColor,
     titleTextColor,
+    selectTitleTextColor,
     subTitleTextColor,
     chartFillColor,
     primaryColor,
@@ -314,7 +315,7 @@ export default function EyeClinicSchedule() {
           onChange={(e) => setClinic(e.target.value)}
           placeholder="Select Clinic"
           fontSize={Clinic !== "" ? "16px" : "13px"}
-          color={textColor}
+          color={selectTitleTextColor}
         >
           {
             ClinicData?.map((item, i) => (

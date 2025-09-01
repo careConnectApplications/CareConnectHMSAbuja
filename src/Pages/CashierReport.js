@@ -38,6 +38,7 @@ export default function CashierReport() {
     textColor,
     borderColor,
     titleTextColor,
+    selectTitleTextColor,
     subTitleTextColor,
     chartFillColor,
     primaryColor,
@@ -196,7 +197,7 @@ export default function CashierReport() {
       <Box bg={bgColor} border={`1px solid ${borderColor}`} mt="12px" py="17px" px={["18px", "18px"]} rounded="10px">
         <SimpleGrid mt="12px" columns={{ base: 2, md: 3 }} spacing={2}>
           <Box>
-            <Text color={titleTextColor} fontWeight="500" fontSize="14px">
+            <Text color={selectTitleTextColor} fontWeight="500" fontSize="14px">
               Cashier Email
             </Text>
             <Select
@@ -222,7 +223,7 @@ export default function CashierReport() {
             </Select>
           </Box>
           <Box>
-            <Text color={titleTextColor} fontWeight="500" fontSize="14px">
+            <Text color={selectTitleTextColor} fontWeight="500" fontSize="14px">
               Start Date
             </Text>
             <Input
@@ -237,7 +238,7 @@ export default function CashierReport() {
             />
           </Box>
           <Box>
-            <Text color={titleTextColor} fontWeight="500" fontSize="14px">
+            <Text color={selectTitleTextColor} fontWeight="500" fontSize="14px">
               End Date
             </Text>
             <Input

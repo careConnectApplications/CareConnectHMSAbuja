@@ -31,6 +31,7 @@ export default function DoctoerSchedule() {
     textColor,
     borderColor,
     titleTextColor,
+    selectTitleTextColor,
     subTitleTextColor,
     chartFillColor,
     primaryColor,
@@ -233,7 +234,7 @@ export default function DoctoerSchedule() {
           onChange={(e) => handleFilterChange("clinic", e.target.value)}
           placeholder="Select Clinic"
           fontSize={filters.clinic ? "16px" : "13px"}
-          color={titleTextColor}
+          color={selectTitleTextColor}
         >
           {
             ClinicData?.map((item, i) => (

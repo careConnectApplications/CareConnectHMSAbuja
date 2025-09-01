@@ -53,6 +53,7 @@ export default function ScheduleProcedure() {
     textColor,
     borderColor,
     titleTextColor,
+    selectTitleTextColor,
     subTitleTextColor,
     chartFillColor,
     primaryColor,
@@ -380,6 +381,7 @@ export default function ScheduleProcedure() {
           onChange={(e) => setClinic(e.target.value)}
           placeholder="Select Clinic"
           fontSize={Clinic !== "" ? "16px" : "13px"}
+          color={selectTitleTextColor}
         >
           {ClinicData?.map((item, i) => (
             <option value={item.clinic} key={i}>

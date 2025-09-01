@@ -40,6 +40,7 @@ export default function ManageDailyWardReports() {
     textColor,
     borderColor,
     titleTextColor,
+    selectTitleTextColor,
     subTitleTextColor,
     chartFillColor,
     primaryColor,
@@ -179,7 +180,7 @@ export default function ManageDailyWardReports() {
           fontSize={selectedWard ? "16px" : "13px"}
           borderWidth="2px"
           borderColor={borderColor}
-          color={titleTextColor}
+          color={selectTitleTextColor}
         >
           {wards.map((w) => (
             <option key={w._id} value={w._id}>

@@ -45,6 +45,7 @@ const InPatientAdmission = () => {
     textColor,
     borderColor,
     titleTextColor,
+    selectTitleTextColor,
     subTitleTextColor,
     chartFillColor,
     primaryColor,
@@ -231,7 +232,7 @@ const InPatientAdmission = () => {
           onChange={(e) => setSelectedWard(e.target.value)}
           placeholder="Select Ward"
           fontSize={selectedWard !== "" ? "16px" : "13px"}
-          color={titleTextColor}
+          color={selectTitleTextColor}
         >
           {wards.map((ward) => (
             <option key={ward._id} value={ward._id}>

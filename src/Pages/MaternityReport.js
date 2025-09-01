@@ -32,6 +32,7 @@ const MaternityReport = () => {
         textColor,
         borderColor,
         titleTextColor,
+        selectTitleTextColor,
         subTitleTextColor,
         primaryColor,
         secondaryColor,
@@ -162,7 +163,7 @@ const MaternityReport = () => {
                 {/* Filters Section */}
                 <Grid templateColumns="repeat(3, 1fr)" gap={4} mb={6}>
                     <GridItem>
-                        <Text fontSize="sm" mb={2} fontWeight="medium" color={textColor}>
+                        <Text fontSize="sm" mb={2} fontWeight="medium" color={selectTitleTextColor}>
                             Report Type
                         </Text>
                         <Select
@@ -184,7 +185,7 @@ const MaternityReport = () => {
                     </GridItem>
 
                     <GridItem>
-                        <Text fontSize="sm" mb={2} fontWeight="medium" color={textColor}>
+                        <Text fontSize="sm" mb={2} fontWeight="medium" color={selectTitleTextColor}>
                             Delivery Type
                         </Text>
                         <Select
@@ -204,7 +205,7 @@ const MaternityReport = () => {
                     </GridItem>
 
                     <GridItem>
-                        <Text fontSize="sm" mb={2} fontWeight="medium" color={textColor}>
+                        <Text fontSize="sm" mb={2} fontWeight="medium" color={selectTitleTextColor}>
                             Outcome
                         </Text>
                         <Select
@@ -224,7 +225,7 @@ const MaternityReport = () => {
                     </GridItem>
 
                     <GridItem>
-                        <Text fontSize="sm" mb={2} fontWeight="medium" color={textColor}>
+                        <Text fontSize="sm" mb={2} fontWeight="medium" color={selectTitleTextColor}>
                             Date From
                         </Text>
                         <Input
@@ -238,7 +239,7 @@ const MaternityReport = () => {
                     </GridItem>
 
                     <GridItem>
-                        <Text fontSize="sm" mb={2} fontWeight="medium" color={textColor}>
+                        <Text fontSize="sm" mb={2} fontWeight="medium" color={selectTitleTextColor}>
                             Date To
                         </Text>
                         <Input
@@ -252,7 +253,7 @@ const MaternityReport = () => {
                     </GridItem>
 
                     <GridItem>
-                        <Text fontSize="sm" mb={2} fontWeight="medium" color={textColor}>
+                        <Text fontSize="sm" mb={2} fontWeight="medium" color={selectTitleTextColor}>
                             Search
                         </Text>
                         <Input
