@@ -28,8 +28,8 @@ export default function Dashboard() {
     borderColor,
     titleTextColor,
     subTitleTextColor,
-    chartFillColor,
-    chartFillXColor,
+    chartFillColorBar,
+    chartFillXColorBar,
     cardBgColor,
     primaryColor,
     secondaryColor,
@@ -163,8 +163,8 @@ export default function Dashboard() {
           <YAxis />
           <Tooltip  color="red"/>
           <Legend color="red"/>
-          <Bar dataKey="OutPatients" fill={theme.colors.blue.blue400} background={{ fill: chartFillColor}} />
-          <Bar dataKey="InPatients" fill={theme.colors.blue.blue500} background={{ fill: chartFillXColor }}/>
+          <Bar dataKey="OutPatients" fill={theme.colors.blue.blue400} background={{ fill: chartFillColorBar}} />
+          <Bar dataKey="InPatients" fill={theme.colors.blue.blue500} background={{ fill: chartFillXColorBar }}/>
         </BarChart>
         </Box>
 

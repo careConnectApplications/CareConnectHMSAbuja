@@ -10,6 +10,8 @@ export const useColors = () => {
   const cardBgColor = theme === 'light' ? 'gray.50' : 'gray.800';
   const NavbarText = theme === 'light' ? 'blue.blue500' : "blue.blue400";
   const chartFillColor = theme === 'light' ? '#eee' : '#6e299aff';
+  const chartFillColorBar = theme === 'light' ? '#eee' : '#301740ff';
+  const chartFillXColorBar = theme === 'light' ? '#e1e1e1ff' : '#381b15ff';
   const chartFillXColor = theme === 'light' ? '#e1e1e1ff' : '#b44d36ff';
   const primaryColor = theme === 'light' ? 'blue.blue500' : "blue.blue400";
   const secondaryColor = '#eeeeeeff';
@@ -37,6 +39,8 @@ export const useColors = () => {
     tableColor,
     tableColorBold,
     chartFillXColor,
+    chartFillXColorBar,
+    chartFillColorBar,
     cardBgColor,
     primaryColor,
     secondaryColor,
