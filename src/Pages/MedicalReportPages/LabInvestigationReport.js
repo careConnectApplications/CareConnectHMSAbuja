@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, Flex, HStack, Box, SimpleGrid, Avatar } from "@chakra-ui/react";
+import { Text, Flex, HStack, Box, SimpleGrid } from "@chakra-ui/react";
 import {
   Table,
   Thead,
@@ -22,82 +22,56 @@ import moment from "moment";
 import AdvancedSearchFilter from "../../Components/AdvancedSearchFilter";
 import { FaFilter } from "react-icons/fa";
 
-export default function ImmunizationReport() {
+export default function LabInvestigationReport() {
   const [IsLoading, setIsLoading] = useState(false);
   const [Data, setData] = useState([]);
   const [showAdvancedFilter, setShowAdvancedFilter] = useState(false);
   const [payload, setPayload] = useState({
     startDate: "",
     endDate: "",
-    patient: "",
-    vaccinetype: "",
+    testname: "",
     staffname: "",
-    schedule: "",
-    vaccination: "",
-    immunizationstatus: "",
-    anynotedadverseeffect: "",
-    manufacturer: "",
-    batchno: "",
+    status: "",
+    testid: "",
+    appointmentid: "",
   });
-
-  const handlePatientSelect = (patient) => {
-    setPayload({ ...payload, patient: patient?._id || "" });
-  };
 
   const advancedFilterFields = [
     {
-      name: "patient",
-      label: "Search Patient (First, Last Name)",
-      type: "patient-search",
-      placeholder: "Enter patient name",
+      name: "testname",
+      label: "Test Name",
+      type: "text",
+      placeholder: "Enter test name",
     },
     {
-      name: "vaccinetype",
-      label: "Vaccine Type",
+      name: "testid",
+      label: "Test ID",
       type: "text",
-      placeholder: "Enter vaccine type",
+      placeholder: "Enter test ID",
+    },
+    {
+      name: "appointmentid",
+      label: "Appointment ID",
+      type: "text",
+      placeholder: "Enter appointment ID",
     },
     {
       name: "staffname",
-      label: "Attending Staff",
+      label: "Staff Name",
       type: "text",
-      placeholder: "Enter staff's name",
+      placeholder: "Enter staff name",
     },
     {
-      name: "schedule",
-      label: "Schedule",
-      type: "text",
-      placeholder: "Enter schedule",
-    },
-    {
-      name: "vaccination",
-      label: "Vaccination",
-      type: "text",
-      placeholder: "Enter vaccination",
-    },
-    {
-      name: "immunizationstatus",
-      label: "Immunization Status",
-      type: "text",
-      placeholder: "Enter status",
-    },
-    {
-      name: "anynotedadverseeffect",
-      label: "Adverse Effect",
-      type: "text",
-      placeholder: "Enter adverse effect",
-    },
-    {
-      name: "manufacturer",
-      label: "Manufacturer",
-      type: "text",
-      placeholder: "Enter manufacturer",
-    },
-    {
-      name: "batchno",
-      label: "Batch No",
-      type: "text",
-      placeholder: "Enter batch number",
+      name: "status",
+      label: "Status",
+      type: "select",
+      options: [
+        { value: "pending", label: "Pending" },
+        { value: "completed", label: "Completed" },
+        { value: "cancelled", label: "Cancelled" },
+        { value: "scheduled", label: "Scheduled" },
+      ],
+      placeholder: "Select status",
     },
   ];
 
@@ -126,7 +100,7 @@ export default function ImmunizationReport() {
     setPayload({ ...payload, [name]: value });
   };
 
-  const fetchImmunizationReport = async () => {
+  const fetchLabInvestigationReport = async () => {
     if (!payload.startDate || !payload.endDate) {
       setShowToast({
         show: true,
@@ -148,13 +122,14 @@ export default function ImmunizationReport() {
     try {
       const result = await GetMedicalReportAPI(
         { filters: filteredPayload },
-        "immunizationreport"
+        "labreport"
       );
+      console.log(result);
       setData(result.data.queryresult);
       setIsLoading(false);
       setShowToast({
         show: true,
-        message: "Immunization report data fetched successfully",
+        message: "Lab Investigation report data fetched successfully",
         status: "success",
       });
       setTimeout(() => {
@@ -177,15 +152,11 @@ export default function ImmunizationReport() {
     setPayload({
       startDate: "",
       endDate: "",
-      patient: "",
-      vaccinetype: "",
+      testname: "",
       staffname: "",
-      schedule: "",
-      vaccination: "",
-      immunizationstatus: "",
-      anynotedadverseeffect: "",
-      manufacturer: "",
-      batchno: "",
+      status: "",
+      testid: "",
+      appointmentid: "",
     });
     setData([]);
     setCurrentPage(1);
@@ -206,9 +177,13 @@ export default function ImmunizationReport() {
 
     var workbook = XLSX.utils.book_new();
     var worksheet = XLSX.utils.json_to_sheet(Data);
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Immunization Report");
+    XLSX.utils.book_append_sheet(
+      workbook,
+      worksheet,
+      "Lab Investigation Report"
+    );
     let date = moment(Date.now()).format("DD-MM-YYYY");
-    XLSX.writeFile(workbook, `Immunization_Report_${date}.xlsx`);
+    XLSX.writeFile(workbook, `Lab_Investigation_Report_${date}.xlsx`);
   };
 
   // Function to determine status color based on specific status values
@@ -218,8 +193,11 @@ export default function ImmunizationReport() {
     const statusLower = status.toLowerCase();
     if (statusLower.includes("completed")) {
       return "#027A48"; // Green for completed
-    } else if (statusLower.includes("pending")) {
-      return "#FFA30C"; // Orange for pending
+    } else if (
+      statusLower.includes("pending") ||
+      statusLower.includes("scheduled")
+    ) {
+      return "#FFA30C"; // Orange for pending/scheduled
     } else if (
       statusLower.includes("cancelled") ||
       statusLower.includes("rejected")
@@ -248,7 +226,7 @@ export default function ImmunizationReport() {
         rounded="10px"
       >
         <Text color="#1F2937" fontWeight="600" fontSize="17px">
-          Immunization Report
+          Lab Investigation Report
         </Text>
         <Text color="#667085" mt="8px" fontWeight="400" fontSize="14px">
           To generate a report, select a date range and click apply
@@ -286,7 +264,7 @@ export default function ImmunizationReport() {
 
         <Flex mt="20px" gap="12px" flexWrap="wrap">
           <Button
-            onClick={fetchImmunizationReport}
+            onClick={fetchLabInvestigationReport}
             background="#1F2937"
             color="#fff"
             w={["100%", "100%", "120px", "120px"]}
@@ -324,8 +302,7 @@ export default function ImmunizationReport() {
             fields={advancedFilterFields}
             payload={payload}
             onInputChange={handleInputChange}
-            onPatientSelect={handlePatientSelect}
-            onFilter={fetchImmunizationReport}
+            onFilter={fetchLabInvestigationReport}
             onClear={clearFilters}
           />
         )}
@@ -382,7 +359,7 @@ export default function ImmunizationReport() {
                       color="#534D59"
                       fontWeight="600"
                     >
-                      Patient Name
+                      Test Name
                     </Th>
                     <Th
                       fontSize="13px"
@@ -390,7 +367,7 @@ export default function ImmunizationReport() {
                       color="#534D59"
                       fontWeight="600"
                     >
-                      MRN
+                      Test ID
                     </Th>
                     <Th
                       fontSize="13px"
@@ -398,7 +375,7 @@ export default function ImmunizationReport() {
                       color="#534D59"
                       fontWeight="600"
                     >
-                      Age
+                      Department
                     </Th>
                     <Th
                       fontSize="13px"
@@ -406,7 +383,7 @@ export default function ImmunizationReport() {
                       color="#534D59"
                       fontWeight="600"
                     >
-                      Gender
+                      Appointment ID
                     </Th>
                     <Th
                       fontSize="13px"
@@ -414,55 +391,7 @@ export default function ImmunizationReport() {
                       color="#534D59"
                       fontWeight="600"
                     >
-                      Vaccination
-                    </Th>
-                    <Th
-                      fontSize="13px"
-                      textTransform="capitalize"
-                      color="#534D59"
-                      fontWeight="600"
-                    >
-                      Schedule
-                    </Th>
-                    <Th
-                      fontSize="13px"
-                      textTransform="capitalize"
-                      color="#534D59"
-                      fontWeight="600"
-                    >
-                      Dose
-                    </Th>
-                    <Th
-                      fontSize="13px"
-                      textTransform="capitalize"
-                      color="#534D59"
-                      fontWeight="600"
-                    >
-                      Vaccine Type
-                    </Th>
-                    <Th
-                      fontSize="13px"
-                      textTransform="capitalize"
-                      color="#534D59"
-                      fontWeight="600"
-                    >
-                      Batch No
-                    </Th>
-                    <Th
-                      fontSize="13px"
-                      textTransform="capitalize"
-                      color="#534D59"
-                      fontWeight="600"
-                    >
-                      Manufacturer
-                    </Th>
-                    <Th
-                      fontSize="13px"
-                      textTransform="capitalize"
-                      color="#534D59"
-                      fontWeight="600"
-                    >
-                      Adverse Effect
+                      Staff Name
                     </Th>
                     <Th
                       fontSize="13px"
@@ -478,7 +407,7 @@ export default function ImmunizationReport() {
                       color="#534D59"
                       fontWeight="600"
                     >
-                      Attending Nurse
+                      Created Date
                     </Th>
                     <Th
                       fontSize="13px"
@@ -486,7 +415,7 @@ export default function ImmunizationReport() {
                       color="#534D59"
                       fontWeight="600"
                     >
-                      Date
+                      Updated Date
                     </Th>
                   </Tr>
                 </Thead>
@@ -494,49 +423,33 @@ export default function ImmunizationReport() {
                   {PaginatedData.map((item, index) => (
                     <Tr key={index}>
                       <Td fontSize="14px">{indexOfFirstItem + index + 1}</Td>
-                      <Td fontSize="14px">
-                        <HStack>
-                          <Avatar
-                            name={`${item.firstName} ${item.lastName}`}
-                            size="sm"
-                          />
-                          <Text>{`${item.firstName} ${item.lastName}`}</Text>
-                        </HStack>
-                      </Td>
-                      <Td fontSize="14px">{item.MRN}</Td>
-                      <Td fontSize="14px">{item.age}</Td>
-                      <Td fontSize="14px">{item.gender}</Td>
-                      <Td fontSize="14px">{item.vaccination}</Td>
-                      <Td fontSize="14px">{item.schedule}</Td>
-                      <Td fontSize="14px">{item.dose}</Td>
-                      <Td fontSize="14px">{item.vaccinetype}</Td>
-                      <Td fontSize="14px">{item.batchno}</Td>
-                      <Td fontSize="14px">{item.manufacturer}</Td>
-                      <Td fontSize="14px">
-                        {item.anynotedadverseeffect === "Yes"
-                          ? `${item.adverseeffectseverity || "Adverse Effect"}`
-                          : "None"}
-                      </Td>
+                      <Td fontSize="14px">{item.testname}</Td>
+                      <Td fontSize="14px">{item.testid}</Td>
+                      <Td fontSize="14px">{item.department}</Td>
+                      <Td fontSize="14px">{item.appointmentid}</Td>
+                      <Td fontSize="14px">{item.staffname || "N/A"}</Td>
                       <Td>
-                        <HStack color={getStatusColor(item.immunizationstatus)}>
+                        <HStack color={getStatusColor(item.status)}>
                           <Box
                             rounded="100%"
                             w="8px"
                             h="8px"
-                            bg={getStatusColor(item.immunizationstatus)}
+                            bg={getStatusColor(item.status)}
                           ></Box>
                           <Text
                             fontWeight="400"
                             fontSize="13px"
                             textTransform="capitalize"
                           >
-                            {item.immunizationstatus}
+                            {item.status}
                           </Text>
                         </HStack>
                       </Td>
-                      <Td fontSize="14px">{item.staffname}</Td>
                       <Td fontSize="14px">
                         {moment(item.createdAt).format("DD/MM/YYYY")}
+                      </Td>
+                      <Td fontSize="14px">
+                        {moment(item.updatedAt).format("DD/MM/YYYY")}
                       </Td>
                     </Tr>
                   ))}
