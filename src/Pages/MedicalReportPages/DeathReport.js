@@ -9,7 +9,7 @@ import {
   Td,
   TableContainer,
 } from "@chakra-ui/react";
-import * as XLSX from 'xlsx/xlsx.mjs';
+import * as XLSX from "xlsx/xlsx.mjs";
 import Button from "../../Components/Button";
 import Input from "../../Components/Input";
 import Preloader from "../../Components/Preloader";
@@ -26,38 +26,88 @@ export default function DeathReport() {
   const [IsLoading, setIsLoading] = useState(false);
   const [Data, setData] = useState([]);
   const [showAdvancedFilter, setShowAdvancedFilter] = useState(false);
+
+  // Updated payload to match API response structure
   const [payload, setPayload] = useState({
     startDate: "",
     endDate: "",
-    patient: "",
+    firstName: "", // Changed from 'patient'
+    lastName: "", // Added to match API structure
     gender: "",
-    causeOfDeath: "",
-    attendingDoctor: "",
+    outcome: "", // Changed from 'causeOfDeath'
+    doctorname: "", // Changed from 'attendingDoctor'
+    arrivalMode: "",
+    wardname: "",
+    HMOName: "",
   });
 
   const handlePatientSelect = (patient) => {
-    setPayload({ ...payload, patient: patient?._id || "" });
+    setPayload({
+      ...payload,
+      firstName: patient?.firstName || "",
+      lastName: patient?.lastName || "",
+    });
   };
 
   const advancedFilterFields = [
-    { name: "patient", label: "Patient Name", type: "patient-search", placeholder: "Enter patient's name" },
-    { name: "gender", label: "Gender", type: "select", placeholder: "Select gender", options: [
+    {
+      name: "patient",
+      label: "Patient Name",
+      type: "patient-search",
+      placeholder: "Enter patient's name",
+    },
+    {
+      name: "gender",
+      label: "Gender",
+      type: "select",
+      placeholder: "Select gender",
+      options: [
         { value: "male", label: "Male" },
         { value: "female", label: "Female" },
       ],
     },
-    { name: "causeOfDeath", label: "Cause of Death", type: "text", placeholder: "Enter cause of death" },
-    { name: "attendingDoctor", label: "Attending Doctor", type: "text", placeholder: "Enter doctor's name" },
+    {
+      name: "outcome",
+      label: "Outcome",
+      type: "text",
+      placeholder: "Enter outcome",
+    },
+    {
+      name: "doctorname",
+      label: "Doctor Name",
+      type: "text",
+      placeholder: "Enter doctor's name",
+    },
+    {
+      name: "arrivalMode",
+      label: "Arrival Mode",
+      type: "text",
+      placeholder: "Enter arrival mode",
+    },
+    {
+      name: "wardname",
+      label: "Ward Name",
+      type: "text",
+      placeholder: "Enter ward name",
+    },
+    {
+      name: "HMOName",
+      label: "HMO Name",
+      type: "text",
+      placeholder: "Enter HMO name",
+    },
   ];
 
   // Pagination settings
   const [CurrentPage, setCurrentPage] = useState(1);
-  const [PostPerPage, setPostPerPage] = useState(configuration.sizePerPage || 10);
+  const [PostPerPage, setPostPerPage] = useState(
+    configuration.sizePerPage || 10
+  );
 
   const indexOfLastItem = CurrentPage * PostPerPage;
   const indexOfFirstItem = indexOfLastItem - PostPerPage;
   const PaginatedData = Data.slice(indexOfFirstItem, indexOfLastItem);
-  
+
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
@@ -87,7 +137,15 @@ export default function DeathReport() {
     }
     setIsLoading(true);
     try {
-      const result = await GetMedicalReportAPI({ filters: payload }, "deathreport");
+      // Clean up the payload before sending (remove empty values)
+      const cleanPayload = Object.fromEntries(
+        Object.entries(payload).filter(([_, value]) => value !== "")
+      );
+
+      const result = await GetMedicalReportAPI(
+        { filters: cleanPayload },
+        "deathreport"
+      );
       setData(result.data.queryresult);
       setIsLoading(false);
       setShowToast({
@@ -115,10 +173,14 @@ export default function DeathReport() {
     setPayload({
       startDate: "",
       endDate: "",
-      patient: "",
+      firstName: "",
+      lastName: "",
       gender: "",
-      causeOfDeath: "",
-      attendingDoctor: "",
+      outcome: "",
+      doctorname: "",
+      arrivalMode: "",
+      wardname: "",
+      HMOName: "",
     });
     setData([]);
     setCurrentPage(1);
@@ -282,26 +344,93 @@ export default function DeathReport() {
               <Table variant="striped">
                 <Thead bg="#fff">
                   <Tr>
-                    <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
                       Patient Name
                     </Th>
-                    <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
                       MRN
                     </Th>
-                    <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
                       Age
                     </Th>
-                    <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
                       Gender
                     </Th>
-                    <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
                       Date of Death
                     </Th>
-                    <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
-                      Cause of Death
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
+                      Outcome
                     </Th>
-                    <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
-                      Attending Doctor
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
+                      Doctor Name
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
+                      Arrival Mode
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
+                      Ward Name
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
+                      HMO Name
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
+                      Admission Date
                     </Th>
                   </Tr>
                 </Thead>
@@ -310,16 +439,27 @@ export default function DeathReport() {
                     <Tr key={index}>
                       <Td fontSize="14px">
                         <HStack>
-                          <Avatar name={`${item.firstName} ${item.lastName}`} size="sm" />
+                          <Avatar
+                            name={`${item.firstName} ${item.lastName}`}
+                            size="sm"
+                          />
                           <Text>{`${item.firstName} ${item.lastName}`}</Text>
                         </HStack>
                       </Td>
                       <Td fontSize="14px">{item.MRN}</Td>
                       <Td fontSize="14px">{item.age}</Td>
                       <Td fontSize="14px">{item.gender}</Td>
-                      <Td fontSize="14px">{moment(item.dateOfDeath).format("DD/MM/YYYY")}</Td>
-                      <Td fontSize="14px">{item.causeOfDeath}</Td>
-                      <Td fontSize="14px">{item.attendingDoctor}</Td>
+                      <Td fontSize="14px">
+                        {moment(item.deathDate).format("DD/MM/YYYY")}
+                      </Td>
+                      <Td fontSize="14px">{item.outcome}</Td>
+                      <Td fontSize="14px">{item.doctorname}</Td>
+                      <Td fontSize="14px">{item.arrivalMode || "N/A"}</Td>
+                      <Td fontSize="14px">{item.wardname}</Td>
+                      <Td fontSize="14px">{item.HMOName || "N/A"}</Td>
+                      <Td fontSize="14px">
+                        {moment(item.admissionDate).format("DD/MM/YYYY")}
+                      </Td>
                     </Tr>
                   ))}
                 </Tbody>
