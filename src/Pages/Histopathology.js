@@ -42,6 +42,7 @@ export default function Histopathology() {
     subTitleTextColor,
     chartFillColor,
     primaryColor,
+    secondaryColor,
     NavListBg,
   } = useColors();
   const [IsLoading, setIsLoading] = useState(true);
@@ -380,7 +381,7 @@ export default function Histopathology() {
                     py="11.64px"
                     px="16.98px"
                     bg={NavListBg}
-                    color={textColor}
+                    color={secondaryColor}
                     fontWeight="500"
                     fontSize="14px"
                   >

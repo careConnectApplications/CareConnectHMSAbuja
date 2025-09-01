@@ -48,6 +48,7 @@ export default function InPatient() {
     textColor,
     borderColor,
     titleTextColor,
+    selectTitleTextColor,
     subTitleTextColor,
     chartFillColor,
     primaryColor,
@@ -370,6 +371,7 @@ export default function InPatient() {
           onChange={(e) => setWard(e.target.value)}
           placeholder="Select Ward"
           fontSize={Ward !== "" ? "16px" : "13px"}
+          color={selectTitleTextColor}
         >
           {WardData?.map((item, i) => (
             <option key={i} value={item._id}>

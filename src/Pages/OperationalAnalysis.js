@@ -36,6 +36,7 @@ export default function OperationalAnalysis() {
         textColor,
         borderColor,
         titleTextColor,
+        selectTitleTextColor,
         subTitleTextColor,
         primaryColor,
         secondaryColor,
@@ -145,7 +146,7 @@ export default function OperationalAnalysis() {
             >
                 <SimpleGrid mt="12px" columns={{ base: 2, md: 4 }} spacing={2}>
                     <Box>
-                        <Text color={textColor} fontWeight="500" fontSize="14px">Analysis Type</Text>
+                        <Text color={selectTitleTextColor} fontWeight="500" fontSize="14px">Analysis Type</Text>
                         <Select
                             fontSize={MetricType !== "" ? "16px" : "13px"}
                             h="45px"
@@ -171,7 +172,7 @@ export default function OperationalAnalysis() {
                     </Box>
 
                     <Box>
-                        <Text color={textColor} fontWeight="500" fontSize="14px">Department/Unit</Text>
+                        <Text color={selectTitleTextColor} fontWeight="500" fontSize="14px">Department/Unit</Text>
                         <Select
                             fontSize={Department !== "" ? "16px" : "13px"}
                             h="45px"
@@ -199,7 +200,7 @@ export default function OperationalAnalysis() {
                     </Box>
 
                     <Box>
-                        <Text color={textColor} fontWeight="500" fontSize="14px">Start Date</Text>
+                        <Text color={selectTitleTextColor} fontWeight="500" fontSize="14px">Start Date</Text>
                         <Input
                             type="date"
                             onChange={(e) => {
@@ -213,7 +214,7 @@ export default function OperationalAnalysis() {
                     </Box>
 
                     <Box>
-                        <Text color={textColor} fontWeight="500" fontSize="14px">End Date</Text>
+                        <Text color={selectTitleTextColor} fontWeight="500" fontSize="14px">End Date</Text>
                         <Input
                             type="date"
                             onChange={(e) => {

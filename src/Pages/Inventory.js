@@ -426,13 +426,13 @@ export default function Inventory() {
               <Menu isLazy>
                 <MenuButton as={Box}>
                   <HStack
-                    border="1px solid #EA5937"
+                    border={`1px solid ${NavListBg}`}
                     rounded="7px"
                     cursor="pointer"
                     py="11.64px"
                     px="16.98px"
-                    bg="#f8ddd1"
-                    color="blue.blue500"
+                    bg={NavListBg}
+                    color={secondaryColor}
                     fontWeight="500"
                     fontSize="14px"
                   >
@@ -440,7 +440,7 @@ export default function Inventory() {
                     <IoFilter size={16} />
                   </HStack>
                 </MenuButton>
-                <MenuList fontSize="14px">
+                <MenuList fontSize="14px" bg={bgColor} border={`1px solid ${borderColor}`}>
                   <MenuItem
                     onClick={() => {
                       setByDate(false);
@@ -448,11 +448,11 @@ export default function Inventory() {
                     }}
                     textTransform="capitalize"
                     fontWeight="500"
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     by Product ID
@@ -464,11 +464,11 @@ export default function Inventory() {
                     }}
                     textTransform="capitalize"
                     fontWeight="500"
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     by Service Category
@@ -480,11 +480,11 @@ export default function Inventory() {
                     }}
                     textTransform="capitalize"
                     fontWeight="500"
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     by Amount
@@ -496,11 +496,11 @@ export default function Inventory() {
                     }}
                     textTransform="capitalize"
                     fontWeight="500"
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     by Service Type
@@ -512,11 +512,11 @@ export default function Inventory() {
                     }}
                     textTransform="capitalize"
                     fontWeight="500"
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     by Category
@@ -528,11 +528,11 @@ export default function Inventory() {
                     }}
                     textTransform="capitalize"
                     fontWeight="500"
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     by Quantity
@@ -544,11 +544,11 @@ export default function Inventory() {
                     }}
                     textTransform="capitalize"
                     fontWeight="500"
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     by Date
@@ -562,11 +562,11 @@ export default function Inventory() {
                     }}
                     textTransform="capitalize"
                     fontWeight="500"
-                    color="#2F2F2F"
+                    color={textColor}
                     _hover={{
-                      color: "#fff",
+                      color: bgColor,
                       fontWeight: "400",
-                      bg: "blue.blue500",
+                      bg: NavListBg,
                     }}
                   >
                     clear filter
