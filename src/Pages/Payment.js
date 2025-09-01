@@ -391,7 +391,7 @@ export default function Payment() {
                     py="11.64px"
                     px="16.98px"
                     bg={NavListBg}
-                    color={textColor}
+                    color={secondaryColor}
                     fontWeight="500"
                     fontSize="14px"
                   >
@@ -411,7 +411,6 @@ export default function Payment() {
                       bg: NavListBg,
                     }}
                   >
->>>>>>> Stashed changes
                     <HStack fontSize="14px">
                       <Text>by First Name</Text>
                     </HStack>

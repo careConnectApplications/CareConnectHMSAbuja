@@ -37,8 +37,20 @@ import Input from "../Components/Input";
 import { configuration } from "../Utils/Helpers";
 import Button from "../Components/Button";
 import ToTransferModal from "../Components/ToTransferModal";
+import { useColors } from "../Utils/colors";
 
 const InPatientAdmission = () => {
+  const {
+    bgColor,
+    textColor,
+    borderColor,
+    titleTextColor,
+    subTitleTextColor,
+    chartFillColor,
+    primaryColor,
+    secondaryColor,
+    NavListBg,
+  } = useColors();
   const [filter, setFilter] = useState("all");
   const [admissionData, setAdmissionData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -198,8 +210,8 @@ const InPatientAdmission = () => {
 
   return (
     <Box
-      bg="#fff"
-      border="1px solid #EFEFEF"
+      bg={bgColor}
+      border={`1px solid ${borderColor}`}
       mt="10px"
       py="17px"
       px="18px"
@@ -207,7 +219,7 @@ const InPatientAdmission = () => {
     >
       {toast && <ShowToast status={toast.status} message={toast.message} />}
 
-      <Text color="blue.blue500" mt="9px" fontWeight="400" fontSize="15px">
+      <Text color={primaryColor} mt="9px" fontWeight="400" fontSize="15px">
         Kindly Select Clinic you want to manage
       </Text>
 
@@ -219,6 +231,7 @@ const InPatientAdmission = () => {
           onChange={(e) => setSelectedWard(e.target.value)}
           placeholder="Select Ward"
           fontSize={selectedWard !== "" ? "16px" : "13px"}
+          color={titleTextColor}
         >
           {wards.map((ward) => (
             <option key={ward._id} value={ward._id}>
@@ -239,10 +252,10 @@ const InPatientAdmission = () => {
         <>
           {/* Filter Controls */}
           <Flex justifyContent="space-between" flexWrap="wrap" mt="20px">
-            <Flex
+          <Flex
               alignItems="center"
               flexWrap="wrap"
-              bg="#E4F3FF"
+              bg={chartFillColor}
               rounded="7px"
               py="3.5px"
               px="5px"
@@ -266,10 +279,10 @@ const InPatientAdmission = () => {
                     py="8.5px"
                     px="12px"
                     bg={
-                      filter === status.toLowerCase() ? "#fff" : "transparent"
+                      filter === status.toLowerCase() ? bgColor : "transparent"
                     }
                     rounded="7px"
-                    color="#1F2937"
+                    color={titleTextColor}
                     fontWeight="500"
                     fontSize="13px"
                   >
@@ -298,7 +311,7 @@ const InPatientAdmission = () => {
                     label="Search"
                     onChange={(e) => setSearchInput(e.target.value)}
                     value={searchInput}
-                    bColor="#E4E4E4"
+                    bColor={borderColor}
                     leftIcon={<BiSearch />}
                   />
                 ) : (
@@ -308,7 +321,7 @@ const InPatientAdmission = () => {
                       type="date"
                       onChange={(e) => setStartDate(e.target.value)}
                       value={StartDate}
-                      bColor="#E4E4E4"
+                      bColor={borderColor}
                       leftIcon={<FaCalendarAlt />}
                     />
                     <Input
@@ -316,7 +329,7 @@ const InPatientAdmission = () => {
                       type="date"
                       onChange={(e) => setEndDate(e.target.value)}
                       value={EndDate}
-                      bColor="#E4E4E4"
+                      bColor={borderColor}
                       leftIcon={<FaCalendarAlt />}
                     />
                     <Flex
@@ -325,8 +338,8 @@ const InPatientAdmission = () => {
                       px="5px"
                       py="3px"
                       rounded="5px"
-                      bg="blue.blue500"
-                      color="#fff"
+                      bg={primaryColor}
+                      color={bgColor}
                       justifyContent="center"
                       alignItems="center"
                     >
@@ -338,13 +351,13 @@ const InPatientAdmission = () => {
                 <Menu isLazy>
                   <MenuButton as={Box}>
                     <HStack
-                      border="1px solid #EA5937"
+                      border={`1px solid ${NavListBg}`}
                       rounded="7px"
                       cursor="pointer"
                       py="11.64px"
                       px="16.98px"
-                      bg="#f8ddd1"
-                      color="blue.blue500"
+                      bg={NavListBg}
+                      color={secondaryColor}
                       fontWeight="500"
                       fontSize="14px"
                     >
@@ -352,16 +365,16 @@ const InPatientAdmission = () => {
                       <IoFilter />
                     </HStack>
                   </MenuButton>
-                  <MenuList>
+                  <MenuList bg={bgColor} border={`1px solid ${borderColor}`}>
                     <MenuItem
                       onClick={() => filterBy("patient")}
                       textTransform="capitalize"
                       fontWeight={"500"}
-                      color="#2F2F2F"
+                      color={textColor}
                       _hover={{
-                        color: "#fff",
+                        color: bgColor,
                         fontWeight: "400",
-                        bg: "blue.blue500",
+                        bg: NavListBg,
                       }}
                     >
                       <HStack fontSize="14px">
@@ -372,11 +385,11 @@ const InPatientAdmission = () => {
                       onClick={() => filterBy("doctor")}
                       textTransform="capitalize"
                       fontWeight={"500"}
-                      color="#2F2F2F"
+                      color={textColor}
                       _hover={{
-                        color: "#fff",
+                        color: bgColor,
                         fontWeight: "400",
-                        bg: "blue.blue500",
+                        bg: NavListBg,
                       }}
                     >
                       <HStack fontSize="14px">
@@ -387,11 +400,11 @@ const InPatientAdmission = () => {
                       onClick={() => filterBy("specialization")}
                       textTransform="capitalize"
                       fontWeight={"500"}
-                      color="#2F2F2F"
+                      color={textColor}
                       _hover={{
-                        color: "#fff",
+                        color: bgColor,
                         fontWeight: "400",
-                        bg: "blue.blue500",
+                        bg: NavListBg,
                       }}
                     >
                       <HStack fontSize="14px">
@@ -402,11 +415,11 @@ const InPatientAdmission = () => {
                       onClick={() => filterBy("mrn")}
                       textTransform="capitalize"
                       fontWeight={"500"}
-                      color="#2F2F2F"
+                      color={textColor}
                       _hover={{
-                        color: "#fff",
+                        color: bgColor,
                         fontWeight: "400",
-                        bg: "blue.blue500",
+                        bg: NavListBg,
                       }}
                     >
                       <HStack fontSize="14px">
@@ -417,11 +430,11 @@ const InPatientAdmission = () => {
                       onClick={() => setByDate(true)}
                       textTransform="capitalize"
                       fontWeight={"500"}
-                      color="#2F2F2F"
+                      color={textColor}
                       _hover={{
-                        color: "#fff",
+                        color: bgColor,
                         fontWeight: "400",
-                        bg: "blue.blue500",
+                        bg: NavListBg,
                       }}
                     >
                       <HStack fontSize="14px">
@@ -439,11 +452,11 @@ const InPatientAdmission = () => {
                       }}
                       textTransform="capitalize"
                       fontWeight={"500"}
-                      color="#2F2F2F"
+                      color={textColor}
                       _hover={{
-                        color: "#fff",
+                        color: bgColor,
                         fontWeight: "400",
-                        bg: "blue.blue500",
+                        bg: NavListBg,
                       }}
                     >
                       <HStack fontSize="14px">
@@ -458,8 +471,8 @@ const InPatientAdmission = () => {
 
           {/* Admission Table */}
           <Box
-            bg="#fff"
-            border="1px solid #EFEFEF"
+            bg={bgColor}
+            border={`1px solid ${borderColor}`}
             mt="12px"
             py="15px"
             px="15px"
@@ -477,30 +490,30 @@ const InPatientAdmission = () => {
             ) : (
               <TableContainer>
                 <Table variant="striped">
-                  <Thead bg="#fff">
+                  <Thead bg={bgColor}>
                     <Tr>
-                      <Th fontSize="13px" color="#534D59" fontWeight="600">
+                      <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                         Patient Name
                       </Th>
-                      <Th fontSize="13px" color="#534D59" fontWeight="600">
+                      <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                         MRN
                       </Th>
-                      <Th fontSize="13px" color="#534D59" fontWeight="600">
+                      <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                         Doctor
                       </Th>
-                      <Th fontSize="13px" color="#534D59" fontWeight="600">
+                      <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                         Specialization
                       </Th>
-                      <Th fontSize="13px" color="#534D59" fontWeight="600">
+                      <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                         Remark
                       </Th>
-                      <Th fontSize="13px" color="#534D59" fontWeight="600">
+                      <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                         Referred Date
                       </Th>
-                      <Th fontSize="13px" color="#534D59" fontWeight="600">
+                      <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                         Status
                       </Th>
-                      <Th fontSize="13px" color="#534D59" fontWeight="600">
+                      <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                         Actions
                       </Th>
                     </Tr>

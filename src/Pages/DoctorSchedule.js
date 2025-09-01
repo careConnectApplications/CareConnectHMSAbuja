@@ -233,6 +233,7 @@ export default function DoctoerSchedule() {
           onChange={(e) => handleFilterChange("clinic", e.target.value)}
           placeholder="Select Clinic"
           fontSize={filters.clinic ? "16px" : "13px"}
+          color={titleTextColor}
         >
           {
             ClinicData?.map((item, i) => (
@@ -346,13 +347,13 @@ export default function DoctoerSchedule() {
                 <MenuButton as={Box}>
 
                   <HStack
-                    border={`1px solid ${primaryColor}`}
+                    border={`1px solid ${NavListBg}`}
                     rounded="7px"
                     cursor="pointer"
                     py="11.64px"
                     px="16.98px"
                     bg={NavListBg}
-                    color={primaryColor}
+                    color={secondaryColor}
                     fontWeight="500"
                     fontSize="14px"
                   >
@@ -360,7 +361,7 @@ export default function DoctoerSchedule() {
                     <IoFilter />
                   </HStack>
                 </MenuButton>
-                <MenuList>
+                <MenuList bg={bgColor} border={`1px solid ${borderColor}`}>
                   <MenuItem
                     onClick={() => handleFilterChange("searchField", "firstName")}
                     textTransform="capitalize"
@@ -369,7 +370,7 @@ export default function DoctoerSchedule() {
                     _hover={{
                       color: bgColor,
                       fontWeight: "400",
-                      bg: primaryColor,
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -384,7 +385,7 @@ export default function DoctoerSchedule() {
                     _hover={{
                       color: bgColor,
                       fontWeight: "400",
-                      bg: primaryColor,
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -399,7 +400,7 @@ export default function DoctoerSchedule() {
                     _hover={{
                       color: bgColor,
                       fontWeight: "400",
-                      bg: primaryColor,
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -416,7 +417,7 @@ export default function DoctoerSchedule() {
                     _hover={{
                       color: bgColor,
                       fontWeight: "400",
-                      bg: primaryColor,
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -437,7 +438,7 @@ export default function DoctoerSchedule() {
                     _hover={{
                       color: bgColor,
                       fontWeight: "400",
-                      bg: primaryColor,
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">

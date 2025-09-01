@@ -29,8 +29,20 @@ import { FaCalendarAlt } from "react-icons/fa";
 import Input from "../Components/Input";
 import { configuration } from "../Utils/Helpers";
 import Button from "../Components/Button";
+import { useColors } from "../Utils/colors";
 
 const AdmissionDailyReport = () => {
+  const {
+    bgColor,
+    textColor,
+    borderColor,
+    titleTextColor,
+    subTitleTextColor,
+    chartFillColor,
+    primaryColor,
+    secondaryColor,
+    NavListBg,
+  } = useColors();
   // Admission data state & filtering
   const [filter, setFilter] = useState("all");
   const [admissionData, setAdmissionData] = useState([]);
@@ -124,9 +136,9 @@ const AdmissionDailyReport = () => {
   const paginatedData = filteredData.slice(indexOfFirstPost, indexOfLastPost);
 
   return (
-    <Box bg="#fff" border="1px solid #EFEFEF" mt="10px" py="17px" px="18px" rounded="10px">
+    <Box bg={bgColor} border={`1px solid ${borderColor}`} mt="10px" py="17px" px="18px" rounded="10px">
       {/* Ward Selection Dropdown and Fetch Admissions Button */}
-      <Text color="blue.blue500" mt="9px" fontWeight="400" fontSize="15px">
+      <Text color={primaryColor} mt="9px" fontWeight="400" fontSize="15px">
         Kindly Select the Ward you want to view
       </Text>
       <SimpleGrid mt="5px" columns={{ base: 1, md: 2, lg: 2 }} spacing={10}>
@@ -136,6 +148,7 @@ const AdmissionDailyReport = () => {
           onChange={(e) => setSelectedWard(e.target.value)}
           placeholder="Select Ward"
           fontSize={selectedWard !== "" ? "16px" : "13px"}
+          color={titleTextColor}
         >
           {wards.map((ward) => (
             <option key={ward._id} value={ward._id}>
@@ -161,10 +174,10 @@ const AdmissionDailyReport = () => {
         <>
           {/* Filter Controls */}
           <Flex justifyContent="space-between" flexWrap="wrap" mt="20px">
-            <Flex
+          <Flex
               alignItems="center"
               flexWrap="wrap"
-              bg="#E4F3FF"
+              bg={chartFillColor}
               rounded="7px"
               py="3.5px"
               px="5px"
@@ -183,9 +196,9 @@ const AdmissionDailyReport = () => {
                   <Text
                     py="8.5px"
                     px="12px"
-                    bg={filter === status.toLowerCase() ? "#fff" : "transparent"}
+                    bg={filter === status.toLowerCase() ? bgColor : "transparent"}
                     rounded="7px"
-                    color="#1F2937"
+                    color={titleTextColor}
                     fontWeight="500"
                     fontSize="13px"
                   >
@@ -214,7 +227,7 @@ const AdmissionDailyReport = () => {
                     label="Search"
                     onChange={(e) => setSearchInput(e.target.value)}
                     value={searchInput}
-                    bColor="#E4E4E4"
+                    bColor={borderColor}
                     leftIcon={<BiSearch />}
                   />
                 ) : (
@@ -224,7 +237,7 @@ const AdmissionDailyReport = () => {
                       type="date"
                       onChange={(e) => setStartDate(e.target.value)}
                       value={StartDate}
-                      bColor="#E4E4E4"
+                      bColor={borderColor}
                       leftIcon={<FaCalendarAlt />}
                     />
                     <Input
@@ -232,7 +245,7 @@ const AdmissionDailyReport = () => {
                       type="date"
                       onChange={(e) => setEndDate(e.target.value)}
                       value={EndDate}
-                      bColor="#E4E4E4"
+                      bColor={borderColor}
                       leftIcon={<FaCalendarAlt />}
                     />
                     <Flex
@@ -241,8 +254,8 @@ const AdmissionDailyReport = () => {
                       px="5px"
                       py="3px"
                       rounded="5px"
-                      bg="blue.blue500"
-                      color="#fff"
+                      bg={primaryColor}
+                      color={bgColor}
                       justifyContent="center"
                       alignItems="center"
                     >
@@ -254,13 +267,13 @@ const AdmissionDailyReport = () => {
                 <Menu isLazy>
                   <MenuButton as={Box}>
                     <HStack
-                      border="1px solid #EA5937"
+                      border={`1px solid ${NavListBg}`}
                       rounded="7px"
                       cursor="pointer"
                       py="11.64px"
                       px="16.98px"
-                      bg="#f8ddd1"
-                      color="blue.blue500"
+                      bg={NavListBg}
+                      color={secondaryColor}
                       fontWeight="500"
                       fontSize="14px"
                     >
@@ -268,13 +281,13 @@ const AdmissionDailyReport = () => {
                       <IoFilter />
                     </HStack>
                   </MenuButton>
-                  <MenuList>
+                  <MenuList bg={bgColor} border={`1px solid ${borderColor}`}>
                     <MenuItem
                       onClick={() => filterBy("patient")}
                       textTransform="capitalize"
                       fontWeight="500"
-                      color="#2F2F2F"
-                      _hover={{ color: "#fff", fontWeight: "400", bg: "blue.blue500" }}
+                      color={textColor}
+                      _hover={{ color: bgColor, fontWeight: "400", bg: NavListBg }}
                     >
                       <HStack fontSize="14px">
                         <Text>by patient</Text>
@@ -284,8 +297,8 @@ const AdmissionDailyReport = () => {
                       onClick={() => filterBy("specialization")}
                       textTransform="capitalize"
                       fontWeight="500"
-                      color="#2F2F2F"
-                      _hover={{ color: "#fff", fontWeight: "400", bg: "blue.blue500" }}
+                      color={textColor}
+                      _hover={{ color: bgColor, fontWeight: "400", bg: NavListBg }}
                     >
                       <HStack fontSize="14px">
                         <Text>by Specialization</Text>
@@ -295,8 +308,8 @@ const AdmissionDailyReport = () => {
                       onClick={() => setByDate(true)}
                       textTransform="capitalize"
                       fontWeight="500"
-                      color="#2F2F2F"
-                      _hover={{ color: "#fff", fontWeight: "400", bg: "blue.blue500" }}
+                      color={textColor}
+                      _hover={{ color: bgColor, fontWeight: "400", bg: NavListBg }}
                     >
                       <HStack fontSize="14px">
                         <Text>by date</Text>
@@ -312,8 +325,8 @@ const AdmissionDailyReport = () => {
                       }}
                       textTransform="capitalize"
                       fontWeight="500"
-                      color="#2F2F2F"
-                      _hover={{ color: "#fff", fontWeight: "400", bg: "blue.blue500" }}
+                      color={textColor}
+                      _hover={{ color: bgColor, fontWeight: "400", bg: NavListBg }}
                     >
                       <HStack fontSize="14px">
                         <Text>clear filter</Text>
@@ -327,8 +340,8 @@ const AdmissionDailyReport = () => {
 
           {/* Admissions Table */}
           <Box
-            bg="#fff"
-            border="1px solid #EFEFEF"
+            bg={bgColor}
+            border={`1px solid ${borderColor}`}
             mt="12px"
             py="15px"
             px="15px"
@@ -346,24 +359,24 @@ const AdmissionDailyReport = () => {
             ) : (
               <TableContainer>
                 <Table variant="striped">
-                  <Thead bg="#fff">
+                  <Thead bg={bgColor}>
                     <Tr>
-                      <Th fontSize="13px" color="#534D59" fontWeight="600">
+                      <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                         Specialization
                       </Th>
-                      <Th fontSize="13px" color="#534D59" fontWeight="600">
+                      <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                         Ward
                       </Th>
-                      <Th fontSize="13px" color="#534D59" fontWeight="600">
+                      <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                         Admission Status
                       </Th>
-                      <Th fontSize="13px" color="#534D59" fontWeight="600">
+                      <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                         Patient
                       </Th>
-                      <Th fontSize="13px" color="#534D59" fontWeight="600">
+                      <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                         MRN
                       </Th>
-                      <Th fontSize="13px" color="#534D59" fontWeight="600">
+                      <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                         Admission Date
                       </Th>
                     </Tr>

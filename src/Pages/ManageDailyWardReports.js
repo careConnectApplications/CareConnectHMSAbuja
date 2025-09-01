@@ -32,8 +32,20 @@ import {
 import DailyWardReportModal from "../Components/DailyWardReportModal";
 import Button from "../Components/Button";
 import { configuration } from "../Utils/Helpers";
+import { useColors } from "../Utils/colors";
 
 export default function ManageDailyWardReports() {
+  const {
+    bgColor,
+    textColor,
+    borderColor,
+    titleTextColor,
+    subTitleTextColor,
+    chartFillColor,
+    primaryColor,
+    secondaryColor,
+    NavListBg,
+  } = useColors();
   const [wards, setWards] = useState([]);
   const [selectedWard, setSelectedWard] = useState("");
   const [reports, setReports] = useState([]);
@@ -144,7 +156,7 @@ export default function ManageDailyWardReports() {
   const handleViewClose = () => setShowViewModal(false);
 
   return (
-    <Box bg="#fff" p="18px" rounded="10px">
+    <Box bg={bgColor} p="18px" rounded="10px">
       {toast && <ShowToast status={toast.status} message={toast.message} />}
 
       <Button
@@ -155,7 +167,7 @@ export default function ManageDailyWardReports() {
         Create Report
       </Button>
 
-      <Text color="blue.blue500" fontWeight="400" fontSize="15px" mb="4">
+      <Text color={primaryColor} fontWeight="400" fontSize="15px" mb="4">
         Kindly select a Ward to manage Daily Ward Reports
       </Text>
 
@@ -166,7 +178,8 @@ export default function ManageDailyWardReports() {
           onChange={(e) => setSelectedWard(e.target.value)}
           fontSize={selectedWard ? "16px" : "13px"}
           borderWidth="2px"
-          borderColor="gray.400"
+          borderColor={borderColor}
+          color={titleTextColor}
         >
           {wards.map((w) => (
             <option key={w._id} value={w._id}>
@@ -213,10 +226,10 @@ export default function ManageDailyWardReports() {
       {selectedWard && (
         <>
           <Flex justify="space-between" flexWrap="wrap" mt="20px">
-            <Flex
+          <Flex
               alignItems="center"
               flexWrap="wrap"
-              bg="#E4F3FF"
+              bg={chartFillColor}
               rounded="7px"
               py="3.5px"
               px="5px"
@@ -233,10 +246,10 @@ export default function ManageDailyWardReports() {
                     py="8.5px"
                     px="12px"
                     bg={
-                      statusFilter === s.toLowerCase() ? "#fff" : "transparent"
+                      statusFilter === s.toLowerCase() ? bgColor : "transparent"
                     }
                     rounded="7px"
-                    color="#1F2937"
+                    color={titleTextColor}
                     fontWeight="500"
                     fontSize="13px"
                   >
@@ -266,7 +279,7 @@ export default function ManageDailyWardReports() {
                       type="date"
                       onChange={(e) => setStartDate(e.target.value)}
                       value={startDate}
-                      bColor="#E4E4E4"
+                      bColor={borderColor}
                       leftIcon={<FaCalendarAlt />}
                     />
                     <Input
@@ -274,7 +287,7 @@ export default function ManageDailyWardReports() {
                       type="date"
                       onChange={(e) => setEndDate(e.target.value)}
                       value={endDate}
-                      bColor="#E4E4E4"
+                      bColor={borderColor}
                       leftIcon={<FaCalendarAlt />}
                     />
                     <Flex
@@ -283,8 +296,8 @@ export default function ManageDailyWardReports() {
                       px="5px"
                       py="3px"
                       rounded="5px"
-                      bg="blue.blue500"
-                      color="#fff"
+                      bg={primaryColor}
+                      color={bgColor}
                       justifyContent="center"
                       alignItems="center"
                     >
@@ -296,7 +309,7 @@ export default function ManageDailyWardReports() {
                     label="Search"
                     onChange={(e) => setSearchInput(e.target.value)}
                     value={searchInput}
-                    bColor="#E4E4E4"
+                    bColor={borderColor}
                     leftIcon={<BiSearch />}
                   />
                 )}
@@ -304,13 +317,13 @@ export default function ManageDailyWardReports() {
                 <Menu isLazy>
                   <MenuButton as={Box}>
                     <HStack
-                      border="1px solid #EA5937"
+                      border={`1px solid ${NavListBg}`}
                       rounded="7px"
                       cursor="pointer"
                       py="11.64px"
                       px="16.98px"
-                      bg="#f8ddd1"
-                      color="blue.blue500"
+                      bg={NavListBg}
+                      color={secondaryColor}
                       fontWeight="500"
                       fontSize="14px"
                     >
@@ -318,16 +331,35 @@ export default function ManageDailyWardReports() {
                       <IoFilter />
                     </HStack>
                   </MenuButton>
-                  <MenuList>
-                    <MenuItem onClick={() => filterBy("ward")}>
+                  <MenuList bg={bgColor} border={`1px solid ${borderColor}`}>
+                    <MenuItem
+                      onClick={() => filterBy("ward")}
+                      _hover={{
+                        color: bgColor,
+                        fontWeight: "400",
+                        bg: NavListBg,
+                      }}
+                    >
                       by Ward
                     </MenuItem>
-                    <MenuItem onClick={() => filterBy("staff")}>
+                    <MenuItem
+                      onClick={() => filterBy("staff")}
+                      _hover={{
+                        color: bgColor,
+                        fontWeight: "400",
+                        bg: NavListBg,
+                      }}
+                    >
                       by Staff Name
                     </MenuItem>
                     <MenuItem
                       onClick={() => {
                         setByDate(true);
+                      }}
+                      _hover={{
+                        color: bgColor,
+                        fontWeight: "400",
+                        bg: NavListBg,
                       }}
                     >
                       by date
@@ -344,18 +376,24 @@ export default function ManageDailyWardReports() {
                               )
                         );
                       }}
+                      _hover={{
+                        color: bgColor,
+                        fontWeight: "400",
+                        bg: NavListBg,
+                      }}
                     >
                       clear filter
                     </MenuItem>
                   </MenuList>
                 </Menu>
+>>>>>>> Stashed changes
               </HStack>
             </Flex>
           </Flex>
 
           <Box
-            bg="#fff"
-            border="1px solid #EFEFEF"
+            bg={bgColor}
+            border={`1px solid ${borderColor}`}
             mt="12px"
             rounded="10px"
             overflowX="auto"
@@ -369,22 +407,22 @@ export default function ManageDailyWardReports() {
             ) : (
               <TableContainer>
                 <Table variant="striped">
-                  <Thead bg="#fff">
+                  <Thead bg={bgColor}>
                     <Tr>
-                      <Th>Ward ID</Th>
-                      <Th>Ward Name</Th>
+                      <Th color={subTitleTextColor}>Ward ID</Th>
+                      <Th color={subTitleTextColor}>Ward Name</Th>
 
-                      <Th>Specialization</Th>
+                      <Th color={subTitleTextColor}>Specialization</Th>
 
-                      <Th>Total Bed</Th>
-                      <Th>Occupied Bed</Th>
-                      <Th>Vacant Bed</Th>
+                      <Th color={subTitleTextColor}>Total Bed</Th>
+                      <Th color={subTitleTextColor}>Occupied Bed</Th>
+                      <Th color={subTitleTextColor}>Vacant Bed</Th>
 
-                      <Th>Staff Name</Th>
-                      <Th>Status</Th>
-                      <Th>Created At</Th>
-                      <Th>Updated At</Th>
-                      <Th>Actions</Th>
+                      <Th color={subTitleTextColor}>Staff Name</Th>
+                      <Th color={subTitleTextColor}>Status</Th>
+                      <Th color={subTitleTextColor}>Created At</Th>
+                      <Th color={subTitleTextColor}>Updated At</Th>
+                      <Th color={subTitleTextColor}>Actions</Th>
                     </Tr>
                   </Thead>
                   <Tbody>

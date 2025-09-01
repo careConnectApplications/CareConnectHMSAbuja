@@ -448,13 +448,13 @@ export default function Report() {
                                     <Menu isLazy>
                                         <MenuButton as={Box}>
                                             <HStack
-                                                border="1px solid #EA5937"
+                                                border={`1px solid ${NavListBg}`}
                                                 rounded="7px"
                                                 cursor="pointer"
                                                 py="11.64px"
                                                 px="16.98px"
-                                                bg="#f8ddd1"
-                                                color="blue.blue500"
+                                                bg={NavListBg}
+                                                color={secondaryColor}
                                                 fontWeight="500"
                                                 fontSize="14px"
                                             >
@@ -462,16 +462,16 @@ export default function Report() {
                                                 <IoFilter />
                                             </HStack>
                                         </MenuButton>
-                                        <MenuList>
+                                        <MenuList bg={bgColor} border={`1px solid ${borderColor}`}>
                                             <MenuItem
                                                 onClick={() => filterBy("name")}
                                                 textTransform="capitalize"
                                                 fontWeight={"500"}
-                                                color="#2F2F2F"
+                                                color={textColor}
                                                 _hover={{
-                                                    color: "#fff",
+                                                    color: bgColor,
                                                     fontWeight: "400",
-                                                    bg: "blue.blue500",
+                                                    bg: NavListBg,
                                                 }}
                                             >
                                                 <HStack fontSize="14px">
@@ -482,11 +482,11 @@ export default function Report() {
                                                 onClick={() => filterBy("email")}
                                                 textTransform="capitalize"
                                                 fontWeight={"500"}
-                                                color="#2F2F2F"
+                                                color={textColor}
                                                 _hover={{
-                                                    color: "#fff",
+                                                    color: bgColor,
                                                     fontWeight: "400",
-                                                    bg: "blue.blue500",
+                                                    bg: NavListBg,
                                                 }}
                                             >
                                                 <HStack fontSize="14px">
@@ -497,11 +497,11 @@ export default function Report() {
                                                 onClick={() => filterBy("phoneNumber")}
                                                 textTransform="capitalize"
                                                 fontWeight={"500"}
-                                                color="#2F2F2F"
+                                                color={textColor}
                                                 _hover={{
-                                                    color: "#fff",
+                                                    color: bgColor,
                                                     fontWeight: "400",
-                                                    bg: "blue.blue500",
+                                                    bg: NavListBg,
                                                 }}
                                             >
                                                 <HStack fontSize="14px">
@@ -512,11 +512,11 @@ export default function Report() {
                                                 onClick={() => filterBy("role")}
                                                 textTransform="capitalize"
                                                 fontWeight={"500"}
-                                                color="#2F2F2F"
+                                                color={textColor}
                                                 _hover={{
-                                                    color: "#fff",
+                                                    color: bgColor,
                                                     fontWeight: "400",
-                                                    bg: "blue.blue500",
+                                                    bg: NavListBg,
                                                 }}
                                             >
                                                 <HStack fontSize="14px">
@@ -527,11 +527,11 @@ export default function Report() {
                                                 onClick={() => setByDate(true)}
                                                 textTransform="capitalize"
                                                 fontWeight={"500"}
-                                                color="#2F2F2F"
+                                                color={textColor}
                                                 _hover={{
-                                                    color: "#fff",
+                                                    color: bgColor,
                                                     fontWeight: "400",
-                                                    bg: "blue.blue500",
+                                                    bg: NavListBg,
                                                 }}
                                             >
                                                 <HStack fontSize="14px">
@@ -548,11 +548,11 @@ export default function Report() {
                                                 }}
                                                 textTransform="capitalize"
                                                 fontWeight={"500"}
-                                                color="#2F2F2F"
+                                                color={textColor}
                                                 _hover={{
-                                                    color: "#fff",
+                                                    color: bgColor,
                                                     fontWeight: "400",
-                                                    bg: "blue.blue500",
+                                                    bg: NavListBg,
                                                 }}
                                             >
                                                 <HStack fontSize="14px">

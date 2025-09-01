@@ -44,6 +44,7 @@ export default function ScheduleAppointment() {
     subTitleTextColor,
     chartFillColor,
     primaryColor,
+    secondaryColor,
     NavListBg,
   } = useColors();
   const [IsLoading, setIsLoading] = useState(true);
@@ -398,13 +399,13 @@ export default function ScheduleAppointment() {
               <Menu isLazy>
                 <MenuButton as={Box}>
                   <HStack
-                    border={`1px solid ${primaryColor}`}
+                    border={`1px solid ${NavListBg}`}
                     rounded="7px"
                     cursor="pointer"
                     py="11.64px"
                     px="16.98px"
                     bg={NavListBg}
-                    color={primaryColor}
+                    color={secondaryColor}
                     fontWeight="500"
                     fontSize="14px"
                   >
@@ -412,7 +413,7 @@ export default function ScheduleAppointment() {
                     <IoFilter />
                   </HStack>
                 </MenuButton>
-                <MenuList>
+                <MenuList bg={bgColor} border={`1px solid ${borderColor}`}>
                   <MenuItem
                     onClick={() => filterBy("appointment")}
                     textTransform="capitalize"
@@ -421,7 +422,7 @@ export default function ScheduleAppointment() {
                     _hover={{
                       color: bgColor,
                       fontWeight: "400",
-                      bg: primaryColor,
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -436,7 +437,7 @@ export default function ScheduleAppointment() {
                     _hover={{
                       color: bgColor,
                       fontWeight: "400",
-                      bg: primaryColor,
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -451,7 +452,7 @@ export default function ScheduleAppointment() {
                     _hover={{
                       color: bgColor,
                       fontWeight: "400",
-                      bg: primaryColor,
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -466,7 +467,7 @@ export default function ScheduleAppointment() {
                     _hover={{
                       color: bgColor,
                       fontWeight: "400",
-                      bg: primaryColor,
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -481,7 +482,7 @@ export default function ScheduleAppointment() {
                     _hover={{
                       color: bgColor,
                       fontWeight: "400",
-                      bg: primaryColor,
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -496,7 +497,7 @@ export default function ScheduleAppointment() {
                     _hover={{
                       color: bgColor,
                       fontWeight: "400",
-                      bg: primaryColor,
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -518,8 +519,8 @@ export default function ScheduleAppointment() {
                     color={textColor}
                     _hover={{
                       color: bgColor,
-                      fontWeight: "400",
-                      bg: primaryColor,
+                      fontWeight: "4-00",
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">

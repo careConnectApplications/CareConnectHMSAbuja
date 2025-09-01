@@ -56,6 +56,7 @@ export default function ScheduleProcedure() {
     subTitleTextColor,
     chartFillColor,
     primaryColor,
+    secondaryColor,
     NavListBg,
   } = useColors();
   const [IsLoading, setIsLoading] = useState(false);
@@ -522,13 +523,13 @@ export default function ScheduleProcedure() {
               <Menu isLazy>
                 <MenuButton as={Box}>
                   <HStack
-                    border={`1px solid ${primaryColor}`}
+                    border={`1px solid ${NavListBg}`}
                     rounded="7px"
                     cursor="pointer"
                     py="11.64px"
                     px="16.98px"
                     bg={NavListBg}
-                    color={primaryColor}
+                    color={secondaryColor}
                     fontWeight="500"
                     fontSize="14px"
                   >
@@ -536,7 +537,7 @@ export default function ScheduleProcedure() {
                     <IoFilter />
                   </HStack>
                 </MenuButton>
-                <MenuList>
+                <MenuList bg={bgColor} border={`1px solid ${borderColor}`}>
                   <MenuItem
                     onClick={() => filterBy("name")}
                     textTransform="capitalize"
@@ -545,7 +546,7 @@ export default function ScheduleProcedure() {
                     _hover={{
                       color: bgColor,
                       fontWeight: "400",
-                      bg: primaryColor,
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -560,7 +561,7 @@ export default function ScheduleProcedure() {
                     _hover={{
                       color: bgColor,
                       fontWeight: "400",
-                      bg: primaryColor,
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -575,7 +576,7 @@ export default function ScheduleProcedure() {
                     _hover={{
                       color: bgColor,
                       fontWeight: "400",
-                      bg: primaryColor,
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -590,7 +591,7 @@ export default function ScheduleProcedure() {
                     _hover={{
                       color: bgColor,
                       fontWeight: "400",
-                      bg: primaryColor,
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -605,7 +606,7 @@ export default function ScheduleProcedure() {
                     _hover={{
                       color: bgColor,
                       fontWeight: "400",
-                      bg: primaryColor,
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -620,7 +621,7 @@ export default function ScheduleProcedure() {
                     _hover={{
                       color: bgColor,
                       fontWeight: "400",
-                      bg: primaryColor,
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">
@@ -641,7 +642,7 @@ export default function ScheduleProcedure() {
                     _hover={{
                       color: bgColor,
                       fontWeight: "400",
-                      bg: primaryColor,
+                      bg: NavListBg,
                     }}
                   >
                     <HStack fontSize="14px">

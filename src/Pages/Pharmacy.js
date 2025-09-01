@@ -456,7 +456,7 @@ export default function Pharmacy() {
                     py="11.64px"
                     px="16.98px"
                     bg={NavListBg}
-                    color={textColor}
+                    color={secondaryColor}
                     fontWeight="500"
                     fontSize="14px"
                   >
