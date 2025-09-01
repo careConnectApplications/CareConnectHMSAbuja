@@ -35,6 +35,7 @@ export default function RadiologyReport() {
     requestingDoctor: "",
     radiologist: "",
     status: "",
+    HMOName: "",
   });
 
   const handlePatientSelect = (patient) => {
@@ -73,6 +74,7 @@ export default function RadiologyReport() {
         { value: "completed", label: "Completed" },
       ],
     },
+    { name: "HMOName", label: "HMO Name", type: "text", placeholder: "Enter HMO name" },
   ];
 
   // Pagination settings
@@ -145,6 +147,7 @@ export default function RadiologyReport() {
       requestingDoctor: "",
       radiologist: "",
       status: "",
+      HMOName: "",
     });
     setData([]);
     setCurrentPage(1);
@@ -329,6 +332,18 @@ export default function RadiologyReport() {
                     <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
                       Status
                     </Th>
+                    <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                      HMO Name
+                    </Th>
+                    <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                      Amount
+                    </Th>
+                    <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                      Gender
+                    </Th>
+                    <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                      Age
+                    </Th>
                   </Tr>
                 </Thead>
                 <Tbody>
@@ -341,11 +356,15 @@ export default function RadiologyReport() {
                         </HStack>
                       </Td>
                       <Td fontSize="14px">{item.MRN}</Td>
-                      <Td fontSize="14px">{item.examType}</Td>
+                      <Td fontSize="14px">{item.testname}</Td>
                       <Td fontSize="14px">{moment(item.createdAt).format("DD/MM/YYYY")}</Td>
-                      <Td fontSize="14px">{item.requestingDoctor}</Td>
+                      <Td fontSize="14px">{item.raiseby}</Td>
                       <Td fontSize="14px">{item.radiologist}</Td>
                       <Td fontSize="14px">{item.status}</Td>
+                      <Td fontSize="14px">{item.HMOName}</Td>
+                      <Td fontSize="14px">{item.amount}</Td>
+                      <Td fontSize="14px">{item.gender}</Td>
+                      <Td fontSize="14px">{item.age}</Td>
                     </Tr>
                   ))}
                 </Tbody>

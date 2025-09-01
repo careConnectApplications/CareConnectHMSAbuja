@@ -91,6 +91,7 @@ export default function BirthReport() {
     }
     setIsLoading(true);
     try {
+      // The second argument is the queryType, which is hardcoded to "birthreport" for this report.
       const result = await GetMedicalReportAPI({ filters: payload }, "birthreport");
       setData(result.data.queryresult);
       setIsLoading(false);
