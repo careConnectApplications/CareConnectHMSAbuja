@@ -216,7 +216,7 @@ export default function UserManagement() {
       console.error("Error resetting password:", err); 
       setShowToast({
         show: true,
-        message: err.message,
+        message: err.response.data.message,
         status: "error",
       });
    

@@ -9,7 +9,7 @@ import {
   Td,
   TableContainer,
 } from "@chakra-ui/react";
-import * as XLSX from 'xlsx/xlsx.mjs';
+import * as XLSX from "xlsx/xlsx.mjs";
 import Button from "../../Components/Button";
 import Input from "../../Components/Input";
 import Preloader from "../../Components/Preloader";
@@ -27,18 +27,26 @@ export default function RadiologyReport() {
   const [Data, setData] = useState([]);
   const [Users, setUsers] = useState([]);
   const [showAdvancedFilter, setShowAdvancedFilter] = useState(false);
+
+  // Update payload keys to match table data structure
   const [payload, setPayload] = useState({
     startDate: "",
     endDate: "",
-    patient: "",
-    examType: "",
-    requestingDoctor: "",
+    firstName: "", // Changed from 'patient'
+    lastName: "", // Added to match table structure
+    testname: "", // Changed from 'examType'
+    raiseby: "", // Changed from 'requestingDoctor'
     radiologist: "",
     status: "",
+    HMOName: "",
   });
 
   const handlePatientSelect = (patient) => {
-    setPayload({ ...payload, patient: patient?._id || "" });
+    setPayload({
+      ...payload,
+      firstName: patient?.firstName || "",
+      lastName: patient?.lastName || "",
+    });
   };
 
   const getUsers = async () => {
@@ -52,37 +60,66 @@ export default function RadiologyReport() {
     getUsers();
   }, []);
 
+  // Update filter fields to match API and table structure
   const advancedFilterFields = [
-    { name: "patient", label: "Search Patient (First, Last Name)", type: "patient-search", placeholder: "Enter patient name" },
-    { name: "examType", label: "Exam Type", type: "text", placeholder: "Enter exam type" },
     {
-      name: "requestingDoctor",
+      name: "patient",
+      label: "Search Patient (First, Last Name)",
+      type: "patient-search",
+      placeholder: "Enter patient name",
+    },
+    {
+      name: "testname", // Changed from 'examType'
+      label: "Exam Type",
+      type: "text",
+      placeholder: "Enter exam type",
+    },
+    {
+      name: "raiseby", // Changed from 'requestingDoctor'
       label: "Requesting Doctor",
       type: "select",
       placeholder: "Select doctor",
-      options: Users.filter(
-        (user) => user.role === "Medical Doctor"
-      ).map((user) => ({
-        value: user.firstName + " " + user.lastName,
-        label: user.firstName + " " + user.lastName,
-      })),
+      options: Users.filter((user) => user.role === "Medical Doctor").map(
+        (user) => ({
+          value: user.firstName + " " + user.lastName,
+          label: user.firstName + " " + user.lastName,
+        })
+      ),
     },
-    { name: "radiologist", label: "Radiologist", type: "text", placeholder: "Enter radiologist's name" },
-    { name: "status", label: "Status", type: "select", placeholder: "Select status", options: [
+    {
+      name: "radiologist",
+      label: "Radiologist",
+      type: "text",
+      placeholder: "Enter radiologist's name",
+    },
+    {
+      name: "status",
+      label: "Status",
+      type: "select",
+      placeholder: "Select status",
+      options: [
         { value: "pending", label: "Pending" },
         { value: "completed", label: "Completed" },
       ],
+    },
+    {
+      name: "HMOName",
+      label: "HMO Name",
+      type: "text",
+      placeholder: "Enter HMO name",
     },
   ];
 
   // Pagination settings
   const [CurrentPage, setCurrentPage] = useState(1);
-  const [PostPerPage, setPostPerPage] = useState(configuration.sizePerPage || 10);
+  const [PostPerPage, setPostPerPage] = useState(
+    configuration.sizePerPage || 10
+  );
 
   const indexOfLastItem = CurrentPage * PostPerPage;
   const indexOfFirstItem = indexOfLastItem - PostPerPage;
   const PaginatedData = Data.slice(indexOfFirstItem, indexOfLastItem);
-  
+
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
@@ -112,7 +149,15 @@ export default function RadiologyReport() {
     }
     setIsLoading(true);
     try {
-      const result = await GetMedicalReportAPI({ filters: payload }, "radiologyreport");
+      // Clean up the payload before sending (remove empty values)
+      const cleanPayload = Object.fromEntries(
+        Object.entries(payload).filter(([_, value]) => value !== "")
+      );
+
+      const result = await GetMedicalReportAPI(
+        { filters: cleanPayload },
+        "radiologyreport"
+      );
       setData(result.data.queryresult);
       setIsLoading(false);
       setShowToast({
@@ -140,11 +185,13 @@ export default function RadiologyReport() {
     setPayload({
       startDate: "",
       endDate: "",
-      patient: "",
-      examType: "",
-      requestingDoctor: "",
+      firstName: "",
+      lastName: "",
+      testname: "",
+      raiseby: "",
       radiologist: "",
       status: "",
+      HMOName: "",
     });
     setData([]);
     setCurrentPage(1);
@@ -308,26 +355,93 @@ export default function RadiologyReport() {
               <Table variant="striped">
                 <Thead bg="#fff">
                   <Tr>
-                    <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
                       Patient Name
                     </Th>
-                    <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
                       MRN
                     </Th>
-                    <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
                       Exam Type
                     </Th>
-                    <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
                       Exam Date
                     </Th>
-                    <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
                       Requesting Doctor
                     </Th>
-                    <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
                       Radiologist
                     </Th>
-                    <Th fontSize="13px" textTransform="capitalize" color="#534D59" fontWeight="600">
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
                       Status
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
+                      HMO Name
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
+                      Amount
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
+                      Gender
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color="#534D59"
+                      fontWeight="600"
+                    >
+                      Age
                     </Th>
                   </Tr>
                 </Thead>
@@ -336,16 +450,25 @@ export default function RadiologyReport() {
                     <Tr key={index}>
                       <Td fontSize="14px">
                         <HStack>
-                          <Avatar name={`${item.firstName} ${item.lastName}`} size="sm" />
+                          <Avatar
+                            name={`${item.firstName} ${item.lastName}`}
+                            size="sm"
+                          />
                           <Text>{`${item.firstName} ${item.lastName}`}</Text>
                         </HStack>
                       </Td>
                       <Td fontSize="14px">{item.MRN}</Td>
-                      <Td fontSize="14px">{item.examType}</Td>
-                      <Td fontSize="14px">{moment(item.createdAt).format("DD/MM/YYYY")}</Td>
-                      <Td fontSize="14px">{item.requestingDoctor}</Td>
+                      <Td fontSize="14px">{item.testname}</Td>
+                      <Td fontSize="14px">
+                        {moment(item.createdAt).format("DD/MM/YYYY")}
+                      </Td>
+                      <Td fontSize="14px">{item.raiseby}</Td>
                       <Td fontSize="14px">{item.radiologist}</Td>
                       <Td fontSize="14px">{item.status}</Td>
+                      <Td fontSize="14px">{item.HMOName}</Td>
+                      <Td fontSize="14px">{item.amount}</Td>
+                      <Td fontSize="14px">{item.gender}</Td>
+                      <Td fontSize="14px">{item.age}</Td>
                     </Tr>
                   ))}
                 </Tbody>
