@@ -107,7 +107,7 @@ export default function Dashboard() {
         px={["18px", "18px"]}
         rounded="10px"
       >
-        <SimpleGrid columns={["1", "2", "3", "4"]} spacing={4} bg={primaryColor} rounded="10px" p='5'>
+        <SimpleGrid columns={["1", "2", "3", "4"]} spacing={4} bg={"blue.blue400"} rounded="10px" p='5'>
           <DashboardCard
             title="Total Out Patient"
             value={Data.totalnumberofactivepatient?.toLocaleString()}
