@@ -19,7 +19,6 @@ import {
 import { BiSearch } from "react-icons/bi";
 import { IoFilter } from "react-icons/io5";
 import { SlPlus } from "react-icons/sl";
-import Seo from "../Utils/Seo";
 import { configuration } from "../Utils/Helpers";
 import Pagination from "../Components/Pagination";
 import Button from "../Components/Button";
@@ -29,7 +28,6 @@ import ShowToast from "../Components/ToastNotification";
 import { ReadAllRadiologyByPatientApi, ViewMultipleRadiologyResultsApi } from "../Utils/ApiCalls";
 import RadiologyOrderRequestModal from "../Components/RadiologyOrderRequestModal";
 import TableRowY from "../Components/TableRowY";
-import MainLayout from "../Layouts/Index";
 import { useColors } from "../Utils/colors";
 
 // Helper function to format the date and time in a simpler format
@@ -274,21 +272,13 @@ export default function Radiology() {
   };
 
   return (
-    <MainLayout>
+    <>
       {isLoading && <Preloader />}
 
       {showToast.show && (
         <ShowToast message={showToast.message} status={showToast.status} />
       )}
-      <Seo title="Radiology" description="Radiology Requests and Results" />
-      <HStack>
-        <Text color={titleTextColor} fontWeight="600" fontSize="18px">
-          Radiology
-        </Text>
-      </HStack>
-      <Text color={subTitleTextColor} mt="9px" fontWeight="400" fontSize="12px">
-        Manage all radiology requests and view results in one place.
-      </Text>
+      
       <Box
         bg={bgColor}
         border={`1px solid ${borderColor}`}
@@ -487,6 +477,6 @@ export default function Radiology() {
         initialData={selectedRadiology}
         onSuccess={handleSuccess}
       />
-    </MainLayout>
+    </>
   );
 }
