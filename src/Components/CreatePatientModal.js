@@ -40,7 +40,7 @@ import {
   getAllStates,
   getLGAsForState,
   GetOnlyClinicApi,
-  GetAllInsuranceApi,
+  GetAllInsuranceApi, GetAllUnitApi,
 } from "../Utils/ApiCalls";
 
 import ShowToast from "./ToastNotification";
@@ -51,6 +51,15 @@ export default function CreatePatientModal({
   type,
   filteredpatient,
 }) {
+  // Get today's date in YYYY-MM-DD format
+  const getTodayDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
   const [states, setStates] = useState([]); // To hold all states
   const [lgas, setLgas] = useState([]); // To hold LGAs for the selected state
   const [selectedState, setSelectedState] = useState(""); // The selected state
@@ -132,7 +141,8 @@ export default function CreatePatientModal({
     }
   }, [isOpen]);
 
-  const [patientData, setPatientData] = useState({
+  // Create function to get initial patient data state with today's date
+  const getInitialPatientData = () => ({
     title: "",
     firstName: "",
     middleName: "",
@@ -162,7 +172,7 @@ export default function CreatePatientModal({
     HMOPlan: "",
     clinic: "",
     reason: "",
-    appointmentdate: "",
+    appointmentdate: getTodayDate(),
     unit: "",
     appointmentcategory: "",
     appointmenttype: "",
@@ -183,6 +193,8 @@ export default function CreatePatientModal({
     temperature: "",
     specialNeeds: "",
   });
+
+  const [patientData, setPatientData] = useState(getInitialPatientData());
 
   const [UpdatedPayload, setUpdatedPayload] = useState({
     title: "",
@@ -230,6 +242,7 @@ export default function CreatePatientModal({
   });
 
   const [Settings, setSettings] = useState({});
+  const [AllUnit, setAllUnit] = useState([]);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(""); // State for the message
   const [messageStatus, setMessageStatus] = useState(""); // State for message status (success/error)
@@ -242,59 +255,26 @@ export default function CreatePatientModal({
     } catch (e) {}
   };
 
+  const getAllUnit = async (clinic) => {
+    try {
+      const result = await GetAllUnitApi(clinic);
+
+      setAllUnit(result.queryresult.unitdetails);
+      console.log("result unit", result);
+      return result;
+    } catch (e) {}
+  };
+
+
   useEffect(() => {
     getSettings();
     if (!isOpen) {
-      setPatientData({
-        title: "",
-        firstName: "",
-        middleName: "",
-        lastName: "",
-        country: "",
-        stateOfResidence: "",
-        LGA: "",
-        address: "",
-        age: "",
-        dateOfBirth: "",
-        gender: "",
-        nin: "",
-        phoneNumber: "",
-        email: "",
-        oldMRN: "",
-        nextOfKinName: "",
-        nextOfKinRelationship: "",
-        nextOfKinPhoneNumber: "",
-        nextOfKinAddress: "",
-        maritalStatus: "",
-        disability: "",
-        occupation: "",
-        isHMOCover: "",
-        HMOName: "",
-        HMOId: "",
-        HMOPlan: "",
-        clinic: "",
-        reason: "",
-        appointmentdate: "",
-        unit: "",
-        appointmentcategory: "",
-        appointmenttype: "",
-
-        physicalassault: false,
-        sexualassault: false,
-        policeaname: "",
-        servicenumber: "",
-        policephonenumber: "",
-        facilitypateintreferedfrom: "",
-        alternatePhoneNumber: "",
-        bloodGroup: "",
-        genotype: "",
-        bp: "",
-        heartRate: "",
-        temperature: "",
-        specialNeeds: "",
-      });
+      setPatientData(getInitialPatientData());
       setMessage(""); // Reset message on close
       setMessageStatus(""); // Reset message status on close
+    } else if (type === "new") {
+      // Reset to initial state with today's date for new patients
+      setPatientData(getInitialPatientData());
     }
 
     console.log("filteredpatient", filteredpatient);
@@ -401,6 +381,11 @@ export default function CreatePatientModal({
         ...prev,
         [name]: value,
       }));
+    }
+
+    if (name === "clinic") {
+      // Fetch and update unit options based on selected clinic
+      getAllUnit(value);
     }
   };
 
@@ -560,40 +545,7 @@ export default function CreatePatientModal({
             <ModalCloseButton
               onClick={() => {
                 onClose();
-                setPatientData({
-                  title: "",
-                  firstName: "",
-                  middleName: "",
-                  lastName: "",
-                  country: "",
-                  stateOfResidence: "",
-                  LGA: "",
-                  address: "",
-                  age: "",
-                  dateOfBirth: "",
-                  gender: "",
-                  nin: "",
-                  phoneNumber: "",
-                  email: "",
-                  oldMRN: "",
-                  nextOfKinName: "",
-                  nextOfKinRelationship: "",
-                  nextOfKinPhoneNumber: "",
-                  nextOfKinAddress: "",
-                  maritalStatus: "",
-                  disability: "",
-                  occupation: "",
-                  isHMOCover: "",
-                  HMOName: "",
-                  HMOId: "",
-                  HMOPlan: "",
-                  physicalassault: false,
-                  sexualassault: false,
-                  policaename: "",
-                  servicenumber: "",
-                  policephonenumber: "",
-                  facilitypateintreferedfrom: "",
-                });
+                setPatientData(getInitialPatientData());
               }}
             />
           </ModalHeader>
@@ -631,6 +583,7 @@ export default function CreatePatientModal({
                       <option value="Mallam">Mallam</option>
                       <option value="Alhaji">Alhaji </option>
                       <option value="Hajiya">Hajiya </option>
+                      <option value="Clergy">Clergy </option>
                     </Select>
                   </FormControl>
                   <Input
@@ -843,7 +796,7 @@ export default function CreatePatientModal({
                 >
                   Scheduling Information
                 </Text>
-                <SimpleGrid columns={{ base: 1, md: 6 }} spacing={4}>
+                <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4}>
                   <Input
                     type="date"
                     name="appointmentdate"
@@ -852,13 +805,21 @@ export default function CreatePatientModal({
                     onChange={handleInputChange}
                     leftIcon={<FaCalendarAlt />}
                   />
-                  <Input
-                    name="reason"
-                    label="Reason"
-                    value={patientData.reason}
-                    onChange={handleInputChange}
-                    leftIcon={<RiStickyNoteFill />}
-                  />
+                    <Select
+                      h="45px"
+                      borderWidth="2px"
+                      borderColor="#6B7280"
+                      name="reason"
+                      label="reason"
+                      value={patientData.reason}
+                      onChange={handleInputChange}
+                      placeholder="Select reason"
+                    >
+                      <option value="New">New</option>
+                      <option value="Referred">Referred</option>
+                     
+                    </Select>
+                 
 
                   <FormControl>
                     <Select
@@ -880,9 +841,9 @@ export default function CreatePatientModal({
                       onChange={handleInputChange}
                       placeholder="Select Unit"
                     >
-                      {Settings?.unitcategory?.map((item, index) => (
-                        <option key={index} value={item}>
-                          {item}
+                      {AllUnit?.map((item, index) => (
+                        <option key={index} value={item.unit}>
+                          {item.unit}
                         </option>
                       ))}
                     </Select>
@@ -1526,13 +1487,21 @@ export default function CreatePatientModal({
                     onChange={handleUpdatedPayload}
                     leftIcon={<FaCalendarAlt />}
                   />
-                  <Input
-                    name="reason"
-                    label="Reason"
-                    value={UpdatedPayload.reason}
-                    onChange={handleUpdatedPayload}
-                    leftIcon={<RiStickyNoteFill />}
-                  />
+                   <Select
+                      h="45px"
+                      borderWidth="2px"
+                      borderColor="#6B7280"
+                      name="reason"
+                      label="reason"
+                      value={UpdatedPayload.reason}
+                      onChange={handleUpdatedPayload}
+                      placeholder="Select reason"
+                    >
+                      <option value="New">New</option>
+                      <option value="Referred">Referred</option>
+                     
+                    </Select>
+                 
 
                   <FormControl>
                     <Select
