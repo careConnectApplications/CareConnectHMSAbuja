@@ -16,6 +16,7 @@ export const GetAwaitingAuthorizationRadiology = () => {
   return axios
     .request(config)
     .then((response) => {
+      console.log(response);
       return response.data;
     })
     .catch((error) => {
@@ -28,6 +29,40 @@ export const GetAwaitingAuthorizationRadiology = () => {
         throw new Error(error.msg);
       } else {
         throw new Error(error.msg);
+      }
+    });
+};
+
+export const ValidateLabResultApi = (labResultId, payload) => {
+  const data = JSON.stringify(payload);
+  const config = {
+    method: "put",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/lab/validatelabresult/${labResultId}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data,
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response?.data?.message) {
+        throw new Error(error.response.data.message);
+      } else if (error.response?.data?.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response?.data) {
+        throw new Error(JSON.stringify(error.response.data));
+      } else if (error.request) {
+        throw new Error(error.message);
+      } else {
+        throw new Error(error.message);
       }
     });
 };

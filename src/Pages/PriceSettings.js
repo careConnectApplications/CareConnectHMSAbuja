@@ -98,7 +98,8 @@ export default function PriceSettings() {
       const filtered = data.filter((item) => {
         const serviceType = String(item.servicetype || "").toLowerCase();
         const serviceCategory = String(item.servicecategory || "").toLowerCase();
-        return serviceType.includes(lower) || serviceCategory.includes(lower);
+        const category = String(item.category || "").toLowerCase();
+        return serviceType.includes(lower) || serviceCategory.includes(lower) || category.includes(lower);
       });
       setFilterData(filtered);
     }
@@ -119,6 +120,11 @@ export default function PriceSettings() {
     } else if (field === "servicecategory") {
       const filtered = data.filter((item) =>
         String(item.servicecategory || "").toLowerCase().includes(lower)
+      );
+      setFilterData(filtered);
+    } else if (field === "category") {
+      const filtered = data.filter((item) =>
+        String(item.category || "").toLowerCase().includes(lower)
       );
       setFilterData(filtered);
     }
@@ -214,6 +220,9 @@ export default function PriceSettings() {
               <MenuItem onClick={() => filterBy("servicecategory")} textTransform="capitalize" fontWeight="500" color="#2F2F2F" _hover={{ color: "#fff", fontWeight: "400", bg: "blue.blue500" }}>
                 By Service Category
               </MenuItem>
+              <MenuItem onClick={() => filterBy("category")} textTransform="capitalize" fontWeight="500" color="#2F2F2F" _hover={{ color: "#fff", fontWeight: "400", bg: "blue.blue500" }}>
+                By Category
+              </MenuItem>
               <MenuItem onClick={clearFilter} textTransform="capitalize" fontWeight="500" color="#2F2F2F" _hover={{ color: "#fff", fontWeight: "400", bg: "blue.blue500" }}>
                 Clear Filter
               </MenuItem>
@@ -237,6 +246,7 @@ export default function PriceSettings() {
               <Tr>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">Service Type</Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">Service Category</Th>
+                <Th fontSize="13px" color="#534D59" fontWeight="600">Category</Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">Amount</Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">HMO Cover</Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">Status</Th>
@@ -250,6 +260,7 @@ export default function PriceSettings() {
                   type="price-settings"
                   serviceType={item.servicetype}
                   serviceCategory={item.servicecategory}
+                  category={item.category}
                   amount={item.amount.toLocaleString()}
                   hmoStatus={item.isHMOCover}
                   status={item.status}

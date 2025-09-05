@@ -20,6 +20,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--background-light);
   color: var(--text-light);
+  counter-reset: page;
 }
 
 .dark {
@@ -167,7 +168,7 @@ code {
 .p-datatable .p-datatable-thead > tr > th {
   font-size: 14px !important;
   font-weight: 600 !important;
-  color: #475467 !a important;
+  color: #475467 !important;
 }
 
 .p-datatable .p-datatable-tbody > tr > td {
@@ -553,4 +554,18 @@ code {
   100% {
     opacity: 1;
   }
+}
+
+
+.page-number {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  font-size: 12px;
+  color: #666;
+}
+
+.page-number::after {
+  counter-increment: page;
+  content: "Page " counter(page);
 }

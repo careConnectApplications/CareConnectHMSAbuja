@@ -178,7 +178,9 @@ export default function TableRow({
   dischargeReason,
   referredIn,
   referredFrom,
-
+  onValidate,
+  chemicalReviewStatus,
+  hematologyReviewStatus,
 }) {
   const router = useNavigate();
   const {
@@ -1056,6 +1058,11 @@ export default function TableRow({
           <Td>
             <Text fontWeight="400" fontSize={"13px"}>
               {serviceCategory}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"13px"}>
+              {category}
             </Text>
           </Td>
           <Td>
@@ -3914,9 +3921,9 @@ export default function TableRow({
               </MenuButton>
               <MenuList>
                 <MenuItem
-                  onClick={() => onProcessChemicalPathology?.(_id, report)}
+                  onClick={() => onView(null, report)}
                   textTransform="capitalize"
-                  fontWeight="500"
+                  fontWeight={"500"}
                   color="#2F2F2F"
                   _hover={{
                     color: "#fff",
@@ -3924,12 +3931,12 @@ export default function TableRow({
                     bg: "blue.blue500",
                   }}
                 >
-                  Process Chemical Pathology Report
+                  View
                 </MenuItem>
                 <MenuItem
-                      onClick={() => onProcessPeripheralBlood?.(_id, "marrow")}
+                  onClick={() => onValidate(report)}
                   textTransform="capitalize"
-                  fontWeight="500"
+                  fontWeight={"500"}
                   color="#2F2F2F"
                   _hover={{
                     color: "#fff",
@@ -3937,20 +3944,7 @@ export default function TableRow({
                     bg: "blue.blue500",
                   }}
                 >
-                  Process ADH Bone Marrow Aspiration Report
-                </MenuItem>
-                <MenuItem
-                  onClick={() => onProcessHematology?.(_id, report)}
-                  textTransform="capitalize"
-                  fontWeight="500"
-                  color="#2F2F2F"
-                  _hover={{
-                    color: "#fff",
-                    fontWeight: "400",
-                    bg: "blue.blue500",
-                  }}
-                >
-                  Process Peripheral Blood Film Report
+                  Validate
                 </MenuItem>
               </MenuList>
             </Menu>
@@ -4029,6 +4023,42 @@ export default function TableRow({
               </Text>
             </HStack>
           </Td>
+          {(isChemical || isHematology) && (
+            <Td>
+              <HStack
+                color={
+                  (isChemical ? chemicalReviewStatus : hematologyReviewStatus) ===
+                  "approved"
+                    ? "#027A48"
+                    : (isChemical
+                        ? chemicalReviewStatus
+                        : hematologyReviewStatus) === "pending"
+                    ? "#FFA30C"
+                    : "#FD4739"
+                }
+              >
+                <Box
+                  rounded="100%"
+                  w="8px"
+                  h="8px"
+                  bg={
+                    (isChemical
+                      ? chemicalReviewStatus
+                      : hematologyReviewStatus) === "approved"
+                      ? "#027A48"
+                      : (isChemical
+                          ? chemicalReviewStatus
+                          : hematologyReviewStatus) === "pending"
+                      ? "#FFA30C"
+                      : "#FD4739"
+                  }
+                ></Box>
+                <Text fontWeight="400" fontSize={"12px"}>
+                  {isChemical ? chemicalReviewStatus : hematologyReviewStatus}
+                </Text>
+              </HStack>
+            </Td>
+          )}
           <Td>
             {(labStatus === "chemicalpathologyscheduled" ||
               labStatus === "chemicalpathologyprocessed" ||
@@ -4042,22 +4072,67 @@ export default function TableRow({
                 </MenuButton>
                 <MenuList>
                   {isChemical && (
-                    <MenuItem
-                      onClick={() => onView("chemical", report)}
-                      textTransform="capitalize"
-                      fontWeight={"500"}
-                      color="#2F2F2F"
-                      _hover={{
-                        color: "#fff",
-                        fontWeight: "400",
-                        bg: "blue.blue500",
-                      }}
-                    >
-                      View Chemical Pathology Report
-                    </MenuItem>
+                    <>
+                      <MenuItem
+                        onClick={() =>
+                          onProcessChemicalPathology?.(_id, report)
+                        }
+                        textTransform="capitalize"
+                        fontWeight="500"
+                        color="#2F2F2F"
+                        _hover={{
+                          color: "#fff",
+                          fontWeight: "400",
+                          bg: "blue.blue500",
+                        }}
+                      >
+                        Process Chemical Pathology Report
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => onView("chemical", report)}
+                        textTransform="capitalize"
+                        fontWeight={"500"}
+                        color="#2F2F2F"
+                        _hover={{
+                          color: "#fff",
+                          fontWeight: "400",
+                          bg: "blue.blue500",
+                        }}
+                      >
+                        View Chemical Pathology Report
+                      </MenuItem>
+                    </>
                   )}
                   {isHematology && (
                     <>
+                      <MenuItem
+                        onClick={() =>
+                          onProcessPeripheralBlood?.(_id, "marrow")
+                        }
+                        textTransform="capitalize"
+                        fontWeight="500"
+                        color="#2F2F2F"
+                        _hover={{
+                          color: "#fff",
+                          fontWeight: "400",
+                          bg: "blue.blue500",
+                        }}
+                      >
+                        Process ADH Bone Marrow Aspiration Report
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => onProcessHematology?.(_id, report)}
+                        textTransform="capitalize"
+                        fontWeight="500"
+                        color="#2F2F2F"
+                        _hover={{
+                          color: "#fff",
+                          fontWeight: "400",
+                          bg: "blue.blue500",
+                        }}
+                      >
+                        Process Peripheral Blood Film Report
+                      </MenuItem>
                       <MenuItem
                         onClick={() => onView("boneMarrow", report)}
                         textTransform="capitalize"
