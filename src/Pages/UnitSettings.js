@@ -276,7 +276,7 @@ export default function UnitSettings() {
                   sn={indexOfFirstPost + i + 1}
                   unit={item.unit }
                   unitId={item.id }
-                  clinic={item.clinicName  || "N/A"}
+                  clinic={item.clinicId?.clinic  || "N/A"}
                   date={moment(item.createdAt).format("lll")}
                   onEdit={() => EditUnit(item)}
                   onChangeStatus={() => onChangeStatus(item._id)}

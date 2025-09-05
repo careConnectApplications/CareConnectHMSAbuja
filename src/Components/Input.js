@@ -49,7 +49,7 @@ import { AiOutlineMail } from 'react-icons/ai';
       const {
         bgColor,
         textColor, 
-        borderColor: border,
+        inputBorderColor,
         primaryColor,
       } = useColors();
    
@@ -100,7 +100,7 @@ import { AiOutlineMail } from 'react-icons/ai';
               fontSize="16px"
               fontFamily={"body"}
               _hover={{borderColor: primaryColor}}
-              borderColor = {bColor ? bColor : border}
+              borderColor = {bColor ? bColor : inputBorderColor}
               rounded="8px" 
               borderWidth="1px"
               bg="transparent"

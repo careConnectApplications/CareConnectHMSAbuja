@@ -28,7 +28,7 @@ import {
   ScheduleAppointmentApi,
   UpdateAppointmentApi,
   GetOnlyClinicApi,
-  SearchPatientApi,
+  SearchPatientApi, GetAllUnitApi,
 } from "../Utils/ApiCalls";
 import Button from "../Components/Button";
 import Input from "../Components/Input";
@@ -40,8 +40,20 @@ export default function CreateAppointmentModal({
   type,
   initialData,
 }) {
-  const initialFormState = {
-    appointmentdate: "",
+  // Get today's date in YYYY-MM-DD format
+  const getTodayDate = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  // Create initial form state function to get fresh state with current date
+
+  
+  const getInitialFormState = () => ({
+    appointmentdate: getTodayDate(),
     reason: "",
     appointmentcategory: "",
     appointmenttype: "",
@@ -58,9 +70,22 @@ export default function CreateAppointmentModal({
     arrivalMode: "",
     accidentType: "",
     dateOfAccident: "",
-  };
+  });
 
-  const [formData, setFormData] = useState(initialFormState);
+  const [AllUnit, setAllUnit] = useState([]);
+
+   const getAllUnit = async (clinic) => {
+      try {
+        const result = await GetAllUnitApi(clinic);
+  
+        setAllUnit(result.queryresult.unitdetails);
+        console.log("result unit", result);
+        return result;
+      } catch (e) {}
+    };
+  
+
+  const [formData, setFormData] = useState(getInitialFormState());
   const [settings, setSettings] = useState({});
   // Patients will be populated only after a search is performed.
   const [patients, setPatients] = useState([]);
@@ -79,6 +104,7 @@ export default function CreateAppointmentModal({
   };
 
   useEffect(() => {
+    console.log("Initial dateeee:", getTodayDate());
     if (isOpen) {
       const fetchData = async () => {
         setIsLoadingPatients(true);
@@ -108,6 +134,9 @@ export default function CreateAppointmentModal({
               accidentType: initialData.accidentType || "",
               dateOfAccident: initialData.dateOfAccident || "",
             });
+          } else {
+            // Reset to initial state with today's date for new appointments
+            setFormData(getInitialFormState());
           }
         } catch (error) {
           showToast({
@@ -119,8 +148,6 @@ export default function CreateAppointmentModal({
         }
       };
       fetchData();
-    } else {
-      // setFormData(initialFormState);
     }
   }, [isOpen, type, initialData]);
 
@@ -131,10 +158,19 @@ export default function CreateAppointmentModal({
       setPatients([]);
       setSelectedPatientInfo(null);
     }
+        console.log("Initial dateeee:", getTodayDate());
+
   }, [isOpen]);
 
-  const handleInputChange = ({ target: { name, value } }) =>
+  const handleInputChange = ({ target: { name, value } }) => {
+
     setFormData((prev) => ({ ...prev, [name]: value }));
+
+     if (name === "clinic") {
+          // Fetch and update unit options based on selected clinic
+          getAllUnit(value);
+        }
+  }
 
   // Handler for patient selection from search results
   const handlePatientSelect = (patient) => {
@@ -278,7 +314,7 @@ export default function CreateAppointmentModal({
         });
       }
       onClose();
-      setFormData(initialFormState);
+      setFormData(getInitialFormState());
     } catch (error) {
       console.error("API Error:", error);
       showToast({
@@ -286,7 +322,7 @@ export default function CreateAppointmentModal({
         message: ` ${error.message}`,
       });
       onClose();
-      setFormData(initialFormState);
+      setFormData(getInitialFormState());
     } finally {
       setLoading(false);
     }
@@ -486,9 +522,9 @@ export default function CreateAppointmentModal({
                   onChange={handleInputChange}
                   placeholder="Select Unit"
                 >
-                  {settings?.unitcategory?.map((item, index) => (
-                    <option key={index} value={item}>
-                      {item}
+                  {AllUnit?.map((item, index) => (
+                    <option key={index} value={item.unit}>
+                      {item.unit}
                     </option>
                   ))}
                 </Select>
