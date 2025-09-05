@@ -24,6 +24,7 @@ import PricingModelSettings from "./PricingModelSettings";
 import OutreachMedicationSettings from "./OutreachMedicationSettings";
 import BedManagement from "./BedManagement";
 import InsuranceCoverManagement from "./InsuranceCoverManagement";
+import UnitSettings from "./UnitSettings";
 import { useColors } from "../Utils/colors";
 
 export default function Settings() {
@@ -129,6 +130,12 @@ export default function Settings() {
           >
             Insurance Cover Management
           </Tab>
+          <Tab
+            _focus={{ outline: "none" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
+          >
+            Unit Management
+          </Tab>
         </TabList>
         <TabPanels>
           <TabPanel p="0">
@@ -169,6 +176,9 @@ export default function Settings() {
           </TabPanel>
           <TabPanel p="0">
             <InsuranceCoverManagement />
+          </TabPanel>
+          <TabPanel p="0">
+            <UnitSettings />
           </TabPanel>
         </TabPanels>
       </Tabs>

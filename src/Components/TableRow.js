@@ -19,7 +19,7 @@ export default function TableRow({
   type,
   name,
   email,
-  labName,
+  labName,unitId,
   code,
   physicianName,
   collectedDate,hmopercentagecover,actualcost,
@@ -2198,6 +2198,78 @@ export default function TableRow({
                 >
                   <HStack fontSize="14px">
                     <Text>Edit</Text>
+                  </HStack>
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          </Td>
+        </>
+      )}
+      {type === "unit-settings" && (
+        <>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {sn}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {unitId}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {unit}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {clinic}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {date}
+            </Text>
+          </Td>
+        
+
+          <Td>
+            <Menu isLazy>
+              <MenuButton as={Box}>
+                <Flex justifyContent="center" color="#000000" fontSize="16px">
+                  <BsThreeDots />
+                </Flex>
+              </MenuButton>
+              <MenuList>
+                <MenuItem
+                  onClick={onEdit}
+                  textTransform="capitalize"
+                  fontWeight={"500"}
+                  color="#2F2F2F"
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                >
+                  <HStack fontSize="14px">
+                    <Text>Edit</Text>
+                  </HStack>
+                </MenuItem>
+                <MenuItem
+                  onClick={onChangeStatus}
+                  textTransform="capitalize"
+                  fontWeight={"500"}
+                  color="#2F2F2F"
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                >
+                  <HStack fontSize="14px">
+                    <Text>Change Status</Text>
                   </HStack>
                 </MenuItem>
               </MenuList>
