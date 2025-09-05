@@ -65,6 +65,7 @@ import {
             </Button>
           </HStack>
         )}
+        <div className="page-number"></div>
         <Flex justifyContent="center">
           <Image src={logo} width={"10%"} onClick={() => nav("/")} />
         </Flex>

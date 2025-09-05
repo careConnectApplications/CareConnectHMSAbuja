@@ -59,7 +59,6 @@ export default function RequestLabOtherModal({
     id: "",
     notes: "", // Added notes field
     priority: "", // Added priority field
-    labcategory: "",
   });
   const [searchMRN, setSearchMRN] = useState("");
 
@@ -107,7 +106,6 @@ export default function RequestLabOtherModal({
           department: Payload.department,
           notes: Payload.notes,
           priority: Payload.priority,
-          labcategory: Payload.labcategory,
         },
         Payload.id
       );
@@ -120,7 +118,6 @@ export default function RequestLabOtherModal({
           id: "",
           notes: "",
           priority: "",
-          labcategory: "",
         });
         setTestNames([]);
         activateNotifications("Lab Order Created Successfully", "success");
@@ -274,17 +271,13 @@ export default function RequestLabOtherModal({
         id: "",
         notes: "",
         priority: "",
-        labcategory: "",
       });
       setTestNames([]);
     }
   }, [isOpen]);
 
   const isFormComplete =
-    Payload.department &&
-    Payload.id &&
-    TestNames.length > 0 &&
-    Payload.labcategory;
+    Payload.department && Payload.id && TestNames.length > 0;
 
   return (
     <Modal
@@ -326,26 +319,6 @@ export default function RequestLabOtherModal({
                 {labs.map((item, i) => (
                   <option key={i} value={item.clinic}>
                     {item.clinic}
-                  </option>
-                ))}
-              </Select>
-            </Box>
-
-            {/* Lab Category Dropdown */}
-            <Box mb={4}>
-              <Select
-                onChange={handlePayload}
-                placeholder="Select Lab Category"
-                border="2px solid"
-                id="labcategory"
-                value={Payload.labcategory}
-                size="lg"
-                fontSize={Payload.labcategory !== "" ? "16px" : "13px"}
-                borderColor="gray.500"
-              >
-                {Settings?.labcategory?.map((item, i) => (
-                  <option key={i} value={item}>
-                    {item}
                   </option>
                 ))}
               </Select>

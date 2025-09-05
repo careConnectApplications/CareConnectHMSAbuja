@@ -73,6 +73,7 @@ export default function PrintLabReport() {
 
     return (
         <Box px="6%" mt="32px">
+        <div className="page-number"></div>
           {
                 IsLoading && (
                     <Preloader />

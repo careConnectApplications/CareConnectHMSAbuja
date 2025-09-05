@@ -419,7 +419,6 @@ export default function Hematology() {
           setSelectedReportData(null);
         }}
         testId={selectedTestId}
-        activateNotifications={activateNotifications}
         type={modalType}
         oldPayload={selectedReportData}
       />
