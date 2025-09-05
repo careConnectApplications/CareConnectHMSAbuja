@@ -18,34 +18,25 @@ import {
   Th,
   Td,
   TableContainer,
-  useDisclosure,
 } from "@chakra-ui/react";
 import Button from "./Button";
 import Preloader from "./Preloader";
 import TextArea from "./TextArea";
-import { ProcessChemicalPathologyReportApi } from "../Utils/ApiCalls";
-import ShowToast from "./ToastNotification";
-import { MdLocalPrintshop } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { ValidateLabResultApi } from "../Utils/ApiCalls";
+import { useColors } from "../Utils/colors";
 
-export default function ChemicalPathologyReportModal({
+const ValidateLabResultModal = ({
   isOpen,
   onClose,
-  testId,
-  type,
-  oldPayload = {},
-}) {
+  oldPayload,
+  onValidationSuccess,
+  activateNotifications,
+}) => {
   const [loading, setLoading] = useState(false);
-  const [toast, setToast] = useState(null);
   const [comment, setComment] = useState("");
   const [testResults, setTestResults] = useState([]);
   const [patientName, setPatientName] = useState("");
-  const navigate = useNavigate();
-
-  const showToast = (status, message) => {
-    setToast({ status, message });
-    setTimeout(() => setToast(null), 3000);
-  };
+  const { primaryColor, secondaryColor } = useColors();
 
   useEffect(() => {
     if (!isOpen) {
@@ -56,66 +47,44 @@ export default function ChemicalPathologyReportModal({
     }
 
     if (oldPayload) {
-      setComment(oldPayload.comment || "");
+      // Extract test results from oldPayload
       const results = Array.isArray(oldPayload.testresult)
         ? oldPayload.testresult
         : oldPayload.testresult
         ? [oldPayload.testresult]
         : [];
       setTestResults(results);
+      
+      // Set patient name
       setPatientName(oldPayload.patientName || "");
     }
-  }, [isOpen, oldPayload, type]);
+  }, [isOpen, oldPayload]);
 
   const handleSubmit = async () => {
     setLoading(true);
-    const reportPayload = {
-      comment: comment,
-    };
-
     try {
-      const result = await ProcessChemicalPathologyReportApi(
-        testId,
-        reportPayload
+      const payload = { validationremarks: comment };
+      await ValidateLabResultApi(oldPayload._id, payload);
+      activateNotifications("Lab result validated successfully.", "success");
+      onValidationSuccess();
+      onClose();
+    } catch (error) {
+      activateNotifications(
+        error.message || "There was an error validating the lab result.",
+        "error"
       );
-      if (result.status === 200) {
-        localStorage.setItem(
-          `chemical_pathology_comment_${testId}`,
-          comment || ""
-        );
-        showToast(
-          "success",
-          type === "new"
-            ? "Chemical Pathology Report Processed Successfully"
-            : "Chemical Pathology Report Updated Successfully"
-        );
-        onClose();
-      } else {
-        showToast(
-          "error",
-          result.message || "An error occurred while processing the report."
-        );
-      }
-    } catch (e) {
-      showToast("error", e.message);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <>
-      {toast && <ShowToast status={toast.status} message={toast.message} />}
-      <Modal isOpen={isOpen} onClose={onClose} isCentered size="lg">
-        <ModalOverlay />
-        <ModalContent maxW={{ base: "90%", md: "60%" }}>
-          {loading && <Preloader />}
-          <ModalHeader>
-          {type === "new"
-            ? `Process Chemical Pathology Report for ${patientName}`
-            : type === "edit"
-            ? `Edit Chemical Pathology Report for ${patientName}`
-            : `View Chemical Pathology Report for ${patientName}`}
+    <Modal isOpen={isOpen} onClose={onClose} isCentered size="lg">
+      <ModalOverlay />
+      <ModalContent maxW={{ base: "90%", md: "60%" }}>
+        {loading && <Preloader />}
+        <ModalHeader>
+          Validate Lab Result for {patientName}
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
@@ -152,33 +121,32 @@ export default function ChemicalPathologyReportModal({
 
             <Box mb={4}>
               <Text fontWeight="500" mb={2} fontSize="14px">
-                Comment
+                Validation Remarks
               </Text>
               <TextArea
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
-                placeholder={
-                  type === "view" && !comment
-                    ? "No comment available"
-                    : "Enter your comment"
-                }
+                placeholder="Enter validation remarks here..."
                 size="lg"
                 border="2px solid"
                 borderColor="gray.500"
-                isDisabled={type === "view"}
               />
             </Box>
           </Stack>
         </ModalBody>
         <ModalFooter>
-          {(type === "new" || type === "edit") && (
-            <Button isLoading={loading} onClick={handleSubmit}>
-              {type === "new" ? "Submit" : "Update"}
-            </Button>
-          )}
+          <Button 
+            isLoading={loading} 
+            onClick={handleSubmit}
+            backgroundColor={primaryColor}
+            color={secondaryColor}
+          >
+            Validate
+          </Button>
         </ModalFooter>
       </ModalContent>
     </Modal>
-    </>
   );
-}
+};
+
+export default ValidateLabResultModal;

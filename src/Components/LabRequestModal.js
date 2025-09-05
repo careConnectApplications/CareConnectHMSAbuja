@@ -53,7 +53,6 @@ export default function LabRequestModal({
     testNames: "",
     priority: "",
     notes: "",
-    labcategory: "",
   });
 
   // New state to store lab list
@@ -72,7 +71,6 @@ export default function LabRequestModal({
       testNames: "",
       priority: "",
       notes: "",
-      labcategory: "",
     });
     setTestNames([]);
     setTestPrices({});
@@ -186,7 +184,6 @@ export default function LabRequestModal({
           department: Payload.department,
           priority: Payload.priority,
           notes: Payload.notes,
-          labcategory: Payload.labcategory,
         },
         patientId
       );
@@ -287,25 +284,6 @@ export default function LabRequestModal({
                 {labs.map((item, i) => (
                   <option key={i} value={item.clinic}>
                     {item.clinic}
-                  </option>
-                ))}
-              </Select>
-            </SimpleGrid>
-            {/* Lab Category selection drop down */}
-            <SimpleGrid mt="12px" columns={{ base: 1, md: 1 }} spacing={5}>
-              <Select
-                onChange={handlePayload}
-                placeholder="Select Lab Category"
-                border="2px solid"
-                id="labcategory"
-                value={Payload.labcategory}
-                size="lg"
-                fontSize={Payload.labcategory !== "" ? "16px" : "13px"}
-                borderColor="gray.500"
-              >
-                {Settings?.labcategory?.map((item, i) => (
-                  <option key={i} value={item}>
-                    {item}
                   </option>
                 ))}
               </Select>
