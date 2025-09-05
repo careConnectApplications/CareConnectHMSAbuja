@@ -7,6 +7,7 @@ export const useColors = () => {
   const bgColor = theme === 'light' ? 'white' : 'gray.800';
   const textColor = theme === 'light' ? '#2E2E2E' : '#ddd';
   const borderColor = theme === 'light' ? '#EDEFF2' : '#6e299aff';
+  const inputBorderColor = theme === 'light' ? '#6B7280' : '#6e299aff';
   const cardBgColor = theme === 'light' ? 'gray.50' : 'gray.800';
   const NavbarText = theme === 'light' ? 'blue.blue500' : "blue.blue400";
   const chartFillColor = theme === 'light' ? '#eee' : '#6e299aff';
@@ -32,6 +33,7 @@ export const useColors = () => {
     bgColor,
     textColor,
     borderColor,
+    inputBorderColor,
     titleTextColor,
     selectTitleTextColor,
     subTitleTextColor,

@@ -67,10 +67,10 @@ export default function NavBar({ showSearch = true, showNav = true }) {
 
     const date = new Date(expiredAt);
 
-    console.log("expiredAt", date)
-    console.log("expiration", date.getTime() <= Date.now())
-    console.log("new date", expiredAt * 1000)
-    console.log("dateNow", Date.now())
+    // console.log("expiredAt", date)
+    // console.log("expiration", date.getTime() <= Date.now())
+    // console.log("new date", expiredAt * 1000)
+    // console.log("dateNow", Date.now())
     if (expiredAt * 1000 <= Date.now()) {
 
 
