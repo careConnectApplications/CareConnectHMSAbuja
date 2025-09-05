@@ -34,6 +34,8 @@ import { SortByHematologyAndChemicalPathologyApi } from "../Utils/ApiCalls";
 import PeripheralBloodFilmReportModal from "../Components/PeripheralBloodFilmReportModal";
 import ADHBoneMarrowAspirationReportModal from "../Components/ADHBoneMarrowAspirationReportModal";
 import ChemicalPathologyReportModal from "../Components/ChemicalPathologyReportModal";
+import ViewLabResultModal from "../Components/ViewLabResultModal";
+import ValidateLabResultModal from "../Components/ValidateLabResultModal";
 
 import Pagination from "../Components/Pagination";
 import { configuration } from "../Utils/Helpers";
@@ -110,9 +112,35 @@ export default function LabProcessing() {
     onOpen: onChemicalModalOpen,
     onClose: onChemicalModalClose,
   } = useDisclosure();
+  const {
+    isOpen: isViewLabResultModalOpen,
+    onOpen: onViewLabResultModalOpen,
+    onClose: onViewLabResultModalClose,
+  } = useDisclosure();
+  const {
+    isOpen: isValidateModalOpen,
+    onOpen: onValidateModalOpen,
+    onClose: onValidateModalClose,
+  } = useDisclosure();
+  const [selectedLabResult, setSelectedLabResult] = useState(null);
   const [selectedTestId, setSelectedTestId] = useState(null);
   const [modalType, setModalType] = useState("new");
   const [selectedReportData, setSelectedReportData] = useState(null);
+
+  const handleValidateClick = (type, labResult) => {
+    const labDetail = labResult || type; // Handle both (type, labResult) and (labResult) calls
+    if (labDetail && typeof labDetail === "object") {
+      const reportData = {
+        ...labDetail,
+        testresult: labDetail.testresult || [],
+        patientName: `${labDetail.patient?.firstName || ""} ${
+          labDetail.patient?.lastName || ""
+        }`.trim(),
+      };
+      setSelectedLabResult(reportData);
+      onValidateModalOpen();
+    }
+  };
 
   // Helper function to ensure value is always an array
   const ensureArray = (value) => {
@@ -139,7 +167,9 @@ export default function LabProcessing() {
       testname: labDetail.testname,
       patient: labDetail.patient,
       patientName:
-        labDetail.patient.firstName + " " + labDetail.patient.lastName,
+        (labDetail.patient?.firstName || "") +
+        " " +
+        (labDetail.patient?.lastName || ""),
     });
     onChemicalModalOpen();
   };
@@ -161,7 +191,9 @@ export default function LabProcessing() {
       testname: labDetail.testname,
       patient: labDetail.patient,
       patientName:
-        labDetail.patient.firstName + " " + labDetail.patient.lastName,
+        (labDetail.patient?.firstName || "") +
+        " " +
+        (labDetail.patient?.lastName || ""),
     });
     onPeripheralModalOpen();
   };
@@ -183,7 +215,9 @@ export default function LabProcessing() {
       testname: labDetail.testname,
       patient: labDetail.patient,
       patientName:
-        labDetail.patient.firstName + " " + labDetail.patient.lastName,
+        (labDetail.patient?.firstName || "") +
+        " " +
+        (labDetail.patient?.lastName || ""),
     });
     onBoneMarrowModalOpen();
   };
@@ -203,7 +237,9 @@ export default function LabProcessing() {
       testname: labDetail.testname,
       patient: labDetail.patient,
       patientName:
-        labDetail.patient.firstName + " " + labDetail.patient.lastName,
+        (labDetail.patient?.firstName || "") +
+        " " +
+        (labDetail.patient?.lastName || ""),
     };
 
     if (reportType === "chemical") {
@@ -230,6 +266,13 @@ export default function LabProcessing() {
       setSelectedTestId(labDetail._id);
       setModalType("view");
       onPeripheralModalOpen();
+    } else {
+      setSelectedReportData({
+        ...commonData,
+      });
+      setSelectedTestId(labDetail._id);
+      setModalType("view");
+      onViewLabResultModalOpen();
     }
   };
 
@@ -465,6 +508,8 @@ export default function LabProcessing() {
     getAllScheduledLab("scheduled");
     setStatus("scheduled");
     setCurrentPage(1);
+    setSearchInput("");
+    setFilteredData(null);
   };
 
   const filterProcessed = () => {
@@ -477,6 +522,8 @@ export default function LabProcessing() {
     getAllScheduledLab("processed");
     setStatus("processed");
     setCurrentPage(1);
+    setSearchInput("");
+    setFilteredData(null);
   };
   const filterAwaitingConfirmation = () => {
     setScheduled(false);
@@ -488,6 +535,8 @@ export default function LabProcessing() {
     getAllScheduledLab("awaiting confirmation");
     setStatus("awaiting confirmation");
     setCurrentPage(1);
+    setSearchInput("");
+    setFilteredData(null);
   };
 
   const filterRejected = () => {
@@ -500,6 +549,8 @@ export default function LabProcessing() {
     getAllScheduledLab("reject");
     setStatus("reject");
     setCurrentPage(1);
+    setSearchInput("");
+    setFilteredData(null);
   };
   const filterHematology = () => {
     setScheduled(false);
@@ -511,6 +562,8 @@ export default function LabProcessing() {
     getHematologyLabs("hematology");
     setStatus("hematology");
     setCurrentPage(1);
+    setSearchInput("");
+    setFilteredData(null);
   };
   const filterChemical = () => {
     setScheduled(false);
@@ -522,6 +575,8 @@ export default function LabProcessing() {
     getHematologyLabs("chemicalpathology");
     setStatus("chemicalpathology");
     setCurrentPage(1);
+    setSearchInput("");
+    setFilteredData(null);
   };
   const getHematologyLabs = async (lab) => {
     console.log(`[API] Starting getHematologyLabs for labcategory: ${lab}`);
@@ -973,6 +1028,16 @@ export default function LabProcessing() {
                 >
                   Lab Status
                 </Th>
+                {(Hematology || Chemical) && (
+                  <Th
+                    fontSize="13px"
+                    textTransform="capitalize"
+                    color={subTitleTextColor}
+                    fontWeight="600"
+                  >
+                    {Hematology ? "Hematology" : "Chemical"} Review Status
+                  </Th>
+                )}
                 <Th
                   fontSize="13px"
                   textTransform="capitalize"
@@ -1002,6 +1067,12 @@ export default function LabProcessing() {
                       }
                       isChemical={Chemical}
                       isHematology={Hematology}
+                      chemicalReviewStatus={
+                        item.chemicalpathologyreport?.status || "N/A"
+                      }
+                      hematologyReviewStatus={
+                        item.ADHbonemarrowaspirationreport?.status || "N/A"
+                      }
                       testid={item.testid}
                       name={`${item.patient?.firstName} ${item.patient?.lastName}`}
                       mrn={item.patient?.MRN}
@@ -1011,7 +1082,6 @@ export default function LabProcessing() {
                       labStatus={item.status}
                       _id={item._id}
                       report={item}
-                      onProcessHematology={handleProcessPeripheralBlood}
                       onProcessPeripheralBlood={(id, type) => {
                         if (type === "marrow") {
                           handleProcessBoneMarrow(id, item);
@@ -1022,7 +1092,9 @@ export default function LabProcessing() {
                       onProcessChemicalPathology={
                         handleProcessChemicalPathology
                       }
+                      onProcessHematology={handleProcessPeripheralBlood}
                       onView={handleViewReport}
+                      onValidate={handleValidateClick}
                       onConfirmClick={() => {
                         console.log("Confirm action triggered for item:", item);
                         confirmLab(item);
@@ -1062,6 +1134,12 @@ export default function LabProcessing() {
                       }
                       isChemical={Chemical}
                       isHematology={Hematology}
+                      chemicalReviewStatus={
+                        item.chemicalpathologyreport?.status || "N/A"
+                      }
+                      hematologyReviewStatus={
+                        item.ADHbonemarrowaspirationreport?.status || "N/A"
+                      }
                       testid={item.testid}
                       name={`${item.patient?.firstName} ${item.patient?.lastName}`}
                       mrn={item.patient?.MRN}
@@ -1070,7 +1148,6 @@ export default function LabProcessing() {
                       labStatus={item.status}
                       _id={item._id}
                       report={item}
-                      onProcessHematology={handleProcessPeripheralBlood}
                       onProcessPeripheralBlood={(id, type) => {
                         if (type === "marrow") {
                           handleProcessBoneMarrow(id, item);
@@ -1081,7 +1158,9 @@ export default function LabProcessing() {
                       onProcessChemicalPathology={
                         handleProcessChemicalPathology
                       }
+                      onProcessHematology={handleProcessPeripheralBlood}
                       onView={handleViewReport}
+                      onValidate={handleValidateClick}
                       onConfirmClick={() => {
                         console.log("Confirm action triggered for item:", item);
                         confirmLab(item);
@@ -1103,7 +1182,7 @@ export default function LabProcessing() {
                     />
                   );
                 })
-                ) : (
+              ) : (
                   <Text textAlign="center" mt="32px" color={textColor}>
                     *--No record found--*
                   </Text>
@@ -1171,9 +1250,26 @@ export default function LabProcessing() {
           setSelectedReportData(null);
         }}
         testId={selectedTestId}
-        activateNotifications={activateNotifications}
         type={modalType}
         oldPayload={selectedReportData}
+      />
+      <ViewLabResultModal
+        isOpen={isViewLabResultModalOpen}
+        onClose={() => {
+          onViewLabResultModalClose();
+          setTrigger((prev) => !prev);
+          setSelectedReportData(null);
+        }}
+        oldPayload={selectedReportData}
+      />
+      <ValidateLabResultModal
+        isOpen={isValidateModalOpen}
+        onClose={onValidateModalClose}
+        oldPayload={selectedLabResult}
+        onValidationSuccess={() => {
+          setTrigger((prev) => !prev);
+        }}
+        activateNotifications={activateNotifications}
       />
     </MainLayout>
   );

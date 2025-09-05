@@ -306,7 +306,6 @@ export default function ChemicalPathology() {
           setSelectedPayload({});
         }}
         testId={selectedTestId}
-        activateNotifications={activateNotifications}
         type={modalType}
         oldPayload={selectedPayload}
       />

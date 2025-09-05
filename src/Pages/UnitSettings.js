@@ -14,21 +14,23 @@ import { Table, Thead, Tbody, Tr, Th, TableContainer } from "@chakra-ui/react";
 import { IoFilter } from "react-icons/io5";
 import { BiSearch } from "react-icons/bi";
 import { SlPlus } from "react-icons/sl";
+import moment from "moment";
 import TableRow from "../Components/TableRow";
 import Button from "../Components/Button";
-import CreatePriceModal from "../Components/CreatePriceModal";
+import CreateUnitModal from "../Components/CreateUnitModal";
 import Input from "../Components/Input";
 import ShowToast from "../Components/ToastNotification";
 import Pagination from "../Components/Pagination";
-import { GetAllPriceApi, UpdatePriceStatusApi } from "../Utils/ApiCalls";
+import { GetAllUnitsApi, UpdateUnitApi } from "../Utils/ApiCalls";
 import { configuration } from "../Utils/Helpers";
+import { useColors } from "../Utils/colors";
 
-export default function PriceSettings() {
+export default function UnitSettings() {
   const [all, setAll] = useState(true);
   const [active, setActive] = useState(false);
   const [inActive, setInActive] = useState(false);
-  const [data, setData] = useState([]);         // full dataset
-  const [filterData, setFilterData] = useState([]); // status/search filtered data
+  const [data, setData] = useState([]);
+  const [filterData, setFilterData] = useState([]);
   const [modalState, setModalState] = useState("");
   const [oldPayload, setOldPayload] = useState({});
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -37,6 +39,8 @@ export default function PriceSettings() {
   const postsPerPage = configuration.sizePerPage;
   const [showToast, setShowToast] = useState({ show: false, message: "", status: "" });
   const [searchInput, setSearchInput] = useState("");
+  
+  const { bgColor, textColor } = useColors();
 
   // Calculate indices for pagination
   const indexOfLastPost = currentPage * postsPerPage;
@@ -45,20 +49,27 @@ export default function PriceSettings() {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  const getAllPrice = async () => {
+  const getAllUnits = async () => {
     try {
-      const result = await GetAllPriceApi();
-      setData(result.queryresult.pricedetails);
-      setFilterData(result.queryresult.pricedetails);
+      const result = await GetAllUnitsApi();
+      console.log("getAllUnits", result);
+      // Check the response structure - it might be different from price/clinic
+      
+      setData(result.queryresult?.unitdetails || []);
+      setFilterData(result.queryresult?.unitdetails);
     } catch (e) {
       activateNotifications(e.message, "error");
     }
   };
 
   const activateNotifications = (message, status) => {
-    setShowToast({ show: true, message, status });
+    setShowToast({
+      show: true,
+      message: message,
+      status: status,
+    });
     setTimeout(() => {
-      setShowToast({ show: false });
+      setShowToast({ show: false, message: "", status: "" });
     }, 3000);
   };
 
@@ -94,12 +105,10 @@ export default function PriceSettings() {
       setFilterData(data);
     } else {
       const lower = value.toLowerCase();
-      // By default, filter by service type and service category.
       const filtered = data.filter((item) => {
-        const serviceType = String(item.servicetype || "").toLowerCase();
-        const serviceCategory = String(item.servicecategory || "").toLowerCase();
-        const category = String(item.category || "").toLowerCase();
-        return serviceType.includes(lower) || serviceCategory.includes(lower) || category.includes(lower);
+        const unitName = String(item.unit || item.unitName || "").toLowerCase();
+        const clinicName = String(item.clinicName || item.clinic?.clinic || "").toLowerCase();
+        return unitName.includes(lower) || clinicName.includes(lower);
       });
       setFilterData(filtered);
     }
@@ -112,19 +121,14 @@ export default function PriceSettings() {
       return;
     }
     const lower = searchInput.toLowerCase();
-    if (field === "servicetype") {
+    if (field === "unit") {
       const filtered = data.filter((item) =>
-        String(item.servicetype || "").toLowerCase().includes(lower)
+        String(item.unit || item.unitName || "").toLowerCase().includes(lower)
       );
       setFilterData(filtered);
-    } else if (field === "servicecategory") {
+    } else if (field === "clinic") {
       const filtered = data.filter((item) =>
-        String(item.servicecategory || "").toLowerCase().includes(lower)
-      );
-      setFilterData(filtered);
-    } else if (field === "category") {
-      const filtered = data.filter((item) =>
-        String(item.category || "").toLowerCase().includes(lower)
+        String(item.clinicName || item.clinic?.clinic || "").toLowerCase().includes(lower)
       );
       setFilterData(filtered);
     }
@@ -135,10 +139,24 @@ export default function PriceSettings() {
     setFilterData(data);
   };
 
-  // **Define onChangeStatus function to update the status for a given price entry**
+  // Toggle status for a unit
   const onChangeStatus = async (id) => {
     try {
-      const result = await UpdatePriceStatusApi(id);
+      // Find the current unit
+      const currentUnit = data.find(unit => unit._id === id);
+      if (!currentUnit) return;
+
+      // Toggle the status
+      const newStatus = currentUnit.status === "active" ? "inactive" : "active";
+      
+      // Update the unit with new status
+      const payload = {
+        clinicId: currentUnit.clinicId,
+        unit: currentUnit.unit || currentUnit.unitName,
+        status: newStatus
+      };
+      
+      const result = await UpdateUnitApi(payload, id);
       if (result.status === 200) {
         setTrigger(!trigger);
         setShowToast({
@@ -149,29 +167,30 @@ export default function PriceSettings() {
         setTimeout(() => setShowToast({ show: false }), 3000);
       }
     } catch (err) {
-      // Handle errors if needed.
+      activateNotifications(err.message || "Failed to update status", "error");
     }
   };
 
-  const CreatePrice = () => {
+  const CreateUnit = () => {
     setModalState("new");
+    setOldPayload(null);
     onOpen();
   };
 
-  const EditPrice = (item) => {
+  const EditUnit = (item) => {
     setModalState("edit");
-    onOpen();
     setOldPayload(item);
+    onOpen();
   };
 
   useEffect(() => {
-    getAllPrice();
+    getAllUnits();
     setCurrentPage(1);
     setSearchInput("");
   }, [isOpen, trigger]);
 
   return (
-    <Box bg="#fff" border="1px solid #EFEFEF" mt="10px" py="17px" px={["18px", "18px"]} rounded="10px">
+    <Box bg={bgColor} border="1px solid #EFEFEF" mt="10px" py="17px" px={["18px", "18px"]} rounded="10px">
       {showToast.show && <ShowToast message={showToast.message} status={showToast.status} />}
 
       {/* Filter & Search Section */}
@@ -199,7 +218,7 @@ export default function PriceSettings() {
           <Box maxW="300px" mr="10px">
             <Input
               label="Search"
-              placeholder="Search"
+              placeholder="Search by unit or clinic"
               value={searchInput}
               onChange={handleSearchChange}
               bColor="#E4E4E4"
@@ -214,14 +233,11 @@ export default function PriceSettings() {
               </HStack>
             </MenuButton>
             <MenuList fontSize="14px">
-              <MenuItem onClick={() => filterBy("servicetype")} textTransform="capitalize" fontWeight="500" color="#2F2F2F" _hover={{ color: "#fff", fontWeight: "400", bg: "blue.blue500" }}>
-                By Service Type
+              <MenuItem onClick={() => filterBy("unit")} textTransform="capitalize" fontWeight="500" color="#2F2F2F" _hover={{ color: "#fff", fontWeight: "400", bg: "blue.blue500" }}>
+                By Unit Name
               </MenuItem>
-              <MenuItem onClick={() => filterBy("servicecategory")} textTransform="capitalize" fontWeight="500" color="#2F2F2F" _hover={{ color: "#fff", fontWeight: "400", bg: "blue.blue500" }}>
-                By Service Category
-              </MenuItem>
-              <MenuItem onClick={() => filterBy("category")} textTransform="capitalize" fontWeight="500" color="#2F2F2F" _hover={{ color: "#fff", fontWeight: "400", bg: "blue.blue500" }}>
-                By Category
+              <MenuItem onClick={() => filterBy("clinic")} textTransform="capitalize" fontWeight="500" color="#2F2F2F" _hover={{ color: "#fff", fontWeight: "400", bg: "blue.blue500" }}>
+                By Clinic Name
               </MenuItem>
               <MenuItem onClick={clearFilter} textTransform="capitalize" fontWeight="500" color="#2F2F2F" _hover={{ color: "#fff", fontWeight: "400", bg: "blue.blue500" }}>
                 Clear Filter
@@ -231,10 +247,10 @@ export default function PriceSettings() {
         </Flex>
       </Flex>
 
-      {/* Add Price Button */}
+      {/* Add Unit Button */}
       <Flex justifyContent="space-between" flexWrap="wrap" mt={["10px", "10px", "10px", "10px"]} w={["100%", "100%", "50%", "37%"]}>
-        <Button rightIcon={<SlPlus />} w={["100%", "100%", "144px", "144px"]} onClick={CreatePrice}>
-          Add Price
+        <Button rightIcon={<SlPlus />} w={["100%", "100%", "144px", "144px"]} onClick={CreateUnit}>
+          Add Unit
         </Button>
       </Flex>
 
@@ -244,12 +260,11 @@ export default function PriceSettings() {
           <Table variant="striped">
             <Thead bg="#fff">
               <Tr>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">Service Type</Th>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">Service Category</Th>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">Category</Th>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">Amount</Th>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">HMO Cover</Th>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">Status</Th>
+                <Th fontSize="13px" color="#534D59" fontWeight="600">S/N</Th>
+                <Th fontSize="13px" color="#534D59" fontWeight="600">Unit ID</Th>
+                <Th fontSize="13px" color="#534D59" fontWeight="600">Unit Name</Th>
+                <Th fontSize="13px" color="#534D59" fontWeight="600">Clinic/Department</Th>
+                <Th fontSize="13px" color="#534D59" fontWeight="600">Created Date</Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">Actions</Th>
               </Tr>
             </Thead>
@@ -257,14 +272,13 @@ export default function PriceSettings() {
               {paginatedData.map((item, i) => (
                 <TableRow
                   key={i}
-                  type="price-settings"
-                  serviceType={item.servicetype}
-                  serviceCategory={item.servicecategory}
-                  category={item.category}
-                  amount={item.amount.toLocaleString()}
-                  hmoStatus={item.isHMOCover}
-                  status={item.status}
-                  onEdit={() => EditPrice(item)}
+                  type="unit-settings"
+                  sn={indexOfFirstPost + i + 1}
+                  unit={item.unit }
+                  unitId={item.id }
+                  clinic={item.clinicName  || "N/A"}
+                  date={moment(item.createdAt).format("lll")}
+                  onEdit={() => EditUnit(item)}
                   onChangeStatus={() => onChangeStatus(item._id)}
                 />
               ))}
@@ -274,9 +288,20 @@ export default function PriceSettings() {
       </Box>
 
       {/* Pagination */}
-      <Pagination postPerPage={postsPerPage} currentPage={currentPage} totalPosts={filterData.length} paginate={paginate} />
+      <Pagination
+        postPerPage={postsPerPage}
+        currentPage={currentPage}
+        totalPosts={filterData.length}
+        paginate={paginate}
+      />
 
-      <CreatePriceModal isOpen={isOpen} oldPayload={oldPayload} onClose={onClose} type={modalState} activateNotifications={activateNotifications} />
+      <CreateUnitModal
+        isOpen={isOpen}
+        oldPayload={oldPayload}
+        onClose={onClose}
+        type={modalState}
+        activateNotifications={activateNotifications}
+      />
     </Box>
   );
 }

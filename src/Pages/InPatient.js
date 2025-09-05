@@ -575,7 +575,7 @@ export default function InPatient() {
                 </MenuList>
               </Menu>
             </HStack>
->>>>>>> Stashed changes
+
           </Flex>
         </Flex>
 
