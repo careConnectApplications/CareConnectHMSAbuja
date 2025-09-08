@@ -1,7 +1,20 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from "react";
 import { Text, Flex, HStack, Box, useDisclosure } from "@chakra-ui/react";
-import { Table, Thead, Tbody, Tr, Th, SimpleGrid, Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
+import {
+    Table,
+    Thead,
+    Tbody,
+    Tr,
+    Th,
+    SimpleGrid,
+    Menu,
+    MenuButton,
+    MenuList,
+    MenuItem,
+} from "@chakra-ui/react";
 import moment from "moment";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 import TableRow from "../Components/TableRow";
 import Button from "../Components/Button";
 import ExamineModal from "../Components/ExamineModal";
@@ -18,9 +31,11 @@ import Pagination from "../Components/Pagination";
 import { configuration } from '../Utils/Helpers'
 import Preloader from "../Components/Preloader";
 import { SlPlus } from "react-icons/sl";
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from "react-router-dom";
 import { FaClock } from "react-icons/fa";
 import { BsCalendar2DateFill } from "react-icons/bs";
+import { AiOutlineDownload } from "react-icons/ai";
+import { FacilityName } from "../Utils/ApiConfig";
 
 
 export default function ClinicalEncounter({ hide = false, index }) {
@@ -36,6 +51,8 @@ export default function ClinicalEncounter({ hide = false, index }) {
     const [FilterData, setFilterData] = useState([]);
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [Trigger, setTrigger] = useState(false);
+    const pdfRef = useRef();
+    const [isExporting, setIsExporting] = useState(false);
 
     // Pagination settings to follow
     const [CurrentPage, setCurrentPage] = useState(1);
@@ -165,6 +182,163 @@ export default function ClinicalEncounter({ hide = false, index }) {
     const nav = useNavigate()
     const { pathname } = useLocation()
 
+    const exportToPDF = async (item) => {
+        if (!item) {
+            activateNotifications("No data available to export", "error");
+            return;
+        }
+
+        setIsExporting(true);
+
+        try {
+            const patient = Data.find(
+                (record) => record._id === item._id
+            )?.patient;
+            const patientName = patient
+                ? `${patient.title || ""} ${patient.firstName || ""} ${patient.lastName || ""
+                    }`.trim()
+                : "Patient";
+            const patientMRN = patient?.MRN || "N/A";
+            const patientAge = patient?.age || "N/A";
+            const patientGender = patient?.gender || "N/A";
+            const patientPhone = patient?.phoneNumber || "N/A";
+            const currentDate = moment().format("YYYY-MM-DD");
+
+            const tempDiv = document.createElement("div");
+            tempDiv.style.position = "absolute";
+            tempDiv.style.left = "-9999px";
+            tempDiv.style.top = "0";
+            tempDiv.style.width = "210mm"; // A4 width
+            tempDiv.style.backgroundColor = "white";
+            tempDiv.style.padding = "20px";
+            tempDiv.style.fontFamily = "Arial, sans-serif";
+
+            tempDiv.innerHTML = `
+            <div style="text-align: center; margin-bottom: 30px; border-bottom: 2px solid #2B6CB0; padding-bottom: 20px;">
+              <h1 style="color: #2B6CB0; margin: 0; font-size: 24px; margin-bottom: 10px;">${FacilityName}</h1>
+              <h2 style="color: #2B6CB0; margin: 0; font-size: 20px; margin-bottom: 15px;">Clinical Encounter Report</h2>
+              <table style="width: 100%; margin-top: 15px; border-collapse: collapse;">
+                <tr>
+                  <td style="width: 50%; vertical-align: top; padding-right: 20px;">
+                    <p style="margin: 3px 0; color: #333; font-size: 12px; text-align: left;"><strong>Patient:</strong> ${patientName}</p>
+                    <p style="margin: 3px 0; color: #333; font-size: 12px; text-align: left;"><strong>MRN:</strong> ${patientMRN}</p>
+                    <p style="margin: 3px 0; color: #333; font-size: 12px; text-align: left;"><strong>Age:</strong> ${patientAge} years</p>
+                  </td>
+                  <td style="width: 50%; vertical-align: top; padding-left: 20px;">
+                    <p style="margin: 3px 0; color: #333; font-size: 12px; text-align: right;"><strong>Gender:</strong> ${patientGender}</p>
+                    <p style="margin: 3px 0; color: #333; font-size: 12px; text-align: right;"><strong>Phone:</strong> ${patientPhone}</p>
+                    <p style="margin: 3px 0; color: #333; font-size: 12px; text-align: right;"><strong>Generated:</strong> ${moment().format(
+                "MMMM DD, YYYY"
+            )}</p>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          `;
+
+            const contentToExport = document.getElementById(`encounter-${item._id}`);
+            if (contentToExport) {
+                const clonedContent = contentToExport.cloneNode(true);
+                const buttons = clonedContent.querySelectorAll("button");
+                buttons.forEach((button) => button.remove());
+                tempDiv.appendChild(clonedContent);
+            }
+
+            document.body.appendChild(tempDiv);
+
+            const canvas = await html2canvas(tempDiv, {
+                scale: 2,
+                useCORS: true,
+                allowTaint: true,
+                backgroundColor: "#ffffff",
+                width: tempDiv.scrollWidth,
+                height: tempDiv.scrollHeight,
+            });
+
+            const imgData = canvas.toDataURL("image/png");
+            const pdf = new jsPDF("p", "mm", "a4");
+
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = pdf.internal.pageSize.getHeight();
+            const imgWidth = canvas.width;
+            const imgHeight = canvas.height;
+            const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+            const imgX = (pdfWidth - imgWidth * ratio) / 2;
+            const imgY = 0;
+
+            const pageHeight = pdfHeight;
+            const contentHeight = imgHeight * ratio;
+
+            if (contentHeight <= pageHeight) {
+                pdf.addImage(
+                    imgData,
+                    "PNG",
+                    imgX,
+                    imgY,
+                    imgWidth * ratio,
+                    imgHeight * ratio
+                );
+            } else {
+                let position = 0;
+                const pageCanvas = document.createElement("canvas");
+                const pageCtx = pageCanvas.getContext("2d");
+                pageCanvas.width = canvas.width;
+
+                while (position < contentHeight) {
+                    const remainingHeight = contentHeight - position;
+                    const currentPageHeight = Math.min(
+                        pageHeight / ratio,
+                        remainingHeight / ratio
+                    );
+
+                    pageCanvas.height = currentPageHeight;
+                    pageCtx.drawImage(
+                        canvas,
+                        0,
+                        position / ratio,
+                        canvas.width,
+                        currentPageHeight,
+                        0,
+                        0,
+                        canvas.width,
+                        currentPageHeight
+                    );
+
+                    const pageImgData = pageCanvas.toDataURL("image/png");
+
+                    if (position > 0) {
+                        pdf.addPage();
+                    }
+
+                    pdf.addImage(
+                        pageImgData,
+                        "PNG",
+                        imgX,
+                        0,
+                        imgWidth * ratio,
+                        currentPageHeight * ratio
+                    );
+                    position += pageHeight;
+                }
+            }
+
+            document.body.removeChild(tempDiv);
+
+            const fileName = `Clinical_Encounter_${patientName.replace(
+                /\s+/g,
+                "_"
+            )}_${currentDate}.pdf`;
+            pdf.save(fileName);
+
+            activateNotifications("PDF exported successfully!", "success");
+        } catch (error) {
+            console.error("Error generating PDF:", error);
+            activateNotifications("Failed to export PDF. Please try again.", "error");
+        } finally {
+            setIsExporting(false);
+        }
+    };
+
     const AddClinicalEncounter = () => {
 
 
@@ -191,7 +365,7 @@ export default function ClinicalEncounter({ hide = false, index }) {
 
     }, [isOpen, Trigger, index]);
 
-    
+
 
     return (
         <Box
@@ -382,15 +556,29 @@ export default function ClinicalEncounter({ hide = false, index }) {
                 <Text mb="20px" fontWeight="700" fontSize="16px" color="blue.blue500">Previous Clinical Encounter </Text>
                 {
                     FilterData.map((item, i) => (
-                        <Box key={i} mt="20px">
+                        <Box key={i} mt="20px" id={`encounter-${item._id}`}>
                             <HStack bg="orange.orange500" py="10px" px="10px" rounded="10px" color="blue.blue500" justifyContent="space-between" fontStyle="italic" fontSize="14px" fontWeight="500">
                                 <HStack>
 
+                                    <Text textAlign="center"> Date In progress ~ </Text>
                                     <Box color="blue.blue500"><BsCalendar2DateFill /></Box>
-                                    <Text textAlign="center">{moment(item.createdAt).format("L")} </Text>
+                                    <Text textAlign="center">{moment(item.inprogressStartDate).format("DD-MM-YYYY")} </Text>
                                     <Box color="blue.blue500"><FaClock /></Box>
-                                    <Text textAlign="center"> {moment(item.createdAt).format("LT")} </Text>
+                                    <Text textAlign="center"> {moment(item.inprogressStartDate).format("LT")} </Text>
                                 </HStack>
+                                {
+                                    item.completedDate && (
+                                        <HStack>
+
+                                            <Text textAlign="center">Date Completed ~ </Text>
+                                            <Box color="blue.blue500"><BsCalendar2DateFill /></Box>
+                                            <Text textAlign="center">{moment(item.completedDate).format("DD-MM-YYYY")} </Text>
+                                            <Box color="blue.blue500"><FaClock /></Box>
+                                            <Text textAlign="center"> {moment(item.completedDate).format("LT")} </Text>
+                                        </HStack>
+                                    )
+                                }
+
 
                                 {/* <Text textAlign="center"> {item.appointmenttype} </Text> */}
                             </HStack>
@@ -637,7 +825,7 @@ export default function ClinicalEncounter({ hide = false, index }) {
                             {
                                 item.status === "inprogress" && (
 
-                                    <Button display={hide === false ? "block": "none"} mt="32px" onClick={() => {
+                                    <Button display={hide === false ? "block" : "none"} mt="32px" onClick={() => {
                                         nav(`/dashboard/edit-clinical-encounter/${item._id}`);
                                         localStorage.setItem("pathname", pathname)
                                         localStorage.setItem("oldEncounter", JSON.stringify(item))
@@ -645,6 +833,20 @@ export default function ClinicalEncounter({ hide = false, index }) {
                                     }}>Complete Encounter</Button>
                                 )
                             }
+                            {item.status === "complete" && (
+                                <Button
+                                    mt="32px"
+                                    onClick={() => exportToPDF(item)}
+                                    rightIcon={<AiOutlineDownload />}
+                                    bg="green.500"
+                                    color="white"
+                                    _hover={{ bg: "green.600" }}
+                                    isLoading={isExporting}
+                                    loadingText="Exporting..."
+                                >
+                                    Print Encounter
+                                </Button>
+                            )}
 
 
 

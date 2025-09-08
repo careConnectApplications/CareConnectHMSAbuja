@@ -15,12 +15,12 @@ import CreateReferralModal from "../Components/CreateReferralModal";
 import PreviewEncounter from "../Components/PreviewEncounter";
 import CreatePrescriptionModal from "../Components/CreatePrescriptionModal";
 import { useNavigate } from 'react-router-dom';
-import { IoMdArrowRoundBack } from "react-icons/io"; 
+import { IoMdArrowRoundBack } from "react-icons/io";
 import { FiSearch } from "react-icons/fi";
-import { SettingsApi, GetDiagnosisICApi,GetAllVitalsApi, AddClinicalEncounterAPI } from "../Utils/ApiCalls";
+import { SettingsApi, GetDiagnosisICApi, GetAllVitalsApi, AddClinicalEncounterAPI } from "../Utils/ApiCalls";
 import { FaNoteSticky } from "react-icons/fa6";
 import { IoIosCloseCircle } from "react-icons/io";
-import { FaTemperatureHigh, FaHeartCircleCheck } from "react-icons/fa6";
+import { FaTemperatureHigh, FaHeartCircleCheck, FaPen } from "react-icons/fa6";
 import { FaTextHeight, FaHeartbeat } from "react-icons/fa";
 import { MdBloodtype } from "react-icons/md";
 import { GiEnergyBreath } from "react-icons/gi";
@@ -48,6 +48,12 @@ export default function AddClinicalEncounter() {
     const [DiagnosisNotes, setDiagnosisNotes] = useState([]);
     const [PlanNotes, setPlanNotes] = useState([]);
     const [DiagnosisICD, setDiagnosisICD] = useState([]);
+    
+    // Edit states for each note type
+    const [EditingAssessment, setEditingAssessment] = useState({ isEditing: false, index: -1 });
+    const [EditingDiagnosis, setEditingDiagnosis] = useState({ isEditing: false, index: -1 });
+    const [EditingPlan, setEditingPlan] = useState({ isEditing: false, index: -1 });
+    const [EditingClinical, setEditingClinical] = useState({ isEditing: false, index: -1 });
     const [NurseVitals, setNurseVitals] = useState({});
     const [Outcomes, setOutcomes] = useState([]);
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -138,7 +144,7 @@ export default function AddClinicalEncounter() {
     const handleSearchInputChange = (e) => {
         const value = e.target.value;
         setSearchICD(value);
-        
+
         // Clear selected ICD if user modifies the search significantly
         if (selectedICDInfo && !value.includes(selectedICDInfo.code)) {
             setSelectedICDInfo(null);
@@ -167,19 +173,57 @@ export default function AddClinicalEncounter() {
 
 
     const addClinicalNotes = () => {
-        setClinicalNotes([...ClinicalNotes, Payload.clinicalnote])
+        if (EditingClinical.isEditing) {
+            // Update existing note
+            const updatedNotes = [...ClinicalNotes];
+            updatedNotes[EditingClinical.index] = Payload.clinicalnote;
+            setClinicalNotes(updatedNotes);
+            setEditingClinical({ isEditing: false, index: -1 });
+        } else {
+            // Add new note
+            setClinicalNotes([...ClinicalNotes, Payload.clinicalnote])
+        }
         setPayload({ ...Payload, clinicalnote: "" })
     }
     const addAssessmentNotes = () => {
-        setAssessmentNotes([...AssessmentNotes, Payload.assessmentnote])
+        if (EditingAssessment.isEditing) {
+            // Update existing note
+            const updatedNotes = [...AssessmentNotes];
+            updatedNotes[EditingAssessment.index] = Payload.assessmentnote;
+            setAssessmentNotes(updatedNotes);
+            setEditingAssessment({ isEditing: false, index: -1 });
+        } else {
+            // Add new note
+            setAssessmentNotes([...AssessmentNotes, Payload.assessmentnote])
+        }
         setPayload({ ...Payload, assessmentnote: "" })
     }
+    
     const addDiagnosisNotes = () => {
-        setDiagnosisNotes([...DiagnosisNotes, Payload.diagnosisnote])
+        if (EditingDiagnosis.isEditing) {
+            // Update existing note
+            const updatedNotes = [...DiagnosisNotes];
+            updatedNotes[EditingDiagnosis.index] = Payload.diagnosisnote;
+            setDiagnosisNotes(updatedNotes);
+            setEditingDiagnosis({ isEditing: false, index: -1 });
+        } else {
+            // Add new note
+            setDiagnosisNotes([...DiagnosisNotes, Payload.diagnosisnote])
+        }
         setPayload({ ...Payload, diagnosisnote: "" })
     }
+    
     const addPlanNotes = () => {
-        setPlanNotes([...PlanNotes, Payload.plannote])
+        if (EditingPlan.isEditing) {
+            // Update existing note
+            const updatedNotes = [...PlanNotes];
+            updatedNotes[EditingPlan.index] = Payload.plannote;
+            setPlanNotes(updatedNotes);
+            setEditingPlan({ isEditing: false, index: -1 });
+        } else {
+            // Add new note
+            setPlanNotes([...PlanNotes, Payload.plannote])
+        }
         setPayload({ ...Payload, plannote: "" })
     }
 
@@ -198,8 +242,8 @@ export default function AddClinicalEncounter() {
         try {
             const result = await GetAllVitalsApi(id);
 
-            console.log("getAllVitals",result)
-     
+            console.log("getAllVitals", result)
+
             setNurseVitals(result.queryresult);
 
             setPayload({
@@ -217,32 +261,82 @@ export default function AddClinicalEncounter() {
         }
     };
 
+    // Helper functions for initiating edit mode
+    const editAssessmentNote = (index) => {
+        setEditingAssessment({ isEditing: true, index: index });
+        setPayload({ ...Payload, assessmentnote: AssessmentNotes[index] });
+    }
+
+    const editDiagnosisNote = (index) => {
+        setEditingDiagnosis({ isEditing: true, index: index });
+        setPayload({ ...Payload, diagnosisnote: DiagnosisNotes[index] });
+    }
+
+    const editPlanNote = (index) => {
+        setEditingPlan({ isEditing: true, index: index });
+        setPayload({ ...Payload, plannote: PlanNotes[index] });
+    }
+
+    const editClinicalNote = (index) => {
+        setEditingClinical({ isEditing: true, index: index });
+        setPayload({ ...Payload, clinicalnote: ClinicalNotes[index] });
+    }
+
+    // Cancel functions for exiting edit mode
+    const cancelEditAssessment = () => {
+        setEditingAssessment({ isEditing: false, index: -1 });
+        setPayload({ ...Payload, assessmentnote: "" });
+    }
+
+    const cancelEditDiagnosis = () => {
+        setEditingDiagnosis({ isEditing: false, index: -1 });
+        setPayload({ ...Payload, diagnosisnote: "" });
+    }
+
+    const cancelEditPlan = () => {
+        setEditingPlan({ isEditing: false, index: -1 });
+        setPayload({ ...Payload, plannote: "" });
+    }
+
+    const cancelEditClinical = () => {
+        setEditingClinical({ isEditing: false, index: -1 });
+        setPayload({ ...Payload, clinicalnote: "" });
+    }
+
     const removeAssessment = (item) => {
-
-
         const updatedItems = AssessmentNotes.filter(id => id !== item);
         setAssessmentNotes(updatedItems);
-
-
+        // Cancel edit if the item being removed is currently being edited
+        if (EditingAssessment.isEditing && AssessmentNotes[EditingAssessment.index] === item) {
+            cancelEditAssessment();
+        }
     }
 
     const removeClinicalNotes = (item) => {
-
-
         const updatedItems = ClinicalNotes.filter(id => id !== item);
         setClinicalNotes(updatedItems);
+        // Cancel edit if the item being removed is currently being edited
+        if (EditingClinical.isEditing && ClinicalNotes[EditingClinical.index] === item) {
+            cancelEditClinical();
+        }
     }
+
     const removeDiagnosisNotes = (item) => {
-
-
         const updatedItems = DiagnosisNotes.filter(id => id !== item);
         setDiagnosisNotes(updatedItems);
+        // Cancel edit if the item being removed is currently being edited
+        if (EditingDiagnosis.isEditing && DiagnosisNotes[EditingDiagnosis.index] === item) {
+            cancelEditDiagnosis();
+        }
     }
+
     const removePlanNotes = (item) => {
-
-
         const updatedItems = PlanNotes.filter(id => id !== item);
         setPlanNotes(updatedItems);
+        // Cancel edit if the item being removed is currently being edited
+        if (EditingPlan.isEditing && PlanNotes[EditingPlan.index] === item) {
+            cancelEditPlan();
+        }
     }
 
     const [showToast, setShowToast] = useState({
@@ -353,7 +447,7 @@ export default function AddClinicalEncounter() {
             <Box>
                 <Button leftIcon={<IoMdArrowRoundBack />} px="40px" w="100px" onClick={() => nav(`${pathname}`)}>Back</Button>
                 <PatientInfoCard />
-                
+
                 <Stack spacing={5} mt="32px">
                     {/* Previous Clinical Encounter Section */}
                     <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
@@ -361,58 +455,133 @@ export default function AddClinicalEncounter() {
                         <ClinicalEncounter hide={true} />
                     </Box>
 
-                    {/* Vitals Section */}
-                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
-                        <Text fontSize="xl" fontWeight="bold" mb={4}>Vitals</Text>
-                        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={5}>
-                            <Input type="number" leftIcon={<FaTemperatureHigh />} label="Temperature (C)" value={Payload.temperature} val={Payload.temperature !=="" ? true: false  } onChange={handlePayload} id="temperature" />
-                            <Input type="number" leftIcon={<FaHeartbeat />} label="Heart Rate (bpm)" value={Payload.heartrate} val={Payload.heartrate !=="" ? true: false  } onChange={handlePayload} id="heartrate" />
-                            <Input type="number" leftIcon={<MdBloodtype />} label="Blood Pressure (systolic)(mmHg)" value={Payload.bloodpressuresystolic} val={Payload.bloodpressuresystolic !=="" ? true: false  } onChange={handlePayload} id="bloodpressuresystolic" />
-                            <Input type="number" leftIcon={<MdBloodtype />} label="Blood Pressure (Diastolic)(mmHg)" value={Payload.bloodpressurediastolic} val={Payload.bloodpressurediastolic !=="" ? true: false  } onChange={handlePayload} id="bloodpressurediastolic" />
-                            <Input type="number" leftIcon={<GiEnergyBreath />} label="Respiration (bpm)" value={Payload.respiration} val={Payload.respiration !=="" ? true: false  } onChange={handlePayload} id="respiration" />
-                            <Input type="number" leftIcon={<FaHeartCircleCheck />} label="O2 Saturation (%)" value={Payload.saturation} val={Payload.saturation !=="" ? true: false  } onChange={handlePayload} id="saturation" />
-                            <Input type="number" leftIcon={<FaTextHeight />} label="Height (cm)" value={Payload.height} val={Payload.height !=="" ? true: false  } onChange={handlePayload} id="height" />
-                            <Input type="number" leftIcon={<GiWeight />} label="Weight (kg)" value={Payload.weight} val={Payload.weight !=="" ? true: false  } onChange={handlePayload} id="weight" />
-                        </SimpleGrid>
-                        <Text color="red" mt="20px">Note: Please add at least one vital information</Text>
-                    </Box>
-
                     {/* Clinical Notes Section */}
-                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
-                        <Text fontSize="xl" fontWeight="bold" mb={10}>Clinical Notes</Text>
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md" bg={EditingClinical.isEditing ? "yellow.50" : "white"}>
+                        <Text fontSize="xl" fontWeight="bold" mb={10}>Clinical Notes {EditingClinical.isEditing && <Badge colorScheme="yellow" ml={2}>Editing</Badge>}</Text>
                         <Stack spacing={4}>
                             <TextArea label="Clinical Note" value={Payload.clinicalnote} onChange={handlePayload} id="clinicalnote" />
-                            <Flex justifyContent="flex-end">
+                            <Flex justifyContent="flex-end" gap={2}>
+                                {EditingClinical.isEditing && (
+                                    <Button onClick={cancelEditClinical} variant="outline" colorScheme="gray" w={{ base: "100%", md: "120px" }}>
+                                        Cancel
+                                    </Button>
+                                )}
                                 <Button onClick={addClinicalNotes} w={{ base: "100%", md: "184px" }}>
-                                    Add
+                                    {EditingClinical.isEditing ? "Update" : "Add"}
                                 </Button>
                             </Flex>
                             <SimpleGrid columns={{ base: 1, md: 2 }} spacing={2}>
                                 {ClinicalNotes?.map((item, i) => (
-                                    <Flex key={i} cursor="pointer" px="10px" py="10px" rounded="20px" fontSize="12px" _hover={{ bg: "blue.blue400" }} bg="blue.blue500" w="100%" justifyContent="space-between" alignItems="center" >
-                                        <Text color="#fff" fontWeight="500" textTransform="capitalize" >{item}</Text>
-                                        <Box fontSize="20px" color="#fff" onClick={() => removeClinicalNotes(item)}><IoIosCloseCircle /></Box>
+                                    <Flex 
+                                        key={i} 
+                                        cursor="pointer" 
+                                        px="10px" 
+                                        py="10px" 
+                                        rounded="20px" 
+                                        fontSize="12px" 
+                                        _hover={{ bg: "blue.blue400" }} 
+                                        bg={EditingClinical.isEditing && EditingClinical.index === i ? "yellow.200" : "blue.blue500"} 
+                                        w="100%" 
+                                        justifyContent="space-between" 
+                                        alignItems="center"
+                                    >
+                                        <Text color={EditingClinical.isEditing && EditingClinical.index === i ? "gray.800" : "#fff"} fontWeight="500" textTransform="capitalize" >{item}</Text>
+                                        <Flex gap={2}>
+                                            <Box 
+                                                fontSize="16px" 
+                                                color={EditingClinical.isEditing && EditingClinical.index === i ? "blue.500" : "#fff"} 
+                                                onClick={() => editClinicalNote(i)}
+                                                _hover={{ transform: "scale(1.1)" }}
+                                            >
+                                                <FaPen />
+                                            </Box>
+                                            <Box 
+                                                fontSize="20px" 
+                                                color={EditingClinical.isEditing && EditingClinical.index === i ? "red.500" : "#fff"} 
+                                                onClick={() => removeClinicalNotes(item)}
+                                                _hover={{ transform: "scale(1.1)" }}
+                                            >
+                                                <IoIosCloseCircle />
+                                            </Box>
+                                        </Flex>
                                     </Flex>
                                 ))}
                             </SimpleGrid>
                         </Stack>
                     </Box>
 
-                    {/* Assessment Notes Section */}
+
+                    {/* Vitals Section */}
                     <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
-                        <Text fontSize="xl" fontWeight="bold" mb={10}>Assessment Notes</Text>
+                        <Text fontSize="xl" fontWeight="bold" mb={4}>Vitals</Text>
+                        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={5} mb="42px">
+                            <Input type="number" leftIcon={<FaTemperatureHigh />} label="Temperature (C)" value={Payload.temperature} val={Payload.temperature !== "" ? true : false} onChange={handlePayload} id="temperature" />
+                            <Input type="number" leftIcon={<FaHeartbeat />} label="Heart Rate (bpm)" value={Payload.heartrate} val={Payload.heartrate !== "" ? true : false} onChange={handlePayload} id="heartrate" />
+                            <Input type="number" leftIcon={<MdBloodtype />} label="Blood Pressure (systolic)(mmHg)" value={Payload.bloodpressuresystolic} val={Payload.bloodpressuresystolic !== "" ? true : false} onChange={handlePayload} id="bloodpressuresystolic" />
+                            <Input type="number" leftIcon={<MdBloodtype />} label="Blood Pressure (Diastolic)(mmHg)" value={Payload.bloodpressurediastolic} val={Payload.bloodpressurediastolic !== "" ? true : false} onChange={handlePayload} id="bloodpressurediastolic" />
+                            <Input type="number" leftIcon={<GiEnergyBreath />} label="Respiration (bpm)" value={Payload.respiration} val={Payload.respiration !== "" ? true : false} onChange={handlePayload} id="respiration" />
+                            <Input type="number" leftIcon={<FaHeartCircleCheck />} label="O2 Saturation (%)" value={Payload.saturation} val={Payload.saturation !== "" ? true : false} onChange={handlePayload} id="saturation" />
+                            <Input type="number" leftIcon={<FaTextHeight />} label="Height (cm)" value={Payload.height} val={Payload.height !== "" ? true : false} onChange={handlePayload} id="height" />
+                            <Input type="number" leftIcon={<GiWeight />} label="Weight (kg)" value={Payload.weight} val={Payload.weight !== "" ? true : false} onChange={handlePayload} id="weight" />
+                        </SimpleGrid>
+
+
+                        <TextArea label="Vitals  Note" value={Payload.vitalNote} onChange={handlePayload} id="vitalNote" />
+                        <Text color="red" mt="20px" >Note: Please add at least one vital information</Text>
+
+
+                    </Box>
+
+
+                    {/* Assessment Notes Section */}
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md" bg={EditingAssessment.isEditing ? "yellow.50" : "white"}>
+                        <Text fontSize="xl" fontWeight="bold" mb={10}>Assessment Notes {EditingAssessment.isEditing && <Badge colorScheme="yellow" ml={2}>Editing</Badge>}</Text>
                         <Stack spacing={4}>
                             <TextArea label="Assessment Note" value={Payload.assessmentnote} onChange={handlePayload} id="assessmentnote" />
-                            <Flex justifyContent="flex-end">
+                            <Flex justifyContent="flex-end" gap={2}>
+                                {EditingAssessment.isEditing && (
+                                    <Button onClick={cancelEditAssessment} variant="outline" colorScheme="gray" w={{ base: "100%", md: "120px" }}>
+                                        Cancel
+                                    </Button>
+                                )}
                                 <Button onClick={addAssessmentNotes} w={{ base: "100%", md: "184px" }}>
-                                    Add
+                                    {EditingAssessment.isEditing ? "Update" : "Add"}
                                 </Button>
                             </Flex>
                             <SimpleGrid columns={{ base: 1, md: 2 }} spacing={2}>
                                 {AssessmentNotes?.map((item, i) => (
-                                    <Flex key={i} cursor="pointer" px="10px" py="10px" rounded="20px" fontSize="12px" _hover={{ bg: "blue.blue400" }} bg="blue.blue500" w="100%" justifyContent="space-between" alignItems="center" >
-                                        <Text color="#fff" fontWeight="500" textTransform="capitalize" >{item}</Text>
-                                        <Box fontSize="20px" color="#fff" onClick={() => removeAssessment(item)}><IoIosCloseCircle /></Box>
+                                    <Flex 
+                                        key={i} 
+                                        cursor="pointer" 
+                                        px="10px" 
+                                        py="10px" 
+                                        rounded="20px" 
+                                        fontSize="12px" 
+                                        _hover={{ bg: "blue.blue400" }} 
+                                        bg={EditingAssessment.isEditing && EditingAssessment.index === i ? "yellow.200" : "blue.blue500"} 
+                                        w="100%" 
+                                        justifyContent="space-between" 
+                                        alignItems="center"
+                                    >
+                                        <Text color={EditingAssessment.isEditing && EditingAssessment.index === i ? "gray.800" : "#fff"} fontWeight="500" textTransform="capitalize" >{item}</Text>
+                                        <Flex gap={2}>
+                                            <Box 
+                                                fontSize="16px" 
+                                                color={EditingAssessment.isEditing && EditingAssessment.index === i ? "blue.500" : "#fff"} 
+                                                onClick={() => editAssessmentNote(i)}
+                                                _hover={{ transform: "scale(1.1)" }}
+                                            >
+                                                <FaPen />
+                                            </Box>
+                                            <Box 
+                                                fontSize="20px" 
+                                                color={EditingAssessment.isEditing && EditingAssessment.index === i ? "red.500" : "#fff"} 
+                                                onClick={() => removeAssessment(item)}
+                                                _hover={{ transform: "scale(1.1)" }}
+                                            >
+                                                <IoIosCloseCircle />
+                                            </Box>
+                                        </Flex>
                                     </Flex>
                                 ))}
                             </SimpleGrid>
@@ -420,20 +589,111 @@ export default function AddClinicalEncounter() {
                     </Box>
 
                     {/* Diagnosis Notes Section */}
-                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
-                        <Text fontSize="xl" fontWeight="bold"  mb={10}>Diagnosis Notes</Text>
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md" bg={EditingDiagnosis.isEditing ? "yellow.50" : "white"}>
+                        <Text fontSize="xl" fontWeight="bold" mb={10}>Diagnosis {EditingDiagnosis.isEditing && <Badge colorScheme="yellow" ml={2}>Editing</Badge>}</Text>
                         <Stack spacing={4}>
-                            <TextArea label="Diagnosis Note" value={Payload.diagnosisnote} onChange={handlePayload} id="diagnosisnote" />
-                            <Flex justifyContent="flex-end">
+                            <TextArea label="Diagnosis" value={Payload.diagnosisnote} onChange={handlePayload} id="diagnosisnote" />
+                            <Flex justifyContent="flex-end" gap={2}>
+                                {EditingDiagnosis.isEditing && (
+                                    <Button onClick={cancelEditDiagnosis} variant="outline" colorScheme="gray" w={{ base: "100%", md: "120px" }}>
+                                        Cancel
+                                    </Button>
+                                )}
                                 <Button onClick={addDiagnosisNotes} w={{ base: "100%", md: "184px" }}>
-                                    Add
+                                    {EditingDiagnosis.isEditing ? "Update" : "Add"}
                                 </Button>
                             </Flex>
                             <SimpleGrid columns={{ base: 1, md: 2 }} spacing={2}>
                                 {DiagnosisNotes?.map((item, i) => (
-                                    <Flex key={i} cursor="pointer" px="10px" py="10px" rounded="20px" fontSize="12px" _hover={{ bg: "blue.blue400" }} bg="blue.blue500" w="100%" justifyContent="space-between" alignItems="center" >
-                                        <Text color="#fff" fontWeight="500" textTransform="capitalize" >{item}</Text>
-                                        <Box fontSize="20px" color="#fff" onClick={() => removeDiagnosisNotes(item)}><IoIosCloseCircle /></Box>
+                                    <Flex 
+                                        key={i} 
+                                        cursor="pointer" 
+                                        px="10px" 
+                                        py="10px" 
+                                        rounded="20px" 
+                                        fontSize="12px" 
+                                        _hover={{ bg: "blue.blue400" }} 
+                                        bg={EditingDiagnosis.isEditing && EditingDiagnosis.index === i ? "yellow.200" : "blue.blue500"} 
+                                        w="100%" 
+                                        justifyContent="space-between" 
+                                        alignItems="center"
+                                    >
+                                        <Text color={EditingDiagnosis.isEditing && EditingDiagnosis.index === i ? "gray.800" : "#fff"} fontWeight="500" textTransform="capitalize" >{item}</Text>
+                                        <Flex gap={2}>
+                                            <Box 
+                                                fontSize="16px" 
+                                                color={EditingDiagnosis.isEditing && EditingDiagnosis.index === i ? "blue.500" : "#fff"} 
+                                                onClick={() => editDiagnosisNote(i)}
+                                                _hover={{ transform: "scale(1.1)" }}
+                                            >
+                                                <FaPen />
+                                            </Box>
+                                            <Box 
+                                                fontSize="20px" 
+                                                color={EditingDiagnosis.isEditing && EditingDiagnosis.index === i ? "red.500" : "#fff"} 
+                                                onClick={() => removeDiagnosisNotes(item)}
+                                                _hover={{ transform: "scale(1.1)" }}
+                                            >
+                                                <IoIosCloseCircle />
+                                            </Box>
+                                        </Flex>
+                                    </Flex>
+                                ))}
+                            </SimpleGrid>
+                        </Stack>
+                    </Box>
+
+
+
+                    {/* Plan Notes Section */}
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md" bg={EditingPlan.isEditing ? "yellow.50" : "white"}>
+                        <Text fontSize="xl" fontWeight="bold" mb={10}>Plan Notes {EditingPlan.isEditing && <Badge colorScheme="yellow" ml={2}>Editing</Badge>}</Text>
+                        <Stack spacing={4}>
+                            <TextArea label="Plan Note" value={Payload.plannote} onChange={handlePayload} id="plannote" />
+                            <Flex justifyContent="flex-end" gap={2}>
+                                {EditingPlan.isEditing && (
+                                    <Button onClick={cancelEditPlan} variant="outline" colorScheme="gray" w={{ base: "100%", md: "120px" }}>
+                                        Cancel
+                                    </Button>
+                                )}
+                                <Button onClick={addPlanNotes} w={{ base: "100%", md: "184px" }}>
+                                    {EditingPlan.isEditing ? "Update" : "Add"}
+                                </Button>
+                            </Flex>
+                            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={2}>
+                                {PlanNotes?.map((item, i) => (
+                                    <Flex 
+                                        key={i} 
+                                        cursor="pointer" 
+                                        px="10px" 
+                                        py="10px" 
+                                        rounded="20px" 
+                                        fontSize="12px" 
+                                        _hover={{ bg: "blue.blue400" }} 
+                                        bg={EditingPlan.isEditing && EditingPlan.index === i ? "yellow.200" : "blue.blue500"} 
+                                        w="100%" 
+                                        justifyContent="space-between" 
+                                        alignItems="center"
+                                    >
+                                        <Text color={EditingPlan.isEditing && EditingPlan.index === i ? "gray.800" : "#fff"} fontWeight="500" textTransform="capitalize" >{item}</Text>
+                                        <Flex gap={2}>
+                                            <Box 
+                                                fontSize="16px" 
+                                                color={EditingPlan.isEditing && EditingPlan.index === i ? "blue.500" : "#fff"} 
+                                                onClick={() => editPlanNote(i)}
+                                                _hover={{ transform: "scale(1.1)" }}
+                                            >
+                                                <FaPen />
+                                            </Box>
+                                            <Box 
+                                                fontSize="20px" 
+                                                color={EditingPlan.isEditing && EditingPlan.index === i ? "red.500" : "#fff"} 
+                                                onClick={() => removePlanNotes(item)}
+                                                _hover={{ transform: "scale(1.1)" }}
+                                            >
+                                                <IoIosCloseCircle />
+                                            </Box>
+                                        </Flex>
                                     </Flex>
                                 ))}
                             </SimpleGrid>
@@ -444,14 +704,14 @@ export default function AddClinicalEncounter() {
                     <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
                         <Text fontSize="xl" fontWeight="bold" mb={4}>Diagnosis ICD 11</Text>
                         <Box position="relative">
-                            <Input 
-                                label="Search ICD 11" 
+                            <Input
+                                label="Search ICD 11"
                                 placeholder="Enter diagnosis name or ICD code"
-                                value={SearchICD} 
+                                value={SearchICD}
                                 onChange={handleSearchInputChange}
                                 leftIcon={<FiSearch size={16} color="blue.500" />}
                             />
-                            
+
                             {/* Selected ICD Display */}
                             {selectedICDInfo && (
                                 <Box mt={2} p={3} bg="blue.50" borderRadius="md" border="1px solid" borderColor="blue.200">
@@ -523,27 +783,6 @@ export default function AddClinicalEncounter() {
                                 </Box>
                             )}
                         </Box>
-                    </Box>
-
-                    {/* Plan Notes Section */}
-                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
-                        <Text fontSize="xl" fontWeight="bold"  mb={10}>Plan Notes</Text>
-                        <Stack spacing={4}>
-                            <TextArea label="Plan Note" value={Payload.plannote} onChange={handlePayload} id="plannote" />
-                            <Flex justifyContent="flex-end">
-                                <Button onClick={addPlanNotes} w={{ base: "100%", md: "184px" }}>
-                                    Add
-                                </Button>
-                            </Flex>
-                            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={2}>
-                                {PlanNotes?.map((item, i) => (
-                                    <Flex key={i} cursor="pointer" px="10px" py="10px" rounded="20px" fontSize="12px" _hover={{ bg: "blue.blue400" }} bg="blue.blue500" w="100%" justifyContent="space-between" alignItems="center" >
-                                        <Text color="#fff" fontWeight="500" textTransform="capitalize" >{item}</Text>
-                                        <Box fontSize="20px" color="#fff" onClick={() => removePlanNotes(item)}><IoIosCloseCircle /></Box>
-                                    </Flex>
-                                ))}
-                            </SimpleGrid>
-                        </Stack>
                     </Box>
 
                     {/* Plan Section */}
