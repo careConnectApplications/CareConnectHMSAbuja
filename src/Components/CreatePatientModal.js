@@ -174,7 +174,7 @@ export default function CreatePatientModal({
     reason: "",
     appointmentdate: getTodayDate(),
     unit: "",
-    appointmentcategory: "",
+    appointmentcategory: "Appointment",
     appointmenttype: "",
 
     // New fields
@@ -203,6 +203,7 @@ export default function CreatePatientModal({
     lastName: "",
     country: "",
     stateOfResidence: "",
+    appointmentcategory: "Appointment",
     LGA: "",
     address: "",
     age: "",
@@ -1097,7 +1098,7 @@ export default function CreatePatientModal({
                   Health Insurance Information
                 </Text>
                 <SimpleGrid columns={{ base: 1, md: 4 }} spacing={4}>
-                  <FormControl>
+                  {/* <FormControl>
                     <Select
                       name="isHMOCover"
                       value={patientData.isHMOCover}
@@ -1108,7 +1109,7 @@ export default function CreatePatientModal({
                       <option value={"Yes"}>Yes</option>
                       <option value={"No"}>No</option>
                     </Select>
-                  </FormControl>
+                  </FormControl> */}
 
                   <FormControl>
                     <Select
@@ -1154,7 +1155,7 @@ export default function CreatePatientModal({
                     name="HMOId"
                     leftIcon={<FaMedkit />}
                   />
-                  <Input
+                  {/* <Input
                     id="facilitypateintreferedfrom"
                     name="facilitypateintreferedfrom"
                     label="Facility Referred From"
@@ -1170,7 +1171,7 @@ export default function CreatePatientModal({
                     onChange={handleInputChange}
                     name="authorizationcode"
                     leftIcon={<FaMedkit />}
-                  />
+                  /> */}
                 </SimpleGrid>
                 {/* NEW: Police Report Information */}
                 <Divider my={4} />
@@ -1772,7 +1773,7 @@ export default function CreatePatientModal({
                   Health Insurance Information
                 </Text>
                 <SimpleGrid columns={{ base: 1, md: 4 }} spacing={4}>
-                  <FormControl>
+                  {/* <FormControl>
                     <Select
                       isDisabled={true}
                       name="isHMOCover"
@@ -1786,7 +1787,7 @@ export default function CreatePatientModal({
                       <option value={"Yes"}>Yes</option>
                       <option value={"No"}>No</option>
                     </Select>
-                  </FormControl>
+                  </FormControl> */}
 
                   <FormControl>
                     <Select
@@ -1833,7 +1834,7 @@ export default function CreatePatientModal({
                     placeholder="Old"
                     leftIcon={<FaMedkit />}
                   />
-                  <Input
+                  {/* <Input
                     id="facilitypateintreferedfrom"
                     name="facilitypateintreferedfrom"
                     label="Facility Referred From"
@@ -1849,7 +1850,7 @@ export default function CreatePatientModal({
                     onChange={handleUpdatedPayload}
                     name="authorizationcode"
                     leftIcon={<FaMedkit />}
-                  />
+                  /> */}
                 </SimpleGrid>
                 <Divider my={4} />
                 <Text

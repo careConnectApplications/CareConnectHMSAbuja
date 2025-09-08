@@ -61,6 +61,7 @@ export default function VitalsModal({ isOpen, onClose, type, activateNotificatio
 
 
     const CollectVitals = async () => {
+        console.log("oldPayload", oldPayload)
         setLoading(true)
         try {
             const result = await TakeVitalApi(Payload, oldPayload?.vitals?._id);

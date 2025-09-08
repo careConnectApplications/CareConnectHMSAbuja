@@ -19,7 +19,7 @@ export default function TableRowX({
   type,
   name,
   mrn,
-  phone,
+  phone,onVital,
   code,
   subscription,
   age,
@@ -51,7 +51,7 @@ export default function TableRowX({
       {type === "patient-management" && (
         <>
           <Td>
-            <HStack cursor={"pointer"} onClick={onView}>
+            <HStack cursor={"pointer"} >
               <Avatar
                 name={name}
                 size="sm"
@@ -212,7 +212,7 @@ export default function TableRowX({
                 </MenuItem>
 
                 <MenuItem
-                  onClick={onView}
+                  onClick={onVital}
                   textTransform="capitalize"
                   fontWeight={"500"}
                   _hover={{
@@ -222,7 +222,7 @@ export default function TableRowX({
                   }}
                 >
                   <HStack fontSize="12px">
-                    <Text>Delete</Text>
+                    <Text>Take vitals</Text>
                   </HStack>
                 </MenuItem>
                 <MenuItem

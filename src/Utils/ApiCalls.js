@@ -4147,14 +4147,14 @@ export const TakeVitalApi = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };

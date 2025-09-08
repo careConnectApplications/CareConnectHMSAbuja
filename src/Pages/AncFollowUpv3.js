@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import { Text, Flex, HStack, Box, useDisclosure } from "@chakra-ui/react";
-import { Table, Thead, Tbody, Tr, Th, TableContainer, Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
+import { Table, Thead, Tbody, Tr, Th, TableContainer, Tooltip, Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
 import moment from "moment";
 import TableRow from "../Components/TableRow";
 import { useNavigate, useParams } from "react-router-dom";
 import Button from "../Components/Button";
 import ExamineModal from "../Components/ExamineModal";
 import LabRequestModal from "../Components/LabRequestModal";
+import CreatePrescriptionModal from "../Components/CreatePrescriptionModal";
+import CreateReferralModal from "../Components/CreateReferralModal";
+import CreateProcedureModal from "../Components/CreateProcedureModal";
+import RadiologyOrderRequestModal from "../Components/RadiologyOrderRequestModal";
+import AdmissionModal from "../Components/AdmissionModal";
 import Input from "../Components/Input";
 import ShowToast from "../Components/ToastNotification";
 import { IoFilter } from "react-icons/io5";
@@ -20,7 +25,7 @@ import { configuration } from '../Utils/Helpers'
 import Preloader from "../Components/Preloader";
 import MainLayout from "../Layouts/Index";
 import Seo from "../Utils/Seo";
-import { IoMdArrowRoundBack } from "react-icons/io"; 
+import { IoMdArrowRoundBack } from "react-icons/io";
 
 
 
@@ -38,6 +43,15 @@ export default function AncFollowUpv3() {
     const [Trigger, setTrigger] = useState(false);
     const [ModalState, setModalState] = useState("");
     const [OldPayload, setOldPayload] = useState({});
+
+    //plans state 
+
+    const [OpenLabModal, setOpenLabModal] = useState(false);
+    const [OpenPrescriptionModal, setOpenPrescriptionModal] = useState(false);
+    const [OpenRadiologyModal, setOpenRadiologyModal] = useState(false);
+    const [OpenProcedureModal, setOpenProcedureModal] = useState(false);
+    const [OpenReferralModal, setOpenReferralModal] = useState(false);
+    const [OpenAdmissionModal, setOpenAdmissionModal] = useState(false);
 
 
     // Pagination settings to follow
@@ -83,7 +97,7 @@ export default function AncFollowUpv3() {
 
     // Search Filter settings to follow end here
 
-    let {id} = useParams()
+    let { id } = useParams()
 
 
 
@@ -103,7 +117,7 @@ export default function AncFollowUpv3() {
             const result = await GetAllAncFollowUpApiv3(id);
             console.log("getAllAncFollowup", result)
             if (result.status === true) {
-                setIsLoading(false) 
+                setIsLoading(false)
                 setData(result.queryresult.ancfollowupdetails);
                 setFilterData(result.queryresult.ancfollowupdetails);
             }
@@ -112,7 +126,7 @@ export default function AncFollowUpv3() {
         }
     };
 
- 
+
 
 
 
@@ -178,7 +192,7 @@ export default function AncFollowUpv3() {
     const AddFollowUp = () => {
         setModalState("new")
         onOpen()
-        setOldPayload({_id: id})
+        setOldPayload({ _id: id })
     }
     const handleEdit = (item) => {
         setModalState("edit")
@@ -193,8 +207,8 @@ export default function AncFollowUpv3() {
         onOpen()
     }
 
-     const nav = useNavigate()
-    
+    const nav = useNavigate()
+
     const pathname = localStorage.getItem("pathname")
 
     useEffect(() => {
@@ -206,7 +220,7 @@ export default function AncFollowUpv3() {
     return (
         <MainLayout>
             <Seo title="ANC follow Up" description="Care connect  ANC Follow up " />
-              <Button leftIcon={<IoMdArrowRoundBack />} px="40px" w="100px" onClick={() => nav(`${pathname}`)}>Back</Button>
+            <Button leftIcon={<IoMdArrowRoundBack />} px="40px" w="100px" onClick={() => nav(`${pathname}`)}>Back</Button>
             <Box
                 bg="#fff"
                 border="1px solid #EFEFEF"
@@ -360,38 +374,38 @@ export default function AncFollowUpv3() {
                                         presenting part
                                     </Th>
                                     <Th fontSize="13px" color="#534D59" fontWeight="600">
-                                       foetal height
+                                        foetal height
                                     </Th>
                                     <Th fontSize="13px" color="#534D59" fontWeight="600">
-                                       bp
+                                        bp
                                     </Th>
                                     <Th fontSize="13px" color="#534D59" fontWeight="600">
-                                       hb
+                                        hb
                                     </Th>
                                     <Th fontSize="13px" color="#534D59" fontWeight="600">
-                                       protein
+                                        protein
                                     </Th>
                                     <Th fontSize="13px" color="#534D59" fontWeight="600">
-                                       glucose
+                                        glucose
                                     </Th>
                                     <Th fontSize="13px" color="#534D59" fontWeight="600">
-                                       weight
+                                        weight
                                     </Th>
-                                  
+
                                     <Th fontSize="13px" color="#534D59" fontWeight="600">
-                                       oedema 
-                                    </Th>
-                                    <Th fontSize="13px" color="#534D59" fontWeight="600">
-                                       tetanus toxoid
+                                        oedema
                                     </Th>
                                     <Th fontSize="13px" color="#534D59" fontWeight="600">
-                                       sulfadoxine pyrimethamine
+                                        tetanus toxoid
                                     </Th>
                                     <Th fontSize="13px" color="#534D59" fontWeight="600">
-                                       albendazole
+                                        sulfadoxine pyrimethamine
                                     </Th>
                                     <Th fontSize="13px" color="#534D59" fontWeight="600">
-                                       remark
+                                        albendazole
+                                    </Th>
+                                    <Th fontSize="13px" color="#534D59" fontWeight="600">
+                                        remark
                                     </Th>
 
                                     <Th fontSize="13px" color="#534D59" fontWeight="600">
@@ -435,6 +449,63 @@ export default function AncFollowUpv3() {
                             </Tbody>
                         </Table>
                     </TableContainer>
+
+
+                    <Box  mt="32px" p={5} shadow="md" borderWidth="1px" borderRadius="md">
+                        <Text fontSize="xl" fontWeight="bold" mb={4}>Plan</Text>
+                        <Flex justifyContent="space-between" flexWrap="wrap" mt="15px" w={["100%", "100%", "100%", "100%"]} >
+                            <Tooltip label='Lab Order'>
+                                <Box onClick={() => setOpenLabModal(true)} cursor="pointer" px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500">Lab </Box>
+
+                            </Tooltip>
+                            <Tooltip label='Radiology Order'>
+                                <Box onClick={() => setOpenRadiologyModal(true)} cursor="pointer" px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500">Radiology </Box>
+                            </Tooltip>
+                            <Tooltip label='Prescribe Drug'>
+                                <Box cursor="pointer" onClick={() => setOpenPrescriptionModal(true)} px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500">Prescription </Box>
+                            </Tooltip>
+                            <Tooltip label='Admit Patient'>
+                                <Box onClick={() => setOpenAdmissionModal(true)} cursor="pointer" px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500">Admission </Box>
+                            </Tooltip>
+                            <Tooltip label='Procedure'>
+                                <Box onClick={() => setOpenProcedureModal(true)} cursor="pointer" px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500">Procedure </Box>
+                            </Tooltip>
+                            <Tooltip label='Refer Patient To Another Doctor'>
+                                <Box onClick={() => setOpenReferralModal(true)} cursor="pointer" px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500">Referral </Box>
+                            </Tooltip>
+                        </Flex>
+                    </Box>
+
+
+                    <AdmissionModal isOpen={OpenAdmissionModal} oldPayload={{ _id: id, appointmentid: id }} onClose={() => setOpenAdmissionModal(false)} type={ModalState} activateNotifications={activateNotifications} />
+
+                    <RadiologyOrderRequestModal
+                        isOpen={OpenRadiologyModal}
+                        onClose={() => setOpenRadiologyModal(false)}
+                        admissionId={null}
+                        type={"create"}
+                        initialData={null}
+                        oldPayload={{ id: id }}
+                        onSuccess={activateNotifications}
+                    />
+
+                    <CreateProcedureModal
+                        isOpen={OpenProcedureModal}
+                        onClose={() => setOpenProcedureModal(false)}
+                        type={"new"}
+                        activateNotifications={activateNotifications}
+                        oldPayload={{ id: id }}
+
+                    />
+
+                    <CreateReferralModal isOpen={OpenReferralModal} onClose={() => setOpenReferralModal(false)} type={"new"} activateNotifications={activateNotifications} />
+                    <LabRequestModal isOpen={OpenLabModal} oldPayload={{ _id: id, appointmentid: id }} onClose={() => setOpenLabModal(false)} type={ModalState} activateNotifications={activateNotifications} />
+                    <CreatePrescriptionModal
+                        isOpen={OpenPrescriptionModal}
+                        onClose={() => setOpenPrescriptionModal(false)}
+                        onSuccess={activateNotifications}
+                        oldPayload={{ id: id }}
+                    />
 
                     <CreateANCFollowUpModalv3 isOpen={isOpen} onClose={onClose} type={ModalState} activateNotifications={activateNotifications} oldPayload={OldPayload} />
                 </Box>
