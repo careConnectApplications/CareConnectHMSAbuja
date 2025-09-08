@@ -24,6 +24,7 @@ import {
   MenuItem,
 } from "@chakra-ui/react";
 import CreatePatientModal from "../Components/CreatePatientModal";
+import VitalsModal from "../Components/VitalsModal";
 import {
   GetAllPatientsApi,
   GetAllFilteredPatientsApi,
@@ -70,6 +71,7 @@ export default function Patients() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [FilterPatient, setFilterPatient] = useState({});
   const [isLoading, setIsLoading] = useState(true); //
+  const [OpenVitals, setOpenVitals] = useState(false); 
 
   // Search Filter settings to follow
   const [SearchInput, setSearchInput] = useState("");
@@ -270,6 +272,28 @@ export default function Patients() {
     alert("hello");
   };
 
+ const activateNotifications = (message, status) => {
+
+    setShowToast({
+      show: true,
+      message: message,
+      status: status,
+    });
+
+    setTimeout(() => {
+      setShowToast({
+        show: false,
+      });
+
+    }, 5000)
+  }
+
+  const [OldPayload, setOldPayload] = useState({});
+  const takeVitals = (item) => {
+   setOpenVitals(true)
+    setOldPayload({ vitals:{ _id: item?._id}})
+    setModalState("new")
+  }
   useEffect(() => {
     if (FilteredData?.length > 0 || FilteredData !== null) {
       getFilteredPatient(Key, Value);
@@ -687,6 +711,7 @@ export default function Patients() {
                       date={moment(item.createdAt).format("lll")}
                       onEdit={() => onEdit(item._id)}
                       onView={() => navigateToPatientDetails(item._id)}
+                       onVital={() => takeVitals(item)}
                       onClick={
                         item.subscriptionExpired === true
                           ? () => payAnnualSubscription(item._id)
@@ -721,6 +746,7 @@ export default function Patients() {
                       date={moment(item.createdAt).format("lll")}
                       onEdit={() => onEdit(item._id)}
                       onView={() => navigateToPatientDetails(item._id)}
+                       onVital={() => takeVitals(item)}
                       onClick={
                         item.subscriptionExpired === true
                           ? () => payAnnualSubscription(item._id)
@@ -755,6 +781,9 @@ export default function Patients() {
         type={ModalState}
         filteredpatient={FilterPatient}
       />
+
+      <VitalsModal isOpen={OpenVitals} oldPayload={OldPayload} onClose={() => { setOpenVitals(false) }}  type={ModalState} activateNotifications={activateNotifications} />
+      
     </MainLayout>
   );
 }

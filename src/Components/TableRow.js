@@ -4193,11 +4193,7 @@ export default function TableRow({
               {serviceCategory}
             </Text>
           </Td>
-          <Td>
-            <Text fontWeight="400" fontSize={"13px"}>
-              {amountClaimed}
-            </Text>
-          </Td>
+        
           <Td>
             <Text fontWeight="400" fontSize={"13px"}>
               {amountApproved}

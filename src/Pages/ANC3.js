@@ -399,7 +399,7 @@ export default function ANC3({ hide = false }) {
                                 <HStack>
 
                                     <Box color="blue.blue500"><BsCalendar2DateFill /></Box>
-                                    <Text textAlign="center">{moment(item.createdAt).format("L")} </Text>
+                                    <Text textAlign="center">{moment(item.createdAt).format("DD-MM-YYYY")} </Text>
                                     <Box color="blue.blue500"><FaClock /></Box>
                                     <Text textAlign="center"> {moment(item.createdAt).format("LT")} </Text>
                                 </HStack>
