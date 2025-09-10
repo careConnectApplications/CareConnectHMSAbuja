@@ -21,14 +21,14 @@ export const GetAwaitingAuthorizationRadiology = () => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -53,16 +53,16 @@ export const ValidateLabResultApi = (labResultId, payload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response?.data?.message) {
-        throw new Error(error.response.data.message);
-      } else if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(JSON.stringify(error.response.data));
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -87,14 +87,14 @@ export const UpdateInsuranceClaimStatusApi = (id, payload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -126,14 +126,14 @@ export const GetAllFilteredClaimsApi = (page, limit, status, key, value) => {
     })
     .catch((error) => {
       console.log("Error fetching claims:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -155,14 +155,14 @@ export const GetAllClaimsApi = (page, limit) => {
     })
     .catch((error) => {
       console.log("Error fetching claims:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -190,14 +190,14 @@ export const AuthorizeClaimsApi = (payload, type, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -224,14 +224,14 @@ export const GroupAuthorizeClaimsApi = (payload, type, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -253,14 +253,14 @@ export const GetAwaitingAuthorizationProcedure = () => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -282,14 +282,14 @@ export const GetAwaitingAuthorizationPharmacy = () => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -311,14 +311,14 @@ export const GetAwaitingAuthorizationLab = () => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -340,14 +340,14 @@ export const GetAwaitingAuthorizationHistopathology = () => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -374,14 +374,14 @@ export const ProviderLoginApi = (Payload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -406,14 +406,14 @@ export const CreateHmoCategoryCoverApi = (payload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -438,14 +438,14 @@ export const UpdateHmoCategoryCoverApi = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -467,14 +467,14 @@ export const GetAllHmoCategoryCoverApi = () => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -499,14 +499,14 @@ export const GetPriceOfService = (payload, patientId) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -531,14 +531,14 @@ export const CreateBedApi = (payload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -566,14 +566,14 @@ export const CreateCustomBillApi = (payload, patientId) => {
     .catch((error) => {
       console.log("error", error.response);
 
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -595,14 +595,14 @@ export const GetAllBedsApi = () => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -624,14 +624,14 @@ export const GetPatientBillingHistoryApi = (patientId) => {
     .then((response) => response.data)
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -659,17 +659,17 @@ export const SoftDeleteRestoreBedApi = (id, payload) => {
       if (response.status >= 200 && response.status < 300) {
         return response.data;
       }
-      throw new Error(response.data?.message || "Operation failed");
+      throw new Error(response.data?.msg || "Operation failed");
     })
     .catch((error) => {
       // Improved error handling
-      const errorMessage =
-        error.response?.data?.message ||
-        error.response?.data?.message  ||
-        error.message ||
+      const errormsg =
+        error.response?.data?.msg ||
+        error.response?.data?.msg  ||
+        error.msg ||
         "Failed to update bed status";
-      console.error("API Error:", errorMessage);
-      throw new Error(errorMessage);
+      console.error("API Error:", errormsg);
+      throw new Error(errormsg);
     });
 };
 export const UpdateBedNumberApi = (id, payload) => {
@@ -692,14 +692,14 @@ export const UpdateBedNumberApi = (id, payload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -724,14 +724,14 @@ export const AddEyePreliminaryTestApi = (payload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message) {
-        throw new Error(error.response.data.message);
+      if (error.response.data.msg) {
+        throw new Error(error.response.data.msg);
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -755,14 +755,14 @@ export const AddLensPrescriptionApi = (payload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message) {
-        throw new Error(error.response.data.message);
+      if (error.response.data.msg) {
+        throw new Error(error.response.data.msg);
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -787,14 +787,14 @@ export const AddEyeConsultationApi = (payload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message) {
-        throw new Error(error.response.data.message);
+      if (error.response.data.msg) {
+        throw new Error(error.response.data.msg);
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -818,14 +818,14 @@ export const AddOperationNoteApi = (formData, appointmentId, patientId) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message) {
-        throw new Error(error.response.data.message);
+      if (error.response.data.msg) {
+        throw new Error(error.response.data.msg);
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -850,14 +850,14 @@ export const AddEyeExaminationApi = (payload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -882,14 +882,14 @@ export const CreateHistologyApi = (payload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message) {
-        throw new Error(error.response.data.message);
+      if (error.response.data.msg) {
+        throw new Error(error.response.data.msg);
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -912,14 +912,14 @@ export const GetAllHistopathologyApi = (postPerPage, pageNo, status) => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -943,14 +943,14 @@ export const GetSingleHistopathologyApi = (name, id) => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -979,14 +979,14 @@ export const GetAllHistopathologyFilteredApi = (
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -1008,14 +1008,14 @@ export const GetAllHistopathologyReportApi = () => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -1040,14 +1040,14 @@ export const GetMedicalReportAPI = (payload,queryType) => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -1070,14 +1070,14 @@ export const GetAllSingleHistopathologyHistoryApi = (id) => {
     })
     .catch((error) => {
       console.log("Error fetching histopathology history:", error.response);
-      if (error.response && error.response.data.message) {
-        throw new Error(error.response.data.message);
+      if (error.response && error.response.data.msg) {
+        throw new Error(error.response.data.msg);
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -1100,14 +1100,14 @@ export const GetAllPatientHistopathologyReportApi = (id) => {
     })
     .catch((error) => {
       console.log("Error fetching patient histopathology reports:", error.response);
-      if (error.response && error.response.data.message) {
-        throw new Error(error.response.data.message);
+      if (error.response && error.response.data.msg) {
+        throw new Error(error.response.data.msg);
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -1135,14 +1135,14 @@ export const AddUserApi = (userData) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -1167,14 +1167,14 @@ export const UpdateUserApi = (userData, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -1198,14 +1198,14 @@ export const UpdateUserStatusApi = (id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -1228,14 +1228,14 @@ export const UpdatePriceStatusApi = (id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -1259,14 +1259,14 @@ export const confirmPaymentAPI = (id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -1289,14 +1289,14 @@ export const confirmAllPaymentAPI = (id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -1319,14 +1319,14 @@ export const GetAllUsersApi = () => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -1349,14 +1349,14 @@ export const GetSingleUsersApi = (userId) => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -1381,14 +1381,14 @@ export const UpdateUserPermissionApi = (payload, userId) => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -1410,14 +1410,14 @@ export const GetReportSettingsApi = () => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -1439,14 +1439,14 @@ export const GetReportSummarySettingsApi = () => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -1472,14 +1472,14 @@ export const GetDiagnosisICApi = (payload) => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -1501,14 +1501,14 @@ export const GetFullReportApi = (type, group, start, end) => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -1530,14 +1530,14 @@ export const GetFullReportSummaryApi = (type, start, end) => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -1564,14 +1564,14 @@ export const GetAllPatientsHistoryApi = (
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -1600,14 +1600,14 @@ export const GetAllPatientsHistoryFilteredApi = (
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -1629,14 +1629,14 @@ export const GetAllScheduledLabApi = (postPerPage, pageNo, status) => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -1665,14 +1665,14 @@ export const GetAllScheduledLabFilteredApi = (
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -1694,14 +1694,14 @@ export const GetAllLabReportApi = () => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -1723,14 +1723,14 @@ export const GetAllPatientLabReportApi = (id) => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -1752,14 +1752,14 @@ export const GetAllPatientPharmacyApi = (id) => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -1782,14 +1782,14 @@ export const GetAllAdmissionHistoryApi = (id) => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -1811,14 +1811,14 @@ export const GetAllProcedureHistoryApi = (id) => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -1840,14 +1840,14 @@ export const GetAllProcedureByClinicApi = (clinic) => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -1869,14 +1869,14 @@ export const GetAllImmunizationHistoryApi = (id) => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -1898,14 +1898,14 @@ export const GetAllPartographHistoryApi = (id) => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -1927,14 +1927,14 @@ export const GetAllFamilyPlanningApi = (id) => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -1956,14 +1956,14 @@ export const GetAllAncFollowUpApi = (id) => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -1985,14 +1985,14 @@ export const GetAllAncFollowUpApiv3 = (id) => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -2014,14 +2014,14 @@ export const GetAllReferralApi = (id) => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -2043,14 +2043,14 @@ export const GetAllDeliveryNoteApi = (id) => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -2073,14 +2073,14 @@ export const GetReportApi = (id) => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -2102,14 +2102,14 @@ export const GetPaymentReceiptApi = (id) => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -2131,14 +2131,14 @@ export const GetAllTodayQueueHistoryApi = (clinic) => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -2160,14 +2160,14 @@ export const GetAllVitalsApi = (id) => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -2189,14 +2189,14 @@ export const GetSinglePatientHistoryApi = (id) => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -2218,14 +2218,14 @@ export const GetPreviousANCApi = (id) => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -2247,14 +2247,14 @@ export const GetPreviousANCV2Api = (id) => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -2276,14 +2276,14 @@ export const GetPreviousANCV3Api = (id) => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -2305,14 +2305,14 @@ export const GetPreviousClinicalEncounterApi = (id) => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -2334,14 +2334,14 @@ export const GetPreviousEyeRecordsApi = (id) => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -2363,14 +2363,14 @@ export const GetPreviousEncounterApi = (id) => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -2392,14 +2392,14 @@ export const GetPreviousPreAnatheticsApi = (id) => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -2421,14 +2421,14 @@ export const GetPreviousOperationalConsentApi = (id) => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -2450,14 +2450,14 @@ export const GetAllPaymentApi = () => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -2479,14 +2479,14 @@ export const GetAllPaymentGroupApi = () => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -2508,14 +2508,14 @@ export const GetAllPaidPaymentGroupApi = () => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -2537,14 +2537,14 @@ export const GetAllPaymentDetailApi = (id) => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -2567,14 +2567,14 @@ export const GetAllDetailApi = (id,category) => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -2596,14 +2596,14 @@ export const GetAllPriceApi = () => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -2625,14 +2625,14 @@ export const GetAllClinicApi = () => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -2654,14 +2654,14 @@ export const GetOnlyClinicApi = () => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -2683,14 +2683,14 @@ export const GetAllServiceApi = () => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -2712,14 +2712,14 @@ export const GetAllWardApi = () => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -2741,14 +2741,14 @@ export const GetAllSingleLabHistoryApi = (id) => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -2775,14 +2775,14 @@ export const AddPatientApi = (patientData) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -2808,13 +2808,13 @@ export const AdmitPatientApi = (payload, id) => {
     })
     .catch((error) => {
       console.log("API error:", error.response);
-      // Extract the most specific error message available
-      const errorMessage =
-        error.response?.data?.message ||
-        error.response?.data?.message  ||
-        error.message ||
+      // Extract the most specific error msg available
+      const errormsg =
+        error.response?.data?.msg ||
+        error.response?.data?.msg  ||
+        error.msg ||
         "Failed to admit patient";
-      throw new Error(errorMessage);
+      throw new Error(errormsg);
     });
 };
 export const UpdatePriceSettingAPI = (payload, id) => {
@@ -2838,14 +2838,14 @@ export const UpdatePriceSettingAPI = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -2870,14 +2870,14 @@ export const UpdateClinicSettingAPI = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -2903,14 +2903,14 @@ export const UpdateServiceTypeSettingAPI = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -2935,14 +2935,14 @@ export const UpdateWardAPI = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -2968,14 +2968,14 @@ export const UpdateExaminedPatientAPI = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -3001,14 +3001,14 @@ export const AddEncounterAPI = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -3034,14 +3034,14 @@ export const AddClinicalEncounterAPI = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -3067,14 +3067,14 @@ export const AddPreAnatheticsAPI = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -3100,14 +3100,14 @@ export const AddOperationalConsentAPI = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -3133,14 +3133,14 @@ export const EditOperationalConsentAPI = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -3167,14 +3167,14 @@ export const EditPreAnatheticsAPI = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -3200,14 +3200,14 @@ export const CreateAncAPI = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -3233,14 +3233,14 @@ export const CreateAncV2API = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -3266,14 +3266,14 @@ export const CreateAncV3API = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -3299,14 +3299,14 @@ export const EditAncV3API = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -3332,14 +3332,14 @@ export const AddImmunizationAPI = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -3365,14 +3365,14 @@ export const AddReferralAPI = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -3398,14 +3398,14 @@ export const AddDeliveryNoteAPI = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -3431,14 +3431,14 @@ export const AddANCFollowUpAPI = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -3464,14 +3464,14 @@ export const AddANCFollowUpAPIv3 = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -3498,14 +3498,14 @@ export const AddProcedureAPI = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -3531,14 +3531,14 @@ export const AddReferralResponseAPI = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -3564,14 +3564,14 @@ export const AddReferralScheduleAPI = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -3597,14 +3597,14 @@ export const AddEntriesAPI = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -3630,14 +3630,14 @@ export const AddFamilyPlanAPI = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -3663,14 +3663,14 @@ export const UpdateEntriesAPI = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -3696,14 +3696,14 @@ export const UpdateFamilyPlaningAPI = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -3729,14 +3729,14 @@ export const UpdateImmunizationAPI = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -3762,14 +3762,14 @@ export const UpdateReferralAPI = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -3795,14 +3795,14 @@ export const UpdateDeliveryNoteAPI = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -3828,14 +3828,14 @@ export const UpdateAncFollowupAPI = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -3861,14 +3861,14 @@ export const UpdateAncFollowupAPIv3 = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -3894,14 +3894,14 @@ export const UpdateProcedureAPI = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -3924,14 +3924,14 @@ export const UpdatePathCompleteAPI = (id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -3957,14 +3957,14 @@ export const UpdateAdmissionStatusAPI = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -3989,14 +3989,14 @@ export const AddPriceSettingsApi = (payload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -4021,14 +4021,14 @@ export const AddClinicSettingsApi = (payload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -4052,14 +4052,14 @@ export const AddServiceTypeSettingsApi = (payload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -4084,14 +4084,14 @@ export const AddWardSettingsApi = (payload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -4115,14 +4115,14 @@ export const ExaminePatientApi = (payload, id) => {
       return response;
     })
     .catch((error) => {
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -4180,14 +4180,14 @@ export const RequestLabOrderApi = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -4212,14 +4212,14 @@ export const RequestLabOrderStandAloneApi = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -4244,14 +4244,14 @@ export const ProcessLabApi = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -4276,14 +4276,14 @@ export const ProcessHistopathologyApi = (payload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message) {
-        throw new Error(error.response.data.message);
+      if (error.response.data.msg) {
+        throw new Error(error.response.data.msg);
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -4307,14 +4307,14 @@ export const UpdatePatientApi = (patientData, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -4337,14 +4337,14 @@ export const GetAllPatientsApi = (pageNo, postPerPage) => {
     })
     .catch((error) => {
       console.log("Error fetching patients details:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -4366,14 +4366,14 @@ export const GetAllPaymentGroupOptApi = (pageNo, postPerPage, status) => {
     })
     .catch((error) => {
       console.log("Error fetching patients details:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -4401,14 +4401,14 @@ export const GetAllFilteredPaymentGroupOptApi = (
     })
     .catch((error) => {
       console.log("Error fetching patients details:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -4430,14 +4430,14 @@ export const GetAllFilteredPatientsApi = (key, value, pageNo, postPerPage) => {
     })
     .catch((error) => {
       console.log("Error fetching patients details:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -4459,14 +4459,14 @@ export const GetAllFilteredScheduledApi = (key, value, pageNo, postPerPage) => {
     })
     .catch((error) => {
       console.log("Error  details:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -4488,14 +4488,14 @@ export const SettingsApi = () => {
     })
     .catch((error) => {
       console.log("Error fetching users:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -4522,14 +4522,14 @@ export const BulkUploadApi = (formData) => {
     })
     .catch((error) => {
       console.log("Error in Bulk Upload:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -4558,10 +4558,10 @@ export const DownloadSampleFileApi = () => {
     .catch((error) => {
       console.error(
         "Error downloading the sample file:",
-        error.response || error.message
+        error.response || error.msg
       );
       throw new Error(
-        error.response?.data?.message  || "Failed to download the file."
+        error.response?.data?.msg  || "Failed to download the file."
       );
     });
 };
@@ -4613,14 +4613,14 @@ export const ScheduleAppointmentApi = (payload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(JSON.stringify(error.response.data));
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -4643,14 +4643,14 @@ export const GetAllSchedulesApi = (pageNo, postPerPage) => {
     })
     .catch((error) => {
       console.log("Error in Get All Schedules:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -4678,14 +4678,14 @@ export const UpdateAppointmentApi = (appointmentId, payload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(JSON.stringify(error.response.data));
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -4708,14 +4708,14 @@ export const getPatientData = (id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response.data);
       } else if (error.request) {
-        throw new Error(error.message  || "No response received from server.");
+        throw new Error(error.msg  || "No response received from server.");
       } else {
-        throw new Error(error.message || "Unexpected error occurred.");
+        throw new Error(error.msg || "Unexpected error occurred.");
       }
     });
 };
@@ -4743,14 +4743,14 @@ export const updatePatientPicture = (id, pictureFile) => {
     })
     .catch((error) => {
       console.error("Error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response.data);
       } else if (error.request) {
-        throw new Error(error.message  || "No response received from server.");
+        throw new Error(error.msg  || "No response received from server.");
       } else {
-        throw new Error(error.message || "Unexpected error occurred.");
+        throw new Error(error.msg || "Unexpected error occurred.");
       }
     });
 };
@@ -4774,14 +4774,14 @@ export const PharmacyBulkUploadApi = (formData) => {
     })
     .catch((error) => {
       console.log("Error in Bulk Upload:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -4811,10 +4811,10 @@ export const DownloadPharmacySampleFileApi = () => {
     .catch((error) => {
       console.error(
         "Error downloading the sample file:",
-        error.response || error.message
+        error.response || error.msg
       );
       throw new Error(
-        error.response?.data?.message  || "Failed to download the file."
+        error.response?.data?.msg  || "Failed to download the file."
       );
     });
 };
@@ -4837,14 +4837,14 @@ export const fetchPharmacyStock = () => {
     })
     .catch((error) => {
       console.log("Error in Get All Stock:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -4869,14 +4869,14 @@ export const AddStockApi = (stockData) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -4902,14 +4902,14 @@ export const UpdateStockApi = (stockData, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -4936,14 +4936,14 @@ export const PlaceOrderApi = async (payload, id) => {
     })
     .catch((error) => {
       console.log("Error placing order:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(JSON.stringify(error.response.data));
       } else if (error.request) {
         throw new Error("No response received from the server.");
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -4969,14 +4969,14 @@ export const ReadAllPharmacyApi = () => {
     })
     .catch((error) => {
       console.log("Error in Get All Transaction:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -5000,14 +5000,14 @@ export const DispenseApi = (prescriptionId) => {
     })
     .catch((error) => {
       console.error("Dispense API Error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(JSON.stringify(error.response.data));
       } else if (error.request) {
         throw new Error("No response received from the server.");
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -5031,14 +5031,14 @@ export const GetAllReferredForAdmissionApi = (wardId) => {
     })
     .catch((error) => {
       console.log("Error fetching referred admissions:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -5061,14 +5061,14 @@ export const GetAllAdmittedApi = (ward) => {
     })
     .catch((error) => {
       console.log("Error fetching referred admissions:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -5100,14 +5100,14 @@ export const CreateVitalChartApi = (payload, admissionId) => {
     })
     .catch((error) => {
       console.log("CreateVitalChartApi error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response.data);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -5130,14 +5130,14 @@ export const ReadAllVitalsByPatientApi = (patientId) => {
     .catch((error) => {
       console.error("Error fetching patient vitals:", error.response);
 
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(JSON.stringify(error.response.data));
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -5159,14 +5159,14 @@ export const ReadAllVitalChartByAdmissionApi = (admissionId) => {
     })
     .catch((error) => {
       console.error("Error fetching vital chart data:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(JSON.stringify(error.response.data));
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -5192,14 +5192,14 @@ export const UpdateVitalChartApi = (payload, vitalId) => {
     })
     .catch((error) => {
       console.error("Error updating vital chart:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response.data);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -5230,14 +5230,14 @@ export const CreateMedicationChartApi = (payload, admissionId) => {
     })
     .catch((error) => {
       console.error("CreateMedicationChartApi error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response.data);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -5259,14 +5259,14 @@ export const ReadAllMedicationChartByAdmissionApi = (admissionId) => {
     })
     .catch((error) => {
       console.error("Error fetching medication chart data:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(JSON.stringify(error.response.data));
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -5293,14 +5293,14 @@ export const UpdateMedicalChartApi = (payload, medicalChartId) => {
     })
     .catch((error) => {
       console.error("Error updating medical chart:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(JSON.stringify(error.response.data));
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -5330,14 +5330,14 @@ export const CreateProgressReportApi = (payload, admissionId) => {
     })
     .catch((error) => {
       console.error("CreateProgressReportApi error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response.data);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -5366,14 +5366,14 @@ export const ReadAllProgressReportByAdmissionApi = (admissionId) => {
         "ReadAllProgressReportByAdmissionApi error:",
         error.response
       );
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(JSON.stringify(error.response.data));
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -5403,14 +5403,14 @@ export const UpdateProgressReportApi = (payload, progressReportId) => {
     })
     .catch((error) => {
       console.error("UpdateProgressReportApi error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(JSON.stringify(error.response.data));
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -5437,14 +5437,14 @@ export const CreateInsulinApi = (payload, admissionId) => {
     })
     .catch((error) => {
       console.error("CreateInsulinApi error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(JSON.stringify(error.response.data));
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -5471,14 +5471,14 @@ export const UpdateInsulinApi = (payload, insulinId) => {
     })
     .catch((error) => {
       console.error("UpdateInsulinApi error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(JSON.stringify(error.response.data));
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -5504,14 +5504,14 @@ export const ReadAllInsulinByAdmissionApi = (admissionId) => {
     })
     .catch((error) => {
       console.error("ReadAllInsulinByAdmissionApi error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(JSON.stringify(error.response.data));
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -5542,14 +5542,14 @@ export const CreateTubeFeedingChartApi = (payload, admissionId) => {
     })
     .catch((error) => {
       console.error("CreateTubeFeedingChartApi error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response.data);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -5580,14 +5580,14 @@ export const UpdateTubeFeedingChartApi = (payload, tubeFeedingChartId) => {
     })
     .catch((error) => {
       console.error("UpdateTubeFeedingChartApi error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(JSON.stringify(error.response.data));
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -5613,14 +5613,14 @@ export const ReadAllTubeFeedingChartByAdmissionApi = (admissionId) => {
         "ReadAllTubeFeedingChartByAdmissionApi error:",
         error.response
       );
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(JSON.stringify(error.response.data));
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -5648,14 +5648,14 @@ export const CreateFluidBalanceApi = (payload, admissionId) => {
     })
     .catch((error) => {
       console.error("CreateFluidBalanceApi error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(JSON.stringify(error.response.data));
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -5683,14 +5683,14 @@ export const UpdateFluidBalanceApi = (payload, fluidBalanceId) => {
     })
     .catch((error) => {
       console.error("UpdateFluidBalanceApi error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(JSON.stringify(error.response.data));
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -5716,14 +5716,14 @@ export const ReadAllFluidBalanceByAdmissionApi = (admissionId) => {
     })
     .catch((error) => {
       console.error("ReadAllFluidBalanceByAdmissionApi error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(JSON.stringify(error.response.data));
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -5753,14 +5753,14 @@ export const CreateBloodMonitoringApi = (payload, admissionId) => {
     })
     .catch((error) => {
       console.error("CreateBloodMonitoringApi error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(JSON.stringify(error.response.data));
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -5790,14 +5790,14 @@ export const UpdateBloodMonitoringApi = (payload, bloodMonitoringId) => {
     })
     .catch((error) => {
       console.error("UpdateBloodMonitoringApi error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(JSON.stringify(error.response.data));
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -5826,14 +5826,14 @@ export const ReadAllBloodMonitoringByAdmissionApi = (admissionId) => {
         "ReadAllBloodMonitoringByAdmissionApi error:",
         error.response
       );
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(JSON.stringify(error.response.data));
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -5863,14 +5863,14 @@ export const CreateRadiologyOrderApi = (payload, patientId) => {
     })
     .catch((error) => {
       console.error("CreateRadiologyOrderApi error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(JSON.stringify(error.response.data));
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -5893,14 +5893,14 @@ export const ReadAllRadiologyByPatientApi = (patientId) => {
     })
     .catch((error) => {
       console.error("ReadAllRadiologyByPatientApi error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(JSON.stringify(error.response.data));
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -5930,14 +5930,14 @@ export const UpdateRadiologyApi = (payload, radiologyOrderId) => {
     })
     .catch((error) => {
       console.error("UpdateRadiologyApi error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(JSON.stringify(error.response.data));
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -5966,14 +5966,14 @@ export const CreateNursingCarePlanApi = (payload, admissionId) => {
     })
     .catch((error) => {
       console.error("Error creating nursing care plan:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response.data);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -5998,14 +5998,14 @@ export const GetNursingCarePlansByAdmissionApi = (admissionId) => {
     })
     .catch((error) => {
       console.error("Error fetching nursing care plans:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response.data);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -6035,14 +6035,14 @@ export const UpdateNursingCarePlanApi = (payload, nursingCarePlanId) => {
     })
     .catch((error) => {
       console.error("Error updating nursing care plan:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response.data);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -6066,24 +6066,24 @@ export const UploadRadiologyResultApi = (file, radiologyOrderId) => {
       console.log("Upload Radiology Result Response:", response.data);
 
       if (!response.data.status) {
-        const errormessage  = response.data.message  || "Upload failed";
-        throw new Error(errormessage );
+        const errormsg  = response.data.msg  || "Upload failed";
+        throw new Error(errormsg );
       }
       return response.data;
     })
     .catch((error) => {
-      let errorMessage = "";
-      if (error.response && error.response.data && error.response.data.message ) {
-        errorMessage = error.response.data.message ;
+      let errormsg = "";
+      if (error.response && error.response.data && error.response.data.msg ) {
+        errormsg = error.response.data.msg ;
       } else if (error.response && error.response.data) {
-        errorMessage = JSON.stringify(error.response.data);
+        errormsg = JSON.stringify(error.response.data);
       } else if (error.request) {
-        errorMessage = error.message;
+        errormsg = error.msg;
       } else {
-        errorMessage = error.message;
+        errormsg = error.msg;
       }
-      console.error("Error uploading radiology result:", errorMessage);
-      throw new Error(errorMessage);
+      console.error("Error uploading radiology result:", errormsg);
+      throw new Error(errormsg);
     });
 };
 
@@ -6108,18 +6108,18 @@ export const ViewMultipleRadiologyResultsApi = async (fileNames) => {
     );
     return urls;
   } catch (error) {
-    let errorMessage = "";
-    if (error.response && error.response.data && error.response.data.message ) {
-      errorMessage = error.response.data.message ;
+    let errormsg = "";
+    if (error.response && error.response.data && error.response.data.msg ) {
+      errormsg = error.response.data.msg ;
     } else if (error.response && error.response.data) {
-      errorMessage = JSON.stringify(error.response.data);
+      errormsg = JSON.stringify(error.response.data);
     } else if (error.request) {
-      errorMessage = error.message;
+      errormsg = error.msg;
     } else {
-      errorMessage = error.message;
+      errormsg = error.msg;
     }
-    console.error("Error viewing multiple radiology results:", errorMessage);
-    throw new Error(errorMessage);
+    console.error("Error viewing multiple radiology results:", errormsg);
+    throw new Error(errormsg);
   }
 };
 
@@ -6143,24 +6143,24 @@ export const UploadProcedureResultApi = (file, procedureId) => {
       console.log("Upload Procedure Result Response:", response.data);
 
       if (!response.data.status) {
-        const errormessage  = response.data.message  || "Upload failed";
-        throw new Error(errormessage );
+        const errormsg  = response.data.msg  || "Upload failed";
+        throw new Error(errormsg );
       }
       return response.data;
     })
     .catch((error) => {
-      let errorMessage = "";
-      if (error.response && error.response.data && error.response.data.message ) {
-        errorMessage = error.response.data.message ;
+      let errormsg = "";
+      if (error.response && error.response.data && error.response.data.msg ) {
+        errormsg = error.response.data.msg ;
       } else if (error.response && error.response.data) {
-        errorMessage = JSON.stringify(error.response.data);
+        errormsg = JSON.stringify(error.response.data);
       } else if (error.request) {
-        errorMessage = error.message;
+        errormsg = error.msg;
       } else {
-        errorMessage = error.message;
+        errormsg = error.msg;
       }
-      console.error("Error uploading procedure result:", errorMessage);
-      throw new Error(errorMessage);
+      console.error("Error uploading procedure result:", errormsg);
+      throw new Error(errormsg);
     });
 };
 
@@ -6185,14 +6185,14 @@ export const ReadAllRadiologyApi = (postsPerPage, currentPage, status) => {
     })
     .catch((error) => {
       console.log("Error in Get All Radiology Transactions:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -6223,14 +6223,14 @@ export const ReadAllRadiologyFilteredApi = (
     })
     .catch((error) => {
       console.log("Error in Get All Radiology Transactions:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -6257,14 +6257,14 @@ export const UpdateUserPasswordApi = (payload, userId, tempToken) => {
     })
     .catch((error) => {
       console.error("Error updating user password:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response.data);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -6296,14 +6296,14 @@ export const DashboardApi = (payload) => {
     })
     .catch((error) => {
       console.error("Error fetching dashboard data:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response.data);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -6335,14 +6335,14 @@ export const UpdatePasswordApi = (payload, userId) => {
     })
     .catch((error) => {
       console.error("Error updating user password:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response.data);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -6367,14 +6367,14 @@ export const AddTheatreSettingsApi = (payload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -6399,14 +6399,14 @@ export const UpdateTheatreAPI = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -6427,14 +6427,14 @@ export const GetAllTheatreApi = () => {
     })
     .catch((error) => {
       console.log("Error fetching theatres:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -6460,14 +6460,14 @@ export const ReferTheatreAdmissionApi = (patientId, payload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -6490,14 +6490,14 @@ export const GetAllTheatreAdmissionByPatientApi = (patientId) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -6519,14 +6519,14 @@ export const GetAllReferredForTheatreAdmissionApi = (theatreId) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -6549,14 +6549,14 @@ export const UpdateTheatreAdmissionStatusApi = (id, payload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -6577,14 +6577,14 @@ export const ConfirmRadiologyOrderApi = (radiologyId, payload) => {
     .then((response) => response)
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -6605,14 +6605,14 @@ export const ConfirmLabOrderApi = (labOrderId, payload) => {
     .then((response) => response)
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -6633,14 +6633,14 @@ export const ConfirmPharmacyOrderApi = (pharmacyOrderId, payload) => {
     .then((response) => response)
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -6664,14 +6664,14 @@ export const GetPharmarcystockbyname = (pharmacyName) => {
     })
     .catch((error) => {
       console.log("Error fetching pharmacy stock:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -6693,14 +6693,14 @@ export const GetCashierSettingsApi = () => {
     })
     .catch((error) => {
       console.log("Error fetching cashier settings:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -6722,14 +6722,14 @@ export const GetCashierReportApi = (email, start, end) => {
     })
     .catch((error) => {
       console.log("Error fetching cashier report:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -6752,14 +6752,14 @@ export const RequestPasswordResetApi = (id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response && error.response.data && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response.data);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -6789,14 +6789,14 @@ export const BulkUploadHMOPatientsApi = (formData) => {
     })
     .catch((error) => {
       console.log("Error in Bulk Upload HMO Patients:", error.response);
-      if (error.response && error.response.data && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response.data);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -6823,14 +6823,14 @@ export const CreateInsuranceApi = (payload) => {
     })
     .catch((error) => {
       console.log("Error in Create Insurance:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -6858,14 +6858,14 @@ export const UpdateInsuranceAPI = (payload, id) => {
     })
     .catch((error) => {
       console.log("Error in Update Insurance:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -6888,14 +6888,14 @@ export const GetAllInsuranceApi = () => {
     })
     .catch((error) => {
       console.log("Error fetching insurance:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -6916,14 +6916,14 @@ export const GetAllHMOPatientsApi = () => {
     })
     .catch((error) => {
       console.log("Error fetching HMO Patients:", error.response);
-      if (error.response && error.response.data && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response.data);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -6952,10 +6952,10 @@ export const DownloadHmoSampleFileApi = () => {
     .catch((error) => {
       console.error(
         "Error downloading the HMO sample file:",
-        error.response || error.message
+        error.response || error.msg
       );
       throw new Error(
-        error.response?.data?.message  || "Failed to download the HMO file."
+        error.response?.data?.msg  || "Failed to download the HMO file."
       );
     });
 };
@@ -6974,14 +6974,14 @@ export const GetPriceOfDrugApi = (id) => {
     .then((response) => response.data)
     .catch((error) => {
       console.log("Error fetching drug price:", error.response);
-      if (error.response && error.response.data && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response.data);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -7001,16 +7001,16 @@ export const SearchPatientApi = (searchParam) => {
     .catch((error) => {
       console.error(
         "Error searching patient:",
-        error.response || error.message
+        error.response || error.msg
       );
-      if (error.response && error.response.data && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response.data);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -7035,14 +7035,14 @@ export const AddTestComponentApi = (payload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -7064,14 +7064,14 @@ export const GetAllTestComponentApi = () => {
     })
     .catch((error) => {
       console.log("Error fetching test components:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -7097,14 +7097,14 @@ export const UpdateTestComponentApi = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -7126,14 +7126,14 @@ export const GetTestComponentByTestNameApi = (testName) => {
         "Error fetching test component by test name:",
         error.response
       );
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -7158,14 +7158,14 @@ export const GroupReadAllPharmacyApi = () => {
     })
     .catch((error) => {
       console.log("Error in Get All Group Transaction:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -7191,14 +7191,14 @@ export const GroupReadAllPharmacyOptApi = (
     })
     .catch((error) => {
       console.log("Error in Get All Group Transaction:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -7226,14 +7226,14 @@ export const GroupReadAllFilteredPharmacyOptApi = (
     })
     .catch((error) => {
       console.log("Error in Get All Group Transaction:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -7258,14 +7258,14 @@ export const ReadPharmacyByOrderId = (orderId) => {
     })
     .catch((error) => {
       console.log("Error in Read Pharmacy by Order ID:", error.response);
-      if (error.response && error.response.data && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response.data);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -7292,14 +7292,14 @@ export const ConfirmPharmacyGroupOrder = (payload) => {
     })
     .catch((error) => {
       console.log("Error confirming pharmacy group order:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response.data);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -7317,15 +7317,15 @@ export const SearchTestApi = (searchParam) => {
     .request(config)
     .then((response) => response.data)
     .catch((error) => {
-      console.error("Error searching test:", error.response || error.message);
-      if (error.response && error.response.data && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      console.error("Error searching test:", error.response || error.msg);
+      if (error.response && error.response.data && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response.data);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -7347,14 +7347,14 @@ export const ReadAllAuditApi = () => {
     })
     .catch((error) => {
       console.log("Error in Read All Audit:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -7375,16 +7375,16 @@ export const SearchProcedureApi = (searchParam) => {
     .catch((error) => {
       console.error(
         "Error searching procedure:",
-        error.response || error.message
+        error.response || error.msg
       );
-      if (error.response && error.response.data && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response.data);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -7405,16 +7405,16 @@ export const SearchRadiologyApi = (searchParam) => {
     .catch((error) => {
       console.error(
         "Error searching radiology:",
-        error.response || error.message
+        error.response || error.msg
       );
-      if (error.response && error.response.data && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response.data);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -7441,14 +7441,14 @@ export const CreateDailyWardReportApi = (payload) => {
     .then((response) => response)
     .catch((error) => {
       console.log("Error in Create Daily Ward Report:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -7476,14 +7476,14 @@ export const UpdateDailyWardReportApi = (payload, id) => {
     })
     .catch((error) => {
       console.log("Error in Update Daily Ward Report:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -7505,14 +7505,14 @@ export const GetAllDailyWardReportsByWardApi = (wardId) => {
     })
     .catch((error) => {
       console.log("Error fetching daily ward reports:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -7540,14 +7540,14 @@ export const EnterRadiologyResultApi = (payload, recordId) => {
     })
     .catch((error) => {
       console.log("Error in EnterRadiologyResultApi:", error.response);
-      if (error.response && error.response.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -7578,14 +7578,14 @@ export const PlaceOrderWithoutConfirmationApi = async (payload, patientId) => {
         error.response
       );
 
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(JSON.stringify(error.response.data));
       } else if (error.request) {
         throw new Error("No response received from the server.");
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -7613,14 +7613,14 @@ export const ReadDrugPriceApi = async (payload, patientId) => {
     .catch((error) => {
       console.error("Error reading drug price:", error.response);
 
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(JSON.stringify(error.response.data));
       } else if (error.request) {
         throw new Error("No response received from the server.");
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -7650,14 +7650,14 @@ export const CreateNutritionApi = (payload, patientId) => {
     })
     .catch((error) => {
       console.error("CreateNutritionApi error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(JSON.stringify(error.response.data));
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -7688,14 +7688,14 @@ export const UpdateNutritionApi = (payload, nutritionId) => {
     })
     .catch((error) => {
       console.error("UpdateNutritionApi error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(JSON.stringify(error.response.data));
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -7719,14 +7719,14 @@ export const ReadAllNutritionByPatientApi = (patientId) => {
     })
     .catch((error) => {
       console.error("ReadAllNutritionByPatientApi error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(JSON.stringify(error.response.data));
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -7752,14 +7752,14 @@ export const AddPreoperativePrevisitFormAPI = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -7786,14 +7786,14 @@ export const EditPreoperativePrevisitFormAPI = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -7814,14 +7814,14 @@ export const GetPreviousPreoperativePrevisitFormApi = (id) => {
     })
     .catch((error) => {
       console.log("Error fetching pre-visit form:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -7846,14 +7846,14 @@ export const AddAnaesthesiaFormAPI = (payload, id) => {
     })
     .catch((error) => {
       console.error("AddAnaesthesiaFormAPI error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -7879,14 +7879,14 @@ export const EditAnaesthesiaFormAPI = (payload, id) => {
     })
     .catch((error) => {
       console.error("EditAnaesthesiaFormAPI error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -7906,14 +7906,14 @@ export const GetPreviousAnaesthesiaFormApi = (id) => {
     .then((response) => response.data)
     .catch((error) => {
       console.error("GetPreviousAnaesthesiaFormApi error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -7940,14 +7940,14 @@ export const CreateFoodGivensAPI = (payload, anaesthesiaId) => {
     })
     .catch((error) => {
       console.error("CreateFoodGivensAPI error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -7973,14 +7973,14 @@ export const UpdateFoodGivensAPI = (payload, foodGivenId) => {
     })
     .catch((error) => {
       console.error("UpdateFoodGivensAPI error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -8003,14 +8003,14 @@ export const GetAllFoodGivenByTheatreAdmissionApi = (anaesthesiaId) => {
         "GetAllFoodGivenByTheatreAdmissionApi error:",
         error.response
       );
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -8035,14 +8035,14 @@ export const CreateDrugGivensAPI = (payload, anaesthesiaId) => {
     })
     .catch((error) => {
       console.error("CreateDrugGivensAPI error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -8065,14 +8065,14 @@ export const GetAllDrugGivenByTheatreAdmissionApi = (anaesthesiaId) => {
         "GetAllDrugGivenByTheatreAdmissionApi error:",
         error.response
       );
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -8098,14 +8098,14 @@ export const UpdateDrugGivensAPI = (payload, drugGivenId) => {
     })
     .catch((error) => {
       console.error("UpdateDrugGivensAPI error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -8131,14 +8131,14 @@ export const FillOperationNoteAPI = (payload, theatreAdmissionId) => {
     })
     .catch((error) => {
       console.error("FillOperationNoteAPI error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -8164,14 +8164,14 @@ export const UpdateFillOperationNoteAPI = (payload, preOperationNoteId) => {
     })
     .catch((error) => {
       console.error("UpdateFillOperationNoteAPI error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -8194,14 +8194,14 @@ export const GetOperationNoteByTheatreAdmissionApi = (theatreAdmissionId) => {
         "GetOperationNoteByTheatreAdmissionApi error:",
         error.response
       );
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -8227,14 +8227,14 @@ export const AddPostAnaestheticRecoveryChartFormAPI = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -8261,14 +8261,14 @@ export const EditPostAnaestheticRecoveryChartFormAPI = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -8293,14 +8293,14 @@ export const GetPostAnaestheticRecoveryChartFormAPI = (id) => {
         "Error fetching post-anaesthetic recovery chart form:",
         error.response
       );
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -8325,14 +8325,14 @@ export const CreateVitalSignScoresAPI = (payload, recoveryChartId) => {
     })
     .catch((error) => {
       console.error("CreateVitalSignScoresAPI error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -8355,14 +8355,14 @@ export const GetAllVitalSignScoresByTheatreAdmissionApi = (recoveryChartId) => {
         "GetAllVitalSignScoresByTheatreAdmissionApi error:",
         error.response
       );
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -8388,14 +8388,14 @@ export const UpdateVitalSignScoresAPI = (payload, vitalScoreId) => {
     })
     .catch((error) => {
       console.error("UpdateVitalSignScoresAPI error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -8420,14 +8420,14 @@ export const AddHistologyRequestFormAPI = (payload, admissionId) => {
     })
     .catch((error) => {
       console.error("AddHistologyRequestFormAPI error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -8453,14 +8453,14 @@ export const EditHistologyRequestFormAPI = (payload, formId) => {
     })
     .catch((error) => {
       console.error("EditHistologyRequestFormAPI error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -8480,14 +8480,14 @@ export const GetHistologyRequestFormAPI = (admissionId) => {
     .then((response) => response.data)
     .catch((error) => {
       console.error("GetHistologyRequestFormAPI error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -8514,14 +8514,14 @@ export const AddPricingModelApi = (payload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -8548,14 +8548,14 @@ export const UpdatePricingModelApi = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -8575,14 +8575,14 @@ export const GetPricingModelApi = () => {
     .then((response) => response.data) // return only data payload
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -8611,14 +8611,14 @@ export const AddOutreachMedicationApi = (payload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -8648,14 +8648,14 @@ export const UpdateOutreachMedicationApi = (payload, id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -8675,14 +8675,14 @@ export const GetAllOutreachMedicationApi = () => {
     .then((response) => response.data)
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -8707,14 +8707,14 @@ export const GetHealthFacilityAttendanceReportApi = (startDate, endDate) => {
         "Error fetching health facility attendance report:",
         error.response
       );
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -8736,14 +8736,14 @@ export const GetInpatientCareReportApi = (startDate, endDate) => {
     })
     .catch((error) => {
       console.log("Error fetching inpatient care report:", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -8772,14 +8772,14 @@ export const CreatePsychiatricEvaluationApi = (id, payload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -8831,14 +8831,14 @@ export const UpdatePsychiatricEvaluationApi = (id, payload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -8875,13 +8875,13 @@ export const SortByHematologyAndChemicalPathologyApi = (id, labcategory) => {
       console.error("Error details:", {
         status: error.response?.status,
         data: error.response?.data,
-        message: error.message,
+        msg: error.msg,
       });
-      const errorMessage =
-        error.response?.data?.message  ||
-        error.response?.data?.message ||
+      const errormsg =
+        error.response?.data?.msg  ||
+        error.response?.data?.msg ||
         "Failed to sort lab test";
-      throw new Error(errorMessage);
+      throw new Error(errormsg);
     });
 };
 
@@ -8931,14 +8931,14 @@ export const ProcessPeripheralBloodFilmReportApi = (id, payload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(JSON.stringify(error.response.data));
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -8965,14 +8965,14 @@ export const ProcessADHBoneMarrowAspirationReportApi = (id, payload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -8999,14 +8999,14 @@ export const ProcessChemicalPathologyReportApi = (id, payload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -9032,14 +9032,14 @@ export const CreateDentalEncounterApi = (id, payload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -9088,14 +9088,14 @@ export const UpdateDentalEncounterApi = (id, payload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -9121,14 +9121,14 @@ export const CreatePhysiotherapyAssessmentApi = (id, apiPayload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -9155,14 +9155,14 @@ export const UpdatePhysiotherapyAssessmentApi = (id, apiPayload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -9185,14 +9185,14 @@ export const GetAllPhysiotherapyAssessmentByPatientApi = (id) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -9214,14 +9214,14 @@ export const GetCashierTotalApi = () => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -9244,14 +9244,14 @@ export const ReadOneDentalEncounterApi = (dentalEncounterId) => {
     })
     .catch((error) => {
       console.error("ReadOneDentalEncounterApi error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(JSON.stringify(error.response.data));
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -9273,19 +9273,19 @@ export const UpdateAdmissionStatusApiDoc = (admissionId, updateData) => {
   return axios
     .request(config)
     .then((response) => {
-      return response.data; // Returns success message + updatedAdmission
+      return response.data; // Returns success msg + updatedAdmission
     })
     .catch((error) => {
       console.log("Error updating admission:", error.response);
       // Follows your error handling pattern exactly
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -9311,23 +9311,23 @@ export const DischargePatientApi = (admissionId, dischargeReason) => {
     .catch((error) => {
       console.error("Discharge error:", error);
 
-      let errorMessage = "Failed to discharge patient";
+      let errormsg = "Failed to discharge patient";
       if (error.response) {
         // Handle HTTP errors (4xx, 5xx)
-        if (error.response.data && error.response.data.message ) {
-          errorMessage = error.response.data.message ;
+        if (error.response.data && error.response.data.msg ) {
+          errormsg = error.response.data.msg ;
         } else if (error.response.statusText) {
-          errorMessage = error.response.statusText;
+          errormsg = error.response.statusText;
         }
       } else if (error.request) {
         // Handle network errors
-        errorMessage = "Network error - no response received";
+        errormsg = "Network error - no response received";
       } else {
         // Handle other errors
-        errorMessage = error.message || "Unknown error occurred";
+        errormsg = error.msg || "Unknown error occurred";
       }
 
-      throw new Error(errorMessage);
+      throw new Error(errormsg);
     });
 };
 export const GetAvailableBedsByWardApi = (wardId) => {
@@ -9352,14 +9352,14 @@ export const GetAvailableBedsByWardApi = (wardId) => {
     .catch((error) => {
       console.log("Error fetching available beds:", error.response);
       // Same error handling pattern as your original API
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -9395,15 +9395,15 @@ export const GetDoctorsByClinicApi = (clinicName) => {
     .catch((error) => {
       console.error(
         "API Error Details:",
-        error.response?.data || error.message
+        error.response?.data || error.msg
       );
       if (error.response) {
         throw new Error(
-          error.response.data?.message ||
+          error.response.data?.msg ||
             "Failed to fetch doctors (server error)"
         );
       }
-      throw new Error(error.message || "Failed to fetch doctors");
+      throw new Error(error.msg || "Failed to fetch doctors");
     });
 };
 export const assignDoctorToAppointmentApi = (apiPayload) => {
@@ -9428,14 +9428,14 @@ export const assignDoctorToAppointmentApi = (apiPayload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response && error.response.data.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response && error.response.data.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response && error.response.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       } else {
-        throw new Error(error.message );
+        throw new Error(error.msg );
       }
     });
 };
@@ -9502,15 +9502,15 @@ export const countPatientsPerDoctorApi = (clinicName) => {
     .catch((error) => {
       console.error(
         "API Error Details:",
-        error.response?.data || error.message
+        error.response?.data || error.msg
       );
       if (error.response) {
         throw new Error(
-          error.response.data?.message ||
+          error.response.data?.msg ||
             "Failed to fetch patient counts (server error)"
         );
       }
-      throw new Error(error.message || "Failed to fetch patient counts");
+      throw new Error(error.msg || "Failed to fetch patient counts");
     });
 };
 
@@ -9541,14 +9541,14 @@ export const CreateWardRoundApi = (payload) => {
     })
     .catch((error) => {
       console.error("CreateWardRoundApi error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response.data);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -9575,11 +9575,11 @@ export const AddBedFeeApi = (id, apiPayload) => {
     })
     .catch((error) => {
       console.error("error:", error.response);
-      const errorMessage =
-        error.response?.data?.message ||
-        error.response?.data?.message  ||
+      const errormsg =
+        error.response?.data?.msg ||
+        error.response?.data?.msg  ||
         "An unexpected error occurred";
-      throw new Error(errorMessage);
+      throw new Error(errormsg);
     });
 };
 
@@ -9602,14 +9602,14 @@ export const ReadAllWardRoundByAdmissionApi = (admissionId) => {
     })
     .catch((error) => {
       console.error("ReadAllWardRoundByAdmissionApi error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(JSON.stringify(error.response.data));
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -9632,14 +9632,14 @@ export const GetAllUnitApi = (clinic) => {
     })
     .catch((error) => {
       console.error("ReadAllWardRoundByAdmissionApi error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(JSON.stringify(error.response.data));
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -9671,14 +9671,14 @@ export const UpdateWardRoundApi = (payload, wardRoundId) => {
     })
     .catch((error) => {
       console.error("UpdateWardRoundApi error:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(JSON.stringify(error.response.data));
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -9707,15 +9707,15 @@ export const payAnnualSubscriptionApi = (apiPayload) => {
       if (
         error.response &&
         error.response.data &&
-        error.response.data.message
+        error.response.data.msg
       ) {
-        throw new Error(error.response.data.message); // Use the message from the server
+        throw new Error(error.response.data.msg); // Use the msg from the server
       } else if (error.response && error.response.data) {
         throw new Error(JSON.stringify(error.response.data));
       } else if (error.request) {
         throw new Error("No response received from server");
       } else {
-        throw new Error(error.message || "An unknown error occurred");
+        throw new Error(error.msg || "An unknown error occurred");
       }
     });
 };
@@ -9741,14 +9741,14 @@ export const CreateUnitApi = (payload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -9773,14 +9773,14 @@ export const UpdateUnitApi = (id,payload) => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response?.data?.message) {
-        throw new Error(error.response.data.message);
+      if (error.response?.data?.msg) {
+        throw new Error(error.response.data.msg);
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -9802,14 +9802,14 @@ export const GetAllUnitsApi = () => {
     })
     .catch((error) => {
       console.log("error", error.response);
-      if (error.response?.data?.message) {
-        throw new Error(error.response.data.message);
+      if (error.response?.data?.msg) {
+        throw new Error(error.response.data.msg);
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
@@ -9831,16 +9831,16 @@ export const GetUnitsByClinicNameApi = (clinicName) => {
     })
     .catch((error) => {
       console.log("Error fetching units by clinic name:", error.response);
-      if (error.response?.data?.message ) {
-        throw new Error(error.response.data.message );
-      } else if (error.response?.data?.message) {
-        throw new Error(error.response.data.message);
+      if (error.response?.data?.msg ) {
+        throw new Error(error.response.data.msg );
+      } else if (error.response?.data?.msg) {
+        throw new Error(error.response.data.msg);
       } else if (error.response?.data) {
         throw new Error(error.response);
       } else if (error.request) {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       } else {
-        throw new Error(error.message);
+        throw new Error(error.msg);
       }
     });
 };
