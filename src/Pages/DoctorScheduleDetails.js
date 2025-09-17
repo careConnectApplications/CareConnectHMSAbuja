@@ -162,12 +162,6 @@ export default function DoctorScheduleDetails() {
             Admission
           </Tab>
 
-          <Tab
-            _focus={{ outline: "none" }}
-            _selected={{ color: primaryColor, fontWeight: "700" }}
-          >
-            ANC
-          </Tab>
 
           <Tab
             _focus={{ outline: "none" }}
@@ -331,9 +325,6 @@ export default function DoctorScheduleDetails() {
           </TabPanel> */}
           <TabPanel p="0">
             <SingleAdmission />
-          </TabPanel>
-          <TabPanel p="0">
-            <ANC3 id={id} />
           </TabPanel>
           <TabPanel p="0">
             <ClinicalEncounter index={1} id={id} />
