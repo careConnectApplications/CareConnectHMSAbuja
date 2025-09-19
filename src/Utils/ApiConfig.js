@@ -5,6 +5,7 @@ export const nigeriaStateApiUrl = "https://nga-states-lga.onrender.com";
 
 export const baseUrl = `http://20.164.19.147:8085/api/v1`;
 
+
 //  export const baseUrl = `${window.location.protocol}//${window.location.hostname}/api/v1`;
 
 const baseChecker = `${window.location.hostname}`;

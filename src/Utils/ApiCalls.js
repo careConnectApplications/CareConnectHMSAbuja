@@ -92,6 +92,35 @@ export const GetMortalityRegisterByPatientApi = (patientId) => {
     });
 };
 
+export const GetServiceTypesByCategoryApi = (category) => {
+  const config = {
+    method: "get",
+    url: `${baseUrl}/settings/getservicetypesbycategory/${category}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      return response.data;
+    })
+    .catch((error) => {
+      console.log("Error fetching service types by category:", error.response);
+      if (error.response && error.response.data.message) {
+        throw new Error(error.response.data.message);
+      } else if (error.response && error.response.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.message);
+      } else {
+        throw new Error(error.message);
+      }
+    });
+};
+
 export const ValidateLabResultApi = (labResultId, payload) => {
   const data = JSON.stringify(payload);
   const config = {
