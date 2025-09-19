@@ -24,8 +24,10 @@ import FirstStageLabourModal from "../Components/FirstStageLabourModal";
 import { useColors } from "../Utils/colors";
 import moment from "moment";
 import { BsThreeDots } from "react-icons/bs";
+
 import { SlPlus } from "react-icons/sl";
 import { GetFirstStageLabourByPatientApi } from "../Utils/ApiCalls";
+
 import Preloader from "../Components/Preloader";
 import Input from "../Components/Input";
 import { BiSearch } from "react-icons/bi";
@@ -103,6 +105,7 @@ export default function FirstStageLabour() {
     setData([]);
     setFilterData([]);
     try {
+
       const response = await GetFirstStageLabourByPatientApi(id);
 
       if (response?.status === true) {
@@ -110,6 +113,7 @@ export default function FirstStageLabour() {
         setData(records);
         setFilterData(records);
       }
+
     } catch (error) {
       console.error("Error fetching first stage labour data:", error);
       toast({
