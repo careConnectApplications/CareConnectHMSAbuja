@@ -98,6 +98,8 @@ import MedicalReport from "../Pages/MedicalReport";
 import OperationalAnalysis from "../Pages/OperationalAnalysis";
 import RevenueAnalysis from "../Pages/RevenueAnalysis";
 import MaternityReport from "../Pages/MaternityReport";
+import MaternitySchedule from "../Pages/MaternitySchedule";
+import MaternityTimeline from "../Pages/MaternityTimeline";
 
 
 export default function IndexRoutes() {
@@ -307,6 +309,16 @@ export default function IndexRoutes() {
               element={<MaternityReport />}
             />
           </Route>
+          {/* Maternity Module Routes */}
+          <Route
+            path="/dashboard/maternity-schedule"
+            element={<MaternitySchedule />}
+          />
+          <Route
+            path="/dashboard/maternity-timeline/:id"
+            element={<MaternityTimeline />}
+          />
+
           <Route element={<ReferTheatreRoutes />}>
             <Route
               path="/dashboard/single-theatre"

@@ -506,14 +506,7 @@ export default function Claims() {
                 >
                   Service Category
                 </Th>
-                <Th
-                  fontSize="13px"
-                  textTransform="capitalize"
-                  color={subTitleTextColor}
-                  fontWeight="600"
-                >
-                  Amount Claimed
-                </Th>
+             
                 <Th
                   fontSize="13px"
                   textTransform="capitalize"
@@ -557,7 +550,7 @@ export default function Claims() {
                   mrn={`${item.patient?.MRN}`}
                   serviceCategory={item.serviceCategory}
                   hmo={item.insurer}
-                  amountClaimed={item.amountClaimed}
+                 
                   amountApproved={item.amountApproved}
                   status={item.status}
                   date={moment(item.createdAt).format("lll")}

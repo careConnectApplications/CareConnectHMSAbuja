@@ -1,4 +1,4 @@
-import { HStack, Text, Box, Flex, Select, Stack, useDisclosure, SimpleGrid, Tooltip } from '@chakra-ui/react'
+import { HStack, Text, Box, Flex, Select, Stack, useDisclosure, SimpleGrid, Tooltip, VStack, Badge } from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import MainLayout from "../Layouts/Index";
 import Seo from "../Utils/Seo";
@@ -8,47 +8,25 @@ import TextArea from "../Components/TextArea";
 import LabRequestModal from "../Components/LabRequestModal";
 import ShowToast from "../Components/ToastNotification";
 import ClinicalEncounter from "./ClinicalEncounter";
-import GeneralExaminationModal from "../Components/GeneralExaminationModal";
-import HistoryCvsModal from "../Components/HistoryCvsModal";
-import HistoryRespModal from "../Components/HistoryRespModal";
-import HistoryGiModal from "../Components/HistoryGiModal";
-import HistoryGuModal from "../Components/HistoryGuModal";
-import HistoryNeuroModal from "../Components/HistoryNeuroModal";
-import HistoryMskModal from "../Components/HistoryMskModal";
-import MedicalHistoryModal from "../Components/MedicalHistoryModal";
-import PostnatalHistoryModal from "../Components/PostnatalHistoryModal";
-import DevelopmentalHistoryModal from "../Components/DevelopmentalHistoryModal";
-import ImmunizationHistoryModal from "../Components/ImmunizationHistoryModal";
-import CvsExaminationModal from "../Components/CvsExaminationModal";
-import RespExaminationModal from "../Components/RespExaminationModal";
-import GiExaminationModal from "../Components/GiExaminationModal";
-import GuExaminationModal from "../Components/GuExaminationModal";
-import NeuroExaminationModal from "../Components/NeuroExaminationModal";
 import AdmissionModal from "../Components/AdmissionModal";
 import RadiologyOrderRequestModal from "../Components/RadiologyOrderRequestModal";
 import CreateProcedureModal from "../Components/CreateProcedureModal";
 import CreateReferralModal from "../Components/CreateReferralModal";
-import MskExaminationModal from "../Components/MskExaminationModal";
 import PreviewEncounter from "../Components/PreviewEncounter";
 import CreatePrescriptionModal from "../Components/CreatePrescriptionModal";
 import { useNavigate } from 'react-router-dom';
-import { IoMdArrowRoundBack } from "react-icons/io"; import {
-    Accordion,
-    AccordionItem,
-    AccordionButton,
-    AccordionPanel,
-    AccordionIcon,
-} from '@chakra-ui/react'
-import { SettingsApi, GetDiagnosisICApi,GetAllVitalsApi, AddClinicalEncounterAPI } from "../Utils/ApiCalls";
+import { IoMdArrowRoundBack } from "react-icons/io";
+import { FiSearch } from "react-icons/fi";
+import { SettingsApi, GetDiagnosisICApi, GetAllVitalsApi, AddClinicalEncounterAPI } from "../Utils/ApiCalls";
 import { FaNoteSticky } from "react-icons/fa6";
 import { IoIosCloseCircle } from "react-icons/io";
-import { FaTemperatureHigh, FaHeartCircleCheck } from "react-icons/fa6";
+import { FaTemperatureHigh, FaHeartCircleCheck, FaPen } from "react-icons/fa6";
 import { FaTextHeight, FaHeartbeat } from "react-icons/fa";
 import { MdBloodtype } from "react-icons/md";
 import { GiEnergyBreath } from "react-icons/gi";
 import { GiWeight } from "react-icons/gi";
-import { TbMichelinStarFilled } from "react-icons/tb";
 import { useParams } from 'react-router-dom';
+import PatientInfoCard from '../Components/PatientInfoCard';
 
 export default function ClinicalEncounterEdit() {
     const { id } = useParams()
@@ -60,6 +38,9 @@ export default function ClinicalEncounterEdit() {
     const [OpenReferralModal, setOpenReferralModal] = useState(false);
     const [OpenPreview, setOpenPreview] = useState(false);
     const [SearchICD, setSearchICD] = useState("");
+    const [selectedICDInfo, setSelectedICDInfo] = useState(null);
+    const [icdSearchResults, setICDSearchResults] = useState([]);
+    const [isLoadingICD, setIsLoadingICD] = useState(false);
     const [OpenAdmissionModal, setOpenAdmissionModal] = useState(false);
     const [Complaints, setComplaints] = useState([]);
     const [ClinicalNotes, setClinicalNotes] = useState([]);
@@ -67,6 +48,12 @@ export default function ClinicalEncounterEdit() {
     const [DiagnosisNotes, setDiagnosisNotes] = useState([]);
     const [PlanNotes, setPlanNotes] = useState([]);
     const [DiagnosisICD, setDiagnosisICD] = useState([]);
+    
+    // Edit states for each note type
+    const [EditingAssessment, setEditingAssessment] = useState({ isEditing: false, index: -1 });
+    const [EditingDiagnosis, setEditingDiagnosis] = useState({ isEditing: false, index: -1 });
+    const [EditingPlan, setEditingPlan] = useState({ isEditing: false, index: -1 });
+    const [EditingClinical, setEditingClinical] = useState({ isEditing: false, index: -1 });
     const [NurseVitals, setNurseVitals] = useState({});
     const [Outcomes, setOutcomes] = useState([]);
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -74,6 +61,7 @@ export default function ClinicalEncounterEdit() {
     const [Disabled, setDisabled] = useState(true);
     const [Loading, setLoading] = useState(false);
     const [LoadingCompleted, setLoadingCompleted] = useState(false);
+
     const [Payload, setPayload] = useState({
         diagnosisnote: "",
         diagnosisicd10: "",
@@ -96,19 +84,76 @@ export default function ClinicalEncounterEdit() {
     const getAllICD = async (value) => {
         try {
             const result = await GetDiagnosisICApi({ diagnosis: value });
-
             setDiagnosisICD(result.queryresult);
         } catch (e) {
-
+            console.error("Error fetching ICD codes:", e.message);
         }
     };
 
-    const handleSearch = (e) => {
+    // Handler for ICD selection from search results
+    const handleICDSelect = (icdItem) => {
+        setPayload((prev) => ({
+            ...prev,
+            diagnosisicd10: icdItem[1],
+        }));
+        setSelectedICDInfo({
+            name: icdItem[0],
+            code: icdItem[1],
+        });
+        setICDSearchResults([]); // Clear search results
+        setSearchICD(`${icdItem[0]} (${icdItem[1]})`);
+    };
 
-        setSearchICD(e.target.value)
-        getAllICD(e.target.value)
+    // Auto-search functionality with debouncing for ICD
+    useEffect(() => {
+        const searchICD = async (searchTerm) => {
+            if (!searchTerm || searchTerm.trim().length < 2) {
+                setICDSearchResults([]);
+                return;
+            }
 
-    }
+            // Don't search if an ICD is already selected and the search term matches
+            if (selectedICDInfo && searchTerm.includes(selectedICDInfo.code)) {
+                return;
+            }
+
+            try {
+                setIsLoadingICD(true);
+                const result = await GetDiagnosisICApi({ diagnosis: searchTerm });
+                if (result?.queryresult) {
+                    setICDSearchResults(result.queryresult);
+                } else {
+                    setICDSearchResults([]);
+                }
+            } catch (e) {
+                console.error("Error searching ICD codes:", e.message);
+                setICDSearchResults([]);
+            } finally {
+                setIsLoadingICD(false);
+            }
+        };
+
+        const timeoutId = setTimeout(() => {
+            searchICD(SearchICD);
+        }, 300); // 300ms debounce
+
+        return () => clearTimeout(timeoutId);
+    }, [SearchICD, selectedICDInfo]);
+
+    // Handle search input change and clear selection if user starts typing new search
+    const handleSearchInputChange = (e) => {
+        const value = e.target.value;
+        setSearchICD(value);
+
+        // Clear selected ICD if user modifies the search significantly
+        if (selectedICDInfo && !value.includes(selectedICDInfo.code)) {
+            setSelectedICDInfo(null);
+            setPayload((prev) => ({
+                ...prev,
+                diagnosisicd10: "",
+            }));
+        }
+    };
 
     const handleSuccess = (message, status) => {
         setShowToast({ show: true, message, status });
@@ -120,26 +165,65 @@ export default function ClinicalEncounterEdit() {
 
     const handlePayload = (e) => {
         setPayload({ ...Payload, [e.target.id]: e.target.value })
-       
+        if (e.target.id === "presentingcompalintcode") {
+
+            setComplaints([...Complaints, e.target.value])
+        }
     }
 
 
     const addClinicalNotes = () => {
-        setClinicalNotes([...ClinicalNotes, Payload.clinicalnote])
+        if (EditingClinical.isEditing) {
+            // Update existing note
+            const updatedNotes = [...ClinicalNotes];
+            updatedNotes[EditingClinical.index] = Payload.clinicalnote;
+            setClinicalNotes(updatedNotes);
+            setEditingClinical({ isEditing: false, index: -1 });
+        } else {
+            // Add new note
+            setClinicalNotes([...ClinicalNotes, Payload.clinicalnote])
+        }
         setPayload({ ...Payload, clinicalnote: "" })
     }
     const addAssessmentNotes = () => {
-        setAssessmentNotes([...AssessmentNotes, Payload.assessmentnote])
+        if (EditingAssessment.isEditing) {
+            // Update existing note
+            const updatedNotes = [...AssessmentNotes];
+            updatedNotes[EditingAssessment.index] = Payload.assessmentnote;
+            setAssessmentNotes(updatedNotes);
+            setEditingAssessment({ isEditing: false, index: -1 });
+        } else {
+            // Add new note
+            setAssessmentNotes([...AssessmentNotes, Payload.assessmentnote])
+        }
         setPayload({ ...Payload, assessmentnote: "" })
     }
+    
     const addDiagnosisNotes = () => {
-        setDiagnosisNotes([...DiagnosisNotes, Payload.diagnosisnote])
-        console.log("DiagnosisNotes", Payload.diagnosisnote)
+        if (EditingDiagnosis.isEditing) {
+            // Update existing note
+            const updatedNotes = [...DiagnosisNotes];
+            updatedNotes[EditingDiagnosis.index] = Payload.diagnosisnote;
+            setDiagnosisNotes(updatedNotes);
+            setEditingDiagnosis({ isEditing: false, index: -1 });
+        } else {
+            // Add new note
+            setDiagnosisNotes([...DiagnosisNotes, Payload.diagnosisnote])
+        }
         setPayload({ ...Payload, diagnosisnote: "" })
     }
-   
+    
     const addPlanNotes = () => {
-        setPlanNotes([...PlanNotes, Payload.plannote])
+        if (EditingPlan.isEditing) {
+            // Update existing note
+            const updatedNotes = [...PlanNotes];
+            updatedNotes[EditingPlan.index] = Payload.plannote;
+            setPlanNotes(updatedNotes);
+            setEditingPlan({ isEditing: false, index: -1 });
+        } else {
+            // Add new note
+            setPlanNotes([...PlanNotes, Payload.plannote])
+        }
         setPayload({ ...Payload, plannote: "" })
     }
 
@@ -158,8 +242,8 @@ export default function ClinicalEncounterEdit() {
         try {
             const result = await GetAllVitalsApi(id);
 
-            console.log("getAllVitals",result)
-     
+            console.log("getAllVitals", result)
+
             setNurseVitals(result.queryresult);
 
             setPayload({
@@ -177,32 +261,82 @@ export default function ClinicalEncounterEdit() {
         }
     };
 
+    // Helper functions for initiating edit mode
+    const editAssessmentNote = (index) => {
+        setEditingAssessment({ isEditing: true, index: index });
+        setPayload({ ...Payload, assessmentnote: AssessmentNotes[index] });
+    }
+
+    const editDiagnosisNote = (index) => {
+        setEditingDiagnosis({ isEditing: true, index: index });
+        setPayload({ ...Payload, diagnosisnote: DiagnosisNotes[index] });
+    }
+
+    const editPlanNote = (index) => {
+        setEditingPlan({ isEditing: true, index: index });
+        setPayload({ ...Payload, plannote: PlanNotes[index] });
+    }
+
+    const editClinicalNote = (index) => {
+        setEditingClinical({ isEditing: true, index: index });
+        setPayload({ ...Payload, clinicalnote: ClinicalNotes[index] });
+    }
+
+    // Cancel functions for exiting edit mode
+    const cancelEditAssessment = () => {
+        setEditingAssessment({ isEditing: false, index: -1 });
+        setPayload({ ...Payload, assessmentnote: "" });
+    }
+
+    const cancelEditDiagnosis = () => {
+        setEditingDiagnosis({ isEditing: false, index: -1 });
+        setPayload({ ...Payload, diagnosisnote: "" });
+    }
+
+    const cancelEditPlan = () => {
+        setEditingPlan({ isEditing: false, index: -1 });
+        setPayload({ ...Payload, plannote: "" });
+    }
+
+    const cancelEditClinical = () => {
+        setEditingClinical({ isEditing: false, index: -1 });
+        setPayload({ ...Payload, clinicalnote: "" });
+    }
+
     const removeAssessment = (item) => {
-
-
         const updatedItems = AssessmentNotes.filter(id => id !== item);
         setAssessmentNotes(updatedItems);
-
-
+        // Cancel edit if the item being removed is currently being edited
+        if (EditingAssessment.isEditing && AssessmentNotes[EditingAssessment.index] === item) {
+            cancelEditAssessment();
+        }
     }
 
     const removeClinicalNotes = (item) => {
-
-
         const updatedItems = ClinicalNotes.filter(id => id !== item);
         setClinicalNotes(updatedItems);
+        // Cancel edit if the item being removed is currently being edited
+        if (EditingClinical.isEditing && ClinicalNotes[EditingClinical.index] === item) {
+            cancelEditClinical();
+        }
     }
+
     const removeDiagnosisNotes = (item) => {
-
-
         const updatedItems = DiagnosisNotes.filter(id => id !== item);
         setDiagnosisNotes(updatedItems);
+        // Cancel edit if the item being removed is currently being edited
+        if (EditingDiagnosis.isEditing && DiagnosisNotes[EditingDiagnosis.index] === item) {
+            cancelEditDiagnosis();
+        }
     }
+
     const removePlanNotes = (item) => {
-
-
         const updatedItems = PlanNotes.filter(id => id !== item);
         setPlanNotes(updatedItems);
+        // Cancel edit if the item being removed is currently being edited
+        if (EditingPlan.isEditing && PlanNotes[EditingPlan.index] === item) {
+            cancelEditPlan();
+        }
     }
 
     const [showToast, setShowToast] = useState({
@@ -288,26 +422,29 @@ export default function ClinicalEncounterEdit() {
     console.log("oldEncounter", oldEncounter)
 
     useEffect(() => {
-
-
         getAllVitals()
         getSettings();
 
-        setClinicalNotes(oldEncounter?.clinicalencounter?.clinicalnot||[])
-        setAssessmentNotes(oldEncounter?.clinicalencounter?.assessmentnote||[])
-        setDiagnosisNotes(oldEncounter?.clinicalencounter?.diagnosisnotes||[])
-        setPlanNotes(oldEncounter?.clinicalencounter?.plannote||[])
+        setClinicalNotes(oldEncounter?.clinicalencounter?.clinicalnot || [])
+        setAssessmentNotes(oldEncounter?.clinicalencounter?.assessmentnote || [])
+        setDiagnosisNotes(oldEncounter?.clinicalencounter?.diagnosisnotes || [])
+        setPlanNotes(oldEncounter?.clinicalencounter?.plannote || [])
 
         setPayload({
-         
             outcome: oldEncounter?.clinicalencounter?.outcome,
-
         })
 
         setSearchICD(oldEncounter?.clinicalencounter?.diagnosisicd10)
         getAllICD(oldEncounter?.clinicalencounter?.diagnosisicd10)
+    }, []);
 
-
+    // Clear search input and ICD list when component unmounts or resets
+    useEffect(() => {
+        return () => {
+            setSearchICD("");
+            setICDSearchResults([]);
+            setSelectedICDInfo(null);
+        };
     }, []);
 
 
@@ -324,369 +461,424 @@ export default function ClinicalEncounterEdit() {
 
             <Box>
                 <Button leftIcon={<IoMdArrowRoundBack />} px="40px" w="100px" onClick={() => nav(`${pathname}`)}>Back</Button>
+                <PatientInfoCard />
 
-                <Accordion defaultIndex={[7]} mt="32px" allowToggle>
-                    <AccordionItem mb="15px" >
+                <Stack spacing={5} mt="32px">
+                    {/* Previous Clinical Encounter Section */}
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
+                        <Text fontSize="xl" fontWeight="bold" mb={4}>Previous Clinical Encounter</Text>
+                        <ClinicalEncounter hide={true} />
+                    </Box>
 
-                        <AccordionButton _hover={{ border: "1px solid #EA5937", color: "#000" }} _focus={{ outline: "none" }} border="1px solid #fff" _expanded={{ rounded: "8px 8px 0px 0px", border: 0 }} bg="#fff" color="#000" rounded="8px">
-                            <Box as='span' flex='1' textAlign='left'>
-                                Previous Clinical Encounter
-                            </Box>
-                            <AccordionIcon />
-                        </AccordionButton>
-
-                        <AccordionPanel pb={4} bg="#fff" rounded="0px 0px 8px 8px" >
-                            <ClinicalEncounter hide={true} />
-                        </AccordionPanel>
-                    </AccordionItem>
-                    <AccordionItem mb="15px">
-
-                        <AccordionButton _hover={{ border: "1px solid #EA5937", color: "#000" }} _focus={{ outline: "none" }} border="1px solid #fff" _expanded={{ rounded: "8px 8px 0px 0px", border: 0 }} bg="#fff" color="#000" rounded="8px">
-                            <Box as='span' flex='1' textAlign='left'>
-                                Vital
-                            </Box>
-                            <AccordionIcon />
-                        </AccordionButton>
-
-                        <AccordionPanel pb={4} bg="#fff" rounded="0px 0px 8px 8px">
-                            <SimpleGrid mt="32px" columns={{ base: 1, md: 2 }} spacing={5}>
-                                <Input type="number" leftIcon={<FaTemperatureHigh />} label="Temperature (C)" value={Payload.temperature} val={Payload.temperature !=="" ? true: false  } onChange={handlePayload} id="temperature" />
-                                <Input type="number" leftIcon={<FaHeartbeat />} label="Heart Rate (bpm)" value={Payload.heartrate} val={Payload.heartrate !=="" ? true: false  } onChange={handlePayload} id="heartrate" />
-                                <Input type="number" leftIcon={<MdBloodtype />} label="Blood Pressure (systolic)(mmHg)" value={Payload.bloodpressuresystolic} val={Payload.bloodpressuresystolic !=="" ? true: false  } onChange={handlePayload} id="bloodpressuresystolic" />
-                                <Input type="number" leftIcon={<MdBloodtype />} label="Blood Pressure (Diastolic)(mmHg)" value={Payload.bloodpressurediastolic} val={Payload.bloodpressurediastolic !=="" ? true: false  } onChange={handlePayload} id="bloodpressurediastolic" />
-                                <Input type="number" leftIcon={<GiEnergyBreath />} label="Respiration (bpm)" value={Payload.respiration} val={Payload.respiration !=="" ? true: false  } onChange={handlePayload} id="respiration" />
-                                <Input type="number" leftIcon={<FaHeartCircleCheck />} label="O2 Saturation (%)" value={Payload.saturation} val={Payload.saturation !=="" ? true: false  } onChange={handlePayload} id="saturation" />
-                                <Input type="number" leftIcon={<FaTextHeight />} label="Height (cm)" value={Payload.height} val={Payload.height !=="" ? true: false  } onChange={handlePayload} id="height" />
-                                <Input type="number" leftIcon={<GiWeight />} label="Weight (kg)" value={Payload.weight} val={Payload.weight !=="" ? true: false  } onChange={handlePayload} id="weight" />
-
-
-                            </SimpleGrid>
-                            <Text color="red" mt="20px">Note: Please add at least one vital information </Text>
-                        </AccordionPanel>
-                    </AccordionItem>
-
-                    <AccordionItem mb="15px">
-
-                        <AccordionButton _hover={{ border: "1px solid #EA5937", color: "#000" }} _focus={{ outline: "none" }} border="1px solid #fff" _expanded={{ rounded: "8px 8px 0px 0px", border: 0 }} bg="#fff" color="#000" rounded="8px">
-                            <Box as='span' flex='1' textAlign='left'>
-                                Clinical Notes
-                            </Box>
-                            <AccordionIcon />
-                        </AccordionButton>
-
-                        <AccordionPanel pb={4} bg="#fff" rounded="0px 0px 8px 8px">
-                            <Stack spacing={4} pt="10">
-
-                                <TextArea label="Clinical Note" value={Payload.clinicalnote} onChange={handlePayload} id="clinicalnote" />
-
-
-                            </Stack>
-                            <Flex justifyContent={"flex-end"} mt="2">
-                                <Button
-
-                                    onClick={addClinicalNotes}
-
-                                    w={["100%", "100%", "184px", "184px"]}
-
-                                >
-                                    Add
+                    {/* Clinical Notes Section */}
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md" bg={EditingClinical.isEditing ? "yellow.50" : "white"}>
+                        <Text fontSize="xl" fontWeight="bold" mb={10}>Clinical Notes {EditingClinical.isEditing && <Badge colorScheme="yellow" ml={2}>Editing</Badge>}</Text>
+                        <Stack spacing={4}>
+                            <TextArea label="Clinical Note" value={Payload.clinicalnote} onChange={handlePayload} id="clinicalnote" />
+                            <Flex justifyContent="flex-end" gap={2}>
+                                {EditingClinical.isEditing && (
+                                    <Button onClick={cancelEditClinical} variant="outline" colorScheme="gray" w={{ base: "100%", md: "120px" }}>
+                                        Cancel
+                                    </Button>
+                                )}
+                                <Button onClick={addClinicalNotes} w={{ base: "100%", md: "184px" }}>
+                                    {EditingClinical.isEditing ? "Update" : "Add"}
                                 </Button>
                             </Flex>
-
-
-
-                            <SimpleGrid mt="12px" columns={{ base: 2, md: 2 }} spacing={2}>
-
-                                {
-                                    ClinicalNotes?.map((item, i) => (
-
-                                        <Flex key={i} cursor="pointer" px="10px" py="10px" rounded={"20px"} fontSize="12px" _hover={{ bg: "blue.blue400" }} bg="blue.blue500" w="100%" justifyContent="space-between" alignItems="center" >
-                                            <Text color="#fff" fontWeight="500" textTransform="capitalize" >{item}</Text>
-                                            <Box fontSize="20px" color="#fff" onClick={() => removeClinicalNotes(item)}><IoIosCloseCircle /></Box>
+                            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={2}>
+                                {ClinicalNotes?.map((item, i) => (
+                                    <Flex 
+                                        key={i} 
+                                        cursor="pointer" 
+                                        px="10px" 
+                                        py="10px" 
+                                        rounded="20px" 
+                                        fontSize="12px" 
+                                        _hover={{ bg: "blue.blue400" }} 
+                                        bg={EditingClinical.isEditing && EditingClinical.index === i ? "yellow.200" : "blue.blue500"} 
+                                        w="100%" 
+                                        justifyContent="space-between" 
+                                        alignItems="center"
+                                    >
+                                        <Text color={EditingClinical.isEditing && EditingClinical.index === i ? "gray.800" : "#fff"} fontWeight="500" textTransform="capitalize" >{item}</Text>
+                                        <Flex gap={2}>
+                                            <Box 
+                                                fontSize="16px" 
+                                                color={EditingClinical.isEditing && EditingClinical.index === i ? "blue.500" : "#fff"} 
+                                                onClick={() => editClinicalNote(i)}
+                                                _hover={{ transform: "scale(1.1)" }}
+                                            >
+                                                <FaPen />
+                                            </Box>
+                                            <Box 
+                                                fontSize="20px" 
+                                                color={EditingClinical.isEditing && EditingClinical.index === i ? "red.500" : "#fff"} 
+                                                onClick={() => removeClinicalNotes(item)}
+                                                _hover={{ transform: "scale(1.1)" }}
+                                            >
+                                                <IoIosCloseCircle />
+                                            </Box>
                                         </Flex>
-                                    ))
-                                }
-
+                                    </Flex>
+                                ))}
                             </SimpleGrid>
+                        </Stack>
+                    </Box>
 
 
-                        </AccordionPanel>
-                    </AccordionItem>
-                    <AccordionItem mb="15px">
-
-                        <AccordionButton _hover={{ border: "1px solid #EA5937", color: "#000" }} _focus={{ outline: "none" }} border="1px solid #fff" _expanded={{ rounded: "8px 8px 0px 0px", border: 0 }} bg="#fff" color="#000" rounded="8px">
-                            <Box as='span' flex='1' textAlign='left'>
-                                Assessment Notes
-                            </Box>
-                            <AccordionIcon />
-                        </AccordionButton>
-
-                        <AccordionPanel pb={4} bg="#fff" rounded="0px 0px 8px 8px">
-                            <Stack spacing={4} pt="10">
-
-                                <TextArea label=" Assessment Note" value={Payload.assessmentnote} onChange={handlePayload} id="assessmentnote" />
+                    {/* Vitals Section */}
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
+                        <Text fontSize="xl" fontWeight="bold" mb={4}>Vitals</Text>
+                        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={5} mb="42px">
+                            <Input type="number" leftIcon={<FaTemperatureHigh />} label="Temperature (C)" value={Payload.temperature} val={Payload.temperature !== "" ? true : false} onChange={handlePayload} id="temperature" />
+                            <Input type="number" leftIcon={<FaHeartbeat />} label="Heart Rate (bpm)" value={Payload.heartrate} val={Payload.heartrate !== "" ? true : false} onChange={handlePayload} id="heartrate" />
+                            <Input type="number" leftIcon={<MdBloodtype />} label="Blood Pressure (systolic)(mmHg)" value={Payload.bloodpressuresystolic} val={Payload.bloodpressuresystolic !== "" ? true : false} onChange={handlePayload} id="bloodpressuresystolic" />
+                            <Input type="number" leftIcon={<MdBloodtype />} label="Blood Pressure (Diastolic)(mmHg)" value={Payload.bloodpressurediastolic} val={Payload.bloodpressurediastolic !== "" ? true : false} onChange={handlePayload} id="bloodpressurediastolic" />
+                            <Input type="number" leftIcon={<GiEnergyBreath />} label="Respiration (bpm)" value={Payload.respiration} val={Payload.respiration !== "" ? true : false} onChange={handlePayload} id="respiration" />
+                            <Input type="number" leftIcon={<FaHeartCircleCheck />} label="O2 Saturation (%)" value={Payload.saturation} val={Payload.saturation !== "" ? true : false} onChange={handlePayload} id="saturation" />
+                            <Input type="number" leftIcon={<FaTextHeight />} label="Height (cm)" value={Payload.height} val={Payload.height !== "" ? true : false} onChange={handlePayload} id="height" />
+                            <Input type="number" leftIcon={<GiWeight />} label="Weight (kg)" value={Payload.weight} val={Payload.weight !== "" ? true : false} onChange={handlePayload} id="weight" />
+                        </SimpleGrid>
 
 
-                            </Stack>
-                            <Flex justifyContent={"flex-end"} mt="2">
-                                <Button
+                        <TextArea label="Vitals  Note" value={Payload.vitalNote} onChange={handlePayload} id="vitalNote" />
+                        <Text color="red" mt="20px" >Note: Please add at least one vital information</Text>
 
-                                    onClick={addAssessmentNotes}
 
-                                    w={["100%", "100%", "184px", "184px"]}
+                    </Box>
 
-                                >
-                                    Add
+
+                    {/* Assessment Notes Section */}
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md" bg={EditingAssessment.isEditing ? "yellow.50" : "white"}>
+                        <Text fontSize="xl" fontWeight="bold" mb={10}>Assessment Notes {EditingAssessment.isEditing && <Badge colorScheme="yellow" ml={2}>Editing</Badge>}</Text>
+                        <Stack spacing={4}>
+                            <TextArea label="Assessment Note" value={Payload.assessmentnote} onChange={handlePayload} id="assessmentnote" />
+                            <Flex justifyContent="flex-end" gap={2}>
+                                {EditingAssessment.isEditing && (
+                                    <Button onClick={cancelEditAssessment} variant="outline" colorScheme="gray" w={{ base: "100%", md: "120px" }}>
+                                        Cancel
+                                    </Button>
+                                )}
+                                <Button onClick={addAssessmentNotes} w={{ base: "100%", md: "184px" }}>
+                                    {EditingAssessment.isEditing ? "Update" : "Add"}
                                 </Button>
                             </Flex>
-
-
-
-                            <SimpleGrid mt="12px" columns={{ base: 2, md: 2 }} spacing={2}>
-
-                                {
-                                    AssessmentNotes?.map((item, i) => (
-
-                                        <Flex key={i} cursor="pointer" px="10px" py="10px" rounded={"20px"} fontSize="12px" _hover={{ bg: "blue.blue400" }} bg="blue.blue500" w="100%" justifyContent="space-between" alignItems="center" >
-                                            <Text color="#fff" fontWeight="500" textTransform="capitalize" >{item}</Text>
-                                            <Box fontSize="20px" color="#fff" onClick={() => removeAssessment(item)}><IoIosCloseCircle /></Box>
+                            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={2}>
+                                {AssessmentNotes?.map((item, i) => (
+                                    <Flex 
+                                        key={i} 
+                                        cursor="pointer" 
+                                        px="10px" 
+                                        py="10px" 
+                                        rounded="20px" 
+                                        fontSize="12px" 
+                                        _hover={{ bg: "blue.blue400" }} 
+                                        bg={EditingAssessment.isEditing && EditingAssessment.index === i ? "yellow.200" : "blue.blue500"} 
+                                        w="100%" 
+                                        justifyContent="space-between" 
+                                        alignItems="center"
+                                    >
+                                        <Text color={EditingAssessment.isEditing && EditingAssessment.index === i ? "gray.800" : "#fff"} fontWeight="500" textTransform="capitalize" >{item}</Text>
+                                        <Flex gap={2}>
+                                            <Box 
+                                                fontSize="16px" 
+                                                color={EditingAssessment.isEditing && EditingAssessment.index === i ? "blue.500" : "#fff"} 
+                                                onClick={() => editAssessmentNote(i)}
+                                                _hover={{ transform: "scale(1.1)" }}
+                                            >
+                                                <FaPen />
+                                            </Box>
+                                            <Box 
+                                                fontSize="20px" 
+                                                color={EditingAssessment.isEditing && EditingAssessment.index === i ? "red.500" : "#fff"} 
+                                                onClick={() => removeAssessment(item)}
+                                                _hover={{ transform: "scale(1.1)" }}
+                                            >
+                                                <IoIosCloseCircle />
+                                            </Box>
                                         </Flex>
-                                    ))
-                                }
-
+                                    </Flex>
+                                ))}
                             </SimpleGrid>
+                        </Stack>
+                    </Box>
 
-
-                        </AccordionPanel>
-                    </AccordionItem>
-                    <AccordionItem mb="15px">
-
-                        <AccordionButton _hover={{ border: "1px solid #EA5937", color: "#000" }} _focus={{ outline: "none" }} border="1px solid #fff" _expanded={{ rounded: "8px 8px 0px 0px", border: 0 }} bg="#fff" color="#000" rounded="8px">
-                            <Box as='span' flex='1' textAlign='left'>
-                                Diagnosis Notes
-                            </Box>
-                            <AccordionIcon />
-                        </AccordionButton>
-
-                        <AccordionPanel pb={4} bg="#fff" rounded="0px 0px 8px 8px">
-                            <Stack spacing={4} pt="10">
-
-                                <TextArea label=" Diagnosis Note" value={Payload.diagnosisnote} onChange={handlePayload} id="diagnosisnote" />
-
-
-                            </Stack>
-                            <Flex justifyContent={"flex-end"} mt="2">
-                                <Button
-
-                                    onClick={addDiagnosisNotes}
-
-                                    w={["100%", "100%", "184px", "184px"]}
-
-                                >
-                                    Add
+                    {/* Diagnosis Notes Section */}
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md" bg={EditingDiagnosis.isEditing ? "yellow.50" : "white"}>
+                        <Text fontSize="xl" fontWeight="bold" mb={10}>Diagnosis {EditingDiagnosis.isEditing && <Badge colorScheme="yellow" ml={2}>Editing</Badge>}</Text>
+                        <Stack spacing={4}>
+                            <TextArea label="Diagnosis" value={Payload.diagnosisnote} onChange={handlePayload} id="diagnosisnote" />
+                            <Flex justifyContent="flex-end" gap={2}>
+                                {EditingDiagnosis.isEditing && (
+                                    <Button onClick={cancelEditDiagnosis} variant="outline" colorScheme="gray" w={{ base: "100%", md: "120px" }}>
+                                        Cancel
+                                    </Button>
+                                )}
+                                <Button onClick={addDiagnosisNotes} w={{ base: "100%", md: "184px" }}>
+                                    {EditingDiagnosis.isEditing ? "Update" : "Add"}
                                 </Button>
                             </Flex>
-
-
-
-                            <SimpleGrid mt="12px" columns={{ base: 2, md: 2 }} spacing={2}>
-
-                                {
-                                    DiagnosisNotes?.map((item, i) => (
-
-                                        <Flex key={i} cursor="pointer" px="10px" py="10px" rounded={"20px"} fontSize="12px" _hover={{ bg: "blue.blue400" }} bg="blue.blue500" w="100%" justifyContent="space-between" alignItems="center" >
-                                            <Text color="#fff" fontWeight="500" textTransform="capitalize" >{item}</Text>
-                                            <Box fontSize="20px" color="#fff" onClick={() => removeDiagnosisNotes(item)}><IoIosCloseCircle /></Box>
+                            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={2}>
+                                {DiagnosisNotes?.map((item, i) => (
+                                    <Flex 
+                                        key={i} 
+                                        cursor="pointer" 
+                                        px="10px" 
+                                        py="10px" 
+                                        rounded="20px" 
+                                        fontSize="12px" 
+                                        _hover={{ bg: "blue.blue400" }} 
+                                        bg={EditingDiagnosis.isEditing && EditingDiagnosis.index === i ? "yellow.200" : "blue.blue500"} 
+                                        w="100%" 
+                                        justifyContent="space-between" 
+                                        alignItems="center"
+                                    >
+                                        <Text color={EditingDiagnosis.isEditing && EditingDiagnosis.index === i ? "gray.800" : "#fff"} fontWeight="500" textTransform="capitalize" >{item}</Text>
+                                        <Flex gap={2}>
+                                            <Box 
+                                                fontSize="16px" 
+                                                color={EditingDiagnosis.isEditing && EditingDiagnosis.index === i ? "blue.500" : "#fff"} 
+                                                onClick={() => editDiagnosisNote(i)}
+                                                _hover={{ transform: "scale(1.1)" }}
+                                            >
+                                                <FaPen />
+                                            </Box>
+                                            <Box 
+                                                fontSize="20px" 
+                                                color={EditingDiagnosis.isEditing && EditingDiagnosis.index === i ? "red.500" : "#fff"} 
+                                                onClick={() => removeDiagnosisNotes(item)}
+                                                _hover={{ transform: "scale(1.1)" }}
+                                            >
+                                                <IoIosCloseCircle />
+                                            </Box>
                                         </Flex>
-                                    ))
-                                }
-
+                                    </Flex>
+                                ))}
                             </SimpleGrid>
+                        </Stack>
+                    </Box>
 
 
-                        </AccordionPanel>
-                    </AccordionItem>
-                    <AccordionItem mb="15px">
 
-                        <AccordionButton _hover={{ border: "1px solid #EA5937", color: "#000" }} _focus={{ outline: "none" }} border="1px solid #fff" _expanded={{ rounded: "8px 8px 0px 0px", border: 0 }} bg="#fff" color="#000" rounded="8px">
-                            <Box as='span' flex='1' textAlign='left'>
-                                Diagnosis ICD
-                            </Box>
-                            <AccordionIcon />
-                        </AccordionButton>
-
-                        <AccordionPanel pb={4} bg="#fff" rounded="0px 0px 8px 8px">
-                            <SimpleGrid mt="12px" pt="12px" columns={{ base: 1, md: 1 }} spacing={2}>
-
-                                <Input label="Search ICD 11" value={SearchICD} onChange={handleSearch} />
-
-                                <Select fontSize={Payload.diagnosisicd10 !== "" ? "16px" : "13px"} h="45px" borderWidth="2px" borderColor="#6B7280" id="diagnosisicd10"
-                                    value={Payload.diagnosisicd10} onChange={handlePayload} placeholder="Select diagnosis icd 11" >
-
-                                    {
-                                        DiagnosisICD.map((item, i) => (
-
-                                            <option key={i} value={`${item[1]}`}>{`${item[0]} ~ ${item[1]}`}</option>
-                                        ))
-                                    }
-
-
-                                </Select>
-
-                            </SimpleGrid>
-
-                        </AccordionPanel>
-                    </AccordionItem>
-                    <AccordionItem mb="15px">
-
-                        <AccordionButton _hover={{ border: "1px solid #EA5937", color: "#000" }} _focus={{ outline: "none" }} border="1px solid #fff" _expanded={{ rounded: "8px 8px 0px 0px", border: 0 }} bg="#fff" color="#000" rounded="8px">
-                            <Box as='span' flex='1' textAlign='left'>
-                                Plan Notes
-                            </Box>
-                            <AccordionIcon />
-                        </AccordionButton>
-
-                        <AccordionPanel pb={4} bg="#fff" rounded="0px 0px 8px 8px">
-                            <Stack spacing={4} pt="10">
-
-                                <TextArea label=" Plan Note" value={Payload.plannote} onChange={handlePayload} id="plannote" />
-
-
-                            </Stack>
-                            <Flex justifyContent={"flex-end"} mt="2">
-                                <Button
-
-                                    onClick={addPlanNotes}
-
-                                    w={["100%", "100%", "184px", "184px"]}
-
-                                >
-                                    Add
+                    {/* Plan Notes Section */}
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md" bg={EditingPlan.isEditing ? "yellow.50" : "white"}>
+                        <Text fontSize="xl" fontWeight="bold" mb={10}>Plan Notes {EditingPlan.isEditing && <Badge colorScheme="yellow" ml={2}>Editing</Badge>}</Text>
+                        <Stack spacing={4}>
+                            <TextArea label="Plan Note" value={Payload.plannote} onChange={handlePayload} id="plannote" />
+                            <Flex justifyContent="flex-end" gap={2}>
+                                {EditingPlan.isEditing && (
+                                    <Button onClick={cancelEditPlan} variant="outline" colorScheme="gray" w={{ base: "100%", md: "120px" }}>
+                                        Cancel
+                                    </Button>
+                                )}
+                                <Button onClick={addPlanNotes} w={{ base: "100%", md: "184px" }}>
+                                    {EditingPlan.isEditing ? "Update" : "Add"}
                                 </Button>
                             </Flex>
-
-
-
-                            <SimpleGrid mt="12px" columns={{ base: 2, md: 2 }} spacing={2}>
-
-                                {
-                                    PlanNotes?.map((item, i) => (
-
-                                        <Flex key={i} cursor="pointer" px="10px" py="10px" rounded={"20px"} fontSize="12px" _hover={{ bg: "blue.blue400" }} bg="blue.blue500" w="100%" justifyContent="space-between" alignItems="center" >
-                                            <Text color="#fff" fontWeight="500" textTransform="capitalize" >{item}</Text>
-                                            <Box fontSize="20px" color="#fff" onClick={() => removePlanNotes(item)}><IoIosCloseCircle /></Box>
+                            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={2}>
+                                {PlanNotes?.map((item, i) => (
+                                    <Flex 
+                                        key={i} 
+                                        cursor="pointer" 
+                                        px="10px" 
+                                        py="10px" 
+                                        rounded="20px" 
+                                        fontSize="12px" 
+                                        _hover={{ bg: "blue.blue400" }} 
+                                        bg={EditingPlan.isEditing && EditingPlan.index === i ? "yellow.200" : "blue.blue500"} 
+                                        w="100%" 
+                                        justifyContent="space-between" 
+                                        alignItems="center"
+                                    >
+                                        <Text color={EditingPlan.isEditing && EditingPlan.index === i ? "gray.800" : "#fff"} fontWeight="500" textTransform="capitalize" >{item}</Text>
+                                        <Flex gap={2}>
+                                            <Box 
+                                                fontSize="16px" 
+                                                color={EditingPlan.isEditing && EditingPlan.index === i ? "blue.500" : "#fff"} 
+                                                onClick={() => editPlanNote(i)}
+                                                _hover={{ transform: "scale(1.1)" }}
+                                            >
+                                                <FaPen />
+                                            </Box>
+                                            <Box 
+                                                fontSize="20px" 
+                                                color={EditingPlan.isEditing && EditingPlan.index === i ? "red.500" : "#fff"} 
+                                                onClick={() => removePlanNotes(item)}
+                                                _hover={{ transform: "scale(1.1)" }}
+                                            >
+                                                <IoIosCloseCircle />
+                                            </Box>
                                         </Flex>
-                                    ))
-                                }
-
+                                    </Flex>
+                                ))}
                             </SimpleGrid>
+                        </Stack>
+                    </Box>
 
+                    {/* Diagnosis ICD Section */}
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
+                        <Text fontSize="xl" fontWeight="bold" mb={4}>Diagnosis ICD 11</Text>
+                        <Box position="relative">
+                            <Input
+                                label="Search ICD 11"
+                                placeholder="Enter diagnosis name or ICD code"
+                                value={SearchICD}
+                                onChange={handleSearchInputChange}
+                                leftIcon={<FiSearch size={16} color="blue.500" />}
+                            />
 
-                        </AccordionPanel>
-                    </AccordionItem>
-                    <AccordionItem mb="15px">
+                            {/* Selected ICD Display */}
+                            {selectedICDInfo && (
+                                <Box mt={2} p={3} bg="blue.50" borderRadius="md" border="1px solid" borderColor="blue.200">
+                                    <HStack spacing={2}>
+                                        <Badge colorScheme="blue" variant="solid">Selected</Badge>
+                                        <Text fontWeight="medium">{selectedICDInfo.name}</Text>
+                                        <Text fontSize="sm" color="gray.600">Code: {selectedICDInfo.code}</Text>
+                                    </HStack>
+                                </Box>
+                            )}
 
-                        <AccordionButton _hover={{ border: "1px solid #EA5937", color: "#000" }} _focus={{ outline: "none" }} border="1px solid #fff" _expanded={{ rounded: "8px 8px 0px 0px", border: 0 }} bg="#fff" color="#000" rounded="8px">
-                            <Box as='span' flex='1' textAlign='left'>
-                                Plan
-                            </Box>
-                            <AccordionIcon />
-                        </AccordionButton>
-
-                        <AccordionPanel pb={4} bg="#fff" rounded="0px 0px 8px 8px">
-                            <SimpleGrid mt="30px" mb={2} columns={{ base: 1, md: 1 }} spacing={4} >
-
-                                <Select fontSize={Payload.outcome !== "" ? "16px" : "13px"} h="45px" borderWidth="2px" borderColor="#6B7280" id="outcome"
-                                    value={Payload.outcome} onChange={handlePayload} placeholder="Select outcome" >
-                                    {Outcomes?.map(item => (
-                                        <option key={item} value={item}>{item}</option>
+                            {/* Search Results Dropdown */}
+                            {icdSearchResults.length > 0 && !selectedICDInfo && (
+                                <Box
+                                    position="absolute"
+                                    top="100%"
+                                    left={0}
+                                    right={0}
+                                    zIndex={1000}
+                                    bg="white"
+                                    border="1px solid"
+                                    borderColor="gray.200"
+                                    borderRadius="md"
+                                    boxShadow="xl"
+                                    maxH="400px"
+                                    overflowY="auto"
+                                    mt={1}
+                                >
+                                    {icdSearchResults.map((item, index) => (
+                                        <Box
+                                            key={index}
+                                            p={4}
+                                            cursor="pointer"
+                                            _hover={{ bg: "blue.50", borderColor: "blue.200" }}
+                                            onClick={() => handleICDSelect(item)}
+                                            borderBottom="1px solid"
+                                            borderColor="gray.100"
+                                            _last={{ borderBottom: "none" }}
+                                            transition="all 0.2s"
+                                        >
+                                            <Text fontWeight="medium" fontSize="sm" color="gray.800">
+                                                {item[0]}
+                                            </Text>
+                                            <Text fontSize="xs" color="blue.600" mt={1}>
+                                                Code: {item[1]}
+                                            </Text>
+                                        </Box>
                                     ))}
-                                </Select>
+                                </Box>
+                            )}
 
+                            {/* Loading Indicator */}
+                            {isLoadingICD && (
+                                <Box
+                                    position="absolute"
+                                    top="100%"
+                                    left={0}
+                                    right={0}
+                                    zIndex={1000}
+                                    bg="white"
+                                    border="1px solid"
+                                    borderColor="gray.200"
+                                    borderRadius="md"
+                                    boxShadow="lg"
+                                    p={4}
+                                    mt={1}
+                                >
+                                    <Text color="gray.500" fontSize="sm">Searching ICD codes...</Text>
+                                </Box>
+                            )}
+                        </Box>
+                    </Box>
 
-                            </SimpleGrid>
-                            <Flex justifyContent="space-between" flexWrap="wrap" mt="15px" w={["100%", "100%", "100%", "100%"]} >
+                    {/* Plan Section */}
+                    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
+                        <Text fontSize="xl" fontWeight="bold" mb={4}>Plan</Text>
+                        <Stack spacing={4}>
+                            <Select fontSize={Payload.outcome !== "" ? "16px" : "13px"} h="45px" borderWidth="2px" borderColor="#6B7280" id="outcome"
+                                value={Payload.outcome} onChange={handlePayload} placeholder="Select outcome" >
+                                {Outcomes?.map(item => (
+                                    <option key={item} value={item}>{item}</option>
+                                ))}
+                            </Select>
+                            <Flex justifyContent="space-between" flexWrap="wrap" gap={3}>
                                 <Tooltip label='Lab Order'>
-                                    <Box onClick={() => setOpenLabModal(true)} cursor="pointer" px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500">Lab </Box>
-
+                                    <Box onClick={() => setOpenLabModal(true)} cursor="pointer" px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500">Lab</Box>
                                 </Tooltip>
                                 <Tooltip label='Radiology Order'>
-                                    <Box onClick={() => setOpenRadiologyModal(true)} cursor="pointer" px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500">Radiology </Box>
+                                    <Box onClick={() => setOpenRadiologyModal(true)} cursor="pointer" px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500">Radiology</Box>
                                 </Tooltip>
                                 <Tooltip label='Prescribe Drug'>
-                                    <Box cursor="pointer" onClick={() => setOpenPrescriptionModal(true)} px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500">Prescription </Box>
+                                    <Box cursor="pointer" onClick={() => setOpenPrescriptionModal(true)} px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500">Prescription</Box>
                                 </Tooltip>
                                 <Tooltip label='Admit Patient'>
-                                    <Box onClick={() => setOpenAdmissionModal(true)} cursor="pointer" px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500">Admission </Box>
+                                    <Box onClick={() => setOpenAdmissionModal(true)} cursor="pointer" px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500">Admission</Box>
                                 </Tooltip>
                                 <Tooltip label='Procedure'>
-                                    <Box onClick={() => setOpenProcedureModal(true)} cursor="pointer" px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500">Procedure </Box>
+                                    <Box onClick={() => setOpenProcedureModal(true)} cursor="pointer" px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500">Procedure</Box>
                                 </Tooltip>
                                 <Tooltip label='Refer Patient To Another Doctor'>
-                                    <Box onClick={() => setOpenReferralModal(true)} cursor="pointer" px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500">Referral </Box>
+                                    <Box onClick={() => setOpenReferralModal(true)} cursor="pointer" px="25px" py="10px" rounded="8px" border="1px solid #EA5937" color="blue.blue500" bg="orange.orange500">Referral</Box>
                                 </Tooltip>
                             </Flex>
-                        </AccordionPanel>
-                        <AdmissionModal isOpen={OpenAdmissionModal} oldPayload={{ _id: id, appointmentid: id }} onClose={() => setOpenAdmissionModal(false)} type={ModalState} activateNotifications={activateNotifications} />
+                        </Stack>
+                    </Box>
+                </Stack>
 
-                        <RadiologyOrderRequestModal
-                            isOpen={OpenRadiologyModal}
-                            onClose={() => setOpenRadiologyModal(false)}
-                            admissionId={null}
-                            type={"create"}
-                            initialData={null}
-                            oldPayload={{ id: id }}
-                            onSuccess={handleSuccess}
-                        />
-
-                        <CreateProcedureModal
-                            isOpen={OpenProcedureModal}
-                            onClose={() => setOpenProcedureModal(false)}
-                            type={"new"}
-                            activateNotifications={activateNotifications}
-                            oldPayload={{ id: id }}
-
-                        />
-
-                        <CreateReferralModal isOpen={OpenReferralModal} onClose={() => setOpenReferralModal(false)} type={ModalState} activateNotifications={activateNotifications} />
-
-                    </AccordionItem>
-
-
-                </Accordion>
-
-                <Flex justifyContent="center">
-
+                <Flex justifyContent="center" mt={8}>
                     <Flex
                         justifyContent="space-between"
                         flexWrap="wrap"
-                        mt={["10px", "10px", "10px", "10px"]}
-                        w={["100%", "100%", "60%", "60%"]}
+                        w={{ base: "100%", md: "60%" }}
+                        gap={4}
                     >
-                      
                         <Button
-                            w={["100%", "100%", "184px", "184px"]}
+                            w={{ base: "100%", md: "184px" }}
                             onClick={handleInprogress}
                             isLoading={Loading}
-                           
-
                         >
                             Save as In-Progress
                         </Button>
                         <Button
-                           
                             onClick={handleCompleted}
                             isLoading={LoadingCompleted}
-                            w={["100%", "100%", "184px", "184px"]}
-
+                            w={{ base: "100%", md: "184px" }}
                         >
                             Save as Completed
                         </Button>
-
                     </Flex>
                 </Flex>
-                <LabRequestModal isOpen={OpenLabModal} oldPayload={{ _id: id, appointmentid: id }} onClose={() => setOpenLabModal(false)} type={ModalState} activateNotifications={activateNotifications} />
+
+                {/* Modals */}
+                <AdmissionModal isOpen={OpenAdmissionModal} oldPayload={{ _id: id, appointmentid: id }} onClose={() => setOpenAdmissionModal(false)} type={ModalState} activateNotifications={activateNotifications} />
+                <RadiologyOrderRequestModal
+                    isOpen={OpenRadiologyModal}
+                    onClose={() => setOpenRadiologyModal(false)}
+                    admissionId={null}
+                    type={"create"}
+                    initialData={null}
+                    oldPayload={{ id: id }}
+                    onSuccess={handleSuccess}
+                />
+                <CreateProcedureModal
+                    isOpen={OpenProcedureModal}
+                    onClose={() => setOpenProcedureModal(false)}
+                    type={"new"}
+                    activateNotifications={activateNotifications}
+                    oldPayload={{ id: id }}
+                />
+                <CreateReferralModal isOpen={OpenReferralModal} onClose={() => setOpenReferralModal(false)} type={"new"} activateNotifications={activateNotifications} />
                 <PreviewEncounter isOpen={OpenPreview} onClose={() => setOpenPreview(false)} setOldPayload={setPayload} oldPayload={Payload} />
+                <LabRequestModal isOpen={OpenLabModal} oldPayload={{ _id: id, appointmentid: id }} onClose={() => setOpenLabModal(false)} type={ModalState} activateNotifications={activateNotifications} />
                 <CreatePrescriptionModal
                     isOpen={OpenPrescriptionModal}
                     onClose={() => setOpenPrescriptionModal(false)}

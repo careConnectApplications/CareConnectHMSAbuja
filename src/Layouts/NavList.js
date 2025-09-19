@@ -187,6 +187,13 @@ export const NavList = (location) => {
       ],
     },
     {
+      name: "maternity",
+      icon: <FaUserNurse />,
+      link: "/dashboard/maternity-schedule",
+      active: isActive(location, "/dashboard/maternity-schedule"),
+      display: true,
+    },
+    {
       name: "eye Clinic",
       icon: <FaEye />,
       link: "/dashboard/eye-clinic",
