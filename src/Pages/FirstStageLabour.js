@@ -24,7 +24,7 @@ import { useColors } from "../Utils/colors";
 import moment from "moment";
 import { BsThreeDots } from "react-icons/bs";
 import axios from "axios";
-import { API_URL } from "../Utils/ApiConfig";
+// import { API_URL } from "../Utils/ApiConfig";
 import Preloader from "../Components/Preloader";
 
 export default function FirstStageLabour({ id }) {
@@ -49,19 +49,9 @@ export default function FirstStageLabour({ id }) {
     
     setIsLoading(true);
     try {
-      const token = localStorage.getItem("token");
-      const response = await axios.get(
-        `${API_URL}/first-stage-labour/patient/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+    
       
-      if (response.data?.status === true) {
-        setData(response.data.queryresult || []);
-      }
+      
     } catch (error) {
       console.error("Error fetching first stage labour data:", error);
       toast({
