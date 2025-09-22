@@ -124,7 +124,8 @@ export default function ThirdStageLabourModal({
   }, [isOpen]);
 
   useEffect(() => {
-    if (mode === "edit" && data) {
+    // Fetch record data for both edit and view modes when data is provided
+    if ((mode === "edit" || mode === "view") && data) {
       const recordId = data._id;
       const fetchRecordData = async () => {
         setIsLoading(true);
@@ -197,6 +198,7 @@ export default function ThirdStageLabourModal({
       };
       fetchRecordData();
     } else {
+      // Reset form for create mode
       setFormData({
         mother: {
           bloodPressureSystolic: "",
@@ -391,7 +393,7 @@ export default function ThirdStageLabourModal({
                   isReadOnly={mode === "view"}
                   placeholder="Select status"
                 >
-                  {settings?.statusAfterDelivery?.map((option) => (
+                  {settings?.motherStatusAfterDelivery?.map((option) => (
                     <option key={option} value={option}>
                       {option}
                     </option>
@@ -693,7 +695,7 @@ export default function ThirdStageLabourModal({
                   isReadOnly={mode === "view"}
                   placeholder="Select delivery type"
                 >
-                  {settings?.typeofDelivery?.map((option) => (
+                  {settings?.typeOfDelivery?.map((option) => (
                     <option key={option} value={option}>
                       {option}
                     </option>
