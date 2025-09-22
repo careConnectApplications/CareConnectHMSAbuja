@@ -250,150 +250,128 @@ export default function MortalityRegisterModal({
               )}
             </FormControl>
 
-            {/* Maternal Death Fields - Only show if maternal death type or in view mode with data */}
-            {(currentDeathType === "Maternal" ||
-              (isReadOnly && formData.maternalDeath)) && (
-              <>
-                <FormControl>
-                  <FormLabel>Maternal Death Cause</FormLabel>
-                  {isReadOnly ? (
-                    <Input
-                      value={formData.maternalDeath || "N/A"}
-                      readOnly={true}
-                    />
-                  ) : (
-                    <Select
-                      placeholder="Select Cause"
-                      value={formData.maternalDeath}
-                      onChange={(e) =>
-                        handleInputChange("maternalDeath", e.target.value)
-                      }
-                      disabled={isReadOnly}
-                    >
-                      <option value="">Select Cause</option>
-                      {settings?.maternalDeath?.map((option) => (
-                        <option key={option} value={option}>
-                          {option}
-                        </option>
-                      ))}
-                    </Select>
-                  )}
-                </FormControl>
-
-                {formData.maternalDeath === "Other" && (
-                  <Input
-                    label="Other Maternal Cause"
-                    value={formData.other}
-                    onChange={(e) => handleInputChange("other", e.target.value)}
-                    readOnly={isReadOnly}
-                  />
-                )}
-              </>
-            )}
-
-            {/* Neonatal Death Fields - Only show if neonatal death type or in view mode with data */}
-            {(currentDeathType === "Neonatal" ||
-              (isReadOnly && formData.neonatalDeath)) && (
-              <>
-                <FormControl>
-                  <FormLabel>Neonatal Death Cause</FormLabel>
-                  {isReadOnly ? (
-                    <Input
-                      value={formData.neonatalDeath || "N/A"}
-                      readOnly={true}
-                    />
-                  ) : (
-                    <Select
-                      placeholder="Select Cause"
-                      value={formData.neonatalDeath}
-                      onChange={(e) =>
-                        handleInputChange("neonatalDeath", e.target.value)
-                      }
-                      disabled={isReadOnly}
-                    >
-                      <option value="">Select Cause</option>
-                      {settings?.neonatalDeath?.map((option) => (
-                        <option key={option} value={option}>
-                          {option}
-                        </option>
-                      ))}
-                    </Select>
-                  )}
-                </FormControl>
-
-                {formData.neonatalDeath === "⁠Others" && (
-                  <Input
-                    label="Other Neonatal Cause"
-                    value={formData.neonatalOther}
-                    onChange={(e) =>
-                      handleInputChange("neonatalOther", e.target.value)
-                    }
-                    readOnly={isReadOnly}
-                  />
-                )}
-              </>
-            )}
-
-            {/* Under Five Death Fields - Only show if under five death type or in view mode with data */}
-            {(currentDeathType === "Under Five" ||
-              (isReadOnly && formData.Deathunderfive)) && (
-              <>
-                <FormControl>
-                  <FormLabel>Under Five Death Cause</FormLabel>
-                  {isReadOnly ? (
-                    <Input
-                      value={formData.Deathunderfive || "N/A"}
-                      readOnly={true}
-                    />
-                  ) : (
-                    <Select
-                      placeholder="Select Cause"
-                      value={formData.Deathunderfive}
-                      onChange={(e) =>
-                        handleInputChange("Deathunderfive", e.target.value)
-                      }
-                      disabled={isReadOnly}
-                    >
-                      <option value="">Select Cause</option>
-                      {settings?.deathUnderFive?.map((option) => (
-                        <option key={option} value={option}>
-                          {option}
-                        </option>
-                      ))}
-                    </Select>
-                  )}
-                </FormControl>
-
-                {formData.Deathunderfive === "Others" && (
-                  <Input
-                    label="Other Under Five Cause"
-                    value={formData.DeathunderfiveOther}
-                    onChange={(e) =>
-                      handleInputChange("DeathunderfiveOther", e.target.value)
-                    }
-                    readOnly={isReadOnly}
-                  />
-                )}
-              </>
-            )}
-
-            {/* Other Death Type Field - Only show if other death type or in view mode with other cause */}
-            {(currentDeathType === "Other" ||
-              (isReadOnly &&
-                formData.other &&
-                !formData.maternalDeath &&
-                !formData.neonatalDeath &&
-                !formData.Deathunderfive)) && (
-              <FormControl>
-                <FormLabel>Other Death Cause</FormLabel>
+            {/* Maternal Death Fields */}
+            <FormControl>
+              <FormLabel>Maternal Death Cause</FormLabel>
+              {isReadOnly ? (
                 <Input
-                  value={formData.other}
-                  onChange={(e) => handleInputChange("other", e.target.value)}
-                  readOnly={isReadOnly}
-                  placeholder="Enter cause of death"
+                  value={formData.maternalDeath || "N/A"}
+                  readOnly={true}
                 />
-              </FormControl>
+              ) : (
+                <Select
+                  placeholder="Select Cause"
+                  value={formData.maternalDeath}
+                  onChange={(e) =>
+                    handleInputChange("maternalDeath", e.target.value)
+                  }
+                  disabled={isReadOnly}
+                >
+                  <option value="">Select Cause</option>
+                  {settings?.maternalDeath?.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </Select>
+              )}
+            </FormControl>
+
+            {formData.maternalDeath === "Other" && (
+              <Input
+                label="Other Maternal Cause"
+                value={formData.other}
+                onChange={(e) => handleInputChange("other", e.target.value)}
+                readOnly={isReadOnly}
+              />
             )}
+
+            {/* Neonatal Death Fields */}
+            <FormControl>
+              <FormLabel>Neonatal Death Cause</FormLabel>
+              {isReadOnly ? (
+                <Input
+                  value={formData.neonatalDeath || "N/A"}
+                  readOnly={true}
+                />
+              ) : (
+                <Select
+                  placeholder="Select Cause"
+                  value={formData.neonatalDeath}
+                  onChange={(e) =>
+                    handleInputChange("neonatalDeath", e.target.value)
+                  }
+                  disabled={isReadOnly}
+                >
+                  <option value="">Select Cause</option>
+                  {settings?.neonatalDeath?.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </Select>
+              )}
+            </FormControl>
+
+            {formData.neonatalDeath === "⁠Others" && (
+              <Input
+                label="Other Neonatal Cause"
+                value={formData.neonatalOther}
+                onChange={(e) =>
+                  handleInputChange("neonatalOther", e.target.value)
+                }
+                readOnly={isReadOnly}
+              />
+            )}
+
+            {/* Under Five Death Fields */}
+            <FormControl>
+              <FormLabel>Under Five Death Cause</FormLabel>
+              {isReadOnly ? (
+                <Input
+                  value={formData.Deathunderfive || "N/A"}
+                  readOnly={true}
+                />
+              ) : (
+                <Select
+                  placeholder="Select Cause"
+                  value={formData.Deathunderfive}
+                  onChange={(e) =>
+                    handleInputChange("Deathunderfive", e.target.value)
+                  }
+                  disabled={isReadOnly}
+                >
+                  <option value="">Select Cause</option>
+                  {settings?.deathUnderFive?.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </Select>
+              )}
+            </FormControl>
+
+            {formData.Deathunderfive === "Others" && (
+              <Input
+                label="Other Under Five Cause"
+                value={formData.DeathunderfiveOther}
+                onChange={(e) =>
+                  handleInputChange("DeathunderfiveOther", e.target.value)
+                }
+                readOnly={isReadOnly}
+              />
+            )}
+
+            {/* General Other Death Field */}
+            <FormControl>
+              <FormLabel>Other Death Cause</FormLabel>
+              <Input
+                value={formData.other}
+                onChange={(e) => handleInputChange("other", e.target.value)}
+                readOnly={isReadOnly}
+                placeholder="Enter other cause of death"
+              />
+            </FormControl>
           </SimpleGrid>
         </ModalBody>
         <ModalFooter gap="4">
