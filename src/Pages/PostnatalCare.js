@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Text,
@@ -11,89 +11,453 @@ import {
   Td,
   TableContainer,
   useDisclosure,
+  useToast,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Flex,
 } from "@chakra-ui/react";
 import Button from "../Components/Button";
 import PostnatalCareModal from "../Components/PostnatalCareModal";
 import { useColors } from "../Utils/colors";
 import moment from "moment";
+import { BsThreeDots } from "react-icons/bs";
+import { SlPlus } from "react-icons/sl";
+import { GetPostnatalCareByPatientApi } from "../Utils/ApiCalls";
+import Preloader from "../Components/Preloader";
+import Input from "../Components/Input";
+import { BiSearch } from "react-icons/bi";
+import { IoFilter } from "react-icons/io5";
+import Pagination from "../Components/Pagination";
+import { configuration } from "../Utils/Helpers";
 
 export default function PostnatalCare({ id }) {
-  const {
-    bgColor,
-    textColor,
-    borderColor,
-    titleTextColor,
-    subTitleTextColor,
-  } = useColors();
-  
+  const { bgColor, textColor, borderColor, titleTextColor, subTitleTextColor } =
+    useColors();
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [data, setData] = useState([]);
+  const [filterData, setFilterData] = useState([]);
+  const [selectedRecord, setSelectedRecord] = useState(null);
+  const [modalMode, setModalMode] = useState("create");
+  const [isLoading, setIsLoading] = useState(false);
+  const toast = useToast();
+
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postPerPage, setPostPerPage] = useState(configuration.sizePerPage);
+
+  // Filter states
+  const [searchInput, setSearchInput] = useState("");
+  const [filteredData, setFilteredData] = useState(null);
+
+  // Get current posts
+  const indexOfLastRecord = currentPage * postPerPage;
+  const indexOfFirstRecord = indexOfLastRecord - postPerPage;
+  const currentRecords = (filteredData || filterData).slice(
+    indexOfFirstRecord,
+    indexOfLastRecord
+  );
+
+  // Change page
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  // Filter functions
+  const filterBy = (field) => {
+    let filterResults = data.filter((item) => {
+      if (field === "typeOfVisit") {
+        return item.typeOfVisit
+          ?.toLowerCase()
+          .includes(searchInput.toLowerCase());
+      } else if (field === "parity") {
+        return item.parity?.toLowerCase().includes(searchInput.toLowerCase());
+      } else if (field === "sexOfChild") {
+        return item.sexOfChild
+          ?.toLowerCase()
+          .includes(searchInput.toLowerCase());
+      } else if (field === "kangarooMotherCare") {
+        return item.kangarooMotherCare
+          ?.toLowerCase()
+          .includes(searchInput.toLowerCase());
+      } else if (field === "outcomeOfVisit.visit") {
+        return item.outcomeOfVisit?.visit
+          ?.toLowerCase()
+          .includes(searchInput.toLowerCase());
+      } else if (field === "outcomeOfVisit.outcomeOfVisit") {
+        return item.outcomeOfVisit?.outcomeOfVisit
+          ?.toLowerCase()
+          .includes(searchInput.toLowerCase());
+      }
+      return false;
+    });
+
+    setFilteredData(filterResults);
+  };
+
+  const clearFilter = () => {
+    setFilteredData(null);
+    setSearchInput("");
+  };
+
+  // Fetch data from API
+  const fetchData = async () => {
+    if (!id) return;
+
+    setIsLoading(true);
+    setData([]);
+    setFilterData([]);
+    try {
+      const response = await GetPostnatalCareByPatientApi(id);
+
+      if (response?.status === true) {
+        const records = response.queryresult || [];
+        setData(records);
+        setFilterData(records);
+      }
+    } catch (error) {
+      console.error("Error fetching postnatal care data:", error);
+      toast({
+        title: "Error",
+        description: error.message || "Failed to fetch postnatal care records",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [id]);
+
+  const handleCreate = () => {
+    setSelectedRecord(null);
+    setModalMode("create");
+    onOpen();
+  };
+
+  const handleEdit = (record) => {
+    setSelectedRecord(record);
+    setModalMode("edit");
+    onOpen();
+  };
+
+  const handleView = (record) => {
+    setSelectedRecord(record);
+    setModalMode("view");
+    onOpen();
+  };
 
   return (
-    <Box>
-      <HStack justifyContent="space-between" mb={4}>
-        <Text color={titleTextColor} fontWeight="600" fontSize="18px">
-          Postnatal Care Records
-        </Text>
-        <Button onClick={onOpen}>
+    <Box
+      bg="#fff"
+      border="1px solid #EFEFEF"
+      mt="10px"
+      py="17px"
+      px={["18px", "18px"]}
+      rounded="10px"
+    >
+      {isLoading && <Preloader />}
+
+      {/* Filter section */}
+      <Flex justifyContent="space-between" flexWrap="wrap">
+        <Flex
+          alignItems="center"
+          flexWrap="wrap"
+          bg="#E4F3FF"
+          rounded="7px"
+          py="3.5px"
+          px="5px"
+          cursor="pointer"
+          mt={["10px", "10px", "0px", "0px"]}
+        >
+          <Box borderRight="1px solid #EDEFF2" pr="5px">
+            <Text
+              py="8.5px"
+              px="12px"
+              bg="#fff"
+              rounded="7px"
+              color={"#1F2937"}
+              fontWeight={"500"}
+              fontSize={"13px"}
+            >
+              All{" "}
+              <Box color="#667085" as="span" fontWeight="400" fontSize="13px">
+                ({data.length})
+              </Box>
+            </Text>
+          </Box>
+        </Flex>
+
+        <Flex
+          flexWrap="wrap"
+          mt={["10px", "10px", "0px", "0px"]}
+          alignItems="center"
+          justifyContent={"flex-end"}
+        >
+          <HStack>
+            <Input
+              label="Search"
+              onChange={(e) => setSearchInput(e.target.value)}
+              value={searchInput}
+              bColor="#E4E4E4"
+              leftIcon={<BiSearch />}
+            />
+
+            <Menu isLazy>
+              <MenuButton as={Box}>
+                <HStack
+                  border="1px solid #EA5937"
+                  rounded="7px"
+                  cursor="pointer"
+                  py="11.64px"
+                  px="16.98px"
+                  bg="#f8ddd1"
+                  color="blue.blue500"
+                  fontWeight="500"
+                  fontSize="14px"
+                >
+                  <Text>Filter</Text>
+                  <IoFilter />
+                </HStack>
+              </MenuButton>
+              <MenuList>
+                <MenuItem
+                  onClick={() => filterBy("typeOfVisit")}
+                  textTransform="capitalize"
+                  fontWeight={"500"}
+                  color="#2F2F2F"
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                >
+                  By Visit Type
+                </MenuItem>
+                <MenuItem
+                  onClick={() => filterBy("parity")}
+                  textTransform="capitalize"
+                  fontWeight={"500"}
+                  color="#2F2F2F"
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                >
+                  By Parity
+                </MenuItem>
+                <MenuItem
+                  onClick={() => filterBy("sexOfChild")}
+                  textTransform="capitalize"
+                  fontWeight={"500"}
+                  color="#2F2F2F"
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                >
+                  By Sex of Child
+                </MenuItem>
+                <MenuItem
+                  onClick={() => filterBy("kangarooMotherCare")}
+                  textTransform="capitalize"
+                  fontWeight={"500"}
+                  color="#2F2F2F"
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                >
+                  By Kangaroo Care
+                </MenuItem>
+                <MenuItem
+                  onClick={() => filterBy("outcomeOfVisit.visit")}
+                  textTransform="capitalize"
+                  fontWeight={"500"}
+                  color="#2F2F2F"
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                >
+                  By Visit Outcome
+                </MenuItem>
+                <MenuItem
+                  onClick={clearFilter}
+                  textTransform="capitalize"
+                  fontWeight={"500"}
+                  color="#2F2F2F"
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                >
+                  Clear filter
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          </HStack>
+        </Flex>
+      </Flex>
+
+      <Flex
+        justifyContent="space-between"
+        flexWrap="wrap"
+        mt={["10px", "10px", "10px", "10px"]}
+      >
+        <Button
+          rightIcon={<SlPlus />}
+          w={["100%", "100%", "154px", "154px"]}
+          px={"120px"}
+          onClick={handleCreate}
+        >
           Add New Record
         </Button>
-      </HStack>
+      </Flex>
 
+      {/* Table section */}
       <Box
-        bg={bgColor}
-        border={`1px solid ${borderColor}`}
-        p="15px"
+        bg="#fff"
+        border="1px solid #EFEFEF"
+        mt="12px"
+        py="15px"
+        px="15px"
         rounded="10px"
         overflowX="auto"
       >
+        <Text mb="20px" fontWeight="700" fontSize="16px" color="blue.blue500">
+          Postnatal Care History
+        </Text>
+
         <TableContainer>
           <Table variant="striped">
-            <Thead bg={bgColor}>
+            <Thead bg="#fff">
               <Tr>
-                <Th fontSize="13px" textTransform="capitalize" color={subTitleTextColor} fontWeight="600">
-                  Date/Time
+                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  Visit Date
                 </Th>
-                <Th fontSize="13px" textTransform="capitalize" color={subTitleTextColor} fontWeight="600">
+                <Th fontSize="13px" color="#534D59" fontWeight="600">
                   Visit Type
                 </Th>
-                <Th fontSize="13px" textTransform="capitalize" color={subTitleTextColor} fontWeight="600">
-                  Mother's Condition
+                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  Parity
                 </Th>
-                <Th fontSize="13px" textTransform="capitalize" color={subTitleTextColor} fontWeight="600">
-                  Baby's Condition
+                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  Mother Weeks/Days
                 </Th>
-                <Th fontSize="13px" textTransform="capitalize" color={subTitleTextColor} fontWeight="600">
-                  Breastfeeding
+                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  Newborn Weeks/Days
                 </Th>
-                <Th fontSize="13px" textTransform="capitalize" color={subTitleTextColor} fontWeight="600">
-                  Complications
+                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  Sex of Child
                 </Th>
-                <Th fontSize="13px" textTransform="capitalize" color={subTitleTextColor} fontWeight="600">
-                  Next Visit
+                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  Kangaroo Care
                 </Th>
-                <Th fontSize="13px" textTransform="capitalize" color={subTitleTextColor} fontWeight="600">
+                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  Babies Delivered
+                </Th>
+                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  Visit Outcome
+                </Th>
+                <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  Recorded By
+                </Th>
+                <Th fontSize="13px" color="#534D59" fontWeight="600">
                   Actions
                 </Th>
               </Tr>
             </Thead>
             <Tbody>
-              <Tr>
-                <Td colSpan={8}>
-                  <Text textAlign="center" mt="32px" color={textColor}>
-                    No postnatal care records found
-                  </Text>
-                </Td>
-              </Tr>
+              {currentRecords.length > 0 ? (
+                currentRecords.map((item, i) => (
+                  <Tr key={i}>
+                    <Td fontSize="14px" color={textColor}>
+                      {moment(item.createdAt).format("DD/MM/YYYY")}
+                    </Td>
+                    <Td fontSize="14px" color={textColor}>
+                      {item.typeOfVisit}
+                    </Td>
+                    <Td fontSize="14px" color={textColor}>
+                      {item.parity}
+                    </Td>
+                    <Td fontSize="14px" color={textColor}>
+                      {item.motherWeeks}/{item.motherDays}
+                    </Td>
+                    <Td fontSize="14px" color={textColor}>
+                      {item.newBornWeeks}/{item.newBornDays}
+                    </Td>
+                    <Td fontSize="14px" color={textColor}>
+                      {item.sexOfChild}
+                    </Td>
+                    <Td fontSize="14px" color={textColor}>
+                      {item.kangarooMotherCare}
+                    </Td>
+                    <Td fontSize="14px" color={textColor}>
+                      {item.numberOfBabiesDelivered}
+                    </Td>
+                    <Td fontSize="14px" color={textColor}>
+                      {item.outcomeOfVisit?.outcomeOfVisit}
+                    </Td>
+                    <Td fontSize="14px" color={textColor}>
+                      {item.doctor?.firstName} {item.doctor?.lastName}
+                    </Td>
+                    <Td>
+                      <Menu>
+                        <MenuButton>
+                          <Box as={BsThreeDots} />
+                        </MenuButton>
+                        <MenuList>
+                          <MenuItem onClick={() => handleView(item)}>
+                            View
+                          </MenuItem>
+                          <MenuItem onClick={() => handleEdit(item)}>
+                            Edit
+                          </MenuItem>
+                        </MenuList>
+                      </Menu>
+                    </Td>
+                  </Tr>
+                ))
+              ) : (
+                <Tr>
+                  <Td colSpan={11}>
+                    <Text textAlign="center" mt="32px" color={textColor}>
+                      No postnatal care records found
+                    </Text>
+                  </Td>
+                </Tr>
+              )}
             </Tbody>
           </Table>
         </TableContainer>
       </Box>
 
+      <Pagination
+        postPerPage={postPerPage}
+        currentPage={currentPage}
+        totalPosts={(filteredData || filterData).length}
+        paginate={paginate}
+      />
+
       <PostnatalCareModal
         isOpen={isOpen}
         onClose={onClose}
+        mode={modalMode}
+        data={selectedRecord}
         patientId={id}
+        fetchData={fetchData}
       />
     </Box>
   );
