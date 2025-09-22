@@ -7,365 +7,751 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  Text,
-  SimpleGrid,
-  Textarea,
+  FormControl,
+  FormLabel,
+  Input,
   Select,
+  Textarea,
+  Grid,
+  GridItem,
+  SimpleGrid,
   Box,
+  Text,
+  Flex,
+  HStack,
+  Badge,
 } from "@chakra-ui/react";
 import Button from "./Button";
-import Input from "./Input";
-import { useColors } from "../Utils/colors";
+import ShowToast from "./ToastNotification";
+import {
+  CreatePostnatalCareApi,
+  UpdatePostnatalCareApi,
+  GetPostnatalCareByIdApi,
+  SettingsApi,
+} from "../Utils/ApiCalls";
+import { IoIosCloseCircle } from "react-icons/io";
+import { SlPlus } from "react-icons/sl";
 
 export default function PostnatalCareModal({
   isOpen,
   onClose,
-  type,
-  record,
+  mode,
+  data,
   patientId,
-  activateNotifications,
-  onSuccess,
+  fetchData,
 }) {
-  const {
-    bgColor,
-    textColor,
-    titleTextColor,
-    primaryColor,
-  } = useColors();
-
   const [formData, setFormData] = useState({
-    daysPostDelivery: "",
-    motherCondition: "",
-    babyCondition: "",
-    breastfeeding: "",
-    breastfeedingIssues: "",
-    motherTemperature: "",
-    motherBloodPressure: "",
-    motherPulse: "",
-    motherRespiratoryRate: "",
-    babyWeight: "",
-    babyTemperature: "",
-    feedingAmount: "",
-    uterineInvolution: "",
-    lochia: "",
-    perinealHealing: "",
-    contraceptionDiscussed: "",
-    immunizations: "",
-    complications: "",
-    notes: "",
+    typeOfVisit: "",
+    parity: "",
+    motherWeeks: "",
+    motherDays: "",
+    newBornWeeks: "",
+    newBornDays: "",
+    sexOfChild: "",
+    kangarooMotherCare: "",
+    numberOfBabiesDelivered: "",
+    outcomeOfVisit: {
+      visit: "",
+      visitFor: "",
+      outcomeOfVisit: "",
+      associatedProblems: "",
+      services: [],
+      neonatalComplications: [],
+      counselling: [],
+    },
   });
 
+  const [servicesInput, setServicesInput] = useState("");
+  const [complicationsInput, setComplicationsInput] = useState("");
+  const [counsellingInput, setCounsellingInput] = useState("");
+
+  const [settings, setSettings] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showToast, setShowToast] = useState({
+    show: false,
+    message: "",
+    status: "",
+  });
+
+  const isReadOnly = mode === "view";
+
+  // Get enum values from settings using the correct keys
+  const getEnumValues = (fieldName) => {
+    if (!settings || !settings[fieldName]) return [];
+    return Array.isArray(settings[fieldName]) ? settings[fieldName] : [];
+  };
+
+  const activateNotifications = (message, status) => {
+    setShowToast({
+      show: true,
+      message: message,
+      status: status,
+    });
+
+    setTimeout(() => {
+      setShowToast({
+        show: false,
+        message: "",
+        status: "",
+      });
+    }, 5000);
+  };
 
   useEffect(() => {
-    if (type === "edit" && record) {
-      setFormData(record);
-    } else if (type === "create") {
-      setFormData({
-        daysPostDelivery: "",
-        motherCondition: "",
-        babyCondition: "",
-        breastfeeding: "",
-        breastfeedingIssues: "",
-        motherTemperature: "",
-        motherBloodPressure: "",
-        motherPulse: "",
-        motherRespiratoryRate: "",
-        babyWeight: "",
-        babyTemperature: "",
-        feedingAmount: "",
-        uterineInvolution: "",
-        lochia: "",
-        perinealHealing: "",
-        contraceptionDiscussed: "",
-        immunizations: "",
-        complications: "",
-        notes: "",
-      });
-    }
-  }, [type, record, isOpen]);
+    const fetchSettings = async () => {
+      try {
+        const response = await SettingsApi();
+        setSettings(response);
+      } catch (error) {
+        console.error("Error fetching settings:", error);
+        activateNotifications("Failed to fetch settings.", "error");
+      }
+    };
 
-  const handleInputChange = (name, value) => {
-    setFormData(prev => ({
+    if (isOpen) {
+      fetchSettings();
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    if ((mode === "edit" || mode === "view") && data) {
+      const recordId = data._id;
+      const fetchRecordData = async () => {
+        setIsLoading(true);
+        try {
+          const response = await GetPostnatalCareByIdApi(recordId);
+          if (response.status === true) {
+            const record = response.queryresult;
+            setFormData({
+              typeOfVisit: record.typeOfVisit || "",
+              parity: record.parity || "",
+              motherWeeks: record.motherWeeks || "",
+              motherDays: record.motherDays || "",
+              newBornWeeks: record.newBornWeeks || "",
+              newBornDays: record.newBornDays || "",
+              sexOfChild: record.sexOfChild || "",
+              kangarooMotherCare: record.kangarooMotherCare || "",
+              numberOfBabiesDelivered: record.numberOfBabiesDelivered || "",
+              outcomeOfVisit: record.outcomeOfVisit || {
+                visit: "",
+                visitFor: "",
+                outcomeOfVisit: "",
+                associatedProblems: "",
+                services: [],
+                neonatalComplications: [],
+                counselling: [],
+              },
+            });
+          }
+        } catch (error) {
+          console.error("Error fetching record data:", error);
+          activateNotifications("Failed to fetch record data.", "error");
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      fetchRecordData();
+    } else {
+      setFormData({
+        typeOfVisit: "",
+        parity: "",
+        motherWeeks: "",
+        motherDays: "",
+        newBornWeeks: "",
+        newBornDays: "",
+        sexOfChild: "",
+        kangarooMotherCare: "",
+        numberOfBabiesDelivered: "",
+        outcomeOfVisit: {
+          visit: "",
+          visitFor: "",
+          outcomeOfVisit: "",
+          associatedProblems: "",
+          services: [],
+          neonatalComplications: [],
+          counselling: [],
+        },
+      });
+      setServicesInput("");
+      setComplicationsInput("");
+      setCounsellingInput("");
+    }
+  }, [mode, data, isOpen]);
+
+  const handleChange = (e) => {
+    if (isReadOnly) return; // Prevent changes in view mode
+
+    const { name, value } = e.target;
+
+    if (name.startsWith("outcomeOfVisit.")) {
+      const field = name.split(".")[1];
+      setFormData((prev) => ({
+        ...prev,
+        outcomeOfVisit: {
+          ...prev.outcomeOfVisit,
+          [field]: value,
+        },
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
+  };
+
+  // Add service to array
+  const addService = () => {
+    if (isReadOnly || !servicesInput) return;
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      outcomeOfVisit: {
+        ...prev.outcomeOfVisit,
+        services: [...prev.outcomeOfVisit.services, servicesInput],
+      },
+    }));
+    setServicesInput("");
+  };
+
+  // Remove service from array
+  const removeService = (service) => {
+    if (isReadOnly) return;
+    setFormData((prev) => ({
+      ...prev,
+      outcomeOfVisit: {
+        ...prev.outcomeOfVisit,
+        services: prev.outcomeOfVisit.services.filter((s) => s !== service),
+      },
+    }));
+  };
+
+  // Add complication to array
+  const addComplication = () => {
+    if (isReadOnly || !complicationsInput) return;
+    setFormData((prev) => ({
+      ...prev,
+      outcomeOfVisit: {
+        ...prev.outcomeOfVisit,
+        neonatalComplications: [
+          ...prev.outcomeOfVisit.neonatalComplications,
+          complicationsInput,
+        ],
+      },
+    }));
+    setComplicationsInput("");
+  };
+
+  // Remove complication from array
+  const removeComplication = (complication) => {
+    if (isReadOnly) return;
+    setFormData((prev) => ({
+      ...prev,
+      outcomeOfVisit: {
+        ...prev.outcomeOfVisit,
+        neonatalComplications: prev.outcomeOfVisit.neonatalComplications.filter(
+          (c) => c !== complication
+        ),
+      },
+    }));
+  };
+
+  // Add counselling item to array
+  const addCounselling = () => {
+    if (isReadOnly || !counsellingInput) return;
+    setFormData((prev) => ({
+      ...prev,
+      outcomeOfVisit: {
+        ...prev.outcomeOfVisit,
+        counselling: [...prev.outcomeOfVisit.counselling, counsellingInput],
+      },
+    }));
+    setCounsellingInput("");
+  };
+
+  // Remove counselling item from array
+  const removeCounselling = (counsellingItem) => {
+    if (isReadOnly) return;
+    setFormData((prev) => ({
+      ...prev,
+      outcomeOfVisit: {
+        ...prev.outcomeOfVisit,
+        counselling: prev.outcomeOfVisit.counselling.filter(
+          (c) => c !== counsellingItem
+        ),
+      },
     }));
   };
 
   const handleSubmit = async () => {
+    if (isReadOnly) return;
+
     setIsLoading(true);
+    const payload = { ...formData, patient: patientId };
+
     try {
-      const message = type === "create" 
-        ? "Postnatal care record created successfully"
-        : "Postnatal care record updated successfully";
-      
-      activateNotifications(message, "success");
-      onSuccess();
-      onClose();
+      if (mode === "create") {
+        const response = await CreatePostnatalCareApi(payload);
+        if (response.status === true) {
+          activateNotifications("Record created successfully.", "success");
+          fetchData();
+          onClose();
+        } else {
+          activateNotifications(response.msg, "error");
+        }
+      } else if (mode === "edit") {
+        const response = await UpdatePostnatalCareApi(payload, data._id);
+        if (response.status === true) {
+          activateNotifications("Record updated successfully.", "success");
+          fetchData();
+          onClose();
+        } else {
+          activateNotifications(response.msg, "error");
+        }
+      }
     } catch (error) {
-      activateNotifications(error.message, "error");
+      console.error("Error submitting form:", error);
+      activateNotifications(
+        error?.response?.msg || "Failed to save record.",
+        "error"
+      );
     } finally {
       setIsLoading(false);
     }
   };
 
-  const isReadOnly = type === "view";
-  const modalTitle = type === "create" 
-    ? "Add Postnatal Care Record"
-    : type === "edit" 
-    ? "Edit Postnatal Care Record"
-    : "View Postnatal Care Record";
+  const modalTitle =
+    mode === "create"
+      ? "Add Postnatal Care Record"
+      : mode === "edit"
+      ? "Edit Postnatal Care Record"
+      : "View Postnatal Care Record";
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="6xl" isCentered>
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      size="6xl"
+      isCentered
+      scrollBehavior="inside"
+      blockScrollOnMount={false}
+    >
       <ModalOverlay />
-      <ModalContent bg={bgColor}>
-        <ModalHeader color={titleTextColor}>{modalTitle}</ModalHeader>
+      <ModalContent maxH="90vh">
+        {showToast.show && (
+          <ShowToast message={showToast.message} status={showToast.status} />
+        )}
+        <ModalHeader>{modalTitle}</ModalHeader>
         <ModalCloseButton />
-        <ModalBody>
-          <Text fontSize="16px" fontWeight="600" color={titleTextColor} mb="16px">
-            General Information
+        <ModalBody overflowY="auto" pb={6}>
+          <Text fontSize="16px" fontWeight="600" mb="16px">
+            Basic Information
           </Text>
-          <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={4}>
-            <Input
-              label="Days Post Delivery"
-              type="number"
-              value={formData.daysPostDelivery}
-              onChange={(e) => handleInputChange("daysPostDelivery", e.target.value)}
-              readOnly={isReadOnly}
-              placeholder="7"
-            />
+          <Grid templateColumns="repeat(2, 1fr)" gap={4} mb={6}>
+            <GridItem>
+              <FormControl>
+                <FormLabel>Type of Visit</FormLabel>
+                <Select
+                  name="typeOfVisit"
+                  value={formData.typeOfVisit}
+                  onChange={handleChange}
+                  isReadOnly={isReadOnly}
+                  isDisabled={isReadOnly}
+                  placeholder="Select visit type"
+                >
+                  {getEnumValues("typeOfVisit").map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </Select>
+              </FormControl>
+            </GridItem>
+            <GridItem>
+              <FormControl>
+                <FormLabel>Parity</FormLabel>
+                <Input
+                  name="parity"
+                  value={formData.parity}
+                  onChange={handleChange}
+                  isReadOnly={isReadOnly}
+                  placeholder="Enter parity"
+                />
+              </FormControl>
+            </GridItem>
+            <GridItem>
+              <FormControl>
+                <FormLabel>Mother Weeks</FormLabel>
+                <Input
+                  name="motherWeeks"
+                  value={formData.motherWeeks}
+                  onChange={handleChange}
+                  isReadOnly={isReadOnly}
+                  placeholder="Enter weeks"
+                />
+              </FormControl>
+            </GridItem>
+            <GridItem>
+              <FormControl>
+                <FormLabel>Mother Days</FormLabel>
+                <Input
+                  name="motherDays"
+                  value={formData.motherDays}
+                  onChange={handleChange}
+                  isReadOnly={isReadOnly}
+                  placeholder="Enter days"
+                />
+              </FormControl>
+            </GridItem>
+            <GridItem>
+              <FormControl>
+                <FormLabel>Newborn Weeks</FormLabel>
+                <Input
+                  name="newBornWeeks"
+                  value={formData.newBornWeeks}
+                  onChange={handleChange}
+                  isReadOnly={isReadOnly}
+                  placeholder="Enter weeks"
+                />
+              </FormControl>
+            </GridItem>
+            <GridItem>
+              <FormControl>
+                <FormLabel>Newborn Days</FormLabel>
+                <Input
+                  name="newBornDays"
+                  value={formData.newBornDays}
+                  onChange={handleChange}
+                  isReadOnly={isReadOnly}
+                  placeholder="Enter days"
+                />
+              </FormControl>
+            </GridItem>
+            <GridItem>
+              <FormControl>
+                <FormLabel>Sex of Child</FormLabel>
+                <Select
+                  name="sexOfChild"
+                  value={formData.sexOfChild}
+                  onChange={handleChange}
+                  isReadOnly={isReadOnly}
+                  isDisabled={isReadOnly}
+                  placeholder="Select sex"
+                >
+                  {getEnumValues("gender").map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </Select>
+              </FormControl>
+            </GridItem>
+            <GridItem>
+              <FormControl>
+                <FormLabel>Kangaroo Mother Care</FormLabel>
+                <Select
+                  name="kangarooMotherCare"
+                  value={formData.kangarooMotherCare}
+                  onChange={handleChange}
+                  isReadOnly={isReadOnly}
+                  isDisabled={isReadOnly}
+                  placeholder="Select care type"
+                >
+                  {getEnumValues("kangarooMotherCare").map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </Select>
+              </FormControl>
+            </GridItem>
+            <GridItem>
+              <FormControl>
+                <FormLabel>Number of Babies Delivered</FormLabel>
+                <Input
+                  type="number"
+                  name="numberOfBabiesDelivered"
+                  value={formData.numberOfBabiesDelivered}
+                  onChange={handleChange}
+                  isReadOnly={isReadOnly}
+                  placeholder="Enter number"
+                />
+              </FormControl>
+            </GridItem>
+          </Grid>
 
-            <Select
-              placeholder="Mother's condition"
-              value={formData.motherCondition}
-              onChange={(e) => handleInputChange("motherCondition", e.target.value)}
-              disabled={isReadOnly}
-            >
-              <option value="excellent">Excellent</option>
-              <option value="good">Good</option>
-              <option value="fair">Fair</option>
-              <option value="poor">Poor</option>
-            </Select>
-
-            <Select
-              placeholder="Baby's condition"
-              value={formData.babyCondition}
-              onChange={(e) => handleInputChange("babyCondition", e.target.value)}
-              disabled={isReadOnly}
-            >
-              <option value="excellent">Excellent</option>
-              <option value="good">Good</option>
-              <option value="fair">Fair</option>
-              <option value="poor">Poor</option>
-            </Select>
-          </SimpleGrid>
-
-          <Text fontSize="16px" fontWeight="600" color={titleTextColor} mb="16px" mt="24px">
-            Mother's Vitals
+          <Text fontSize="16px" fontWeight="600" mb="16px">
+            Outcome of Visit
           </Text>
-          <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={4}>
-            <Input
-              label="Temperature (°C)"
-              type="number"
-              step="0.1"
-              value={formData.motherTemperature}
-              onChange={(e) => handleInputChange("motherTemperature", e.target.value)}
-              readOnly={isReadOnly}
-              placeholder="36.5"
-            />
+          <Grid templateColumns="repeat(2, 1fr)" gap={4} mb={6}>
+            <GridItem>
+              <FormControl>
+                <FormLabel>Visit</FormLabel>
+                <Select
+                  name="outcomeOfVisit.visit"
+                  value={formData.outcomeOfVisit.visit}
+                  onChange={handleChange}
+                  isReadOnly={isReadOnly}
+                  isDisabled={isReadOnly}
+                  placeholder="Select visit"
+                >
+                  {getEnumValues("visit").map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </Select>
+              </FormControl>
+            </GridItem>
+            <GridItem>
+              <FormControl>
+                <FormLabel>Visit For</FormLabel>
+                <Input
+                  name="outcomeOfVisit.visitFor"
+                  value={formData.outcomeOfVisit.visitFor}
+                  onChange={handleChange}
+                  isReadOnly={isReadOnly}
+                  placeholder="Enter purpose of visit"
+                />
+              </FormControl>
+            </GridItem>
+            <GridItem>
+              <FormControl>
+                <FormLabel>Outcome of Visit</FormLabel>
+                <Select
+                  name="outcomeOfVisit.outcomeOfVisit"
+                  value={formData.outcomeOfVisit.outcomeOfVisit}
+                  onChange={handleChange}
+                  isReadOnly={isReadOnly}
+                  isDisabled={isReadOnly}
+                  placeholder="Select outcome"
+                >
+                  {getEnumValues("outcomeOfVisit").map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </Select>
+              </FormControl>
+            </GridItem>
+            <GridItem>
+              <FormControl>
+                <FormLabel>Associated Problems</FormLabel>
+                <Input
+                  name="outcomeOfVisit.associatedProblems"
+                  value={formData.outcomeOfVisit.associatedProblems}
+                  onChange={handleChange}
+                  isReadOnly={isReadOnly}
+                  placeholder="Enter associated problems"
+                />
+              </FormControl>
+            </GridItem>
 
-            <Input
-              label="Blood Pressure (mmHg)"
-              value={formData.motherBloodPressure}
-              onChange={(e) => handleInputChange("motherBloodPressure", e.target.value)}
-              readOnly={isReadOnly}
-              placeholder="120/80"
-            />
+            {/* Services */}
+            <GridItem colSpan={2}>
+              <FormControl>
+                <FormLabel>Services</FormLabel>
+                <Flex
+                  direction={{ base: "column", md: "row" }}
+                  alignItems="center"
+                >
+                  <Select
+                    value={servicesInput}
+                    onChange={(e) =>
+                      !isReadOnly && setServicesInput(e.target.value)
+                    }
+                    placeholder="Select service"
+                    isReadOnly={isReadOnly}
+                    isDisabled={isReadOnly}
+                    mr={2}
+                  >
+                    {getEnumValues("services").map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </Select>
+                  {!isReadOnly && (
+                    <Button
+                      mt={{ base: 2, md: 0 }}
+                      onClick={addService}
+                      rightIcon={<SlPlus />}
+                      disabled={!servicesInput}
+                    >
+                      Add
+                    </Button>
+                  )}
+                </Flex>
+                <SimpleGrid columns={{ base: 2, md: 3 }} spacing={2} mt={2}>
+                  {formData.outcomeOfVisit.services.map((service, idx) => (
+                    <Flex
+                      key={idx}
+                      cursor="pointer"
+                      px="10px"
+                      py="10px"
+                      rounded="full"
+                      bg="blue.blue500"
+                      color="white"
+                      fontSize="sm"
+                      _hover={{ bg: "blue.400" }}
+                      alignItems="center"
+                      justifyContent="space-between"
+                    >
+                      <Text fontWeight="medium">{service}</Text>
+                      {!isReadOnly && (
+                        <Box
+                          fontSize="lg"
+                          onClick={() => removeService(service)}
+                        >
+                          <IoIosCloseCircle />
+                        </Box>
+                      )}
+                    </Flex>
+                  ))}
+                </SimpleGrid>
+              </FormControl>
+            </GridItem>
 
-            <Input
-              label="Pulse (bpm)"
-              type="number"
-              value={formData.motherPulse}
-              onChange={(e) => handleInputChange("motherPulse", e.target.value)}
-              readOnly={isReadOnly}
-              placeholder="80"
-            />
-
-            <Input
-              label="Respiratory Rate"
-              type="number"
-              value={formData.motherRespiratoryRate}
-              onChange={(e) => handleInputChange("motherRespiratoryRate", e.target.value)}
-              readOnly={isReadOnly}
-              placeholder="16"
-            />
-          </SimpleGrid>
-
-          <Text fontSize="16px" fontWeight="600" color={titleTextColor} mb="16px" mt="24px">
-            Baby's Assessment
-          </Text>
-          <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={4}>
-            <Input
-              label="Baby Weight (kg)"
-              type="number"
-              step="0.1"
-              value={formData.babyWeight}
-              onChange={(e) => handleInputChange("babyWeight", e.target.value)}
-              readOnly={isReadOnly}
-              placeholder="3.2"
-            />
-
-            <Input
-              label="Baby Temperature (°C)"
-              type="number"
-              step="0.1"
-              value={formData.babyTemperature}
-              onChange={(e) => handleInputChange("babyTemperature", e.target.value)}
-              readOnly={isReadOnly}
-              placeholder="36.5"
-            />
-
-            <Input
-              label="Feeding Amount (ml)"
-              type="number"
-              value={formData.feedingAmount}
-              onChange={(e) => handleInputChange("feedingAmount", e.target.value)}
-              readOnly={isReadOnly}
-              placeholder="60"
-            />
-          </SimpleGrid>
-
-          <Text fontSize="16px" fontWeight="600" color={titleTextColor} mb="16px" mt="24px">
-            Breastfeeding & Recovery
-          </Text>
-          <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={4}>
-            <Select
-              placeholder="Breastfeeding status"
-              value={formData.breastfeeding}
-              onChange={(e) => handleInputChange("breastfeeding", e.target.value)}
-              disabled={isReadOnly}
-            >
-              <option value="exclusive">Exclusive Breastfeeding</option>
-              <option value="mixed">Mixed Feeding</option>
-              <option value="formula">Formula Feeding</option>
-              <option value="difficulties">Having Difficulties</option>
-            </Select>
-
-            <Select
-              placeholder="Uterine involution"
-              value={formData.uterineInvolution}
-              onChange={(e) => handleInputChange("uterineInvolution", e.target.value)}
-              disabled={isReadOnly}
-            >
-              <option value="normal">Normal</option>
-              <option value="delayed">Delayed</option>
-              <option value="subinvolution">Subinvolution</option>
-            </Select>
-
-            <Select
-              placeholder="Lochia"
-              value={formData.lochia}
-              onChange={(e) => handleInputChange("lochia", e.target.value)}
-              disabled={isReadOnly}
-            >
-              <option value="rubra">Lochia Rubra</option>
-              <option value="serosa">Lochia Serosa</option>
-              <option value="alba">Lochia Alba</option>
-              <option value="offensive">Offensive</option>
-              <option value="absent">Absent</option>
-            </Select>
-
-            <Select
-              placeholder="Perineal healing"
-              value={formData.perinealHealing}
-              onChange={(e) => handleInputChange("perinealHealing", e.target.value)}
-              disabled={isReadOnly}
-            >
-              <option value="healing-well">Healing Well</option>
-              <option value="delayed-healing">Delayed Healing</option>
-              <option value="infected">Infected</option>
-              <option value="dehisced">Dehisced</option>
-            </Select>
-
-            <Select
-              placeholder="Contraception discussed"
-              value={formData.contraceptionDiscussed}
-              onChange={(e) => handleInputChange("contraceptionDiscussed", e.target.value)}
-              disabled={isReadOnly}
-            >
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
-              <option value="declined">Declined</option>
-            </Select>
-
-            <Select
-              placeholder="Immunizations"
-              value={formData.immunizations}
-              onChange={(e) => handleInputChange("immunizations", e.target.value)}
-              disabled={isReadOnly}
-            >
-              <option value="up-to-date">Up to Date</option>
-              <option value="pending">Pending</option>
-              <option value="declined">Declined</option>
-            </Select>
-          </SimpleGrid>
-
-          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4} mt={4}>
-            <Box>
-              <Text fontSize="14px" fontWeight="500" color={textColor} mb="8px">
-                Breastfeeding Issues
-              </Text>
-              <Textarea
-                value={formData.breastfeedingIssues}
-                onChange={(e) => handleInputChange("breastfeedingIssues", e.target.value)}
-                readOnly={isReadOnly}
-                placeholder="Describe any breastfeeding difficulties or issues..."
-                rows={3}
-              />
-            </Box>
-
-            <Box>
-              <Text fontSize="14px" fontWeight="500" color={textColor} mb="8px">
-                Complications
-              </Text>
-              <Textarea
-                value={formData.complications}
-                onChange={(e) => handleInputChange("complications", e.target.value)}
-                readOnly={isReadOnly}
-                placeholder="List any complications or concerns..."
-                rows={3}
-              />
-            </Box>
-          </SimpleGrid>
-
-          <Box mt={4}>
-            <Text fontSize="14px" fontWeight="500" color={textColor} mb="8px">
-              Additional Notes
-            </Text>
-            <Textarea
-              value={formData.notes}
-              onChange={(e) => handleInputChange("notes", e.target.value)}
-              readOnly={isReadOnly}
-              placeholder="Any additional observations, instructions, or follow-up plans..."
-              rows={4}
-            />
-          </Box>
+            {/* Neonatal Complications */}
+            <GridItem colSpan={2}>
+              <FormControl>
+                <FormLabel>Neonatal Complications</FormLabel>
+                <Flex
+                  direction={{ base: "column", md: "row" }}
+                  alignItems="center"
+                >
+                  <Select
+                    value={complicationsInput}
+                    onChange={(e) =>
+                      !isReadOnly && setComplicationsInput(e.target.value)
+                    }
+                    placeholder="Select complication"
+                    isReadOnly={isReadOnly}
+                    isDisabled={isReadOnly}
+                    mr={2}
+                  >
+                    {getEnumValues("neonatalComplications").map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </Select>
+                  {!isReadOnly && (
+                    <Button
+                      mt={{ base: 2, md: 0 }}
+                      onClick={addComplication}
+                      rightIcon={<SlPlus />}
+                      disabled={!complicationsInput}
+                    >
+                      Add
+                    </Button>
+                  )}
+                </Flex>
+                <SimpleGrid columns={{ base: 2, md: 3 }} spacing={2} mt={2}>
+                  {formData.outcomeOfVisit.neonatalComplications.map(
+                    (complication, idx) => (
+                      <Flex
+                        key={idx}
+                        cursor="pointer"
+                        px="10px"
+                        py="10px"
+                        rounded="full"
+                        bg="blue.blue500"
+                        color="white"
+                        fontSize="sm"
+                        _hover={{ bg: "red.400" }}
+                        alignItems="center"
+                        justifyContent="space-between"
+                      >
+                        <Text fontWeight="medium">{complication}</Text>
+                        {!isReadOnly && (
+                          <Box
+                            fontSize="lg"
+                            onClick={() => removeComplication(complication)}
+                          >
+                            <IoIosCloseCircle />
+                          </Box>
+                        )}
+                      </Flex>
+                    )
+                  )}
+                </SimpleGrid>
+              </FormControl>
+            </GridItem>
+            {/* Counselling */}
+            <GridItem colSpan={2}>
+              <FormControl>
+                <FormLabel>Counselling</FormLabel>
+                <Flex
+                  direction={{ base: "column", md: "row" }}
+                  alignItems="center"
+                >
+                  <Select
+                    value={counsellingInput}
+                    onChange={(e) =>
+                      !isReadOnly && setCounsellingInput(e.target.value)
+                    }
+                    placeholder="Select counselling topic"
+                    isReadOnly={isReadOnly}
+                    isDisabled={isReadOnly}
+                    mr={2}
+                  >
+                    {getEnumValues("counselling").map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </Select>
+                  {!isReadOnly && (
+                    <Button
+                      mt={{ base: 2, md: 0 }}
+                      onClick={addCounselling}
+                      rightIcon={<SlPlus />}
+                      disabled={!counsellingInput}
+                    >
+                      Add
+                    </Button>
+                  )}
+                </Flex>
+                <SimpleGrid columns={{ base: 2, md: 3 }} spacing={2} mt={2}>
+                  {formData.outcomeOfVisit.counselling.map(
+                    (counsellingItem, idx) => (
+                      <Flex
+                        key={idx}
+                        cursor="pointer"
+                        px="10px"
+                        py="10px"
+                        rounded="full"
+                        bg="blue.blue500"
+                        color="white"
+                        fontSize="sm"
+                        _hover={{ bg: "blue.400" }}
+                        alignItems="center"
+                        justifyContent="space-between"
+                      >
+                        <Text fontWeight="medium">{counsellingItem}</Text>
+                        {!isReadOnly && (
+                          <Box
+                            fontSize="lg"
+                            onClick={() => removeCounselling(counsellingItem)}
+                          >
+                            <IoIosCloseCircle />
+                          </Box>
+                        )}
+                      </Flex>
+                    )
+                  )}
+                </SimpleGrid>
+              </FormControl>
+            </GridItem>
+          </Grid>
         </ModalBody>
-
         <ModalFooter>
-          <Button variant="outline" mr={3} onClick={onClose}>
-            {isReadOnly ? "Close" : "Cancel"}
+          <Button variant="ghost" mr={3} onClick={onClose}>
+            Cancel
           </Button>
-          {!isReadOnly && (
-            <Button
-              bg={primaryColor}
-              color="white"
-              _hover={{ bg: primaryColor }}
-              onClick={handleSubmit}
-              isLoading={isLoading}
-            >
-              {type === "create" ? "Create Record" : "Update Record"}
+          {mode !== "view" && (
+            <Button onClick={handleSubmit} isLoading={isLoading}>
+              {mode === "create" ? "Save" : "Update"}
             </Button>
           )}
         </ModalFooter>

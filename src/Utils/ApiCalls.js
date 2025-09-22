@@ -10297,3 +10297,260 @@ export const GetThirdStageLabourByIdApi = (id) => {
       }
     });
 };
+export const CreateBirthRegisterApi = (payload) => {
+  const data = JSON.stringify(payload);
+  const config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/maternity/birth-register/create`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data,
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      console.log("Birth Register created:", JSON.stringify(response.data));
+      return response.data;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response?.data?.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response?.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
+
+export const GetBirthRegisterByPatientApi = (patientId) => {
+  const config = {
+    method: "get",
+    url: `${baseUrl}/maternity/birth-register/patient/${patientId}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      console.log("Birth Register data retrieved:", response.data);
+      return response.data;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response?.data?.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response?.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
+
+export const UpdateBirthRegisterApi = (payload, id) => {
+  const data = JSON.stringify(payload);
+  const config = {
+    method: "put",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/maternity/birth-register/update/${id}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data,
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      console.log("Birth Register updated:", JSON.stringify(response.data));
+      return response.data;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response?.data?.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response?.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
+
+export const GetBirthRegisterByIdApi = (id) => {
+  const config = {
+    method: "get",
+    url: `${baseUrl}/maternity/birth-register/get/${id}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      console.log("Birth Register data retrieved:", response.data);
+      return response.data;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response?.data?.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response?.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
+// Postnatal Care API Calls
+export const CreatePostnatalCareApi = (payload) => {
+  const data = JSON.stringify(payload);
+  const config = {
+    method: "post",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/maternity/postnatal-care/create`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data,
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      console.log(
+        "Postnatal Care created:",
+        JSON.stringify(response.data)
+      );
+      return response.data;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response?.data?.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response?.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
+
+export const GetPostnatalCareByPatientApi = (patientId) => {
+  const config = {
+    method: "get",
+    url: `${baseUrl}/maternity/postnatal-care/patient/${patientId}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      console.log("Postnatal Care data retrieved:", response.data);
+      return response.data;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response?.data?.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response?.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
+
+export const UpdatePostnatalCareApi = (payload, id) => {
+  const data = JSON.stringify(payload);
+  const config = {
+    method: "put",
+    maxBodyLength: Infinity,
+    url: `${baseUrl}/maternity/postnatal-care/update/${id}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    data,
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      console.log(
+        "Postnatal Care updated:",
+        JSON.stringify(response.data)
+      );
+      return response.data;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response?.data?.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response?.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
+
+export const GetPostnatalCareByIdApi = (id) => {
+  const config = {
+    method: "get",
+    url: `${baseUrl}/maternity/postnatal-care/get/${id}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      console.log("Postnatal Care data retrieved:", response.data);
+      return response.data;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response?.data?.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response?.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
