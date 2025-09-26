@@ -400,6 +400,24 @@ export default function SummaryReport() {
           localStorage.setItem("reportGrandTotal", JSON.stringify(grandTotal));
           localStorage.setItem("reportCategory", QueryType);
           nav("/dashboard/report-analytics/print-summary");
+        } else if (QueryType === "maternity") {
+          const grandTotal = Object.values(result.queryresult).reduce(
+            (acc, curr) => {
+              acc.male += curr.male || 0;
+              acc.female += curr.female || 0;
+              acc.total += curr.total || 0;
+              return acc;
+            },
+            { male: 0, female: 0, total: 0 }
+          );
+
+          localStorage.setItem(
+            "reportSummary",
+            JSON.stringify(result.queryresult)
+          );
+          localStorage.setItem("reportGrandTotal", JSON.stringify(grandTotal));
+          localStorage.setItem("reportCategory", QueryType);
+          nav("/dashboard/report-analytics/print-summary");
         }
       }
     } catch (e) {
