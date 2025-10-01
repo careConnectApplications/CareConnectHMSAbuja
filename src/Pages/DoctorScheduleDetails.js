@@ -27,6 +27,7 @@ import MainLayout from "../Layouts/Index";
 import Seo from "../Utils/Seo";
 import Examine from "./Examine";
 import ClinicalEncounter from "./ClinicalEncounter";
+import PatientConsent from "./PatientConsent";
 import SingleLabReport from "./SingleLabReport";
 import Prescription from "./Prescription";
 import SingleAdmission from "./SingleAdmission";
@@ -169,13 +170,14 @@ export default function DoctorScheduleDetails() {
           >
             Clinical Encounter{" "}
           </Tab>
-
           <Tab
             _focus={{ outline: "none" }}
             _selected={{ color: primaryColor, fontWeight: "700" }}
           >
-            Custom Billing
+            Consent Form {" "}
           </Tab>
+
+          
 
           <Tab
             _focus={{ outline: "none" }}
@@ -196,6 +198,13 @@ export default function DoctorScheduleDetails() {
             _selected={{ color: primaryColor, fontWeight: "700" }}
           >
             Family Planning{" "}
+          </Tab>
+
+          <Tab
+            _focus={{ outline: "none" }}
+            _selected={{ color: primaryColor, fontWeight: "700" }}
+          >
+            Generate Bill
           </Tab>
 
           <Tab
@@ -330,7 +339,7 @@ export default function DoctorScheduleDetails() {
             <ClinicalEncounter index={1} id={id} />
           </TabPanel>
           <TabPanel p="0">
-            <CustomBilling />
+            <PatientConsent index={1} id={id} />
           </TabPanel>
           <TabPanel p="0">
             <SingleDeliveryNote />
@@ -340,6 +349,9 @@ export default function DoctorScheduleDetails() {
           </TabPanel>
           <TabPanel p="0">
             <SingleFamilyPlanning />
+          </TabPanel>
+            <TabPanel p="0">
+            <CustomBilling />
           </TabPanel>
           <TabPanel p="0">
             <SingleHistopathology />

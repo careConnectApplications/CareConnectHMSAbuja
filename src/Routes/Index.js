@@ -65,8 +65,10 @@ import SingleTheatreReferPage from "../Pages/SingleTheatreReferPage";
 import TheatreTimeline from "../Pages/TheatreTimeline";
 import AddNewPreAnathetics from "../Pages/AddNewPreAnathetics";
 import AddOperationalConsent from "../Pages/AddOperationalConsent";
+import AddPatientConsent from "../Pages/AddPatientConsent";
 import EditPreAnathetics from "../Pages/EditPreAnathetics";
 import EditOperationConsent from "../Pages/EditOperationConsent";
+import EditPatientConsent from "../Pages/EditPatientConsent";
 import CashierReport from "../Pages/CashierReport";
 import EditTheatrePrevisitDocumentation from "../Pages/EditTheatrePrevisitDocumentation";
 import AddTheatrePrevisitDocumentation from "../Pages/AddTheatrePrevisitDocumentation";
@@ -337,6 +339,10 @@ export default function IndexRoutes() {
               element={<AddOperationalConsent />}
             />
             <Route
+              path="/dashboard/add-new-patient-consent/:id"
+              element={<AddPatientConsent />}
+            />
+            <Route
               path="/dashboard/add-theatre-previsit-documentation/:id"
               element={<AddTheatrePrevisitDocumentation />}
             />
@@ -351,6 +357,10 @@ export default function IndexRoutes() {
             <Route
               path="/dashboard/edit-operational-consent/:id"
               element={<EditOperationConsent />}
+            />
+            <Route
+              path="/dashboard/edit-patient-consent/:id"
+              element={<EditPatientConsent />}
             />
             <Route
               path="/dashboard/edit-theatre-previsit-documentation/:id"
