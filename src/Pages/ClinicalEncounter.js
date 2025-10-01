@@ -830,7 +830,7 @@ export default function ClinicalEncounter({ hide = false, index }) {
                                         localStorage.setItem("pathname", pathname)
                                         localStorage.setItem("oldEncounter", JSON.stringify(item))
 
-                                    }}>Complete Encounter</Button>
+                                    }}>Continue With Encounter</Button>
                                 )
                             }
                             {item.status === "complete" && (

@@ -168,13 +168,13 @@ export default function CreateCustomBillModal({ isOpen, onClose }) {
     <Modal isOpen={isOpen} onClose={onClose} isCentered size="lg">
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Create Custom Bill</ModalHeader>
+        <ModalHeader>Generate New Bill</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <RadioGroup onChange={handleBillTypeChange} value={billType} mb={4}>
             <Stack direction="row" spacing={5}>
               <Radio value="custom">Custom Bill</Radio>
-              <Radio value="fixed">Fix Bill</Radio>
+              <Radio value="fixed">Fixed Bill</Radio>
             </Stack>
           </RadioGroup>
 
@@ -274,7 +274,7 @@ export default function CreateCustomBillModal({ isOpen, onClose }) {
 
         <ModalFooter>
           <Button isLoading={loading} onClick={handleSubmit}>
-            Save
+            Generate 
           </Button>
         </ModalFooter>
       </ModalContent>

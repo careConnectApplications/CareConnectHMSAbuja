@@ -59,7 +59,7 @@ export default function CustomBilling() {
         mt={["10px", "10px", "10px", "10px"]}
         w={["100%", "100%", "50%", "37%"]}
       >
-        <Button rightIcon={<SlPlus />} onClick={onOpen} colorScheme="blue">Add Custom Bill</Button>
+        <Button rightIcon={<SlPlus />} onClick={onOpen} colorScheme="blue">Generate Bill</Button>
 
       </Flex>
 
