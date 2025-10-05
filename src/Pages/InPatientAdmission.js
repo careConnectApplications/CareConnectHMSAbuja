@@ -494,6 +494,9 @@ const InPatientAdmission = () => {
                   <Thead bg={bgColor}>
                     <Tr>
                       <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
+                        Actions
+                      </Th>
+                      <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                         Patient Name
                       </Th>
                       <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
@@ -513,9 +516,6 @@ const InPatientAdmission = () => {
                       </Th>
                       <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
                         Status
-                      </Th>
-                      <Th fontSize="13px" color={subTitleTextColor} fontWeight="600">
-                        Actions
                       </Th>
                     </Tr>
                   </Thead>

@@ -197,6 +197,7 @@ export default function WardManagement() {
           <Table variant="striped">
             <Thead bg="#fff">
               <Tr>
+                <Th fontSize="13px" color="#534D59" fontWeight="600">Actions</Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">S/N</Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">Created Date</Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">Bed Specialization</Th>
@@ -205,7 +206,6 @@ export default function WardManagement() {
                 <Th fontSize="13px" color="#534D59" fontWeight="600">Vacant Bed</Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">Price</Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">Status</Th>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">Actions</Th>
               </Tr>
             </Thead>
             <Tbody>

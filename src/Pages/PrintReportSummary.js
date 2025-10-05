@@ -1739,6 +1739,571 @@ export default function PrintReportSummary() {
             </Box>
           </>
         )}
+
+        {Category === "disease cases" && Data?.diseases && (
+          <>
+            {/* New Cases Table */}
+            <Text fontSize="18px" fontWeight="700" mt="20px" mb="3" color={titleTextColor}>
+              NEW CASES
+            </Text>
+            <TableContainer>
+              <Table variant="striped" size="sm">
+                <Thead>
+                  <Tr>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color={subTitleTextColor}
+                      fontWeight="600"
+                      rowSpan={3}
+                    >
+                      S/N
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color={subTitleTextColor}
+                      fontWeight="600"
+                      rowSpan={3}
+                      minW="200px"
+                    >
+                      Disease Case
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color={subTitleTextColor}
+                      fontWeight="600"
+                      colSpan={4}
+                      textAlign="center"
+                    >
+                      Male
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color={subTitleTextColor}
+                      fontWeight="600"
+                      colSpan={4}
+                      textAlign="center"
+                    >
+                      Female
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color={subTitleTextColor}
+                      fontWeight="600"
+                      rowSpan={3}
+                      isNumeric
+                    >
+                      Total New Cases
+                    </Th>
+                  </Tr>
+                  <Tr>
+                    {/* Male age groups */}
+                    <Th fontSize="12px" isNumeric>&lt;5</Th>
+                    <Th fontSize="12px" isNumeric>&lt;15</Th>
+                    <Th fontSize="12px" isNumeric>15-19</Th>
+                    <Th fontSize="12px" isNumeric>20+</Th>
+                    {/* Female age groups */}
+                    <Th fontSize="12px" isNumeric>&lt;5</Th>
+                    <Th fontSize="12px" isNumeric>&lt;15</Th>
+                    <Th fontSize="12px" isNumeric>15-19</Th>
+                    <Th fontSize="12px" isNumeric>20+</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {Data.diseases.map((item, i) => {
+                    const newCasesTotal = 
+                      (item.newCases?.male?.["<5"] || 0) +
+                      (item.newCases?.male?.["<15"] || 0) +
+                      (item.newCases?.male?.["15-19"] || 0) +
+                      (item.newCases?.male?.["20+"] || 0) +
+                      (item.newCases?.female?.["<5"] || 0) +
+                      (item.newCases?.female?.["<15"] || 0) +
+                      (item.newCases?.female?.["15-19"] || 0) +
+                      (item.newCases?.female?.["20+"] || 0);
+
+                    return (
+                      <Tr key={i}>
+                        <Td fontSize="12px">{item.sn || i + 1}</Td>
+                        <Td fontSize="12px" whiteSpace="normal">
+                          {item.case}
+                        </Td>
+                        {/* Male new cases */}
+                        <Td fontSize="12px" isNumeric>
+                          {item.newCases?.male?.["<5"] || 0}
+                        </Td>
+                        <Td fontSize="12px" isNumeric>
+                          {item.newCases?.male?.["<15"] || 0}
+                        </Td>
+                        <Td fontSize="12px" isNumeric>
+                          {item.newCases?.male?.["15-19"] || 0}
+                        </Td>
+                        <Td fontSize="12px" isNumeric>
+                          {item.newCases?.male?.["20+"] || 0}
+                        </Td>
+                        {/* Female new cases */}
+                        <Td fontSize="12px" isNumeric>
+                          {item.newCases?.female?.["<5"] || 0}
+                        </Td>
+                        <Td fontSize="12px" isNumeric>
+                          {item.newCases?.female?.["<15"] || 0}
+                        </Td>
+                        <Td fontSize="12px" isNumeric>
+                          {item.newCases?.female?.["15-19"] || 0}
+                        </Td>
+                        <Td fontSize="12px" isNumeric>
+                          {item.newCases?.female?.["20+"] || 0}
+                        </Td>
+                        {/* Total new cases */}
+                        <Td fontSize="12px" isNumeric fontWeight="600">
+                          {newCasesTotal}
+                        </Td>
+                      </Tr>
+                    );
+                  })}
+                </Tbody>
+              </Table>
+            </TableContainer>
+
+            {/* Follow-Up Cases Table */}
+            <Text fontSize="18px" fontWeight="700" mt="30px" mb="3" color={titleTextColor}>
+              FOLLOW-UP CASES
+            </Text>
+            <TableContainer>
+              <Table variant="striped" size="sm">
+                <Thead>
+                  <Tr>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color={subTitleTextColor}
+                      fontWeight="600"
+                      rowSpan={3}
+                    >
+                      S/N
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color={subTitleTextColor}
+                      fontWeight="600"
+                      rowSpan={3}
+                      minW="200px"
+                    >
+                      Disease Case
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color={subTitleTextColor}
+                      fontWeight="600"
+                      colSpan={4}
+                      textAlign="center"
+                    >
+                      Male
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color={subTitleTextColor}
+                      fontWeight="600"
+                      colSpan={4}
+                      textAlign="center"
+                    >
+                      Female
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color={subTitleTextColor}
+                      fontWeight="600"
+                      rowSpan={3}
+                      isNumeric
+                    >
+                      Total Follow-Up
+                    </Th>
+                  </Tr>
+                  <Tr>
+                    {/* Male age groups */}
+                    <Th fontSize="12px" isNumeric>&lt;5</Th>
+                    <Th fontSize="12px" isNumeric>&lt;15</Th>
+                    <Th fontSize="12px" isNumeric>15-19</Th>
+                    <Th fontSize="12px" isNumeric>20+</Th>
+                    {/* Female age groups */}
+                    <Th fontSize="12px" isNumeric>&lt;5</Th>
+                    <Th fontSize="12px" isNumeric>&lt;15</Th>
+                    <Th fontSize="12px" isNumeric>15-19</Th>
+                    <Th fontSize="12px" isNumeric>20+</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {Data.diseases.map((item, i) => {
+                    const followUpTotal = 
+                      (item.followUp?.male?.["<5"] || 0) +
+                      (item.followUp?.male?.["<15"] || 0) +
+                      (item.followUp?.male?.["15-19"] || 0) +
+                      (item.followUp?.male?.["20+"] || 0) +
+                      (item.followUp?.female?.["<5"] || 0) +
+                      (item.followUp?.female?.["<15"] || 0) +
+                      (item.followUp?.female?.["15-19"] || 0) +
+                      (item.followUp?.female?.["20+"] || 0);
+
+                    return (
+                      <Tr key={i}>
+                        <Td fontSize="12px">{item.sn || i + 1}</Td>
+                        <Td fontSize="12px" whiteSpace="normal">
+                          {item.case}
+                        </Td>
+                        {/* Male follow-up */}
+                        <Td fontSize="12px" isNumeric>
+                          {item.followUp?.male?.["<5"] || 0}
+                        </Td>
+                        <Td fontSize="12px" isNumeric>
+                          {item.followUp?.male?.["<15"] || 0}
+                        </Td>
+                        <Td fontSize="12px" isNumeric>
+                          {item.followUp?.male?.["15-19"] || 0}
+                        </Td>
+                        <Td fontSize="12px" isNumeric>
+                          {item.followUp?.male?.["20+"] || 0}
+                        </Td>
+                        {/* Female follow-up */}
+                        <Td fontSize="12px" isNumeric>
+                          {item.followUp?.female?.["<5"] || 0}
+                        </Td>
+                        <Td fontSize="12px" isNumeric>
+                          {item.followUp?.female?.["<15"] || 0}
+                        </Td>
+                        <Td fontSize="12px" isNumeric>
+                          {item.followUp?.female?.["15-19"] || 0}
+                        </Td>
+                        <Td fontSize="12px" isNumeric>
+                          {item.followUp?.female?.["20+"] || 0}
+                        </Td>
+                        {/* Total follow-up */}
+                        <Td fontSize="12px" isNumeric fontWeight="600">
+                          {followUpTotal}
+                        </Td>
+                      </Tr>
+                    );
+                  })}
+                </Tbody>
+              </Table>
+            </TableContainer>
+
+            {/* Mortality Summary Table */}
+            <Text fontSize="18px" fontWeight="700" mt="30px" mb="3" color={titleTextColor}>
+              MORTALITY SUMMARY
+            </Text>
+            <TableContainer>
+              <Table variant="striped" size="sm">
+                <Thead>
+                  <Tr>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color={subTitleTextColor}
+                      fontWeight="600"
+                    >
+                      S/N
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color={subTitleTextColor}
+                      fontWeight="600"
+                    >
+                      Disease Case
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color={subTitleTextColor}
+                      fontWeight="600"
+                      isNumeric
+                    >
+                      Total Cases
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color={subTitleTextColor}
+                      fontWeight="600"
+                      isNumeric
+                    >
+                      Mortality
+                    </Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {Data.diseases
+                    .filter(item => item.mortality > 0)
+                    .map((item, i) => (
+                      <Tr key={i}>
+                        <Td fontSize="12px">{item.sn || i + 1}</Td>
+                        <Td fontSize="12px">{item.case}</Td>
+                        <Td fontSize="12px" isNumeric fontWeight="600">
+                          {item.total || 0}
+                        </Td>
+                        <Td fontSize="12px" isNumeric fontWeight="600" color="red.600">
+                          {item.mortality || 0}
+                        </Td>
+                      </Tr>
+                    ))}
+                </Tbody>
+              </Table>
+            </TableContainer>
+            
+            {/* Summary Statistics */}
+            {Data?.summary && (
+              <Box
+                mt="20px"
+                p="20px"
+                borderWidth="1px"
+                borderColor={borderColor}
+                borderRadius="md"
+                bg={chartFillColor}
+              >
+                <Text fontSize="18px" fontWeight="700" mb="3" color={titleTextColor}>
+                  Summary Statistics
+                </Text>
+                <SimpleGrid columns={{ base: 1, md: 3 }} spacing={3}>
+                  <Box>
+                    <Text fontWeight="600" fontSize="15px" color={subTitleTextColor}>
+                      Total Disease Types:
+                    </Text>
+                    <Text fontWeight="700" fontSize="16px" color={titleTextColor}>
+                      {Data.summary.totalDiseases || 0}
+                    </Text>
+                  </Box>
+                  <Box>
+                    <Text fontWeight="600" fontSize="15px" color={subTitleTextColor}>
+                      Total Cases:
+                    </Text>
+                    <Text fontWeight="700" fontSize="16px" color={titleTextColor}>
+                      {Data.summary.totalCases || 0}
+                    </Text>
+                  </Box>
+                  <Box>
+                    <Text fontWeight="600" fontSize="15px" color={subTitleTextColor}>
+                      Total Mortality:
+                    </Text>
+                    <Text fontWeight="700" fontSize="16px" color={titleTextColor}>
+                      {Data.summary.totalMortality || 0}
+                    </Text>
+                  </Box>
+                </SimpleGrid>
+              </Box>
+            )}
+          </>
+        )}
+
+        {Category === "eyecondition" && Data?.diagnosis && (
+          <>
+            <TableContainer mt="15px">
+              <Table variant="striped" size="sm">
+                <Thead>
+                  <Tr>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color={subTitleTextColor}
+                      fontWeight="600"
+                      rowSpan={2}
+                    >
+                      S/N
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color={subTitleTextColor}
+                      fontWeight="600"
+                      rowSpan={2}
+                    >
+                      Diagnosis
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color={subTitleTextColor}
+                      fontWeight="600"
+                      colSpan={5}
+                      textAlign="center"
+                    >
+                      Male
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color={subTitleTextColor}
+                      fontWeight="600"
+                      colSpan={5}
+                      textAlign="center"
+                    >
+                      Female
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color={subTitleTextColor}
+                      fontWeight="600"
+                      rowSpan={2}
+                      isNumeric
+                    >
+                      Total
+                    </Th>
+                  </Tr>
+                  <Tr>
+                    {/* Male age groups */}
+                    <Th fontSize="12px" isNumeric>0-14</Th>
+                    <Th fontSize="12px" isNumeric>15-29</Th>
+                    <Th fontSize="12px" isNumeric>30-44</Th>
+                    <Th fontSize="12px" isNumeric>45+</Th>
+                    <Th fontSize="12px" isNumeric>Total</Th>
+                    {/* Female age groups */}
+                    <Th fontSize="12px" isNumeric>0-14</Th>
+                    <Th fontSize="12px" isNumeric>15-29</Th>
+                    <Th fontSize="12px" isNumeric>30-44</Th>
+                    <Th fontSize="12px" isNumeric>45+</Th>
+                    <Th fontSize="12px" isNumeric>Total</Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {Data.diagnosis.map((item, i) => (
+                    <Tr key={i}>
+                      <Td fontSize="13px">{i + 1}</Td>
+                      <Td fontSize="13px" textTransform="capitalize">
+                        {item.diagnosis}
+                      </Td>
+                      {/* Male data */}
+                      <Td fontSize="13px" isNumeric>
+                        {item.data?.male?.["0-14"] || 0}
+                      </Td>
+                      <Td fontSize="13px" isNumeric>
+                        {item.data?.male?.["15-29"] || 0}
+                      </Td>
+                      <Td fontSize="13px" isNumeric>
+                        {item.data?.male?.["30-44"] || 0}
+                      </Td>
+                      <Td fontSize="13px" isNumeric>
+                        {item.data?.male?.["45+"] || 0}
+                      </Td>
+                      <Td fontSize="13px" isNumeric fontWeight="600">
+                        {item.data?.male?.total || 0}
+                      </Td>
+                      {/* Female data */}
+                      <Td fontSize="13px" isNumeric>
+                        {item.data?.female?.["0-14"] || 0}
+                      </Td>
+                      <Td fontSize="13px" isNumeric>
+                        {item.data?.female?.["15-29"] || 0}
+                      </Td>
+                      <Td fontSize="13px" isNumeric>
+                        {item.data?.female?.["30-44"] || 0}
+                      </Td>
+                      <Td fontSize="13px" isNumeric>
+                        {item.data?.female?.["45+"] || 0}
+                      </Td>
+                      <Td fontSize="13px" isNumeric fontWeight="600">
+                        {item.data?.female?.total || 0}
+                      </Td>
+                      {/* Grand total */}
+                      <Td fontSize="13px" isNumeric fontWeight="700">
+                        {item.data?.grandTotal || 0}
+                      </Td>
+                    </Tr>
+                  ))}
+                  {/* Grand Total Row */}
+                  {(() => {
+                    const grandTotalData = JSON.parse(
+                      localStorage.getItem("reportGrandTotal") || "{}"
+                    );
+                    return (
+                      <Tr bg="gray.100">
+                        <Td fontSize="13px" fontWeight="700" colSpan={2}>
+                          GRAND TOTAL
+                        </Td>
+                        {/* Male grand totals */}
+                        <Td fontSize="13px" isNumeric fontWeight="600">
+                          {grandTotalData?.male?.["0-14"] || 0}
+                        </Td>
+                        <Td fontSize="13px" isNumeric fontWeight="600">
+                          {grandTotalData?.male?.["15-29"] || 0}
+                        </Td>
+                        <Td fontSize="13px" isNumeric fontWeight="600">
+                          {grandTotalData?.male?.["30-44"] || 0}
+                        </Td>
+                        <Td fontSize="13px" isNumeric fontWeight="600">
+                          {grandTotalData?.male?.["45+"] || 0}
+                        </Td>
+                        <Td fontSize="13px" isNumeric fontWeight="700">
+                          {grandTotalData?.male?.total || 0}
+                        </Td>
+                        {/* Female grand totals */}
+                        <Td fontSize="13px" isNumeric fontWeight="600">
+                          {grandTotalData?.female?.["0-14"] || 0}
+                        </Td>
+                        <Td fontSize="13px" isNumeric fontWeight="600">
+                          {grandTotalData?.female?.["15-29"] || 0}
+                        </Td>
+                        <Td fontSize="13px" isNumeric fontWeight="600">
+                          {grandTotalData?.female?.["30-44"] || 0}
+                        </Td>
+                        <Td fontSize="13px" isNumeric fontWeight="600">
+                          {grandTotalData?.female?.["45+"] || 0}
+                        </Td>
+                        <Td fontSize="13px" isNumeric fontWeight="700">
+                          {grandTotalData?.female?.total || 0}
+                        </Td>
+                        {/* Overall grand total */}
+                        <Td fontSize="14px" isNumeric fontWeight="700">
+                          {grandTotalData?.grandTotal || 0}
+                        </Td>
+                      </Tr>
+                    );
+                  })()}
+                </Tbody>
+              </Table>
+            </TableContainer>
+            
+            {/* Summary Statistics */}
+            {Data?.summary && (
+              <Box
+                mt="20px"
+                p="20px"
+                borderWidth="1px"
+                borderColor={borderColor}
+                borderRadius="md"
+                bg={chartFillColor}
+              >
+                <Text fontSize="18px" fontWeight="700" mb="3" color={titleTextColor}>
+                  Summary Statistics
+                </Text>
+                <SimpleGrid columns={{ base: 1, md: 2 }} spacing={3}>
+                  <Box>
+                    <Text fontWeight="600" fontSize="15px" color={subTitleTextColor}>
+                      Total Diagnoses:
+                    </Text>
+                    <Text fontWeight="700" fontSize="16px" color={titleTextColor}>
+                      {Data.summary.totalDiagnoses || 0}
+                    </Text>
+                  </Box>
+                  <Box>
+                    <Text fontWeight="600" fontSize="15px" color={subTitleTextColor}>
+                      Total Patients:
+                    </Text>
+                    <Text fontWeight="700" fontSize="16px" color={titleTextColor}>
+                      {Data.summary.totalPatients || 0}
+                    </Text>
+                  </Box>
+                </SimpleGrid>
+              </Box>
+            )}
+          </>
+        )}
       </Box>
     </Box>
   );

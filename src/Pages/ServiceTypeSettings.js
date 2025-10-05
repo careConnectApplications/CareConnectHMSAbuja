@@ -228,12 +228,12 @@ export default function ServiceTypeSettings() {
           <Table variant="striped">
             <Thead bg="#fff">
               <Tr>
+                <Th fontSize="13px" color="#534D59" fontWeight="600">Actions</Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">S/N</Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">Date</Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">Service Type</Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">Service Category</Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">Clinic/Department</Th>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">Actions</Th>
               </Tr>
             </Thead>
             <Tbody>

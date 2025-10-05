@@ -199,13 +199,13 @@ export default function ClinicSettings() {
                     <Table variant="striped">
                         <Thead bg="#fff">
                             <Tr>
+                                <Th fontSize="13px" color="#534D59" fontWeight="600">Actions</Th>
                                 <Th fontSize="13px" color="#534D59" fontWeight="600">S/N</Th>
                                 <Th fontSize="13px" color="#534D59" fontWeight="600">Clinic ID</Th>
                                 <Th fontSize="13px" color="#534D59" fontWeight="600">Clinic/Department/Pharmacy</Th>
                                 <Th fontSize="13px" color="#534D59" fontWeight="600">Type</Th>
                                 <Th fontSize="13px" color="#534D59" fontWeight="600">Category</Th>
                                 <Th fontSize="13px" color="#534D59" fontWeight="600">Created Date</Th>
-                                <Th fontSize="13px" color="#534D59" fontWeight="600">Actions</Th>
                             </Tr>
                         </Thead>
                         <Tbody>

@@ -418,6 +418,82 @@ export default function SummaryReport() {
           localStorage.setItem("reportGrandTotal", JSON.stringify(grandTotal));
           localStorage.setItem("reportCategory", QueryType);
           nav("/dashboard/report-analytics/print-summary");
+        } else if (QueryType === "eyecondition") {
+          // Process eye condition data
+          const grandTotal = {
+            male: {
+              "0-14": 0,
+              "15-29": 0,
+              "30-44": 0,
+              "45+": 0,
+              total: 0
+            },
+            female: {
+              "0-14": 0,
+              "15-29": 0,
+              "30-44": 0,
+              "45+": 0,
+              total: 0
+            },
+            grandTotal: 0
+          };
+
+          // Calculate grand totals if diagnosis data exists
+          if (result.queryresult?.diagnosis) {
+            result.queryresult.diagnosis.forEach((item) => {
+              if (item.data) {
+                // Add male totals
+                if (item.data.male) {
+                  grandTotal.male["0-14"] += item.data.male["0-14"] || 0;
+                  grandTotal.male["15-29"] += item.data.male["15-29"] || 0;
+                  grandTotal.male["30-44"] += item.data.male["30-44"] || 0;
+                  grandTotal.male["45+"] += item.data.male["45+"] || 0;
+                  grandTotal.male.total += item.data.male.total || 0;
+                }
+                // Add female totals
+                if (item.data.female) {
+                  grandTotal.female["0-14"] += item.data.female["0-14"] || 0;
+                  grandTotal.female["15-29"] += item.data.female["15-29"] || 0;
+                  grandTotal.female["30-44"] += item.data.female["30-44"] || 0;
+                  grandTotal.female["45+"] += item.data.female["45+"] || 0;
+                  grandTotal.female.total += item.data.female.total || 0;
+                }
+                grandTotal.grandTotal += item.data.grandTotal || 0;
+              }
+            });
+          }
+
+          localStorage.setItem(
+            "reportSummary",
+            JSON.stringify(result.queryresult)
+          );
+          localStorage.setItem("reportGrandTotal", JSON.stringify(grandTotal));
+          localStorage.setItem("reportSummaryData", JSON.stringify(result.queryresult?.summary || {}));
+          localStorage.setItem("reportCategory", QueryType);
+          nav("/dashboard/report-analytics/print-summary");
+        } else if (QueryType === "disease cases") {
+          // Process disease cases data
+          const grandTotal = {
+            totalDiseases: result.queryresult?.diseases?.length || 0,
+            totalCases: 0,
+            totalMortality: 0
+          };
+
+          // Calculate totals from diseases array
+          if (result.queryresult?.diseases) {
+            result.queryresult.diseases.forEach((disease) => {
+              grandTotal.totalCases += disease.total || 0;
+              grandTotal.totalMortality += disease.mortality || 0;
+            });
+          }
+
+          localStorage.setItem(
+            "reportSummary",
+            JSON.stringify(result.queryresult)
+          );
+          localStorage.setItem("reportGrandTotal", JSON.stringify(grandTotal));
+          localStorage.setItem("reportCategory", QueryType);
+          nav("/dashboard/report-analytics/print-summary");
         }
       }
     } catch (e) {

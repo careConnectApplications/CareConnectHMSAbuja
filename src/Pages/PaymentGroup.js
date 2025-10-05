@@ -559,6 +559,14 @@ export default function PaymentGroup() {
                     color="#534D59"
                     fontWeight="600"
                   >
+                    actions
+                  </Th>
+                  <Th
+                    fontSize="13px"
+                    textTransform="capitalize"
+                    color="#534D59"
+                    fontWeight="600"
+                  >
                     patient name
                   </Th>
                   <Th
@@ -610,14 +618,6 @@ export default function PaymentGroup() {
                     fontWeight="600"
                   >
                     date created
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color="#534D59"
-                    fontWeight="600"
-                  >
-                    actions
                   </Th>
                 </Tr>
               </Thead>
