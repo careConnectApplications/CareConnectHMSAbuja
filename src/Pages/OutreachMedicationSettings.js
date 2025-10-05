@@ -379,12 +379,12 @@ export default function OutreachMedicationSettings() {
           <Table variant="striped">
             <Thead bg="#fff">
               <Tr>
+                <Th fontSize="13px" color="#534D59" fontWeight="600">Actions</Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">S/N</Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">Medication Name</Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">Medication ID</Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">Status</Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">Date</Th>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">Actions</Th>
               </Tr>
             </Thead>
             <Tbody>

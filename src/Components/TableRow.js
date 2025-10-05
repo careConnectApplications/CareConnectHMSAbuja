@@ -210,79 +210,6 @@ export default function TableRow({
       {type === "user-management" && (
         <>
           <Td>
-            <HStack cursor={"pointer"} onClick={onClick}>
-              <Avatar
-                name={name}
-                size="sm"
-                src="https://bit.ly/tioluwani-kolawole"
-              />
-              <Box>
-                <Text color={tableColorBold} fontWeight={"500"} fontSize={"13px"}>
-                  {name}
-                </Text>
-                <Text
-                  color={tableColor}
-                  textTransform={"lowercase"}
-                  fontWeight={"400"}
-                  fontSize={"11px"}
-                >
-                  {email}
-                </Text>
-              </Box>
-            </HStack>
-          </Td>
-          <Td >
-            <Text
-              fontWeight="400"
-              fontSize={"12px"}
-              textTransform={"capitalize"}
-            >
-              {role}
-            </Text>
-          </Td>
-          <Td>
-            <Text fontWeight="400" fontSize={"12px"}>
-              {clinic}
-            </Text>
-          </Td>
-          <Td>
-            <Text fontWeight="400" fontSize={"12px"}>
-              {phone}
-            </Text>
-          </Td>
-          <Td>
-            <Text fontWeight="400" fontSize={"12px"}>
-              {date}
-            </Text>
-          </Td>
-          <Td>
-            <HStack
-              color={
-                status === "active"
-                  ? "#027A48"
-                  : status === "inactive"
-                  ? "#FFA30C"
-                  : "#FD4739"
-              }
-            >
-              <Box
-                rounded="100%"
-                w="8px"
-                h="8px"
-                bg={
-                  status === "active"
-                    ? "#027A48"
-                    : status === "inactive"
-                    ? "#FFA30C"
-                    : "#FD4739"
-                }
-              ></Box>
-              <Text fontWeight="400" fontSize={"12px"}>
-                {status}
-              </Text>
-            </HStack>
-          </Td>
-          <Td>
             <Menu isLazy>
               <MenuButton as={Box}>
                 <Flex justifyContent="center" color="#000000" fontSize="16px">
@@ -369,10 +296,129 @@ export default function TableRow({
               </MenuList>
             </Menu>
           </Td>
+          <Td>
+            <HStack cursor={"pointer"} onClick={onClick}>
+              <Avatar
+                name={name}
+                size="sm"
+                src="https://bit.ly/tioluwani-kolawole"
+              />
+              <Box>
+                <Text color={tableColorBold} fontWeight={"500"} fontSize={"13px"}>
+                  {name}
+                </Text>
+                <Text
+                  color={tableColor}
+                  textTransform={"lowercase"}
+                  fontWeight={"400"}
+                  fontSize={"11px"}
+                >
+                  {email}
+                </Text>
+              </Box>
+            </HStack>
+          </Td>
+          <Td >
+            <Text
+              fontWeight="400"
+              fontSize={"12px"}
+              textTransform={"capitalize"}
+            >
+              {role}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"12px"}>
+              {clinic}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"12px"}>
+              {phone}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize={"12px"}>
+              {date}
+            </Text>
+          </Td>
+          <Td>
+            <HStack
+              color={
+                status === "active"
+                  ? "#027A48"
+                  : status === "inactive"
+                  ? "#FFA30C"
+                  : "#FD4739"
+              }
+            >
+              <Box
+                rounded="100%"
+                w="8px"
+                h="8px"
+                bg={
+                  status === "active"
+                    ? "#027A48"
+                    : status === "inactive"
+                    ? "#FFA30C"
+                    : "#FD4739"
+                }
+              ></Box>
+              <Text fontWeight="400" fontSize={"12px"}>
+                {status}
+              </Text>
+            </HStack>
+          </Td>
         </>
       )}
       {type === "payment" && (
         <>
+          <Td>
+            <Menu isLazy>
+              <MenuButton as={Box}>
+                <Flex justifyContent="center" color="#000000" fontSize="16px">
+                  <BsThreeDots />
+                </Flex>
+              </MenuButton>
+              <MenuList>
+                {status !== "paid" && (
+                  <MenuItem
+                    onClick={onClick}
+                    textTransform="capitalize"
+                    fontWeight={"500"}
+                    color="#2F2F2F"
+                    _hover={{
+                      color: "#fff",
+                      fontWeight: "400",
+                      bg: "blue.blue500",
+                    }}
+                  >
+                    <HStack fontSize="14px">
+                      <Text>Confirm Payment</Text>
+                    </HStack>
+                  </MenuItem>
+                )}
+
+                {status === "paid" && (
+                  <MenuItem
+                    onClick={onPrint}
+                    textTransform="capitalize"
+                    fontWeight={"500"}
+                    color="#2F2F2F"
+                    _hover={{
+                      color: "#fff",
+                      fontWeight: "400",
+                      bg: "blue.blue500",
+                    }}
+                  >
+                    <HStack fontSize="14px">
+                      <Text>Print Receipt</Text>
+                    </HStack>
+                  </MenuItem>
+                )}
+              </MenuList>
+            </Menu>
+          </Td>
           <Td>
             <HStack cursor={"pointer"}>
               <Avatar
@@ -462,6 +508,10 @@ export default function TableRow({
               {date}
             </Text>
           </Td>
+        </>
+      )}
+      {type === "insurance-table-Unauthorized" && (
+        <>
           <Td>
             <Menu isLazy>
               <MenuButton as={Box}>
@@ -470,7 +520,7 @@ export default function TableRow({
                 </Flex>
               </MenuButton>
               <MenuList>
-                {status !== "paid" && (
+               
                   <MenuItem
                     onClick={onClick}
                     textTransform="capitalize"
@@ -483,10 +533,10 @@ export default function TableRow({
                     }}
                   >
                     <HStack fontSize="14px">
-                      <Text>Confirm Payment</Text>
+                      <Text>Authorize</Text>
                     </HStack>
                   </MenuItem>
-                )}
+             
 
                 {status === "paid" && (
                   <MenuItem
@@ -508,10 +558,6 @@ export default function TableRow({
               </MenuList>
             </Menu>
           </Td>
-        </>
-      )}
-      {type === "insurance-table-Unauthorized" && (
-        <>
           <Td>
             <HStack cursor={"pointer"}>
               <Avatar
@@ -616,6 +662,10 @@ export default function TableRow({
               {date}
             </Text>
           </Td>
+        </>
+      )}
+      {type === "payment-group" && (
+        <>
           <Td>
             <Menu isLazy>
               <MenuButton as={Box}>
@@ -624,48 +674,24 @@ export default function TableRow({
                 </Flex>
               </MenuButton>
               <MenuList>
-               
-                  <MenuItem
-                    onClick={onClick}
-                    textTransform="capitalize"
-                    fontWeight={"500"}
-                    color="#2F2F2F"
-                    _hover={{
-                      color: "#fff",
-                      fontWeight: "400",
-                      bg: "blue.blue500",
-                    }}
-                  >
-                    <HStack fontSize="14px">
-                      <Text>Authorize</Text>
-                    </HStack>
-                  </MenuItem>
-             
-
-                {status === "paid" && (
-                  <MenuItem
-                    onClick={onPrint}
-                    textTransform="capitalize"
-                    fontWeight={"500"}
-                    color="#2F2F2F"
-                    _hover={{
-                      color: "#fff",
-                      fontWeight: "400",
-                      bg: "blue.blue500",
-                    }}
-                  >
-                    <HStack fontSize="14px">
-                      <Text>Print Receipt</Text>
-                    </HStack>
-                  </MenuItem>
-                )}
+                <MenuItem
+                  onClick={onClick}
+                  textTransform="capitalize"
+                  fontWeight={"500"}
+                  color="#2F2F2F"
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                >
+                  <HStack fontSize="14px">
+                    <Text>Confirm Payment</Text>
+                  </HStack>
+                </MenuItem>
               </MenuList>
             </Menu>
           </Td>
-        </>
-      )}
-      {type === "payment-group" && (
-        <>
           <Td>
             <HStack cursor={"pointer"}>
               <Avatar
@@ -718,6 +744,10 @@ export default function TableRow({
               {date}
             </Text>
           </Td>
+        </>
+      )}
+      {type === "payment-group-paid" && (
+        <>
           <Td>
             <Menu isLazy>
               <MenuButton as={Box}>
@@ -744,10 +774,6 @@ export default function TableRow({
               </MenuList>
             </Menu>
           </Td>
-        </>
-      )}
-      {type === "payment-group-paid" && (
-        <>
           <Td>
             <Text fontWeight="400" fontSize={"13px"}>
               {reference}
@@ -763,6 +789,15 @@ export default function TableRow({
               {date}
             </Text>
           </Td>
+        </>
+      )}
+
+      {(type === "radiology-insurance" ||
+        type === "procedure-insurance" ||
+        type === "pharmacy-insurance" ||
+        type === "lab-insurance" ||
+        type === "histopathology-insurance") && (
+        <>
           <Td>
             <Menu isLazy>
               <MenuButton as={Box}>
@@ -783,21 +818,12 @@ export default function TableRow({
                   }}
                 >
                   <HStack fontSize="14px">
-                    <Text>Confirm Payment</Text>
+                    <Text>View More</Text>
                   </HStack>
                 </MenuItem>
               </MenuList>
             </Menu>
           </Td>
-        </>
-      )}
-
-      {(type === "radiology-insurance" ||
-        type === "procedure-insurance" ||
-        type === "pharmacy-insurance" ||
-        type === "lab-insurance" ||
-        type === "histopathology-insurance") && (
-        <>
           <Td>
             <HStack cursor={"pointer"}>
               <Avatar
@@ -836,32 +862,6 @@ export default function TableRow({
             <Text fontWeight="400" fontSize={"13px"}>
               {date}
             </Text>
-          </Td>
-          <Td>
-            <Menu isLazy>
-              <MenuButton as={Box}>
-                <Flex justifyContent="center" color="#000000" fontSize="16px">
-                  <BsThreeDots />
-                </Flex>
-              </MenuButton>
-              <MenuList>
-                <MenuItem
-                  onClick={onClick}
-                  textTransform="capitalize"
-                  fontWeight={"500"}
-                  color="#2F2F2F"
-                  _hover={{
-                    color: "#fff",
-                    fontWeight: "400",
-                    bg: "blue.blue500",
-                  }}
-                >
-                  <HStack fontSize="14px">
-                    <Text>View More</Text>
-                  </HStack>
-                </MenuItem>
-              </MenuList>
-            </Menu>
           </Td>
         </>
       )}
@@ -1051,6 +1051,48 @@ export default function TableRow({
       {type === "price-settings" && (
         <>
           <Td>
+            <Menu isLazy>
+              <MenuButton as={Box}>
+                <Flex justifyContent="center" color="#000000" fontSize="16px">
+                  <BsThreeDots />
+                </Flex>
+              </MenuButton>
+              <MenuList>
+                <MenuItem
+                  onClick={onEdit}
+                  textTransform="capitalize"
+                  fontWeight={"500"}
+                  color="#2F2F2F"
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                >
+                  <HStack fontSize="14px">
+                    <Text>Edit</Text>
+                  </HStack>
+                </MenuItem>
+
+                <MenuItem
+                  onClick={onChangeStatus}
+                  textTransform="capitalize"
+                  fontWeight={"500"}
+                  color="#2F2F2F"
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                >
+                  <HStack fontSize="14px">
+                    <Text>Change Status</Text>
+                  </HStack>
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          </Td>
+          <Td>
             <Text fontWeight="400" fontSize={"13px"}>
               {serviceType}
             </Text>
@@ -1102,48 +1144,6 @@ export default function TableRow({
                 {status}
               </Text>
             </HStack>
-          </Td>
-          <Td>
-            <Menu isLazy>
-              <MenuButton as={Box}>
-                <Flex justifyContent="center" color="#000000" fontSize="16px">
-                  <BsThreeDots />
-                </Flex>
-              </MenuButton>
-              <MenuList>
-                <MenuItem
-                  onClick={onEdit}
-                  textTransform="capitalize"
-                  fontWeight={"500"}
-                  color="#2F2F2F"
-                  _hover={{
-                    color: "#fff",
-                    fontWeight: "400",
-                    bg: "blue.blue500",
-                  }}
-                >
-                  <HStack fontSize="14px">
-                    <Text>Edit</Text>
-                  </HStack>
-                </MenuItem>
-
-                <MenuItem
-                  onClick={onChangeStatus}
-                  textTransform="capitalize"
-                  fontWeight={"500"}
-                  color="#2F2F2F"
-                  _hover={{
-                    color: "#fff",
-                    fontWeight: "400",
-                    bg: "blue.blue500",
-                  }}
-                >
-                  <HStack fontSize="14px">
-                    <Text>Change Status</Text>
-                  </HStack>
-                </MenuItem>
-              </MenuList>
-            </Menu>
           </Td>
         </>
       )}
@@ -2154,6 +2154,32 @@ export default function TableRow({
       {type === "clinic-settings" && (
         <>
           <Td>
+            <Menu isLazy>
+              <MenuButton as={Box}>
+                <Flex justifyContent="center" color="#000000" fontSize="16px">
+                  <BsThreeDots />
+                </Flex>
+              </MenuButton>
+              <MenuList>
+                <MenuItem
+                  onClick={onEdit}
+                  textTransform="capitalize"
+                  fontWeight={"500"}
+                  color="#2F2F2F"
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                >
+                  <HStack fontSize="14px">
+                    <Text>Edit</Text>
+                  </HStack>
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          </Td>
+          <Td>
             <Text fontWeight="400" fontSize="12px">
               {sn}
             </Text>
@@ -2183,64 +2209,10 @@ export default function TableRow({
               {date}
             </Text>
           </Td>
-
-          <Td>
-            <Menu isLazy>
-              <MenuButton as={Box}>
-                <Flex justifyContent="center" color="#000000" fontSize="16px">
-                  <BsThreeDots />
-                </Flex>
-              </MenuButton>
-              <MenuList>
-                <MenuItem
-                  onClick={onEdit}
-                  textTransform="capitalize"
-                  fontWeight={"500"}
-                  color="#2F2F2F"
-                  _hover={{
-                    color: "#fff",
-                    fontWeight: "400",
-                    bg: "blue.blue500",
-                  }}
-                >
-                  <HStack fontSize="14px">
-                    <Text>Edit</Text>
-                  </HStack>
-                </MenuItem>
-              </MenuList>
-            </Menu>
-          </Td>
         </>
       )}
       {type === "unit-settings" && (
         <>
-          <Td>
-            <Text fontWeight="400" fontSize="12px">
-              {sn}
-            </Text>
-          </Td>
-          <Td>
-            <Text fontWeight="400" fontSize="12px">
-              {unitId}
-            </Text>
-          </Td>
-          <Td>
-            <Text fontWeight="400" fontSize="12px">
-              {unit}
-            </Text>
-          </Td>
-          <Td>
-            <Text fontWeight="400" fontSize="12px">
-              {clinic}
-            </Text>
-          </Td>
-          <Td>
-            <Text fontWeight="400" fontSize="12px">
-              {date}
-            </Text>
-          </Td>
-        
-
           <Td>
             <Menu isLazy>
               <MenuButton as={Box}>
@@ -2282,10 +2254,61 @@ export default function TableRow({
               </MenuList>
             </Menu>
           </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {sn}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {unitId}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {unit}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {clinic}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {date}
+            </Text>
+          </Td>
         </>
       )}
       {type === "serviceType-settings" && (
         <>
+          <Td>
+            <Menu isLazy>
+              <MenuButton as={Box}>
+                <Flex justifyContent="center" color="#000000" fontSize="16px">
+                  <BsThreeDots />
+                </Flex>
+              </MenuButton>
+              <MenuList>
+                <MenuItem
+                  onClick={onEdit}
+                  textTransform="capitalize"
+                  fontWeight={"500"}
+                  color="#2F2F2F"
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                >
+                  <HStack fontSize="14px">
+                    <Text>Edit</Text>
+                  </HStack>
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          </Td>
           <Td>
             <Text fontWeight="400" fontSize="12px">
               {sn}
@@ -2316,7 +2339,10 @@ export default function TableRow({
               {dept}
             </Text>
           </Td>
-
+        </>
+      )}
+      {type === "ward-management" && (
+        <>
           <Td>
             <Menu isLazy>
               <MenuButton as={Box}>
@@ -2343,10 +2369,6 @@ export default function TableRow({
               </MenuList>
             </Menu>
           </Td>
-        </>
-      )}
-      {type === "ward-management" && (
-        <>
           <Td>
             <Text fontWeight="400" fontSize="12px">
               {sn}
@@ -2409,33 +2431,6 @@ export default function TableRow({
                 {status}
               </Text>
             </HStack>
-          </Td>
-
-          <Td>
-            <Menu isLazy>
-              <MenuButton as={Box}>
-                <Flex justifyContent="center" color="#000000" fontSize="16px">
-                  <BsThreeDots />
-                </Flex>
-              </MenuButton>
-              <MenuList>
-                <MenuItem
-                  onClick={onEdit}
-                  textTransform="capitalize"
-                  fontWeight={"500"}
-                  color="#2F2F2F"
-                  _hover={{
-                    color: "#fff",
-                    fontWeight: "400",
-                    bg: "blue.blue500",
-                  }}
-                >
-                  <HStack fontSize="14px">
-                    <Text>Edit</Text>
-                  </HStack>
-                </MenuItem>
-              </MenuList>
-            </Menu>
           </Td>
         </>
       )}

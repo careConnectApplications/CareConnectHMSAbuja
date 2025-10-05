@@ -642,6 +642,9 @@ export default function Patients() {
               <Thead>
                 <Tr>
                   <Th fontSize="12px" fontWeight="600" color={subTitleTextColor}>
+                    Actions
+                  </Th>
+                  <Th fontSize="12px" fontWeight="600" color={subTitleTextColor}>
                     Patient Name
                   </Th>
                   <Th fontSize="12px" fontWeight="600" color={subTitleTextColor}>
@@ -677,9 +680,6 @@ export default function Patients() {
                   </Th>
                   <Th fontSize="12px" fontWeight="600" color={subTitleTextColor}>
                     Date Created
-                  </Th>
-                  <Th fontSize="12px" fontWeight="600" color={subTitleTextColor}>
-                    Actions
                   </Th>
                 </Tr>
               </Thead>

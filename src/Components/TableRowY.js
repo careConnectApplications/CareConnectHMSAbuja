@@ -863,6 +863,44 @@ export default function TableRowY({
       {type === "in-patientAdmission" && (
         <>
           <Td>
+            <Menu>
+              <MenuButton as={Box}>
+                <BsThreeDots />
+              </MenuButton>
+              <MenuList>
+                {/* Only show the action option if the status is not "admited" */}
+                {status.toLowerCase() !== "admited" && (
+                  <MenuItem
+                    _hover={{
+                      color: "#fff",
+                      fontWeight: "400",
+                      bg: "blue.blue500",
+                    }}
+                    onClick={onAdmit}
+                  >
+                    {status.toLowerCase() === "toadmit"
+                      ? "Admit"
+                      : status.toLowerCase() === "totransfer"
+                      ? "Transfer"
+                      : status.toLowerCase() === "todischarge"
+                      ? "Discharge"
+                      : "Action"}
+                  </MenuItem>
+                )}
+                <MenuItem
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                  onClick={onView}
+                >
+                  View
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          </Td>
+          <Td>
             <HStack onClick={onView}>
               <Avatar size="sm" name={patient} />
               <Box>
@@ -931,44 +969,6 @@ export default function TableRowY({
                 {status}
               </Text>
             </HStack>
-          </Td>
-          <Td>
-            <Menu>
-              <MenuButton as={Box}>
-                <BsThreeDots />
-              </MenuButton>
-              <MenuList>
-                {/* Only show the action option if the status is not "admited" */}
-                {status.toLowerCase() !== "admited" && (
-                  <MenuItem
-                    _hover={{
-                      color: "#fff",
-                      fontWeight: "400",
-                      bg: "blue.blue500",
-                    }}
-                    onClick={onAdmit}
-                  >
-                    {status.toLowerCase() === "toadmit"
-                      ? "Admit"
-                      : status.toLowerCase() === "totransfer"
-                      ? "Transfer"
-                      : status.toLowerCase() === "todischarge"
-                      ? "Discharge"
-                      : "Action"}
-                  </MenuItem>
-                )}
-                <MenuItem
-                  _hover={{
-                    color: "#fff",
-                    fontWeight: "400",
-                    bg: "blue.blue500",
-                  }}
-                  onClick={onView}
-                >
-                  View
-                </MenuItem>
-              </MenuList>
-            </Menu>
           </Td>
         </>
       )}
@@ -1706,6 +1706,32 @@ export default function TableRowY({
       {type === "theatre-management" && (
         <>
           <Td>
+            <Menu isLazy>
+              <MenuButton as={Box}>
+                <Flex justifyContent="center" color="#000000" fontSize="16px">
+                  <BsThreeDots />
+                </Flex>
+              </MenuButton>
+              <MenuList>
+                <MenuItem
+                  onClick={onEdit}
+                  textTransform="capitalize"
+                  fontWeight={"500"}
+                  color="#2F2F2F"
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                >
+                  <HStack fontSize="14px">
+                    <Text>Edit</Text>
+                  </HStack>
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          </Td>
+          <Td>
             <Text fontWeight="400" fontSize="12px">
               {sn}
             </Text>
@@ -1767,33 +1793,6 @@ export default function TableRowY({
                 {status}
               </Text>
             </HStack>
-          </Td>
-
-          <Td>
-            <Menu isLazy>
-              <MenuButton as={Box}>
-                <Flex justifyContent="center" color="#000000" fontSize="16px">
-                  <BsThreeDots />
-                </Flex>
-              </MenuButton>
-              <MenuList>
-                <MenuItem
-                  onClick={onEdit}
-                  textTransform="capitalize"
-                  fontWeight={"500"}
-                  color="#2F2F2F"
-                  _hover={{
-                    color: "#fff",
-                    fontWeight: "400",
-                    bg: "blue.blue500",
-                  }}
-                >
-                  <HStack fontSize="14px">
-                    <Text>Edit</Text>
-                  </HStack>
-                </MenuItem>
-              </MenuList>
-            </Menu>
           </Td>
         </>
       )}
@@ -2138,31 +2137,6 @@ export default function TableRowY({
       {type === "insurance-management" && (
         <>
           <Td>
-            <Text fontWeight="400" fontSize="12px">
-              {sn}
-            </Text>
-          </Td>
-          <Td>
-            <Text fontWeight="400" fontSize="12px">
-              {hmoname}
-            </Text>
-          </Td>
-          <Td>
-            <Text fontWeight="400" fontSize="12px">
-              {id}
-            </Text>
-          </Td>
-          <Td>
-            <Text fontWeight="400" fontSize="12px">
-              {createdAt}
-            </Text>
-          </Td>
-          <Td>
-            <Text fontWeight="400" fontSize="12px">
-              {updatedAt}
-            </Text>
-          </Td>
-          <Td>
             <Menu isLazy>
               <MenuButton as={Box}>
                 <Flex justifyContent="center" color="#000000" fontSize="16px">
@@ -2187,6 +2161,31 @@ export default function TableRowY({
                 </MenuItem>
               </MenuList>
             </Menu>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {sn}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {hmoname}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {id}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {createdAt}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {updatedAt}
+            </Text>
           </Td>
         </>
       )}
@@ -2260,31 +2259,6 @@ export default function TableRowY({
       {type === "test" && (
         <>
           <Td>
-            <Text fontWeight="400" fontSize="12px">
-              {sn}
-            </Text>
-          </Td>
-          <Td>
-            <Text fontWeight="400" fontSize="12px">
-              {testName}
-            </Text>
-          </Td>
-          <Td>
-            <Text fontWeight="400" fontSize="12px">
-              {subcomponients.join(", ")}
-            </Text>
-          </Td>
-          <Td>
-            <Text fontWeight="400" fontSize="12px">
-              {createdAt}
-            </Text>
-          </Td>
-          <Td>
-            <Text fontWeight="400" fontSize="12px">
-              {updatedAt}
-            </Text>
-          </Td>
-          <Td>
             <Menu isLazy>
               <MenuButton as={Box}>
                 <Flex justifyContent="center" color="#000000" fontSize="16px">
@@ -2309,6 +2283,31 @@ export default function TableRowY({
                 </MenuItem>
               </MenuList>
             </Menu>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {sn}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {testName}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {subcomponients.join(", ")}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {createdAt}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {updatedAt}
+            </Text>
           </Td>
         </>
       )}
@@ -2954,46 +2953,6 @@ export default function TableRowY({
       )}
       {type === "price-model" && (
         <>
-          <Td>
-            <Text fontWeight="400" fontSize="13px">
-              {sn}
-            </Text>
-          </Td>
-          {/* Pricing Type */}
-          <Td>
-            <Text fontWeight="400" fontSize="13px">
-              {pricingType}
-            </Text>
-          </Td>
-
-          {/* ANC Clinic */}
-          <Td>
-            <Text fontWeight="400" fontSize="13px">
-              {ancClinic}
-            </Text>
-          </Td>
-
-          {/* Service Type (Adult) */}
-          <Td>
-            <Text fontWeight="400" fontSize="13px">
-              {serviceTypeAdult}
-            </Text>
-          </Td>
-
-          {/* Service Type (Child) */}
-          <Td>
-            <Text fontWeight="400" fontSize="13px">
-              {serviceTypeChild}
-            </Text>
-          </Td>
-
-          {/* (Optional) Created Date */}
-          <Td>
-            <Text fontWeight="400" fontSize="13px">
-              {new Date(createdAt).toLocaleDateString()}
-            </Text>
-          </Td>
-
           {/* Actions */}
           <Td>
             <Menu isLazy>
@@ -3021,6 +2980,45 @@ export default function TableRowY({
                 </MenuItem>
               </MenuList>
             </Menu>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="13px">
+              {sn}
+            </Text>
+          </Td>
+          {/* Pricing Type */}
+          <Td>
+            <Text fontWeight="400" fontSize="13px">
+              {pricingType}
+            </Text>
+          </Td>
+
+          {/* ANC Clinic */}
+          <Td>
+            <Text fontWeight="400" fontSize="13px">
+              {ancClinic}
+            </Text>
+          </Td>
+
+          {/* Service Type (Adult) */}
+          <Td>
+            <Text fontWeight="400" fontSize="13px">
+              {serviceTypeAdult}
+            </Text>
+          </Td>
+
+          {/* Service Type (Child) */}
+          <Td>
+            <Text fontWeight="400" fontSize="13px">
+              {serviceTypeChild}
+            </Text>
+          </Td>
+
+          {/* (Optional) Created Date */}
+          <Td>
+            <Text fontWeight="400" fontSize="13px">
+              {new Date(createdAt).toLocaleDateString()}
+            </Text>
           </Td>
         </>
       )}
@@ -3303,31 +3301,6 @@ export default function TableRowY({
       {type === "insurance-cover-management" && (
         <>
           <Td>
-            <Text fontWeight="400" fontSize="12px">
-              {sn}
-            </Text>
-          </Td>
-          <Td>
-            <Text fontWeight="400" fontSize="12px">
-              {date}
-            </Text>
-          </Td>
-          <Td>
-            <Text fontWeight="400" fontSize="12px">
-              {hmo}
-            </Text>
-          </Td>
-          <Td>
-            <Text fontWeight="400" fontSize="12px">
-              {category}
-            </Text>
-          </Td>
-          <Td>
-            <Text fontWeight="400" fontSize="12px">
-              {percentageCover}
-            </Text>
-          </Td>
-          <Td>
             <Menu isLazy>
               <MenuButton as={Box}>
                 <Flex justifyContent="center" color="#000000" fontSize="16px">
@@ -3352,6 +3325,31 @@ export default function TableRowY({
                 </MenuItem>
               </MenuList>
             </Menu>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {sn}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {date}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {hmo}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {category}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {percentageCover}
+            </Text>
           </Td>
         </>
       )}

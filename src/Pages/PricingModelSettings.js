@@ -375,13 +375,13 @@ export default function PricingModelSettings() {
           <Table variant="striped">
             <Thead bg="#fff">
               <Tr>
+                <Th fontSize="13px" color="#534D59" fontWeight="600">Actions</Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">S/N</Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">Pricing Type</Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">Clinic</Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">Adult Service Type</Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">Child Service Type</Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">Date</Th>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">Actions</Th>
               </Tr>
             </Thead>
             <Tbody>

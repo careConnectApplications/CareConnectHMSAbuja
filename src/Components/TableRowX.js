@@ -51,6 +51,77 @@ export default function TableRowX({
       {type === "patient-management" && (
         <>
           <Td>
+            <Menu isLazy>
+              <MenuButton as={Box}>
+                <Flex justifyContent="center" color="#000000" fontSize="16px">
+                  <BsThreeDots />
+                </Flex>
+              </MenuButton>
+              <MenuList>
+                <MenuItem
+                  onClick={onEdit}
+                  textTransform="capitalize"
+                  fontWeight={"500"}
+                  color="#2F2F2F"
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                >
+                  <HStack fontSize="12px">
+                    <Text>Edit</Text>
+                  </HStack>
+                </MenuItem>
+
+                <MenuItem
+                  onClick={onView}
+                  textTransform="capitalize"
+                  fontWeight={"500"}
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                >
+                  <HStack fontSize="12px">
+                    <Text>View</Text>
+                  </HStack>
+                </MenuItem>
+
+                <MenuItem
+                  onClick={onVital}
+                  textTransform="capitalize"
+                  fontWeight={"500"}
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                >
+                  <HStack fontSize="12px">
+                    <Text>Take vitals</Text>
+                  </HStack>
+                </MenuItem>
+                <MenuItem
+                  onClick={onClick}
+                  textTransform="capitalize"
+                  fontWeight={"500"}
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                  isDisabled={!onClick}
+                >
+                  <HStack fontSize="12px">
+                    <Text>Pay Annual Subscription</Text>
+                  </HStack>
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          </Td>
+          <Td>
             <HStack cursor={"pointer"} >
               <Avatar
                 name={name}
@@ -171,77 +242,6 @@ export default function TableRowX({
             <Text fontWeight="400" fontSize={"13px"}>
               {date}
             </Text>
-          </Td>
-          <Td>
-            <Menu isLazy>
-              <MenuButton as={Box}>
-                <Flex justifyContent="center" color="#000000" fontSize="16px">
-                  <BsThreeDots />
-                </Flex>
-              </MenuButton>
-              <MenuList>
-                <MenuItem
-                  onClick={onEdit}
-                  textTransform="capitalize"
-                  fontWeight={"500"}
-                  color="#2F2F2F"
-                  _hover={{
-                    color: "#fff",
-                    fontWeight: "400",
-                    bg: "blue.blue500",
-                  }}
-                >
-                  <HStack fontSize="12px">
-                    <Text>Edit</Text>
-                  </HStack>
-                </MenuItem>
-
-                <MenuItem
-                  onClick={onView}
-                  textTransform="capitalize"
-                  fontWeight={"500"}
-                  _hover={{
-                    color: "#fff",
-                    fontWeight: "400",
-                    bg: "blue.blue500",
-                  }}
-                >
-                  <HStack fontSize="12px">
-                    <Text>View</Text>
-                  </HStack>
-                </MenuItem>
-
-                <MenuItem
-                  onClick={onVital}
-                  textTransform="capitalize"
-                  fontWeight={"500"}
-                  _hover={{
-                    color: "#fff",
-                    fontWeight: "400",
-                    bg: "blue.blue500",
-                  }}
-                >
-                  <HStack fontSize="12px">
-                    <Text>Take vitals</Text>
-                  </HStack>
-                </MenuItem>
-                <MenuItem
-                  onClick={onClick}
-                  textTransform="capitalize"
-                  fontWeight={"500"}
-                  _hover={{
-                    color: "#fff",
-                    fontWeight: "400",
-                    bg: "blue.blue500",
-                  }}
-                  isDisabled={!onClick}
-                >
-                  <HStack fontSize="12px">
-                    <Text>Pay Annual Subscription</Text>
-                  </HStack>
-                </MenuItem>
-              </MenuList>
-            </Menu>
           </Td>
         </>
       )}

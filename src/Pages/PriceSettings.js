@@ -244,13 +244,13 @@ export default function PriceSettings() {
           <Table variant="striped">
             <Thead bg="#fff">
               <Tr>
+                <Th fontSize="13px" color="#534D59" fontWeight="600">Actions</Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">Service Type</Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">Service Category</Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">Category</Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">Amount</Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">HMO Cover</Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">Status</Th>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">Actions</Th>
               </Tr>
             </Thead>
             <Tbody>

@@ -540,6 +540,14 @@ export default function Payment() {
                     color={subTitleTextColor}
                     fontWeight="600"
                   >
+                    actions
+                  </Th>
+                  <Th
+                    fontSize="13px"
+                    textTransform="capitalize"
+                    color={subTitleTextColor}
+                    fontWeight="600"
+                  >
                     patient name
                   </Th>
                   <Th
@@ -590,14 +598,6 @@ export default function Payment() {
                     fontWeight="600"
                   >
                     date created
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color={subTitleTextColor}
-                    fontWeight="600"
-                  >
-                    actions
                   </Th>
                 </Tr>
               </Thead>
