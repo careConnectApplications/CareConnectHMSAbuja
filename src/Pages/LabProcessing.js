@@ -986,6 +986,14 @@ export default function LabProcessing() {
                   color={subTitleTextColor}
                   fontWeight="600"
                 >
+                  Actions
+                </Th>
+                <Th
+                  fontSize="13px"
+                  textTransform="capitalize"
+                  color={subTitleTextColor}
+                  fontWeight="600"
+                >
                   Test ID
                 </Th>
                 <Th
@@ -1038,14 +1046,7 @@ export default function LabProcessing() {
                     {Hematology ? "Hematology" : "Chemical"} Review Status
                   </Th>
                 )}
-                <Th
-                  fontSize="13px"
-                  textTransform="capitalize"
-                  color={subTitleTextColor}
-                  fontWeight="600"
-                >
-                  Actions
-                </Th>
+              
               </Tr>
             </Thead>
             <Tbody>

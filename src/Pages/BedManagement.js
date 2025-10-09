@@ -238,6 +238,9 @@ const handleDeleteRestore = async (id, isCurrentlyDeleted) => {
             <Thead bg="#fff">
               <Tr>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">
+                  Actions
+                </Th>
+                <Th fontSize="13px" color="#534D59" fontWeight="600">
                   S/N
                 </Th>
                 <Th fontSize="13px" color="#534D59" fontWeight="600">
@@ -261,14 +264,41 @@ const handleDeleteRestore = async (id, isCurrentlyDeleted) => {
                 <Th fontSize="13px" color="#534D59" fontWeight="600">
                   Active
                 </Th>
-                <Th fontSize="13px" color="#534D59" fontWeight="600">
-                  Actions
-                </Th>
               </Tr>
             </Thead>
             <Tbody>
               {paginatedData.map((item, i) => (
                 <Tr key={i}>
+                  <Td>
+                    <Menu>
+                      <MenuButton as={Box}>
+                        <BsThreeDots />
+                      </MenuButton>
+                      <MenuList>
+                        <MenuItem
+                          onClick={() => editBed(item)}
+                          _hover={{ color: "white", bg: "blue.500" }}
+                        >
+                          Edit
+                        </MenuItem>
+                        {item.isDeleted ? (
+                          <MenuItem
+                            onClick={() => handleDeleteRestore(item._id, true)}
+                            _hover={{ color: "white", bg: "green.500" }}
+                          >
+                            Restore
+                          </MenuItem>
+                        ) : (
+                          <MenuItem
+                            onClick={() => handleDeleteRestore(item._id, false)}
+                            _hover={{ color: "white", bg: "red.500" }}
+                          >
+                            Delete
+                          </MenuItem>
+                        )}
+                      </MenuList>
+                    </Menu>
+                  </Td>
                   <Td>
                     <Text fontSize="12px">{i + 1}</Text>
                   </Td>
@@ -313,36 +343,6 @@ const handleDeleteRestore = async (id, isCurrentlyDeleted) => {
                     >
                       {item.isDeleted ? "Inactive" : "Active"}
                     </Text>
-                  </Td>
-                  <Td>
-                    <Menu>
-                      <MenuButton as={Box}>
-                        <BsThreeDots />
-                      </MenuButton>
-                      <MenuList>
-                        <MenuItem
-                          onClick={() => editBed(item)}
-                          _hover={{ color: "white", bg: "blue.500" }}
-                        >
-                          Edit
-                        </MenuItem>
-                        {item.isDeleted ? (
-                          <MenuItem
-                            onClick={() => handleDeleteRestore(item._id, true)}
-                            _hover={{ color: "white", bg: "green.500" }}
-                          >
-                            Restore
-                          </MenuItem>
-                        ) : (
-                          <MenuItem
-                            onClick={() => handleDeleteRestore(item._id, false)}
-                            _hover={{ color: "white", bg: "red.500" }}
-                          >
-                            Delete
-                          </MenuItem>
-                        )}
-                      </MenuList>
-                    </Menu>
                   </Td>
                 </Tr>
               ))}

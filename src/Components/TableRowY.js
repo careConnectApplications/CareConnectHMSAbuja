@@ -3024,6 +3024,33 @@ export default function TableRowY({
       )}
       {type === "outreach-medication" && (
         <>
+          {/* Actions */}
+          <Td>
+            <Menu isLazy>
+              <MenuButton as={Box}>
+                <Flex justifyContent="center" color="#000" fontSize="16px">
+                  <BsThreeDots />
+                </Flex>
+              </MenuButton>
+              <MenuList>
+                <MenuItem
+                  onClick={onEdit}
+                  textTransform="capitalize"
+                  fontWeight="500"
+                  color="#2F2F2F"
+                  _hover={{
+                    bg: "blue.blue500",
+                    color: "#fff",
+                    fontWeight: "400",
+                  }}
+                >
+                  <HStack fontSize="14px">
+                    <Text>Edit</Text>
+                  </HStack>
+                </MenuItem>
+              </MenuList>
+            </Menu>
+          </Td>
           <Td>
             <Text fontWeight="400" fontSize="13px">
               {sn}
@@ -3052,33 +3079,6 @@ export default function TableRowY({
             <Text fontWeight="400" fontSize="13px">
               {new Date(createdAt).toLocaleDateString()}
             </Text>
-          </Td>
-          {/* Actions */}
-          <Td>
-            <Menu isLazy>
-              <MenuButton as={Box}>
-                <Flex justifyContent="center" color="#000" fontSize="16px">
-                  <BsThreeDots />
-                </Flex>
-              </MenuButton>
-              <MenuList>
-                <MenuItem
-                  onClick={onEdit}
-                  textTransform="capitalize"
-                  fontWeight="500"
-                  color="#2F2F2F"
-                  _hover={{
-                    bg: "blue.blue500",
-                    color: "#fff",
-                    fontWeight: "400",
-                  }}
-                >
-                  <HStack fontSize="14px">
-                    <Text>Edit</Text>
-                  </HStack>
-                </MenuItem>
-              </MenuList>
-            </Menu>
           </Td>
         </>
       )}
