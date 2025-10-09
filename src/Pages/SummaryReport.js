@@ -494,6 +494,76 @@ export default function SummaryReport() {
           localStorage.setItem("reportGrandTotal", JSON.stringify(grandTotal));
           localStorage.setItem("reportCategory", QueryType);
           nav("/dashboard/report-analytics/print-summary");
+        } // Replace the existing "Newborn Health(Outcome of pregnancy(Outcome of pregnancy)" section 
+        // in your SummaryReport.js (around line 280+) with this corrected version:
+
+        else if (QueryType === "Newborn Health(Outcome of pregnancy(Outcome of pregnancy)") {
+          // Calculate grand totals
+          const liveBirthsTotal =
+            (result.queryresult.liveBirths?.["under2.5kg"]?.total || 0) +
+            (result.queryresult.liveBirths?.["≥2.5kg"]?.total || 0);
+
+          const stillBirthsTotal =
+            (result.queryresult.stillBirths?.["Fresh Still Births (FSB)"] || 0) +
+            (result.queryresult.stillBirths?.["Macerated Still Births (MSB)"] || 0);
+
+          const grandTotal = {
+            liveBirthsTotal: liveBirthsTotal,
+            stillBirthsTotal: stillBirthsTotal,
+            totalBirths: liveBirthsTotal + stillBirthsTotal,
+            lowBirthWeight: result.queryresult.liveBirths?.["under2.5kg"]?.total || 0,
+            normalBirthWeight: result.queryresult.liveBirths?.["≥2.5kg"]?.total || 0,
+            freshStillBirths: result.queryresult.stillBirths?.["Fresh Still Births (FSB)"] || 0,
+            maceratedStillBirths: result.queryresult.stillBirths?.["Macerated Still Births (MSB)"] || 0,
+          };
+
+          localStorage.setItem("reportSummary", JSON.stringify(result.queryresult));
+          localStorage.setItem("reportCategory", QueryType);
+          localStorage.setItem("reportGrandTotal", JSON.stringify(grandTotal));
+          setLoading(false);
+          nav("/dashboard/report-analytics/print-summary");
+          return;
+        } else if (QueryType === "birth registration") {
+          // Calculate grand totals across all categories
+          const grandTotal = {
+            male:
+              (result.queryresult["Children Under 1 Year Registered"]?.male || 0) +
+              (result.queryresult["Birth Certificates Issued"]?.male || 0) +
+              (result.queryresult["Birth Certificates Collected"]?.male || 0),
+            female:
+              (result.queryresult["Children Under 1 Year Registered"]?.female || 0) +
+              (result.queryresult["Birth Certificates Issued"]?.female || 0) +
+              (result.queryresult["Birth Certificates Collected"]?.female || 0),
+            total:
+              (result.queryresult["Children Under 1 Year Registered"]?.total || 0) +
+              (result.queryresult["Birth Certificates Issued"]?.total || 0) +
+              (result.queryresult["Birth Certificates Collected"]?.total || 0),
+          };
+
+          // Additional statistics
+          const statistics = {
+            childrenRegistered: result.queryresult["Children Under 1 Year Registered"]?.total || 0,
+            certificatesIssued: result.queryresult["Birth Certificates Issued"]?.total || 0,
+            certificatesCollected: result.queryresult["Birth Certificates Collected"]?.total || 0,
+            pendingCollection:
+              (result.queryresult["Birth Certificates Issued"]?.total || 0) -
+              (result.queryresult["Birth Certificates Collected"]?.total || 0),
+            collectionRate:
+              result.queryresult["Birth Certificates Issued"]?.total > 0
+                ? (
+                  (result.queryresult["Birth Certificates Collected"]?.total /
+                    result.queryresult["Birth Certificates Issued"]?.total) * 100
+                ).toFixed(1)
+                : 0,
+          };
+
+          localStorage.setItem("reportSummary", JSON.stringify(result.queryresult));
+          localStorage.setItem("reportCategory", QueryType);
+          localStorage.setItem("reportGrandTotal", JSON.stringify(grandTotal));
+          localStorage.setItem("reportStatistics", JSON.stringify(statistics));
+          setLoading(false);
+          nav("/dashboard/report-analytics/print-summary");
+          return;
         }
       }
     } catch (e) {

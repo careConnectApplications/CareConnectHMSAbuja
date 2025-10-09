@@ -53,7 +53,7 @@ export default function PrintReportSummary() {
     }, 2000);
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
 
   const formatCategory = (category) => {
     return category.replace(/([A-Z])/g, ' $1').trim();
@@ -310,6 +310,59 @@ export default function PrintReportSummary() {
                       status={item.status}
                     />
                   ))}
+
+                  {/* Newborn Health Outcome of Pregnancy */}
+                  {Category === "newborn outcome of pregnancy" && Data && (
+                    <>
+                      <Text mt="4" fontWeight="700" fontSize="18px" color={titleTextColor}>
+                        Newborn Health (Outcome of Pregnancy)
+                      </Text>
+                      <TableContainer mt="15px">
+                        <Table variant="striped" size="sm">
+                          <Thead>
+                            <Tr>
+                              <Th>Birth Type</Th>
+                              <Th isNumeric>Male</Th>
+                              <Th isNumeric>Female</Th>
+                              <Th isNumeric>Total</Th>
+                            </Tr>
+                          </Thead>
+                          <Tbody>
+                            <Tr>
+                              <Td>Live Births &lt;2.5kg</Td>
+                              <Td isNumeric>{Data.liveBirths["under2.5kg"].male}</Td>
+                              <Td isNumeric>{Data.liveBirths["under2.5kg"].female}</Td>
+                              <Td isNumeric>{Data.liveBirths["under2.5kg"].total}</Td>
+                            </Tr>
+                            <Tr>
+                              <Td>Live Births ≥2.5kg</Td>
+                              <Td isNumeric>{Data.liveBirths["≥2.5kg"].male}</Td>
+                              <Td isNumeric>{Data.liveBirths["≥2.5kg"].female}</Td>
+                              <Td isNumeric>{Data.liveBirths["≥2.5kg"].total}</Td>
+                            </Tr>
+                            <Tr>
+                              <Td>Fresh Still Births (FSB)</Td>
+                              <Td isNumeric colSpan={2}></Td>
+                              <Td isNumeric>{Data.stillBirths["Fresh Still Births (FSB)"]}</Td>
+                            </Tr>
+                            <Tr>
+                              <Td>Macerated Still Births (MSB)</Td>
+                              <Td isNumeric colSpan={2}></Td>
+                              <Td isNumeric>{Data.stillBirths["Macerated Still Births (MSB)"]}</Td>
+                            </Tr>
+                          </Tbody>
+                        </Table>
+                      </TableContainer>
+                      <Box mt="20px" p="20px" borderWidth="1px" borderColor={borderColor} borderRadius="md" bg={chartFillColor}>
+                        <Text fontWeight="700" fontSize="16px" color={titleTextColor}>
+                          Grand Total Live Births: {JSON.parse(localStorage.getItem("reportGrandTotal"))?.liveBirthsTotal}
+                        </Text>
+                        <Text fontWeight="700" fontSize="16px" color={titleTextColor}>
+                          Grand Total Still Births: {JSON.parse(localStorage.getItem("reportGrandTotal"))?.stillBirthsTotal}
+                        </Text>
+                      </Box>
+                    </>
+                  )}
                 </Tbody>
               </Table>
             </TableContainer>
@@ -1623,63 +1676,63 @@ export default function PrintReportSummary() {
           Category === "operation" ||
           Category === "special consultative" ||
           Category === "immunization") && (
-          <>
-            <TableContainer mt="15px">
-              <Table variant="striped">
-                <Thead>
-                  <Tr>
-                    <Th>Category</Th>
-                    <Th isNumeric>Male</Th>
-                    <Th isNumeric>Female</Th>
-                    <Th isNumeric>Total</Th>
-                  </Tr>
-                </Thead>
-                <Tbody>
-                  {Object.entries(Data).map(([key, value], i) => (
-                    <TableRow
-                      key={i}
-                      type="generic-gender-total-aggregate"
-                      category={key}
-                      male={value.male}
-                      female={value.female}
-                      total={value.total}
-                    />
-                  ))}
-                </Tbody>
-              </Table>
-            </TableContainer>
-            <Box
-              mt="20px"
-              p="20px"
-              borderWidth="1px"
-              borderColor="gray.200"
-              borderRadius="md"
-              bg="gray.50"
-            >
-              <Text fontWeight="700" fontSize="16px">
-                Grand Total Male:{" "}
-                {
-                  JSON.parse(localStorage.getItem("reportGrandTotal"))
-                    ?.male
-                }
-              </Text>
-              <Text fontWeight="700" fontSize="16px">
-                Grand Total Female:{" "}
-                {
-                  JSON.parse(localStorage.getItem("reportGrandTotal"))
-                    ?.female
-                }
-              </Text>
-              <Text fontWeight="700" fontSize="16px">
-                Grand Total:{" "}
-                {
-                  JSON.parse(localStorage.getItem("reportGrandTotal"))
-                    ?.total
-                }
-              </Text>
-            </Box>
-          </>
-        )}
+            <>
+              <TableContainer mt="15px">
+                <Table variant="striped">
+                  <Thead>
+                    <Tr>
+                      <Th>Category</Th>
+                      <Th isNumeric>Male</Th>
+                      <Th isNumeric>Female</Th>
+                      <Th isNumeric>Total</Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {Object.entries(Data).map(([key, value], i) => (
+                      <TableRow
+                        key={i}
+                        type="generic-gender-total-aggregate"
+                        category={key}
+                        male={value.male}
+                        female={value.female}
+                        total={value.total}
+                      />
+                    ))}
+                  </Tbody>
+                </Table>
+              </TableContainer>
+              <Box
+                mt="20px"
+                p="20px"
+                borderWidth="1px"
+                borderColor="gray.200"
+                borderRadius="md"
+                bg="gray.50"
+              >
+                <Text fontWeight="700" fontSize="16px">
+                  Grand Total Male:{" "}
+                  {
+                    JSON.parse(localStorage.getItem("reportGrandTotal"))
+                      ?.male
+                  }
+                </Text>
+                <Text fontWeight="700" fontSize="16px">
+                  Grand Total Female:{" "}
+                  {
+                    JSON.parse(localStorage.getItem("reportGrandTotal"))
+                      ?.female
+                  }
+                </Text>
+                <Text fontWeight="700" fontSize="16px">
+                  Grand Total:{" "}
+                  {
+                    JSON.parse(localStorage.getItem("reportGrandTotal"))
+                      ?.total
+                  }
+                </Text>
+              </Box>
+            </>
+          )}
 
         {Category === "maternity" && (
           <>
@@ -1815,7 +1868,7 @@ export default function PrintReportSummary() {
                 </Thead>
                 <Tbody>
                   {Data.diseases.map((item, i) => {
-                    const newCasesTotal = 
+                    const newCasesTotal =
                       (item.newCases?.male?.["<5"] || 0) +
                       (item.newCases?.male?.["<15"] || 0) +
                       (item.newCases?.male?.["15-19"] || 0) +
@@ -1941,7 +1994,7 @@ export default function PrintReportSummary() {
                 </Thead>
                 <Tbody>
                   {Data.diseases.map((item, i) => {
-                    const followUpTotal = 
+                    const followUpTotal =
                       (item.followUp?.male?.["<5"] || 0) +
                       (item.followUp?.male?.["<15"] || 0) +
                       (item.followUp?.male?.["15-19"] || 0) +
@@ -2056,7 +2109,7 @@ export default function PrintReportSummary() {
                 </Tbody>
               </Table>
             </TableContainer>
-            
+
             {/* Summary Statistics */}
             {Data?.summary && (
               <Box
@@ -2268,7 +2321,7 @@ export default function PrintReportSummary() {
                 </Tbody>
               </Table>
             </TableContainer>
-            
+
             {/* Summary Statistics */}
             {Data?.summary && (
               <Box
@@ -2302,6 +2355,400 @@ export default function PrintReportSummary() {
                 </SimpleGrid>
               </Box>
             )}
+          </>
+        )}
+
+
+        {Category === "Newborn Health(Outcome of pregnancy(Outcome of pregnancy)" && Data && (
+          <>
+            <Text mt="4" fontWeight="700" fontSize="18px" color={titleTextColor}>
+              Newborn Health (Outcome of Pregnancy)
+            </Text>
+
+            {/* Live Births Section */}
+            <Text mt="4" fontWeight="600" fontSize="16px" color={subTitleTextColor}>
+              Live Births
+            </Text>
+            <TableContainer mt="2">
+              <Table variant="striped" size="sm">
+                <Thead>
+                  <Tr>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color={subTitleTextColor}
+                      fontWeight="600"
+                    >
+                      Birth Weight Category
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color={subTitleTextColor}
+                      fontWeight="600"
+                      isNumeric
+                    >
+                      Male
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color={subTitleTextColor}
+                      fontWeight="600"
+                      isNumeric
+                    >
+                      Female
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color={subTitleTextColor}
+                      fontWeight="600"
+                      isNumeric
+                    >
+                      Total
+                    </Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  <Tr>
+                    <Td fontSize="13px">Live Births &lt;2.5kg</Td>
+                    <Td fontSize="13px" isNumeric>
+                      {Data.liveBirths?.["under2.5kg"]?.male || 0}
+                    </Td>
+                    <Td fontSize="13px" isNumeric>
+                      {Data.liveBirths?.["under2.5kg"]?.female || 0}
+                    </Td>
+                    <Td fontSize="13px" isNumeric fontWeight="600">
+                      {Data.liveBirths?.["under2.5kg"]?.total || 0}
+                    </Td>
+                  </Tr>
+                  <Tr>
+                    <Td fontSize="13px">Live Births ≥2.5kg</Td>
+                    <Td fontSize="13px" isNumeric>
+                      {Data.liveBirths?.["≥2.5kg"]?.male || 0}
+                    </Td>
+                    <Td fontSize="13px" isNumeric>
+                      {Data.liveBirths?.["≥2.5kg"]?.female || 0}
+                    </Td>
+                    <Td fontSize="13px" isNumeric fontWeight="600">
+                      {Data.liveBirths?.["≥2.5kg"]?.total || 0}
+                    </Td>
+                  </Tr>
+                  {/* Total Live Births Row */}
+                  <Tr bg={chartFillColor}>
+                    <Td fontSize="13px" fontWeight="700">
+                      Total Live Births
+                    </Td>
+                    <Td fontSize="13px" isNumeric fontWeight="700">
+                      {(Data.liveBirths?.["under2.5kg"]?.male || 0) +
+                        (Data.liveBirths?.["≥2.5kg"]?.male || 0)}
+                    </Td>
+                    <Td fontSize="13px" isNumeric fontWeight="700">
+                      {(Data.liveBirths?.["under2.5kg"]?.female || 0) +
+                        (Data.liveBirths?.["≥2.5kg"]?.female || 0)}
+                    </Td>
+                    <Td fontSize="13px" isNumeric fontWeight="700">
+                      {(Data.liveBirths?.["under2.5kg"]?.total || 0) +
+                        (Data.liveBirths?.["≥2.5kg"]?.total || 0)}
+                    </Td>
+                  </Tr>
+                </Tbody>
+              </Table>
+            </TableContainer>
+
+            {/* Still Births Section */}
+            <Text mt="6" fontWeight="600" fontSize="16px" color={subTitleTextColor}>
+              Still Births
+            </Text>
+            <TableContainer mt="2">
+              <Table variant="striped" size="sm">
+                <Thead>
+                  <Tr>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color={subTitleTextColor}
+                      fontWeight="600"
+                    >
+                      Still Birth Type
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color={subTitleTextColor}
+                      fontWeight="600"
+                      isNumeric
+                    >
+                      Count
+                    </Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  <Tr>
+                    <Td fontSize="13px">Fresh Still Births (FSB)</Td>
+                    <Td fontSize="13px" isNumeric fontWeight="600">
+                      {Data.stillBirths?.["Fresh Still Births (FSB)"] || 0}
+                    </Td>
+                  </Tr>
+                  <Tr>
+                    <Td fontSize="13px">Macerated Still Births (MSB)</Td>
+                    <Td fontSize="13px" isNumeric fontWeight="600">
+                      {Data.stillBirths?.["Macerated Still Births (MSB)"] || 0}
+                    </Td>
+                  </Tr>
+                  {/* Total Still Births Row */}
+                  <Tr bg={chartFillColor}>
+                    <Td fontSize="13px" fontWeight="700">
+                      Total Still Births
+                    </Td>
+                    <Td fontSize="13px" isNumeric fontWeight="700">
+                      {(Data.stillBirths?.["Fresh Still Births (FSB)"] || 0) +
+                        (Data.stillBirths?.["Macerated Still Births (MSB)"] || 0)}
+                    </Td>
+                  </Tr>
+                </Tbody>
+              </Table>
+            </TableContainer>
+
+            {/* Grand Total Summary */}
+            <Box
+              mt="20px"
+              p="20px"
+              borderWidth="1px"
+              borderColor={borderColor}
+              borderRadius="md"
+              bg={chartFillColor}
+            >
+              <Text fontSize="18px" fontWeight="700" mb="3" color={titleTextColor}>
+                Summary Statistics
+              </Text>
+              <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
+                <Box>
+                  <Text fontWeight="600" fontSize="15px" color={subTitleTextColor}>
+                    Total Live Births:
+                  </Text>
+                  <Text fontWeight="700" fontSize="18px" color={titleTextColor}>
+                    {(Data.liveBirths?.["under2.5kg"]?.total || 0) +
+                      (Data.liveBirths?.["≥2.5kg"]?.total || 0)}
+                  </Text>
+                </Box>
+                <Box>
+                  <Text fontWeight="600" fontSize="15px" color={subTitleTextColor}>
+                    Total Still Births:
+                  </Text>
+                  <Text fontWeight="700" fontSize="18px" color={titleTextColor}>
+                    {(Data.stillBirths?.["Fresh Still Births (FSB)"] || 0) +
+                      (Data.stillBirths?.["Macerated Still Births (MSB)"] || 0)}
+                  </Text>
+                </Box>
+                <Box>
+                  <Text fontWeight="600" fontSize="15px" color={subTitleTextColor}>
+                    Low Birth Weight (&lt;2.5kg):
+                  </Text>
+                  <Text fontWeight="700" fontSize="18px" color={titleTextColor}>
+                    {Data.liveBirths?.["under2.5kg"]?.total || 0}
+                  </Text>
+                </Box>
+                <Box>
+                  <Text fontWeight="600" fontSize="15px" color={subTitleTextColor}>
+                    Normal Birth Weight (≥2.5kg):
+                  </Text>
+                  <Text fontWeight="700" fontSize="18px" color={titleTextColor}>
+                    {Data.liveBirths?.["≥2.5kg"]?.total || 0}
+                  </Text>
+                </Box>
+              </SimpleGrid>
+            </Box>
+          </>
+        )}
+
+        {Category === "birth registration" && Data && (
+          <>
+            <Text mt="4" fontWeight="700" fontSize="18px" color={titleTextColor}>
+              Birth Report
+            </Text>
+
+            <TableContainer mt="15px">
+              <Table variant="striped" size="sm">
+                <Thead>
+                  <Tr>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color={subTitleTextColor}
+                      fontWeight="600"
+                    >
+                      S/N
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color={subTitleTextColor}
+                      fontWeight="600"
+                    >
+                      Category
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color={subTitleTextColor}
+                      fontWeight="600"
+                      isNumeric
+                    >
+                      Male
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color={subTitleTextColor}
+                      fontWeight="600"
+                      isNumeric
+                    >
+                      Female
+                    </Th>
+                    <Th
+                      fontSize="13px"
+                      textTransform="capitalize"
+                      color={subTitleTextColor}
+                      fontWeight="600"
+                      isNumeric
+                    >
+                      Total
+                    </Th>
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  <Tr>
+                    <Td fontSize="13px">1</Td>
+                    <Td fontSize="13px">Children Under 1 Year Registered</Td>
+                    <Td fontSize="13px" isNumeric>
+                      {Data["Children Under 1 Year Registered"]?.male || 0}
+                    </Td>
+                    <Td fontSize="13px" isNumeric>
+                      {Data["Children Under 1 Year Registered"]?.female || 0}
+                    </Td>
+                    <Td fontSize="13px" isNumeric fontWeight="600">
+                      {Data["Children Under 1 Year Registered"]?.total || 0}
+                    </Td>
+                  </Tr>
+                  <Tr>
+                    <Td fontSize="13px">2</Td>
+                    <Td fontSize="13px">Birth Certificates Issued</Td>
+                    <Td fontSize="13px" isNumeric>
+                      {Data["Birth Certificates Issued"]?.male || 0}
+                    </Td>
+                    <Td fontSize="13px" isNumeric>
+                      {Data["Birth Certificates Issued"]?.female || 0}
+                    </Td>
+                    <Td fontSize="13px" isNumeric fontWeight="600">
+                      {Data["Birth Certificates Issued"]?.total || 0}
+                    </Td>
+                  </Tr>
+                  <Tr>
+                    <Td fontSize="13px">3</Td>
+                    <Td fontSize="13px">Birth Certificates Collected</Td>
+                    <Td fontSize="13px" isNumeric>
+                      {Data["Birth Certificates Collected"]?.male || 0}
+                    </Td>
+                    <Td fontSize="13px" isNumeric>
+                      {Data["Birth Certificates Collected"]?.female || 0}
+                    </Td>
+                    <Td fontSize="13px" isNumeric fontWeight="600">
+                      {Data["Birth Certificates Collected"]?.total || 0}
+                    </Td>
+                  </Tr>
+                  {/* Grand Total Row */}
+                  <Tr bg={chartFillColor}>
+                    <Td fontSize="13px" fontWeight="700" colSpan={2}>
+                      GRAND TOTAL
+                    </Td>
+                    <Td fontSize="13px" isNumeric fontWeight="700">
+                      {JSON.parse(localStorage.getItem("reportGrandTotal") || "{}")?.male || 0}
+                    </Td>
+                    <Td fontSize="13px" isNumeric fontWeight="700">
+                      {JSON.parse(localStorage.getItem("reportGrandTotal") || "{}")?.female || 0}
+                    </Td>
+                    <Td fontSize="13px" isNumeric fontWeight="700">
+                      {JSON.parse(localStorage.getItem("reportGrandTotal") || "{}")?.total || 0}
+                    </Td>
+                  </Tr>
+                </Tbody>
+              </Table>
+            </TableContainer>
+
+            {/* Summary Statistics */}
+            <Box
+              mt="20px"
+              p="20px"
+              borderWidth="1px"
+              borderColor={borderColor}
+              borderRadius="md"
+              bg={chartFillColor}
+            >
+              <Text fontSize="18px" fontWeight="700" mb="3" color={titleTextColor}>
+                Summary Statistics
+              </Text>
+              <SimpleGrid columns={{ base: 1, md: 3 }} spacing={4}>
+                <Box>
+                  <Text fontWeight="600" fontSize="15px" color={subTitleTextColor}>
+                    Total Children Registered:
+                  </Text>
+                  <Text fontWeight="700" fontSize="18px" color={titleTextColor}>
+                    {Data["Children Under 1 Year Registered"]?.total || 0}
+                  </Text>
+                </Box>
+                <Box>
+                  <Text fontWeight="600" fontSize="15px" color={subTitleTextColor}>
+                    Total Certificates Issued:
+                  </Text>
+                  <Text fontWeight="700" fontSize="18px" color={titleTextColor}>
+                    {Data["Birth Certificates Issued"]?.total || 0}
+                  </Text>
+                </Box>
+                <Box>
+                  <Text fontWeight="600" fontSize="15px" color={subTitleTextColor}>
+                    Total Certificates Collected:
+                  </Text>
+                  <Text fontWeight="700" fontSize="18px" color={titleTextColor}>
+                    {Data["Birth Certificates Collected"]?.total || 0}
+                  </Text>
+                </Box>
+              </SimpleGrid>
+
+              {/* Additional Insights */}
+              <Box mt="4" pt="4" borderTopWidth="1px" borderColor={borderColor}>
+                <Text fontSize="16px" fontWeight="600" mb="2" color={titleTextColor}>
+                  Additional Insights
+                </Text>
+                <SimpleGrid columns={{ base: 1, md: 2 }} spacing={3}>
+                  <Box>
+                    <Text fontSize="14px" color={subTitleTextColor}>
+                      Collection Rate:
+                    </Text>
+                    <Text fontSize="16px" fontWeight="600" color={titleTextColor}>
+                      {Data["Birth Certificates Issued"]?.total > 0
+                        ? (
+                          (Data["Birth Certificates Collected"]?.total /
+                            Data["Birth Certificates Issued"]?.total) *
+                          100
+                        ).toFixed(1)
+                        : 0}
+                      %
+                    </Text>
+                  </Box>
+                  <Box>
+                    <Text fontSize="14px" color={subTitleTextColor}>
+                      Pending Collection:
+                    </Text>
+                    <Text fontSize="16px" fontWeight="600" color={titleTextColor}>
+                      {(Data["Birth Certificates Issued"]?.total || 0) -
+                        (Data["Birth Certificates Collected"]?.total || 0)}
+                    </Text>
+                  </Box>
+                </SimpleGrid>
+              </Box>
+            </Box>
           </>
         )}
       </Box>

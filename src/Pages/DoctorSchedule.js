@@ -479,6 +479,14 @@ export default function DoctoerSchedule() {
                     color={subTitleTextColor}
                     fontWeight="600"
                   >
+                    Actions
+                  </Th>
+                  <Th
+                    fontSize="13px"
+                    textTransform="capitalize"
+                    color={subTitleTextColor}
+                    fontWeight="600"
+                  >
                     Patient
                   </Th>
                   <Th
@@ -536,14 +544,6 @@ export default function DoctoerSchedule() {
                     fontWeight="600"
                   >
                     Status
-                  </Th>
-                  <Th
-                    fontSize="13px"
-                    textTransform="capitalize"
-                    color={subTitleTextColor}
-                    fontWeight="600"
-                  >
-                    Actions
                   </Th>
                 </Tr>
               </Thead>
