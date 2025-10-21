@@ -10554,3 +10554,32 @@ export const GetPostnatalCareByIdApi = (id) => {
       }
     });
 };
+export const PrintBottleLabelApi = (labOrderId) => {
+  const config = {
+    method: "get",
+    url: `${baseUrl}/lab/print-bottle-label/${labOrderId}`,
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  return axios
+    .request(config)
+    .then((response) => {
+      console.log("Bottle label data retrieved:", response.data);
+      return response.data;
+    })
+    .catch((error) => {
+      console.log("error", error.response);
+      if (error.response?.data?.msg) {
+        throw new Error(error.response.data.msg);
+      } else if (error.response?.data) {
+        throw new Error(error.response);
+      } else if (error.request) {
+        throw new Error(error.msg);
+      } else {
+        throw new Error(error.msg);
+      }
+    });
+};
