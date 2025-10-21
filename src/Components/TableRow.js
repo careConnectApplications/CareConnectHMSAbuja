@@ -19,10 +19,14 @@ export default function TableRow({
   type,
   name,
   email,
-  labName,unitId,
+  labName,
+  unitId,
+  onPrintBottleLabel,
   code,
   physicianName,
-  collectedDate,hmopercentagecover,actualcost,
+  collectedDate,
+  hmopercentagecover,
+  actualcost,
   facility,
   reportedDate,
   visitType,
@@ -148,6 +152,7 @@ export default function TableRow({
   onVital,
   onClinicalInfo,
   onSpecialNeeds,
+  onAssignDoctor,
   price,
   occupiedBed,
   totalBed,
@@ -183,11 +188,7 @@ export default function TableRow({
   hematologyReviewStatus,
 }) {
   const router = useNavigate();
-  const {
-     
-    tableColor,
-   tableColorBold,
-   } = useColors();
+  const { tableColor, tableColorBold } = useColors();
 
   const onlineUser = JSON.parse(localStorage.getItem("onlineUser"));
 
@@ -304,7 +305,11 @@ export default function TableRow({
                 src="https://bit.ly/tioluwani-kolawole"
               />
               <Box>
-                <Text color={tableColorBold} fontWeight={"500"} fontSize={"13px"}>
+                <Text
+                  color={tableColorBold}
+                  fontWeight={"500"}
+                  fontSize={"13px"}
+                >
                   {name}
                 </Text>
                 <Text
@@ -318,7 +323,7 @@ export default function TableRow({
               </Box>
             </HStack>
           </Td>
-          <Td >
+          <Td>
             <Text
               fontWeight="400"
               fontSize={"12px"}
@@ -520,23 +525,21 @@ export default function TableRow({
                 </Flex>
               </MenuButton>
               <MenuList>
-               
-                  <MenuItem
-                    onClick={onClick}
-                    textTransform="capitalize"
-                    fontWeight={"500"}
-                    color="#2F2F2F"
-                    _hover={{
-                      color: "#fff",
-                      fontWeight: "400",
-                      bg: "blue.blue500",
-                    }}
-                  >
-                    <HStack fontSize="14px">
-                      <Text>Authorize</Text>
-                    </HStack>
-                  </MenuItem>
-             
+                <MenuItem
+                  onClick={onClick}
+                  textTransform="capitalize"
+                  fontWeight={"500"}
+                  color="#2F2F2F"
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                >
+                  <HStack fontSize="14px">
+                    <Text>Authorize</Text>
+                  </HStack>
+                </MenuItem>
 
                 {status === "paid" && (
                   <MenuItem
@@ -597,7 +600,7 @@ export default function TableRow({
           </Td>
           <Td>
             <Text fontWeight="400" fontSize={"13px"}>
-              {hmopercentagecover}  
+              {hmopercentagecover}
             </Text>
           </Td>
           <Td>
@@ -916,7 +919,7 @@ export default function TableRow({
                 }
               ></Box>
               <Text fontWeight="400" fontSize={"13px"}>
-                {status} 
+                {status}
               </Text>
             </HStack>
           </Td>
@@ -1218,6 +1221,21 @@ export default function TableRow({
                     <Text>Add Special Need</Text>
                   </HStack>
                 </MenuItem>
+                <MenuItem
+                  onClick={onAssignDoctor}
+                  textTransform="capitalize"
+                  fontWeight={"500"}
+                  color="#2F2F2F"
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                >
+                  <HStack fontSize="14px">
+                    <Text>Assign Patient</Text>
+                  </HStack>
+                </MenuItem>
               </MenuList>
             </Menu>
           </Td>
@@ -1314,7 +1332,6 @@ export default function TableRow({
               </Text>
             </HStack>
           </Td>
-          
         </>
       )}
       {type === "medical-history" && (
@@ -1595,24 +1612,42 @@ export default function TableRow({
                     Confirm
                   </MenuItem>
                 ) : labStatus === "scheduled" ? (
-                  <MenuItem
-                    onClick={onClick}
-                    textTransform="capitalize"
-                    fontWeight={"500"}
-                    color="#2F2F2F"
-                    _hover={{
-                      color: "#fff",
-                      fontWeight: "400",
-                      bg: "blue.blue500",
-                    }}
-                  >
-                    Process
-                  </MenuItem>
+                  <>
+                    <MenuItem
+                      onClick={onClick}
+                      textTransform="capitalize"
+                      fontWeight={"500"}
+                      color="#2F2F2F"
+                      _hover={{
+                        color: "#fff",
+                        fontWeight: "400",
+                        bg: "blue.blue500",
+                      }}
+                    >
+                      Process
+                    </MenuItem>
+                    {/* Add Print Bottle Label option for scheduled tests */}
+                    <MenuItem
+                      onClick={() => onPrintBottleLabel?.(_id)}
+                      textTransform="capitalize"
+                      fontWeight={"500"}
+                      color="#2F2F2F"
+                      _hover={{
+                        color: "#fff",
+                        fontWeight: "400",
+                        bg: "blue.blue500",
+                      }}
+                    >
+                      Print Bottle Label
+                    </MenuItem>
+                  </>
                 ) : labStatus === "processed" ? (
                   <>
                     {isChemical && (
                       <MenuItem
-                        onClick={() => onProcessChemicalPathology?.(_id, report)}
+                        onClick={() =>
+                          onProcessChemicalPathology?.(_id, report)
+                        }
                         textTransform="capitalize"
                         fontWeight="500"
                         color="#2F2F2F"
@@ -3846,10 +3881,10 @@ export default function TableRow({
             <HStack>
               <Avatar size="sm" name={name} />
               <Box>
-                <Text color="#101828" fontWeight="500" fontSize="13px">
+                <Text color={"#101828"} fontWeight={"500"} fontSize={"13px"}>
                   {name}
                 </Text>
-                <Text color="#667085" fontWeight="400" fontSize="11px">
+                <Text color={"#667085"} fontWeight={"400"} fontSize={"11px"}>
                   MRN ~ {mrn}
                 </Text>
               </Box>
@@ -3875,13 +3910,10 @@ export default function TableRow({
               color={
                 labStatus === "complete"
                   ? "#027A48"
-                  : labStatus === "hemathologyscheduled" ||
+                  : labStatus === "scheduled" ||
+                    labStatus === "hemathologyscheduled" ||
                     labStatus === "chemicalpathologyscheduled"
                   ? "#FFA30C"
-                  : labStatus === "hemathologyprocessed" ||
-                    labStatus === "chemicalpathologyprocessed" ||
-                    labStatus === "hemathologychemicalpathologyprocessed"
-                  ? "#027A48"
                   : "#FF0000"
               }
             >
@@ -3892,16 +3924,13 @@ export default function TableRow({
                 bg={
                   labStatus === "complete"
                     ? "#027A48"
-                    : labStatus === "hemathologyscheduled" ||
+                    : labStatus === "scheduled" ||
+                      labStatus === "hemathologyscheduled" ||
                       labStatus === "chemicalpathologyscheduled"
                     ? "#FFA30C"
-                    : labStatus === "hemathologyprocessed" ||
-                      labStatus === "chemicalpathologyprocessed" ||
-                      labStatus === "hemathologychemicalpathologyprocessed"
-                    ? "#027A48"
                     : "#FF0000"
                 }
-              />
+              ></Box>
               <Text fontWeight="400" fontSize="13px">
                 {labStatus}
               </Text>
@@ -3913,8 +3942,23 @@ export default function TableRow({
                 <BsThreeDots />
               </MenuButton>
               <MenuList>
+                {/* Print Bottle Label option for processed tests */}
                 <MenuItem
-                  onClick={() => onView(null, report)}
+                  onClick={() => onPrintBottleLabel?.(_id)}
+                  textTransform="capitalize"
+                  fontWeight={"500"}
+                  color="#2F2F2F"
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                >
+                  Print Bottle Label
+                </MenuItem>
+
+                <MenuItem
+                  onClick={() => onView?.("general", report)}
                   textTransform="capitalize"
                   fontWeight={"500"}
                   color="#2F2F2F"
@@ -3927,7 +3971,7 @@ export default function TableRow({
                   View
                 </MenuItem>
                 <MenuItem
-                  onClick={() => onValidate(report)}
+                  onClick={() => onValidate?.(report)}
                   textTransform="capitalize"
                   fontWeight={"500"}
                   color="#2F2F2F"
@@ -4020,8 +4064,9 @@ export default function TableRow({
             <Td>
               <HStack
                 color={
-                  (isChemical ? chemicalReviewStatus : hematologyReviewStatus) ===
-                  "approved"
+                  (isChemical
+                    ? chemicalReviewStatus
+                    : hematologyReviewStatus) === "approved"
                     ? "#027A48"
                     : (isChemical
                         ? chemicalReviewStatus
@@ -4186,7 +4231,7 @@ export default function TableRow({
               {serviceCategory}
             </Text>
           </Td>
-        
+
           <Td>
             <Text fontWeight="400" fontSize={"13px"}>
               {amountApproved}
@@ -4238,7 +4283,7 @@ export default function TableRow({
                   }}
                   onClick={onClick}
                 >
-                 Update Claim Status
+                  Update Claim Status
                 </MenuItem>
               </MenuList>
             </Menu>

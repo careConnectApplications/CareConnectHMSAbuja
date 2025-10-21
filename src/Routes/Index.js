@@ -93,7 +93,8 @@ import ChemicalPathology from "../Pages/ChemicalPathology";
 import DentalEncounterForm from "../Pages/DentalEncounterForm";
 import DentalEncounterEdit from "../Pages/DentalEncounterEdit";
 import AddEyeConsultation from "../Pages/AddEyeConsultation";
-import PrintReport from "../Pages/PrintReport"
+import PrintReport from "../Pages/PrintReport";
+import PrintBottleLabel from "../Pages/PrintBottleLabel";
 import Insurance from "../Pages/Insurance";
 import Claims from "../Pages/Claims";
 import MedicalReport from "../Pages/MedicalReport";
@@ -110,7 +111,8 @@ export default function IndexRoutes() {
       <Routes>
         <Route path="/" element={<SignIn />} />
         <Route element={<PrivateRoutes />}>
-        <Route path="/print-report" element={<PrintReport />} />
+          <Route path="/print-report" element={<PrintReport />} />
+          <Route path="/print-bottle-label" element={<PrintBottleLabel />} />
 
           <Route
             path="/dashboard/profile-settings"

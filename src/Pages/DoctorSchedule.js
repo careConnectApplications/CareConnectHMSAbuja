@@ -10,6 +10,7 @@ import VitalsModal from "../Components/VitalsModal";
 import UpdateClinicalInfoModal from "../Components/UpdateClinicalInfoModal";
 import AddSpecialNeedsModal from "../Components/AddSpecialNeedsModal";
 import ShowToast from "../Components/ToastNotification";
+import AssignDoctorModal from "../Components/AssignDoctorModal";
 import { BiSearch } from "react-icons/bi";
 import { IoFilter } from "react-icons/io5";
 import { SlPlus } from "react-icons/sl";
@@ -51,6 +52,18 @@ export default function DoctoerSchedule() {
   const [isSpecialNeedsModalOpen, setIsSpecialNeedsModalOpen] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [TotalData, setTotalData] = useState("");
+
+  // Assign Doctor Modal
+  const {
+    isOpen: isAssignDoctorOpen,
+    onOpen: onAssignDoctorOpen,
+    onClose: onAssignDoctorClose,
+  } = useDisclosure();
+  const [selectedAppointmentForDoctor, setSelectedAppointmentForDoctor] =
+    useState({
+      id: "",
+      clinic: "",
+    });
 
   const [filters, setFilters] = useState({
     clinic: null,
@@ -187,6 +200,19 @@ export default function DoctoerSchedule() {
   const closeSpecialNeedsModal = () => {
     setIsSpecialNeedsModalOpen(false);
     setSelectedPatient(null);
+  };
+
+  const handleAssignDoctor = (id, clinic) => {
+    setSelectedAppointmentForDoctor({
+      id: id,
+      clinic: clinic,
+    });
+    onAssignDoctorOpen();
+  };
+
+  const handleAssignDoctorSuccess = (message, status) => {
+    activateNotifications(message, status);
+    setTrigger(!Trigger);
   };
 
   useEffect(() => {
@@ -566,6 +592,9 @@ export default function DoctoerSchedule() {
                       onVital={() => takeVitals(item)}
                       onClinicalInfo={() => openClinicalInfoModal(item)}
                       onSpecialNeeds={() => openSpecialNeedsModal(item)}
+                      onAssignDoctor={() =>
+                        handleAssignDoctor(item._id, item.clinic)
+                      }
                     />
                   ))
                 ) : (
@@ -599,7 +628,13 @@ export default function DoctoerSchedule() {
           activateNotifications={activateNotifications}
         />
       </Box>
-
+      <AssignDoctorModal
+        isOpen={isAssignDoctorOpen}
+        onClose={onAssignDoctorClose}
+        appointmentId={selectedAppointmentForDoctor.id}
+        clinic={selectedAppointmentForDoctor.clinic}
+        activateNotifications={handleAssignDoctorSuccess}
+      />
     </MainLayout>
   );
 }
