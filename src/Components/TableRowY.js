@@ -128,6 +128,8 @@ export default function TableRowY({
   onTransfer,
   onDischarge,
   onConfirm,
+  onPrint,
+
   pharmacy,
   dosageForm,
   strength,
@@ -2395,8 +2397,88 @@ export default function TableRowY({
                 >
                   Order Details
                 </MenuItem>
+                <MenuItem
+                  _hover={{
+                    color: "#fff",
+                    fontWeight: "400",
+                    bg: "blue.blue500",
+                  }}
+                  onClick={onPrint}
+                >
+                  Print
+                </MenuItem>
               </MenuList>
             </Menu>
+          </Td>
+        </>
+      )}
+      {type === "pharmacy-print" && (
+        <>
+          <Td>
+            <Text fontWeight="500" fontSize="13px">
+              {orderid}
+            </Text>
+          </Td>
+          <Td>
+            <HStack>
+              <Avatar size="sm" name={patient} />
+              <Box>
+                <Text fontWeight="500" fontSize="13px">
+                  {patient}
+                </Text>
+                <Text fontWeight="400" color="#667085" fontSize="11px">
+                  {email}
+                </Text>
+              </Box>
+            </HStack>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {MRN}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {new Date(createdDate).toLocaleDateString()}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {prescribersName}
+            </Text>
+          </Td>
+
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {isHMOCover}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {HMOName}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {HMOPlan}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {appointmentdate
+                ? new Date(appointmentdate).toLocaleDateString()
+                : "N/A"}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {clinic}
+            </Text>
+          </Td>
+          <Td>
+            <Text fontWeight="400" fontSize="12px">
+              {appointmentid}
+            </Text>
           </Td>
         </>
       )}
