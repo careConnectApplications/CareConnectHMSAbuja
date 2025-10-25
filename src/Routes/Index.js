@@ -103,6 +103,8 @@ import RevenueAnalysis from "../Pages/RevenueAnalysis";
 import MaternityReport from "../Pages/MaternityReport";
 import MaternitySchedule from "../Pages/MaternitySchedule";
 import MaternityTimeline from "../Pages/MaternityTimeline";
+import PrintPharmacyReport from "../Pages/PrintPharmacyReport";
+import PrintPharmacyNew from "../Pages/PrintPharmacyNew";
 
 
 export default function IndexRoutes() {
@@ -113,6 +115,8 @@ export default function IndexRoutes() {
         <Route element={<PrivateRoutes />}>
           <Route path="/print-report" element={<PrintReport />} />
           <Route path="/print-bottle-label" element={<PrintBottleLabel />} />
+          <Route path="/print-pharmacy-report" element={<PrintPharmacyReport />} />
+          <Route path="/print-pharmacy-new" element={<PrintPharmacyNew />} />
 
           <Route
             path="/dashboard/profile-settings"

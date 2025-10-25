@@ -26,6 +26,7 @@ import ShowToast from "../Components/ToastNotification";
 import { BiSearch } from "react-icons/bi";
 import { IoFilter } from "react-icons/io5";
 import { SlPlus } from "react-icons/sl";
+import { useNavigate } from "react-router-dom";
 import Seo from "../Utils/Seo";
 import { configuration } from "../Utils/Helpers";
 import PharmacyModal from "../Components/PharmacyModal";
@@ -84,6 +85,7 @@ export default function PharmacyNew() {
   });
 
   const [IsLoading, setIsLoading] = useState(false);
+  const nav = useNavigate();
 
   const [Status, setStatus] = useState("pending");
   const [TotalData, setTotalData] = useState("");
@@ -263,6 +265,11 @@ export default function PharmacyNew() {
   const handleConfirmClick = (orderId) => {
     setSelectedOrderId(orderId);
     setOrderModalOpen(true);
+  };
+
+  const handlePrint = (data) => {
+    localStorage.setItem("pharmacyPrintData", JSON.stringify(data));
+    nav("/print-pharmacy-new");
   };
 
   // Reusable local toast (via ShowToast)
@@ -699,6 +706,7 @@ export default function PharmacyNew() {
                     appointmentid={item.appointmentid}
                     onDispense={() => handleDispense(item.orderid)}
                     onConfirm={() => handleConfirmClick(item.orderid)}
+                    onPrint={() => handlePrint(item)}
                   />
                 ))
               ) : FilteredData.length > 0 ? (
@@ -720,6 +728,7 @@ export default function PharmacyNew() {
                     appointmentid={item.appointmentid}
                     onDispense={() => handleDispense(item.orderid)}
                     onConfirm={() => handleConfirmClick(item.orderid)}
+                    onPrint={() => handlePrint(item)}
                   />
                 ))
               ) : (
@@ -766,6 +775,7 @@ export default function PharmacyNew() {
           onSuccess={handleSuccess}
         />
       )}
+
     </MainLayout>
   );
 }

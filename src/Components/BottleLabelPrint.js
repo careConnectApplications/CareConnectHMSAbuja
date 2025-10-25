@@ -28,7 +28,7 @@ const BottleLabelPrint = React.forwardRef(({ labData }, ref) => {
       >
         LAB SPECIMEN
       </Text>
-      <SimpleGrid columns={{ base: 1, md: 2 }} spacing={0.3} mt="4px">
+      <SimpleGrid columns={{ base: 2, md: 2 }} spacing={0.3} mt="4px">
         <Box>
           <Text fontWeight="800" fontSize="7px" textTransform="uppercase">
             Patient:
